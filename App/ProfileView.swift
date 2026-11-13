@@ -5,6 +5,10 @@ struct ProfileView: View {
     @Environment(ProgramController.self) private var controller
     @State private var confirmStartOver = false
     @State private var restoring = false
+    @State private var alertRows: [ProfileRow] = []
+    @State private var testMessage: String?
+    @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         let model = controller.profileSnapshot()
@@ -31,6 +35,34 @@ struct ProfileView: View {
                             section(Copy.scheduleTitle) {
                                 rows(model.schedule)
                                 Text(Copy.scheduleNote)
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(Chalk.inkMuted)
+                            }
+                        }
+                        section(Copy.alertsCheckTitle) {
+                            rows(alertRows)
+                            if alertRows.contains(where: { $0.value == "Off" || $0.value == "Not asked yet" || $0.value.hasPrefix("On (") }) {
+                                Text(Copy.alertsFixHint)
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(Chalk.inkSoft)
+                                TextLink(title: Copy.openSettings) {
+                                    if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                                        openURL(url)
+                                    }
+                                }
+                            }
+                            Text(Copy.alertsCheckBody)
+                                .font(.system(size: 14))
+                                .foregroundStyle(Chalk.inkMuted)
+                            SecondaryButton(title: Copy.sendTestAlert, height: 56) {
+                                Task {
+                                    let sent = await Notifier.sendTestAlert()
+                                    testMessage = sent ? Copy.testAlertSent : Copy.testAlertFailed
+                                    await loadAlertRows()
+                                }
+                            }
+                            if let testMessage {
+                                Text(testMessage)
                                     .font(.system(size: 14))
                                     .foregroundStyle(Chalk.inkMuted)
                             }
@@ -70,12 +102,21 @@ struct ProfileView: View {
                 .padding(.top, 12)
             }
         }
+        .task { await loadAlertRows() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await loadAlertRows() } }
+        }
         .confirmationDialog(Copy.startOverConfirmTitle, isPresented: $confirmStartOver, titleVisibility: .visible) {
             Button(Copy.startOverTitle, role: .destructive) { controller.startOver() }
             Button(Copy.back, role: .cancel) {}
         } message: {
             Text(Copy.startOverConfirmBody)
         }
+    }
+
+    private func loadAlertRows() async {
+        await controller.refreshAlerts()
+        alertRows = await Notifier.diagnostics()
     }
 
     @ViewBuilder

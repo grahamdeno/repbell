@@ -401,7 +401,21 @@ final class ProgramController {
         }
     }
 
+    /// Many screens ask for a refresh at once (open, log, busy). Each refresh waits for the one before it
+    /// and reads the library when it actually runs, so two refills can never undo each other.
+    private var alertRefreshTail: Task<Void, Never>?
+
     func refreshAlerts() async {
+        let previous = alertRefreshTail
+        let task = Task { @MainActor in
+            await previous?.value
+            await self.performAlertRefresh()
+        }
+        alertRefreshTail = task
+        await task.value
+    }
+
+    private func performAlertRefresh() async {
         await Notifier.refill(library: library)
         if let run = library.current {
             await TestAlarms.sync(run: run, allows: { self.library.allows(day: $0) })
