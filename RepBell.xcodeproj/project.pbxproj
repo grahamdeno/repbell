@@ -504,6 +504,7 @@
 				CODE_SIGN_ENTITLEMENTS = Watch/RepBellWatch.entitlements;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Watch/Info.plist;
+				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = x86_64;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.grahamdeno.repbell;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -528,6 +529,7 @@
 				CODE_SIGN_ENTITLEMENTS = Watch/RepBellWatch.entitlements;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Watch/Info.plist;
+				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = x86_64;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.grahamdeno.repbell;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
