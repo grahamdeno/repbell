@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Watch today</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 198px; height: 242px; box-sizing: border-box; background: #000000; color: #F2F0EB; font-family: Inter, system-ui, sans-serif; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 36px">
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.04em; text-transform: uppercase; color: #FF6A13">Day 3 of 14</span>
+<span style="font-size: 13px; color: #A3A09A; margin-top: 4px">Next at 10:45 a.m.</span>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 64px; line-height: 0.9">30</span>
+<div style="flex-grow: 1"></div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{sets}}" as="s" hint-placeholder-count="21">
+<div style="{{s.style}}"></div>
+</sc-for>
+</div>
+<span style="font-size: 13px; color: #A3A09A; margin-top: 4px">4 of 21 · 120 today</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":198,"height":242}}'>
+class Component extends DCLogic {
+renderVals() {
+const sets = Array.from({ length: 21 }, (_, i) => {
+let s = 'height: 8px; border-radius: 4px; box-sizing: border-box; ';
+if (i === 2) s += 'border: 1px dashed #6E6B66';
+else if (i < 5) s += 'background: #F2F0EB';
+else if (i === 5) s += 'background: #FF6A13';
+else s += 'background: #2E2D2A';
+return { style: s };
+});
+return { sets };
+}
+}
+</script>
+</body>
+</html>
