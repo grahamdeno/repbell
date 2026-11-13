@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Compile and test only. This workflow does not archive, notarize, upload to
+# TestFlight, or submit anything to App Store Connect.
+jobs:
+  engine:
+    name: Schedule engine tests
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the 13 schedule engine tests
+        run: swift test --package-path Packages/RepBellEngine
+
+  apps:
+    name: iOS, Watch, and widget
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the iPhone app, Watch app, and widget
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project RepBell.xcodeproj \
+            -scheme RepBell \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build

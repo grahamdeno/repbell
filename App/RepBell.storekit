@@ -1,0 +1,33 @@
+{
+  "identifier" : "RepBell",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6834201034-unlock",
+      "localizations" : [
+        {
+          "description" : "The rest of this run, and every rerun.",
+          "displayName" : "Full program",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.grahamdeno.repbell.unlock",
+      "referenceName" : "Full program",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6834201034",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
