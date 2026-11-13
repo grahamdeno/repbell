@@ -20,6 +20,15 @@ extension Copy {
     static let busySheetTitle = "Pause alerts for an hour?"
     static let busyPause = "Pause for 1 hour"
     static let undo = "Undo"
+    static let didIt = "Done"
+    static let dayDone = "Day done"
+    static let tapToContinue = "Tap to continue"
+    static func celebrationLine(done: Int, total: Int, repsToday: Int) -> String {
+        "Set \(done) of \(total) · \(grouped(repsToday)) push-ups today"
+    }
+    static func dayDoneLine(day: Int, repsToday: Int) -> String {
+        "Day \(day): \(grouped(repsToday)) push-ups. Every set done."
+    }
     static let profileLabel = "Profile"
 
     static func busyNothingSkipped(resume: String) -> String {
@@ -39,7 +48,7 @@ extension Copy {
     }
 
     static func doneSet(_ reps: Int) -> String {
-        "Done · \(reps)"
+        "I did \(reps)"
     }
 
     static func skippedRow(time: String, reps: Int) -> String {
