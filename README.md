@@ -18,7 +18,7 @@ The 1024 px icon is h1-B. The 14 is outlined from Barlow Condensed Black so the 
 
 ```sh
 swift test --package-path Packages/RepBellEngine
-xcodebuild -project RepBell.xcodeproj -scheme RepBell -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+xcodebuild -project RepBell.xcodeproj -scheme RepBell -destination 'platform=iOS Simulator,name=iPhone 17' ONLY_ACTIVE_ARCH=YES CODE_SIGNING_ALLOWED=NO build
 ```
 
 GitHub Actions on `macos-26` runs the package tests and that compile. It does not archive, notarize, upload a build, or submit for review.

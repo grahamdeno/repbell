@@ -22,12 +22,23 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the iPhone app, Watch app, and widget
         run: |
-          set -o pipefail
+          set -euo pipefail
+          # A generic simulator destination builds the Watch app for both arm64 and
+          # x86_64. Xcode then runs CreateUniversalBinary and CopyAndPreserveArchs
+          # on the same RepBellWatch executable. A concrete iPhone picks one arch.
+          UDID=$(python3 -c 'import json,subprocess,sys; data=json.loads(subprocess.check_output(["xcrun","simctl","list","devices","available","-j"])); matches=[d["udid"] for runtime,devices in data.get("devices",{}).items() if "iOS" in runtime for d in devices if d.get("isAvailable") and str(d.get("name","")).startswith("iPhone")]; print(matches[0]) if matches else sys.exit(1)')
+          if [ -z "$UDID" ]; then
+            echo "No available iPhone simulator" >&2
+            xcrun simctl list devices available >&2
+            exit 1
+          fi
+          echo "Using iPhone simulator $UDID"
           xcodebuild \
             -project RepBell.xcodeproj \
             -scheme RepBell \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,id=$UDID" \
             -configuration Debug \
+            ONLY_ACTIVE_ARCH=YES \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
