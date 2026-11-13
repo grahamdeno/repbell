@@ -251,7 +251,7 @@
 			);
 			productName = RepBellWatch;
 			productReference = AA0000000000000000000015 /* RepBellWatch.app */;
-			productType = "com.apple.product-type.application.watchapp2";
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
