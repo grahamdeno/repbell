@@ -32,16 +32,39 @@ enum Notifier {
         }
     }
 
-    static func refill(library: LibraryFile) async {
+    /// Builds the full set of requests the run needs, removes only stale ones, then adds or replaces the rest.
+    /// Callers must not run two refills at once; ProgramController serializes them.
+    @discardableResult
+    static func refill(library: LibraryFile) async -> AlertReport {
         let center = UNUserNotificationCenter.current()
+        let desired = desiredRequests(library: library)
+        let wanted = Set(desired.map(\.identifier))
         let pending = await center.pendingNotificationRequests()
-        let ours = pending.map(\.identifier).filter { $0.hasPrefix("set.") || $0.hasPrefix("note.") }
-        center.removePendingNotificationRequests(withIdentifiers: ours)
-        guard let run = library.current, run.pausedAt == nil, !run.ended else { return }
+        let stale = pending.map(\.identifier).filter { ($0.hasPrefix("set.") || $0.hasPrefix("note.")) && !wanted.contains($0) }
+        if !stale.isEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: stale)
+        }
+        var added = 0
+        var lastError: String?
+        for request in desired {
+            do {
+                try await center.add(request)
+                added += 1
+            } catch {
+                lastError = error.localizedDescription
+            }
+        }
+        let report = AlertReport(at: Date(), wanted: desired.count, added: added, error: lastError)
+        report.save()
+        return report
+    }
+
+    private static func desiredRequests(library: LibraryFile) -> [UNNotificationRequest] {
+        guard let run = library.current, run.pausedAt == nil, !run.ended else { return [] }
         let now = CivilDateTime.local(Date())
         let resolved = ScheduleEngine.resolve(run.input, now: now)
-        let queue = resolved.alertQueue(at: now)
-        for alert in queue.pending where library.allows(day: alert.day) {
+        var requests: [UNNotificationRequest] = []
+        for alert in resolved.alertQueue(at: now).pending where library.allows(day: alert.day) {
             guard let date = alert.at.foundationDate(), date > Date() else { continue }
             let content = UNMutableNotificationContent()
             content.title = Copy.setAlertTitle(reps: alert.reps)
@@ -50,10 +73,7 @@ enum Notifier {
             content.categoryIdentifier = categoryID
             content.interruptionLevel = .timeSensitive
             content.threadIdentifier = "day-\(alert.day)"
-            let parts = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-            let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: false)
-            let request = UNNotificationRequest(identifier: "set.\(alert.day).\(alert.index)", content: content, trigger: trigger)
-            try? await center.add(request)
+            requests.append(UNNotificationRequest(identifier: "set.\(alert.day).\(alert.index)", content: content, trigger: trigger(for: date)))
         }
         var notes = 0
         for note in resolved.notes() where notes < 4 && note.at > now {
@@ -63,10 +83,89 @@ enum Notifier {
             content.title = Copy.wordmark
             content.body = note.body
             content.sound = .default
-            let parts = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-            let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: false)
-            try? await center.add(UNNotificationRequest(identifier: "note.\(note.id)", content: content, trigger: trigger))
+            requests.append(UNNotificationRequest(identifier: "note.\(note.id)", content: content, trigger: trigger(for: date)))
             notes += 1
+        }
+        return requests
+    }
+
+    private static func trigger(for date: Date) -> UNNotificationTrigger {
+        let seconds = date.timeIntervalSinceNow
+        if seconds < 3600 {
+            // Close alerts use an interval trigger so a calendar match can never be skipped.
+            return UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)
+        }
+        var parts = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        parts.timeZone = TimeZone.current
+        return UNCalendarNotificationTrigger(dateMatching: parts, repeats: false)
+    }
+
+    /// Fires a sample set alert in 10 seconds so the person can lock the phone or switch apps and see it arrive.
+    static func sendTestAlert() async -> Bool {
+        guard await requestAuthorization() else { return false }
+        let content = UNMutableNotificationContent()
+        content.title = Copy.testAlertTitle
+        content.body = Copy.testAlertBody
+        content.sound = .default
+        content.categoryIdentifier = categoryID
+        content.interruptionLevel = .timeSensitive
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        do {
+            try await UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "check.test", content: content, trigger: trigger))
+            return true
+        } catch {
+            AlertReport(at: Date(), wanted: 1, added: 0, error: error.localizedDescription).save()
+            return false
+        }
+    }
+
+    /// Live picture of what iOS will and won't do with Rep Bell's alerts.
+    static func diagnostics() async -> [ProfileRow] {
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        let pending = await center.pendingNotificationRequests().filter { $0.identifier.hasPrefix("set.") }
+        var rows: [ProfileRow] = []
+        rows.append(ProfileRow(label: "Permission", value: label(settings.authorizationStatus)))
+        rows.append(ProfileRow(label: "Banners", value: label(settings.alertSetting, style: settings.alertStyle)))
+        rows.append(ProfileRow(label: "Sound", value: label(settings.soundSetting)))
+        rows.append(ProfileRow(label: "Time Sensitive", value: label(settings.timeSensitiveSetting)))
+        if settings.scheduledDeliverySetting == .enabled {
+            rows.append(ProfileRow(label: "Scheduled Summary", value: "On (alerts held back)"))
+        }
+        rows.append(ProfileRow(label: "Set alerts queued", value: "\(pending.count)"))
+        let next = pending.compactMap { request -> Date? in
+            if let calendar = request.trigger as? UNCalendarNotificationTrigger { return calendar.nextTriggerDate() }
+            if let interval = request.trigger as? UNTimeIntervalNotificationTrigger { return interval.nextTriggerDate() }
+            return nil
+        }.min()
+        if let next {
+            rows.append(ProfileRow(label: "Next alert", value: next.formatted(date: .abbreviated, time: .shortened)))
+        }
+        if let report = AlertReport.load(), let error = report.error {
+            rows.append(ProfileRow(label: "Last error", value: error))
+        }
+        return rows
+    }
+
+    private static func label(_ status: UNAuthorizationStatus) -> String {
+        switch status {
+        case .authorized: return "Allowed"
+        case .denied: return "Off"
+        case .notDetermined: return "Not asked yet"
+        case .provisional: return "Quiet only"
+        case .ephemeral: return "Temporary"
+        @unknown default: return "Unknown"
+        }
+    }
+
+    private static func label(_ setting: UNNotificationSetting, style: UNAlertStyle? = nil) -> String {
+        switch setting {
+        case .enabled:
+            if let style, style == .none { return "Off" }
+            return "On"
+        case .disabled: return "Off"
+        case .notSupported: return "Not supported"
+        @unknown default: return "Unknown"
         }
     }
 
@@ -91,6 +190,26 @@ enum Notifier {
             let now = CivilDateTime.local(Date())
             return resolved.day(day)?.date == now.date
         }
+    }
+}
+
+struct AlertReport: Codable {
+    var at: Date
+    var wanted: Int
+    var added: Int
+    var error: String?
+
+    private static let key = "repbell.alertReport"
+
+    func save() {
+        if let data = try? JSONEncoder().encode(self) {
+            UserDefaults.standard.set(data, forKey: Self.key)
+        }
+    }
+
+    static func load() -> AlertReport? {
+        guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
+        return try? JSONDecoder().decode(AlertReport.self, from: data)
     }
 }
 

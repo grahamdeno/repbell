@@ -30,6 +30,15 @@ extension Copy {
         "Day \(day): \(grouped(repsToday)) push-ups. Every set done."
     }
     static let profileLabel = "Profile"
+    static let alertsCheckTitle = "Alerts check"
+    static let alertsCheckBody = "Tap below, then lock your phone or switch apps. A sample alert arrives in 10 seconds."
+    static let sendTestAlert = "Send a test alert"
+    static let testAlertSent = "Sent. It arrives in 10 seconds."
+    static let testAlertFailed = "iOS refused the alert. Check that notifications are on for Rep Bell."
+    static let testAlertTitle = "Test alert. This is what a set looks like."
+    static let testAlertBody = "If you can see this, set alerts reach you."
+    static let alertsFixHint = "Something above is Off. Open Settings, tap Rep Bell, then Notifications, and turn on Allow Notifications, Banners, Sounds and Time Sensitive."
+    static let openSettings = "Open Settings"
 
     static func busyNothingSkipped(resume: String) -> String {
         "No sets fall in the next hour, so nothing is skipped. Alerts resume at \(resume)."
