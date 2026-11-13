@@ -59,6 +59,7 @@ final class ProgramController {
     var alertsDenied = false
     var unlockMessage: String?
     var showBusyConfirm = false
+    var celebration: Celebration?
 
     private init() {
         let loaded = LibraryDisk.load()
@@ -157,12 +158,16 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
-    func logDone(day: Int, index: Int) {
+    func logDone(day: Int, index: Int, celebrate: Bool = false) {
         let now = CivilDateTime.local(Date())
         update { $0.input.events.append(.done(day: day, index: index, at: now)) }
         if let run = library.current, let resolved = ScheduleEngine.resolve(run.input, now: now).day(day) {
             let finished = !resolved.sets.isEmpty && !resolved.sets.contains { $0.status == .upcoming }
             Haptics.play(finished ? .dayComplete : .setDone)
+            if celebrate {
+                let reps = resolved.sets.first { $0.index == index }?.reps ?? resolved.reps
+                celebration = Celebration(day: day, reps: reps, done: resolved.doneCount, total: resolved.sets.count, repsToday: resolved.loggedReps, dayComplete: finished)
+            }
         }
         Task { await refreshAlerts() }
     }
@@ -631,6 +636,16 @@ final class ProgramController {
         formatter.dateFormat = "EEEE"
         return formatter.string(from: foundation)
     }
+}
+
+struct Celebration: Equatable, Identifiable {
+    var id: String { "\(day).\(done)" }
+    var day: Int
+    var reps: Int
+    var done: Int
+    var total: Int
+    var repsToday: Int
+    var dayComplete: Bool
 }
 
 struct ProfileRow: Identifiable, Equatable {

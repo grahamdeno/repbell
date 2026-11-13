@@ -5,7 +5,24 @@ struct TodayView: View {
     @Environment(ProgramController.self) private var controller
 
     var body: some View {
-        let model = controller.todaySnapshot()
+        TimelineView(.periodic(from: .now, by: 15)) { _ in
+            content(controller.todaySnapshot())
+        }
+        .overlay {
+            if let celebration = controller.celebration {
+                CelebrationView(celebration: celebration) { controller.celebration = nil }
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeOut(duration: 0.2), value: controller.celebration)
+        .sheet(isPresented: Bindable(controller).showBusyConfirm) {
+            BusySheet()
+                .environment(controller)
+        }
+    }
+
+    @ViewBuilder
+    private func content(_ model: TodaySnapshot) -> some View {
         ScreenChrome {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 12) {
@@ -61,10 +78,6 @@ struct TodayView: View {
                 Spacer(minLength: 12)
                 footer(model)
             }
-        }
-        .sheet(isPresented: Bindable(controller).showBusyConfirm) {
-            BusySheet()
-                .environment(controller)
         }
     }
 
@@ -141,7 +154,7 @@ struct TodayView: View {
                 PrimaryButton(title: Copy.resume) { controller.resume() }
             default:
                 if let due = controller.dueSet() {
-                    PrimaryButton(title: Copy.doneSet(due.reps)) { controller.logDone(day: due.day, index: due.index) }
+                    PrimaryButton(title: Copy.doneSet(due.reps)) { controller.logDone(day: due.day, index: due.index, celebrate: true) }
                 }
                 if let end = controller.activeBusyEnd() {
                     HStack {
