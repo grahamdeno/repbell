@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Confirm max</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FF6A13}a:hover{color:#FF8A45}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #121212; color: #F2F0EB; font-family: Inter, system-ui, sans-serif; padding: 96px 24px 40px; display: flex; flex-direction: column; gap: 20px">
+<span style="font-size: 15px; color: #A3A09A; font-weight: 500">Your max</span>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 200px; line-height: 0.85; color: #FF6A13">50</span>
+<div style="border-top: 1.5px solid #2E2D2A; padding-top: 20px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px; line-height: 1; text-transform: uppercase">Today: 15, every hour</span>
+<span style="font-size: 16px; line-height: 1.5; color: #C9C6C0">First set at 8:05 a.m. Last set at 9:05 p.m. That's 14 sets.</span>
+</div>
+<div style="flex-grow: 1"></div>
+<a href="D-Today.dc.html" style="height: 60px; border-radius: 14px; background: #FF6A13; color: #121212; font-size: 18px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Start the day</a>
+<a href="B2-Counter.dc.html" style="align-self: center; font-size: 15px; padding: 12px">Recount</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

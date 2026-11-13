@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Today, Chalk direction</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FF6A13}a:hover{color:#FF8A45}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #121212; color: #F2F0EB; font-family: Inter, system-ui, sans-serif; padding: 64px 24px 40px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase">Day 3 of 14</span>
+<span style="font-size: 14px; color: #A3A09A">Max 50</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px" aria-label="Day 3 of 14">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="14">
+<div style="{{d.style}}"></div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; margin-top: 24px">
+<span style="font-size: 15px; color: #A3A09A; font-weight: 500">Next set at 10:45 a.m.</span>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 200px; line-height: 0.9; color: {{accent}}">30</span>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: 0.03em; text-transform: uppercase">push-ups in 18 min</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-size: 15px; font-weight: 600">Today's sets</span>
+<span style="font-size: 14px; color: #A3A09A">4 of 21 done, 1 missed</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{sets}}" as="s" hint-placeholder-count="21">
+<div style="{{s.style}}"></div>
+</sc-for>
+</div>
+<span style="font-size: 14px; color: #A3A09A">120 push-ups so far today</span>
+</div>
+<div style="flex-grow: 1"></div>
+<div style="display: flex; flex-direction: column; gap: 16px; align-items: stretch">
+<button type="button" style="height: 56px; border-radius: 14px; border: 1.5px solid #3A3936; background: transparent; color: #F2F0EB; font-family: Inter, sans-serif; font-size: 17px; font-weight: 600">Busy for 1 hour</button>
+<a href="F1-Hurts.dc.html" style="align-self: center; font-size: 15px; padding: 12px">Something hurts?</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#FF6A13","options":["#FF6A13","#E8FF3A","#3AC7FF"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const accent = this.props.accent ?? '#FF6A13';
+const days = Array.from({ length: 14 }, (_, i) => ({ style: 'height: 6px; border-radius: 3px; background: ' + (i < 2 ? '#F2F0EB' : i === 2 ? accent : '#2E2D2A') }));
+const sets = Array.from({ length: 21 }, (_, i) => {
+let s = 'height: 22px; border-radius: 6px; box-sizing: border-box; ';
+if (i === 2) s += 'border: 1.5px dashed #6E6B66; background: transparent';
+else if (i < 5) s += 'background: #F2F0EB';
+else if (i === 5) s += 'background: ' + accent;
+else s += 'border: 1.5px solid #3A3936; background: transparent';
+return { style: s };
+});
+return { accent, days, sets };
+}
+}
+</script>
+</body>
+</html>

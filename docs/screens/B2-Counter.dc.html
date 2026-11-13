@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Test counter</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FF6A13}a:hover{color:#FF8A45}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #121212; color: #F2F0EB; font-family: Inter, system-ui, sans-serif; padding: 64px 24px 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase">Test · Day 1</span>
+<span style="font-size: 14px; color: #A3A09A">Good form, to failure</span>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; color: #C9C6C0">How many did you do? Slide your thumb up or down to set the number.</p>
+<button type="button" onPointerDown="{{down}}" onPointerMove="{{move}}" onPointerUp="{{up}}" onPointerCancel="{{up}}" onKeyDown="{{key}}" aria-label="Push-up count. Slide up to add, down to subtract, or use the arrow keys." style="flex-grow: 1; position: relative; touch-action: none; border: 1.5px solid #2E2D2A; border-radius: 28px; background: #1A1A19; color: #F2F0EB; display: flex; align-items: stretch; padding: 0; cursor: ns-resize; font-family: Inter, sans-serif; overflow: hidden">
+<div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px">
+<svg width="28" height="16" viewBox="0 0 28 16" aria-hidden="true"><path d="M4 12l10-8 10 8" fill="none" stroke="#6E6B66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 600; line-height: 1; color: #55534F">{{above}}</span>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 200px; line-height: 0.9; color: #FF6A13">{{count}}</span>
+<span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 600; line-height: 1; color: #55534F">{{below}}</span>
+<svg width="28" height="16" viewBox="0 0 28 16" aria-hidden="true"><path d="M4 4l10 8 10-8" fill="none" stroke="#6E6B66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div style="width: 28px; display: flex; flex-direction: column; justify-content: space-between; padding: 28px 0; align-items: center" aria-hidden="true">
+<sc-for list="{{ticks}}" as="t" hint-placeholder-count="15">
+<div style="{{t.style}}"></div>
+</sc-for>
+</div>
+</button>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+<button type="button" onClick="{{minus}}" aria-label="Subtract one" style="height: 60px; border-radius: 14px; border: 1.5px solid #3A3936; background: transparent; color: #F2F0EB; font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700">−1</button>
+<button type="button" onClick="{{plus}}" aria-label="Add one" style="height: 60px; border-radius: 14px; border: 1.5px solid #3A3936; background: transparent; color: #F2F0EB; font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700">+1</button>
+<a href="B3-Confirm.dc.html" style="height: 60px; border-radius: 14px; background: #FF6A13; color: #121212; font-size: 18px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Done</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"pxPerRep":{"editor":"range","default":14,"min":6,"max":30,"step":1,"unit":"px"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { count: 0, startY: null, startCount: 0 };
+}
+set(n) {
+this.setState({ count: Math.max(0, Math.min(500, n)) });
+}
+renderVals() {
+const step = this.props.pxPerRep ?? 14;
+const count = this.state.count;
+const offset = count % 5;
+const ticks = Array.from({ length: 15 }, (_, i) => {
+const major = (i + offset) % 5 === 0;
+const mid = i === 7;
+return { style: 'height: 2px; border-radius: 1px; width: ' + (mid ? 20 : major ? 14 : 8) + 'px; background: ' + (mid ? '#FF6A13' : major ? '#6E6B66' : '#3A3936') };
+});
+return {
+count,
+above: count + 1,
+below: count > 0 ? count - 1 : ' ',
+ticks,
+down: (e) => {
+if (e.currentTarget && e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId);
+this.setState({ startY: e.clientY, startCount: count });
+},
+move: (e) => {
+if (this.state.startY === null) return;
+const delta = Math.round((this.state.startY - e.clientY) / step);
+this.set(this.state.startCount + delta);
+},
+up: () => this.setState({ startY: null }),
+key: (e) => {
+if (e.key === 'ArrowUp') { e.preventDefault(); this.set(count + 1); }
+if (e.key === 'ArrowDown') { e.preventDefault(); this.set(count - 1); }
+},
+plus: () => this.set(count + 1),
+minus: () => this.set(count - 1)
+};
+}
+}
+</script>
+</body>
+</html>

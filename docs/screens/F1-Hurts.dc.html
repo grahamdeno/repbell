@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Something hurts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FF6A13}a:hover{color:#FF8A45}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #121212; color: #F2F0EB; font-family: Inter, system-ui, sans-serif; padding: 96px 24px 40px; display: flex; flex-direction: column; gap: 20px">
+<h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 52px; line-height: 0.95; text-transform: uppercase">Something<br>hurts?</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.5; color: #C9C6C0">Sharp or joint pain is a reason to stop. Your progress is kept either way.</p>
+<div style="flex-grow: 1"></div>
+<a href="D-Today.dc.html" style="min-height: 76px; box-sizing: border-box; border-radius: 16px; border: 1.5px solid #3A3936; color: #F2F0EB; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; gap: 4px; text-decoration: none">
+<span style="font-size: 18px; font-weight: 600">Pause the program</span>
+<span style="font-size: 14px; color: #A3A09A">No alerts until you resume. Day 3 picks up where you left off.</span>
+</a>
+<a href="E1-Result.dc.html" style="min-height: 76px; box-sizing: border-box; border-radius: 16px; border: 1.5px solid #3A3936; color: #F2F0EB; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; gap: 4px; text-decoration: none">
+<span style="font-size: 18px; font-weight: 600">End it here</span>
+<span style="font-size: 14px; color: #A3A09A">Your days so far are saved. Start a new run any time.</span>
+</a>
+<a href="D-Today.dc.html" style="align-self: center; font-size: 15px; padding: 12px">Back</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

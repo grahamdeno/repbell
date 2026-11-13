@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bedtime</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FF6A13}a:hover{color:#FF8A45}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #121212; color: #F2F0EB; font-family: Inter, system-ui, sans-serif; padding: 64px 24px 40px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px" aria-label="Step 2 of 5">
+<div style="height: 4px; border-radius: 2px; background: #FF6A13"></div>
+<div style="height: 4px; border-radius: 2px; background: #FF6A13"></div>
+<div style="height: 4px; border-radius: 2px; background: #2E2D2A"></div>
+<div style="height: 4px; border-radius: 2px; background: #2E2D2A"></div>
+<div style="height: 4px; border-radius: 2px; background: #2E2D2A"></div>
+</div>
+<h1 style="margin: 16px 0 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 48px; line-height: 0.95; text-transform: uppercase">When do you<br>go to bed?</h1>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; color: #C9C6C0">Your last set is an hour before.</p>
+<div style="margin-top: 32px; display: flex; flex-direction: column; align-items: stretch">
+<div style="height: 56px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 30px; color: #55534F">10:00 p.m.</div>
+<div style="height: 56px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px; color: #8A8782">10:30 p.m.</div>
+<div style="height: 72px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 52px; color: #F2F0EB; border-top: 1.5px solid #3A3936; border-bottom: 1.5px solid #3A3936">11:00 p.m.</div>
+<div style="height: 56px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px; color: #8A8782">11:30 p.m.</div>
+<div style="height: 56px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 30px; color: #55534F">12:00 a.m.</div>
+</div>
+<span style="font-size: 15px; color: #A3A09A; text-align: center">Last set at 10:00 p.m.</span>
+<div style="flex-grow: 1"></div>
+<a href="A4-Start.dc.html" style="height: 60px; border-radius: 14px; background: #FF6A13; color: #121212; font-size: 18px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Next</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

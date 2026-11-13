@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Compile and test only. This workflow does not archive, notarize, upload to
+# TestFlight, or submit anything to App Store Connect.
+jobs:
+  engine:
+    name: Schedule engine tests
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the 13 schedule engine tests
+        run: swift test --package-path Packages/RepBellEngine
+
+  apps:
+    name: iOS, Watch, and widget
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the iPhone app, Watch app, and widget
+        run: |
+          set -euo pipefail
+          # Pin arch=arm64. The same simulator id also matches an x86_64 destination,
+          # and the Watch target otherwise builds both slices.
+          UDID=$(python3 -c 'import json,subprocess,sys; data=json.loads(subprocess.check_output(["xcrun","simctl","list","devices","available","-j"])); matches=[d["udid"] for runtime,devices in data.get("devices",{}).items() if "iOS" in runtime for d in devices if d.get("isAvailable") and str(d.get("name","")).startswith("iPhone")]; print(matches[0]) if matches else sys.exit(1)')
+          if [ -z "$UDID" ]; then
+            echo "No available iPhone simulator" >&2
+            xcrun simctl list devices available >&2
+            exit 1
+          fi
+          echo "Using iPhone simulator $UDID"
+          xcodebuild \
+            -project RepBell.xcodeproj \
+            -scheme RepBell \
+            -destination "platform=iOS Simulator,id=$UDID,arch=arm64" \
+            -configuration Debug \
+            ONLY_ACTIVE_ARCH=YES \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
