@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import RepBellEngine
+import UIKit
 
 enum Screen: Equatable {
     case promise
@@ -16,6 +17,7 @@ enum Screen: Equatable {
     case result
     case about
     case paywall
+    case profile
 }
 
 enum SetMark: Equatable {
@@ -104,6 +106,7 @@ final class ProgramController {
             openCounter(day: 1, preserve: false)
         } else {
             screen = .ready
+            Haptics.play(.dayComplete)
         }
         await refreshAlerts()
     }
@@ -150,13 +153,141 @@ final class ProgramController {
             if day == 1 { run.input.dayOneMax = reps }
         }
         screen = day == 15 ? .result : .today
+        Haptics.play(day == 15 ? .result : .testLogged)
         Task { await refreshAlerts() }
     }
 
     func logDone(day: Int, index: Int) {
         let now = CivilDateTime.local(Date())
         update { $0.input.events.append(.done(day: day, index: index, at: now)) }
+        if let run = library.current, let resolved = ScheduleEngine.resolve(run.input, now: now).day(day) {
+            let finished = !resolved.sets.isEmpty && !resolved.sets.contains { $0.status == .upcoming }
+            Haptics.play(finished ? .dayComplete : .setDone)
+        }
         Task { await refreshAlerts() }
+    }
+
+    /// The set that is due right now, if any.
+    func dueSet() -> ScheduledSet? {
+        guard let run = library.current, run.pausedAt == nil, !run.ended else { return nil }
+        let now = CivilDateTime.local(Date())
+        guard let next = ScheduleEngine.resolve(run.input, now: now).nextSet(at: now), let alert = next.alert, alert <= now else { return nil }
+        guard library.allows(day: next.day) else { return nil }
+        return next
+    }
+
+    /// Upcoming sets whose alerts fall in the next hour; these are the ones Busy would skip.
+    func setsInNextHour() -> [ScheduledSet] {
+        guard let run = library.current else { return [] }
+        let now = CivilDateTime.local(Date())
+        let end = now.adding(minutes: 60)
+        return ScheduleEngine.resolve(run.input, now: now).days.flatMap(\.sets).filter { set in
+            guard set.status == .upcoming, let alert = set.alert else { return false }
+            return alert >= now && alert < end
+        }.sorted { $0.grid < $1.grid }
+    }
+
+    /// When the current Busy hour ends, if one is running.
+    func activeBusyEnd() -> CivilDateTime? {
+        guard let run = library.current else { return nil }
+        let now = CivilDateTime.local(Date())
+        for event in run.input.events.reversed() {
+            if case .busy(let at) = event {
+                let end = at.adding(minutes: 60)
+                return end > now ? end : nil
+            }
+        }
+        return nil
+    }
+
+    func undoBusy() {
+        guard activeBusyEnd() != nil, var run = library.current else { return }
+        if let index = run.input.events.lastIndex(where: { if case .busy = $0 { return true } else { return false } }) {
+            run.input.events.remove(at: index)
+            library.current = run
+            persist()
+            Haptics.play(.tap)
+            Task { await refreshAlerts() }
+        }
+    }
+
+    func startOver() {
+        let now = CivilDateTime.local(Date())
+        if let run = library.current {
+            let resolved = ScheduleEngine.resolve(run.input, now: run.pausedAt ?? now)
+            if resolved.day(1)?.testReps != nil, !library.history.contains(where: { $0.input.start == run.input.start }) {
+                var ended = run
+                ended.ended = true
+                ended.pausedAt = nil
+                library.history.append(ended)
+            }
+            let reachedDay = run.input.dayNumber(on: (run.pausedAt ?? now).date) ?? 0
+            if library.runsStarted <= 1 && reachedDay <= 3 {
+                // Restarting the first run inside its free days keeps those days free.
+                library.runsStarted = 0
+            }
+            draftWake = run.input.wake
+            draftBed = run.input.bed
+        }
+        library.current = nil
+        draftStartsToday = false
+        draftCount = 0
+        persist()
+        screen = .promise
+        Task { await refreshAlerts() }
+    }
+
+    func restorePurchases() async {
+        let found = await Unlocker.restore()
+        if found {
+            library.unlocked = true
+            unlockMessage = nil
+            persist()
+            Haptics.play(.dayComplete)
+        } else {
+            unlockMessage = Copy.restoreNone
+        }
+    }
+
+    func profileSnapshot() -> ProfileSnapshot {
+        let now = CivilDateTime.local(Date())
+        var runRows: [ProfileRow] = []
+        var schedule: [ProfileRow] = []
+        if let run = library.current {
+            let moment = run.pausedAt ?? now
+            let resolved = ScheduleEngine.resolve(run.input, now: moment)
+            if let number = run.input.dayNumber(on: moment.date) {
+                runRows.append(ProfileRow(label: "Day", value: run.ended ? "Ended" : "\(min(number, 15)) of 14"))
+            } else if moment.date < run.input.start {
+                runRows.append(ProfileRow(label: "Day", value: "Starts \(Self.dateLabel(run.input.start))"))
+            }
+            runRows.append(ProfileRow(label: "Started", value: Self.dateLabel(run.input.start)))
+            let max = resolved.day(15)?.testReps ?? resolved.day(8)?.testReps ?? resolved.day(1)?.testReps
+            runRows.append(ProfileRow(label: "Max", value: max.map(String.init) ?? "Test on Day 1"))
+            runRows.append(ProfileRow(label: "Push-ups", value: Copy.grouped(resolved.loggedSetReps)))
+            schedule.append(ProfileRow(label: "Wake", value: Copy.clock(run.input.wake)))
+            schedule.append(ProfileRow(label: "Bed", value: Copy.clock(run.input.bed)))
+            let last = ScheduleEngine.lastAllowedMinutes(bed: run.input.bed, wake: run.input.wake) % 1440
+            schedule.append(ProfileRow(label: "Last set", value: Copy.clock(ClockTime(hour: last / 60, minute: last % 60))))
+            schedule.append(ProfileRow(label: "Week 2 re-test", value: run.input.retestEnabled ? "On" : "Off"))
+        }
+        let record: [ProfileRow] = library.history.reversed().map { run in
+            let resolved = ScheduleEngine.resolve(run.input, now: now)
+            let start = resolved.day(1)?.testReps ?? run.input.dayOneMax
+            if let end = resolved.day(15)?.testReps {
+                return ProfileRow(label: Self.dateLabel(run.input.start), value: "\(start) → \(end)")
+            }
+            return ProfileRow(label: Self.dateLabel(run.input.start), value: "\(start), ended early")
+        }
+        return ProfileSnapshot(run: runRows, record: record, schedule: schedule, unlocked: library.unlocked)
+    }
+
+    static func dateLabel(_ date: CivilDate) -> String {
+        let calendar = Calendar.current
+        guard let foundation = calendar.date(from: DateComponents(year: date.year, month: date.month, day: date.day)) else { return "" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy"
+        return formatter.string(from: foundation)
     }
 
     func logSnooze(day: Int, index: Int) {
@@ -169,6 +300,7 @@ final class ProgramController {
         let now = CivilDateTime.local(Date())
         showBusyConfirm = false
         update { $0.input.events.append(.busy(at: now)) }
+        Haptics.play(.tap)
         Task { await refreshAlerts() }
     }
 
@@ -245,6 +377,7 @@ final class ProgramController {
             unlockMessage = nil
             persist()
             screen = library.current == nil ? .promise : .today
+            Haptics.play(.result)
             await refreshAlerts()
         } else if unlockMessage == nil {
             unlockMessage = Copy.unlockMissing
@@ -498,6 +631,19 @@ final class ProgramController {
         formatter.dateFormat = "EEEE"
         return formatter.string(from: foundation)
     }
+}
+
+struct ProfileRow: Identifiable, Equatable {
+    var id: String { label + value }
+    var label: String
+    var value: String
+}
+
+struct ProfileSnapshot: Equatable {
+    var run: [ProfileRow]
+    var record: [ProfileRow]
+    var schedule: [ProfileRow]
+    var unlocked: Bool
 }
 
 extension CivilDate {

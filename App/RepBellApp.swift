@@ -38,6 +38,7 @@ struct RootView: View {
             case .result: ResultView()
             case .about: AboutView()
             case .paywall: PaywallView()
+            case .profile: ProfileView()
             }
         }
         .task {

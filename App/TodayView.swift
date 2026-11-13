@@ -20,6 +20,14 @@ struct TodayView: View {
                                 .font(.system(size: 14))
                                 .foregroundStyle(Chalk.inkMuted)
                         }
+                        Button { controller.screen = .profile } label: {
+                            Image(systemName: "person.crop.circle")
+                                .font(.system(size: 24, weight: .regular))
+                                .foregroundStyle(Chalk.inkSoft)
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Copy.profileLabel)
                     }
                     if !model.bars.isEmpty {
                         DayBars(marks: model.bars)
@@ -54,9 +62,9 @@ struct TodayView: View {
                 footer(model)
             }
         }
-        .confirmationDialog(Copy.busyConfirm(until: controller.busyUntil()), isPresented: Bindable(controller).showBusyConfirm, titleVisibility: .visible) {
-            Button(Copy.busy) { controller.confirmBusy() }
-            Button(Copy.back, role: .cancel) {}
+        .sheet(isPresented: Bindable(controller).showBusyConfirm) {
+            BusySheet()
+                .environment(controller)
         }
     }
 
@@ -132,8 +140,25 @@ struct TodayView: View {
             case .paused:
                 PrimaryButton(title: Copy.resume) { controller.resume() }
             default:
-                if model.showBusy {
+                if let due = controller.dueSet() {
+                    PrimaryButton(title: Copy.doneSet(due.reps)) { controller.logDone(day: due.day, index: due.index) }
+                }
+                if let end = controller.activeBusyEnd() {
+                    HStack {
+                        Text(Copy.busyActive(Copy.clock(end)))
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(Chalk.inkSoft)
+                        Spacer()
+                        TextLink(title: Copy.undo) { controller.undoBusy() }
+                    }
+                    .padding(.leading, 16)
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.line, lineWidth: 1.5))
+                } else if model.showBusy {
                     SecondaryButton(title: Copy.busy, height: 56) { controller.showBusyConfirm = true }
+                    Text(Copy.busyCaption)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Chalk.inkMuted)
+                        .multilineTextAlignment(.center)
                 }
             }
             if case .paused = model.hero {
@@ -141,7 +166,6 @@ struct TodayView: View {
             } else if controller.library.current?.ended != true {
                 TextLink(title: Copy.somethingHurts) { controller.screen = .hurts }
             }
-            TextLink(title: Copy.aboutTitle) { controller.screen = .about }
         }
         .frame(maxWidth: .infinity)
     }

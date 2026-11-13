@@ -60,7 +60,7 @@ struct AboutView: View {
                     .lineSpacing(4)
                 Spacer()
                 SecondaryButton(title: Copy.back) {
-                    controller.screen = controller.library.current == nil ? .promise : .today
+                    controller.screen = controller.library.current == nil ? .promise : .profile
                 }
             }
         }

@@ -1,6 +1,7 @@
 import Foundation
 import RepBellEngine
 import WatchConnectivity
+import WatchKit
 
 @MainActor
 @Observable
@@ -15,6 +16,7 @@ final class WatchModel: NSObject, WCSessionDelegate {
     }
 
     func done(day: Int, index: Int) {
+        WKInterfaceDevice.current().play(.success)
         apply(kind: "done", day: day, index: index)
     }
 
