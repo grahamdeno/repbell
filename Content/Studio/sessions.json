@@ -1,0 +1,464 @@
+{
+  "version": 1,
+  "warmup": [
+    {
+      "id": "march",
+      "seconds": 45
+    },
+    {
+      "id": "arm-circles",
+      "seconds": 60
+    },
+    {
+      "id": "hip-circles",
+      "seconds": 30
+    },
+    {
+      "id": "good-morning",
+      "seconds": 45
+    },
+    {
+      "id": "inchworm",
+      "seconds": 60
+    }
+  ],
+  "cooldown": [
+    {
+      "id": "childs-pose",
+      "seconds": 45
+    },
+    {
+      "id": "wall-chest",
+      "seconds": 60
+    },
+    {
+      "id": "hamstring-fold",
+      "seconds": 45
+    },
+    {
+      "id": "breathing",
+      "seconds": 30
+    }
+  ],
+  "suggest": {
+    "testDay": [
+      "flow",
+      "stretch"
+    ],
+    "dayAfterTest": [
+      "stretch",
+      "flow"
+    ],
+    "pushDay": [
+      "lower-back",
+      "core",
+      "easy-cardio",
+      "ab-finisher"
+    ],
+    "never_on_pushDay": [
+      "upper",
+      "shoulders-arms"
+    ]
+  },
+  "sessions": [
+    {
+      "id": "upper",
+      "name": "Upper",
+      "gear": [
+        "bar",
+        "band"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 4,
+          "work": 45,
+          "rest": 15,
+          "restBetweenRounds": 90,
+          "moves": [
+            "push-up",
+            "band-row",
+            "wide-push-up",
+            "underhand-band-row",
+            "decline-push-up",
+            "table-row",
+            "diamond-push-up",
+            "towel-row"
+          ]
+        }
+      ],
+      "minutes": 44
+    },
+    {
+      "id": "lower-back",
+      "name": "Lower and back",
+      "gear": [
+        "chair"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 4,
+          "work": 45,
+          "rest": 15,
+          "restBetweenRounds": 90,
+          "moves": [
+            "squat",
+            "reverse-lunge",
+            "glute-bridge",
+            "split-squat",
+            "superman",
+            "wall-sit",
+            "calf-raise",
+            "good-morning"
+          ]
+        }
+      ],
+      "minutes": 44
+    },
+    {
+      "id": "shoulders-arms",
+      "name": "Shoulders and arms",
+      "gear": [
+        "band",
+        "chair"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 3,
+          "work": 45,
+          "rest": 15,
+          "restBetweenRounds": 90,
+          "moves": [
+            "pike-push-up",
+            "lateral-raise",
+            "curl",
+            "chair-dip",
+            "overhead-press",
+            "hammer-curl",
+            "triceps-extension",
+            "shoulder-tap"
+          ]
+        }
+      ],
+      "minutes": 35
+    },
+    {
+      "id": "jump",
+      "name": "Jump",
+      "gear": [],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 4,
+          "work": 30,
+          "rest": 30,
+          "restBetweenRounds": 60,
+          "moves": [
+            "squat-jump",
+            "skater-hop",
+            "high-knees",
+            "lateral-shuffle",
+            "split-jump",
+            "burpee"
+          ]
+        }
+      ],
+      "minutes": 35
+    },
+    {
+      "id": "flow",
+      "name": "Flow",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "free": false,
+      "warmup": false,
+      "cooldown": false,
+      "blocks": [
+        {
+          "kind": "sequence",
+          "rest": 10,
+          "moves": [
+            {
+              "id": "breathing",
+              "seconds": 60
+            },
+            {
+              "id": "cat-cow",
+              "seconds": 90
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 60
+            },
+            {
+              "id": "low-lunge",
+              "seconds": 60
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 45
+            },
+            {
+              "id": "warrior-one",
+              "seconds": 60
+            },
+            {
+              "id": "warrior-two",
+              "seconds": 60
+            },
+            {
+              "id": "reverse-warrior",
+              "seconds": 45
+            },
+            {
+              "id": "triangle",
+              "seconds": 60
+            },
+            {
+              "id": "side-angle",
+              "seconds": 45
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 45
+            },
+            {
+              "id": "chair-pose",
+              "seconds": 45
+            },
+            {
+              "id": "tree",
+              "seconds": 60
+            },
+            {
+              "id": "half-moon",
+              "seconds": 45
+            },
+            {
+              "id": "childs-pose",
+              "seconds": 60
+            },
+            {
+              "id": "bridge-pose",
+              "seconds": 60
+            },
+            {
+              "id": "seated-fold",
+              "seconds": 90
+            },
+            {
+              "id": "figure-four",
+              "seconds": 75
+            },
+            {
+              "id": "supine-twist",
+              "seconds": 60
+            },
+            {
+              "id": "final-rest",
+              "seconds": 240
+            }
+          ]
+        }
+      ],
+      "minutes": 35
+    },
+    {
+      "id": "strike",
+      "name": "Strike",
+      "gear": [],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 6,
+          "work": 20,
+          "rest": 0,
+          "restBetweenRounds": 30,
+          "moves": [
+            "fighting-stance",
+            "jab",
+            "jab-cross",
+            "hook",
+            "uppercut",
+            "front-kick",
+            "knee-strike",
+            "side-kick",
+            "bounce"
+          ]
+        }
+      ],
+      "minutes": 28
+    },
+    {
+      "id": "core",
+      "name": "Core",
+      "gear": [
+        "mat"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 3,
+          "work": 40,
+          "rest": 20,
+          "restBetweenRounds": 60,
+          "moves": [
+            "forearm-plank",
+            "dead-bug",
+            "side-plank",
+            "bird-dog",
+            "hollow-hold",
+            "mountain-climber",
+            "bridge-march",
+            "russian-twist"
+          ]
+        }
+      ],
+      "minutes": 34
+    },
+    {
+      "id": "ab-finisher",
+      "name": "Ab finisher",
+      "gear": [
+        "mat"
+      ],
+      "free": true,
+      "warmup": false,
+      "cooldown": false,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 2,
+          "work": 40,
+          "rest": 10,
+          "restBetweenRounds": 30,
+          "moves": [
+            "crunch",
+            "bicycle",
+            "reverse-crunch",
+            "leg-raise",
+            "flutter-kick",
+            "forearm-plank"
+          ]
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "easy-cardio",
+      "name": "Easy cardio",
+      "gear": [],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 3,
+          "work": 60,
+          "rest": 0,
+          "restBetweenRounds": 60,
+          "moves": [
+            "step-jack",
+            "shadow-boxing",
+            "lateral-shuffle",
+            "butt-kick",
+            "march-reach",
+            "knee-drive"
+          ],
+          "betweenRoundsMove": "easy-walk"
+        }
+      ],
+      "minutes": 28
+    },
+    {
+      "id": "stretch",
+      "name": "Stretch",
+      "gear": [
+        "mat"
+      ],
+      "free": true,
+      "warmup": false,
+      "cooldown": false,
+      "blocks": [
+        {
+          "kind": "sequence",
+          "rest": 5,
+          "moves": [
+            {
+              "id": "breathing",
+              "seconds": 45
+            },
+            {
+              "id": "neck-stretch",
+              "seconds": 60
+            },
+            {
+              "id": "doorway-chest",
+              "seconds": 45
+            },
+            {
+              "id": "cross-shoulder",
+              "seconds": 60
+            },
+            {
+              "id": "hip-flexor",
+              "seconds": 90
+            },
+            {
+              "id": "seated-hamstring",
+              "seconds": 90
+            },
+            {
+              "id": "quad-stretch",
+              "seconds": 60
+            },
+            {
+              "id": "calf-wall",
+              "seconds": 60
+            },
+            {
+              "id": "figure-four",
+              "seconds": 90
+            },
+            {
+              "id": "childs-pose",
+              "seconds": 60
+            },
+            {
+              "id": "supine-twist",
+              "seconds": 90
+            },
+            {
+              "id": "final-rest",
+              "seconds": 90
+            }
+          ]
+        }
+      ],
+      "minutes": 25
+    }
+  ]
+}
