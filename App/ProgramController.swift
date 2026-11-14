@@ -18,6 +18,9 @@ enum Screen: Equatable {
     case about
     case paywall
     case profile
+    case studio
+    case studioSession(String)
+    case studioPlayer(String)
 }
 
 enum SetMark: Equatable {
@@ -251,6 +254,18 @@ final class ProgramController {
             Haptics.play(.dayComplete)
         } else {
             unlockMessage = Copy.restoreNone
+        }
+    }
+
+    /// One Studio session to suggest, by push-up day. Upper body work is never suggested on a push day.
+    func studioSuggestion() -> String {
+        guard let run = library.current, !run.ended else { return "flow-45" }
+        let today = CivilDateTime.local(Date()).date
+        guard let day = run.input.dayNumber(on: today) else { return "flow-45" }
+        switch day {
+        case 1, 8, 15: return "flow-45"
+        case 2, 9: return "stretch"
+        default: return day % 2 == 0 ? "lower-back" : "core"
         }
     }
 

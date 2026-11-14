@@ -8,7 +8,7 @@ import json
 import pathlib
 import sys
 
-OUT = pathlib.Path(__file__).resolve().parent.parent / "Content" / "Studio"
+OUT = pathlib.Path(__file__).resolve().parent.parent / "App" / "Studio"
 
 # id, name, setup cue, fault cue, sides, gear, stand-in, easier, harder, view, keyframes
 M = [
