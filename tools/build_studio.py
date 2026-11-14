@@ -155,13 +155,13 @@ def sequence(moves, rest=0):
 
 S = [
     dict(id="upper", name="Upper", gear=["bar", "band"], free=False, warmup=True, cooldown=True,
-         blocks=[circuit(4, 45, 15, 90, ["push-up", "band-row", "wide-push-up", "underhand-band-row", "decline-push-up", "table-row", "diamond-push-up", "towel-row"])]),
+         blocks=[circuit(4, 45, 15, 90, ["push-up", "band-row", "wide-push-up", "underhand-band-row", "decline-push-up", "table-row", "diamond-push-up", "band-row"])]),
     dict(id="lower-back", name="Lower and back", gear=["chair"], free=False, warmup=True, cooldown=True,
          blocks=[circuit(4, 45, 15, 90, ["squat", "reverse-lunge", "glute-bridge", "split-squat", "superman", "wall-sit", "calf-raise", "good-morning"])]),
     dict(id="shoulders-arms", name="Shoulders and arms", gear=["band", "chair"], free=False, warmup=True, cooldown=True,
          blocks=[circuit(3, 45, 15, 90, ["pike-push-up", "lateral-raise", "curl", "chair-dip", "overhead-press", "hammer-curl", "triceps-extension", "shoulder-tap"])]),
     dict(id="jump", name="Jump", gear=[], free=False, warmup=True, cooldown=True,
-         blocks=[circuit(4, 30, 30, 60, ["squat-jump", "skater-hop", "high-knees", "lateral-shuffle", "split-jump", "burpee"])]),
+         blocks=[circuit(4, 30, 30, 90, ["squat-jump", "skater-hop", "high-knees", "lateral-shuffle", "split-jump", "burpee"])]),
     dict(id="flow", name="Flow", gear=["mat", "block"], free=False, warmup=False, cooldown=False,
          blocks=[sequence([("breathing", 60), ("cat-cow", 90), ("downward-dog", 60), ("low-lunge", 60), ("downward-dog", 45),
                            ("warrior-one", 60), ("warrior-two", 60), ("reverse-warrior", 45), ("triangle", 60), ("side-angle", 45),
@@ -169,7 +169,7 @@ S = [
                            ("bridge-pose", 60), ("seated-fold", 90), ("figure-four", 75), ("supine-twist", 60),
                            ("final-rest", 240)], rest=10)]),
     dict(id="strike", name="Strike", gear=[], free=False, warmup=True, cooldown=True,
-         blocks=[circuit(6, 20, 0, 30, ["fighting-stance", "jab", "jab-cross", "hook", "uppercut", "front-kick", "knee-strike", "side-kick", "bounce"])]),
+         blocks=[dict(circuit(6, 20, 0, 30, ["fighting-stance", "jab", "jab-cross", "hook", "uppercut", "front-kick", "knee-strike", "side-kick", "bounce"]), easyFirstRound=True)]),
     dict(id="core", name="Core", gear=["mat"], free=False, warmup=True, cooldown=True,
          blocks=[circuit(3, 40, 20, 60, ["forearm-plank", "dead-bug", "side-plank", "bird-dog", "hollow-hold", "mountain-climber", "bridge-march", "russian-twist"])]),
     dict(id="ab-finisher", name="Ab finisher", gear=["mat"], free=True, warmup=False, cooldown=False,
@@ -210,7 +210,7 @@ def main():
             errors.append(f"{m['id']} stands in for itself")
     used = set()
 
-    def secs_seq(moves):
+    def _unused(moves):
         t = 0
         for mid, s in moves:
             if mid not in ids:
@@ -220,34 +220,103 @@ def main():
             t += s * (2 if by_id[mid]["sides"] == "each" else 1)
         return t
 
+    GET_READY, TRANSITION, SWITCH, SETUP_REST = 10, 30, 5, 30
+
+    def gear_of(mid):
+        return {g for g in by_id[mid]["gear"] if g != "mat"}
+
     sessions = []
-    print(f"{'session':<20}{'min':>5}  moves")
+    print(f"{'session':<20}{'min':>5}  steps")
     for s in S:
-        total = 0
-        if s["warmup"]:
-            total += secs_seq(WARMUP)
-        for b in s["blocks"]:
-            if b["kind"] == "circuit":
-                if b.get("betweenRoundsMove"):
-                    used.add(b["betweenRoundsMove"])
-                for mid in b["moves"]:
-                    if mid not in ids:
-                        errors.append(f"{s['id']}: missing {mid}")
-                    used.add(mid)
-                n = len(b["moves"])
-                total += b["rounds"] * n * (b["work"] + b["rest"]) + (b["rounds"] - 1) * b["restBetweenRounds"]
+        steps = []
+        set_up = set()
+
+        def rest(sec, kind="rest", nxt=None):
+            if sec > 0:
+                steps.append({"type": kind, "seconds": sec, "next": nxt})
+
+        def move(mid, sec, pace=None):
+            if mid not in ids:
+                errors.append(f"{s['id']}: missing {mid}")
+                return
+            used.add(mid)
+            m = by_id[mid]
+            base = {"type": "move", "id": mid}
+            if pace:
+                base["pace"] = pace
+            if m["sides"] == "each":
+                steps.append(dict(base, side="left", seconds=sec))
+                rest(SWITCH, "switch", mid)
+                steps.append(dict(base, side="right", seconds=sec))
             else:
-                total += secs_seq([(m["id"], m["seconds"]) for m in b["moves"]])
-                total += b["rest"] * (len(b["moves"]) - 1)
+                steps.append(dict(base, seconds=sec))
+
+        def setup_needed(mid):
+            new = gear_of(mid) - set_up
+            set_up.update(gear_of(mid))
+            return bool(new)
+
+        def all_moves():
+            out = []
+            if s["warmup"]:
+                out += [m for m, _ in WARMUP]
+            for b in s["blocks"]:
+                out += b["moves"] if b["kind"] == "circuit" else [m["id"] for m in b["moves"]]
+            return out
+
+        first = all_moves()[0]
+        set_up.update(gear_of(first))
+        rest(GET_READY, "getReady", first)
+        if s["warmup"]:
+            for i, (mid, sec) in enumerate(WARMUP):
+                move(mid, sec)
+                if i < len(WARMUP) - 1:
+                    rest(5, "rest", WARMUP[i + 1][0])
+        for bi, b in enumerate(s["blocks"]):
+            moves = b["moves"] if b["kind"] == "circuit" else [m["id"] for m in b["moves"]]
+            if s["warmup"] and bi == 0:
+                setup_needed(moves[0])
+                rest(TRANSITION, "transition", moves[0])
+            if b["kind"] == "circuit":
+                for r in range(b["rounds"]):
+                    pace = "easy" if (b.get("easyFirstRound") and r == 0) else None
+                    for i, mid in enumerate(moves):
+                        if i > 0:
+                            gap = b["rest"]
+                            if setup_needed(mid):
+                                gap = max(gap, SETUP_REST)
+                            rest(gap, "rest", mid)
+                        work = b["work"]
+                        if by_id.get(mid, {}).get("sides") == "each":
+                            work = (b["work"] - SWITCH) // 2
+                        move(mid, work, pace)
+                    if r < b["rounds"] - 1:
+                        if b.get("betweenRoundsMove"):
+                            used.add(b["betweenRoundsMove"])
+                            steps.append({"type": "move", "id": b["betweenRoundsMove"], "seconds": b["restBetweenRounds"], "role": "recovery"})
+                        else:
+                            rest(b["restBetweenRounds"], "roundRest", moves[0])
+            else:
+                for i, m in enumerate(b["moves"]):
+                    if i > 0:
+                        gap = b["rest"]
+                        if setup_needed(m["id"]):
+                            gap = max(gap, SETUP_REST)
+                        rest(gap, "rest", m["id"])
+                    move(m["id"], m["seconds"])
         if s["cooldown"]:
-            total += secs_seq(COOLDOWN)
-        s = dict(s, minutes=round(total / 60))
+            rest(TRANSITION, "transition", COOLDOWN[0][0])
+            for i, (mid, sec) in enumerate(COOLDOWN):
+                move(mid, sec)
+                if i < len(COOLDOWN) - 1:
+                    rest(5, "rest", COOLDOWN[i + 1][0])
+        total = sum(st["seconds"] for st in steps)
+        s = dict(s, minutes=round(total / 60), timeline=steps)
         sessions.append(s)
-        count = sum(len(b["moves"]) for b in s["blocks"])
-        print(f"{s['name']:<20}{s['minutes']:>5}  {count}")
+        print(f"{s['name']:<20}{s['minutes']:>5}  {len(steps)}")
     for m in movements:
-        for ref in ("easier", "harder"):
-            if m[ref]:
+        for ref in ("easier", "harder", "standIn"):
+            if m[ref] and m[ref] in ids:
                 used.add(m[ref])
     unused = sorted(ids - used)
     if errors:
