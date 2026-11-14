@@ -1,0 +1,2598 @@
+{
+  "version": 1,
+  "movements": [
+    {
+      "id": "march",
+      "name": "March in place",
+      "cues": [
+        "Stand tall and lift each knee to hip height.",
+        "Swing the opposite arm; don't lean back."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "high-knees",
+      "view": "front",
+      "keyframes": [
+        "knee up left",
+        "knee up right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "arm-circles",
+      "name": "Arm circles",
+      "cues": [
+        "Arms straight out to the sides, palms down.",
+        "Small circles first, then bigger. Shoulders stay low."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "arms out",
+        "arms circling"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "hip-circles",
+      "name": "Hip circles",
+      "cues": [
+        "Hands on hips, feet hip-width apart.",
+        "Draw a slow circle with your hips; keep your head still."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "hips left",
+        "hips right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "good-morning",
+      "name": "Bodyweight good morning",
+      "cues": [
+        "Hands behind your head, soft knees.",
+        "Hinge at the hips with a flat back until you feel your hamstrings."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "standing",
+        "hinged"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "inchworm",
+      "name": "Inchworm walk-out",
+      "cues": [
+        "Fold forward and put your hands on the floor.",
+        "Walk your hands out to a plank, then walk them back. Keep the legs as straight as you can."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "fold",
+        "plank"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "childs-pose",
+      "name": "Child's pose",
+      "cues": [
+        "Knees wide, big toes together, sit back on your heels.",
+        "Reach your arms forward and let your forehead rest down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "resting"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "wall-chest",
+      "name": "Chest opener at a wall",
+      "cues": [
+        "Forearm on a wall at shoulder height.",
+        "Turn your body away slowly until you feel the front of your shoulder."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": "doorframe",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "arm on wall",
+        "turned away"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "hamstring-fold",
+      "name": "Standing hamstring fold",
+      "cues": [
+        "Feet hip-width, knees soft.",
+        "Fold from the hips and let your head hang. Don't bounce."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "folded"
+      ],
+      "modify": {
+        "lowerBack": "Bend your knees deeply and rest your hands on your thighs."
+      }
+    },
+    {
+      "id": "breathing",
+      "name": "Slow breathing",
+      "cues": [
+        "Stand or sit tall, hands on your belly.",
+        "In for four, out for six. Let your shoulders drop."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "breath in",
+        "breath out"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "push-up",
+      "name": "Standard push-up",
+      "cues": [
+        "Hands just wider than shoulders, body in one straight line.",
+        "Lower until your chest is a fist from the floor. Don't let your hips sag."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "knee-push-up",
+      "harder": "decline-push-up",
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "knee-push-up",
+      "name": "Knee push-up",
+      "cues": [
+        "Knees down, hands under shoulders, hips in line with your back.",
+        "Lower your chest, not your face."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "incline-push-up",
+      "harder": "push-up",
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "incline-push-up",
+      "name": "Incline push-up",
+      "cues": [
+        "Hands on a counter or sturdy chair, body straight.",
+        "The higher the surface, the easier it gets."
+      ],
+      "sides": "none",
+      "gear": [
+        "chair"
+      ],
+      "standIn": "counter",
+      "easier": null,
+      "harder": "knee-push-up",
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "wide-push-up",
+      "name": "Wide push-up",
+      "cues": [
+        "Hands a hand's width wider than a normal push-up.",
+        "Elbows point out at about 45 degrees, not straight sideways."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "knee-push-up",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "decline-push-up",
+      "name": "Decline push-up",
+      "cues": [
+        "Feet up on a chair or step, hands on the floor.",
+        "Keep your core tight so your lower back doesn't arch."
+      ],
+      "sides": "none",
+      "gear": [
+        "chair"
+      ],
+      "standIn": "step",
+      "easier": "push-up",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "diamond-push-up",
+      "name": "Close-grip push-up",
+      "cues": [
+        "Hands under your chest, thumbs and fingers nearly touching.",
+        "Elbows brush your ribs on the way down."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "knee-push-up",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "band-row",
+      "name": "Band row",
+      "cues": [
+        "Anchor the band at chest height, step back until it's tight.",
+        "Pull your elbows back and squeeze your shoulder blades. Don't shrug."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "towel-row",
+      "easier": null,
+      "harder": "pull-up",
+      "view": "side",
+      "keyframes": [
+        "arms long",
+        "elbows back"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "towel-row",
+      "name": "Towel door row",
+      "cues": [
+        "Loop a towel around a closed door's handles, lean back holding both ends.",
+        "Pull your chest to the door. Check the door is shut and latched first."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "table-row",
+      "view": "side",
+      "keyframes": [
+        "leaning back",
+        "pulled in"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "underhand-band-row",
+      "name": "Underhand band row",
+      "cues": [
+        "Same as a band row, palms up.",
+        "Lead with your elbows; finish with a squeeze."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "towel-row",
+      "easier": null,
+      "harder": "chin-up",
+      "view": "side",
+      "keyframes": [
+        "arms long",
+        "elbows back"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "pull-up",
+      "name": "Pull-up",
+      "cues": [
+        "Hang from the bar, hands just wider than shoulders, palms away.",
+        "Pull your chest toward the bar, then lower all the way. No swinging."
+      ],
+      "sides": "none",
+      "gear": [
+        "bar"
+      ],
+      "standIn": "band-row",
+      "easier": "negative-pull-up",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "hang",
+        "chin over bar"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "negative-pull-up",
+      "name": "Slow lowering pull-up",
+      "cues": [
+        "Jump or step up so your chin is over the bar.",
+        "Lower yourself over five slow seconds."
+      ],
+      "sides": "none",
+      "gear": [
+        "bar",
+        "chair"
+      ],
+      "standIn": "band-row",
+      "easier": "band-row",
+      "harder": "pull-up",
+      "view": "front",
+      "keyframes": [
+        "chin over bar",
+        "hang"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "chin-up",
+      "name": "Chin-up",
+      "cues": [
+        "Hang from the bar, palms facing you, shoulder-width.",
+        "Lead with your chest. Lower under control."
+      ],
+      "sides": "none",
+      "gear": [
+        "bar"
+      ],
+      "standIn": "underhand-band-row",
+      "easier": "negative-pull-up",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "hang",
+        "chin over bar"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "table-row",
+      "name": "Table row",
+      "cues": [
+        "Lie under a sturdy table, grip the edge, heels on the floor.",
+        "Pull your chest to the table and keep your hips up."
+      ],
+      "sides": "none",
+      "gear": [
+        "table"
+      ],
+      "standIn": "towel-row",
+      "easier": "bent-knee-table-row",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "arms long",
+        "chest up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "bent-knee-table-row",
+      "name": "Bent-knee table row",
+      "cues": [
+        "Same as a table row with your knees bent and feet flat.",
+        "Drive through your heels to keep your hips level."
+      ],
+      "sides": "none",
+      "gear": [
+        "table"
+      ],
+      "standIn": "towel-row",
+      "easier": null,
+      "harder": "table-row",
+      "view": "side",
+      "keyframes": [
+        "arms long",
+        "chest up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "squat",
+      "name": "Bodyweight squat",
+      "cues": [
+        "Feet shoulder-width, toes slightly out.",
+        "Sit back and down; knees track over your toes, heels stay down."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "chair-squat",
+      "harder": "squat-jump",
+      "view": "side",
+      "keyframes": [
+        "standing",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "chair-squat",
+      "name": "Squat to chair",
+      "cues": [
+        "Stand in front of a chair, arms forward.",
+        "Tap the chair with your hips and stand back up without rocking."
+      ],
+      "sides": "none",
+      "gear": [
+        "chair"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "squat",
+      "view": "side",
+      "keyframes": [
+        "standing",
+        "seated tap"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "reverse-lunge",
+      "name": "Reverse lunge",
+      "cues": [
+        "Stand tall, step one foot back.",
+        "Lower until both knees are near 90 degrees. Front knee stays over the ankle."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "static-lunge",
+      "harder": "split-jump",
+      "view": "side",
+      "keyframes": [
+        "standing",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "static-lunge",
+      "name": "Split stance hold-and-dip",
+      "cues": [
+        "Take a long split stance and hold onto a chair if you need to.",
+        "Small dips straight down. Keep your torso upright."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": "chair",
+      "easier": null,
+      "harder": "reverse-lunge",
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "glute-bridge",
+      "name": "Glute bridge",
+      "cues": [
+        "On your back, knees bent, feet flat and close to your hips.",
+        "Push through your heels and lift your hips. Squeeze at the top, don't arch your back."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "bridge-march",
+      "view": "side",
+      "keyframes": [
+        "down",
+        "up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "split-squat",
+      "name": "Rear-foot split squat",
+      "cues": [
+        "Back foot on a chair, front foot a big step forward.",
+        "Drop the back knee straight down. Most of your weight stays on the front leg."
+      ],
+      "sides": "each",
+      "gear": [
+        "chair"
+      ],
+      "standIn": null,
+      "easier": "static-lunge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "superman",
+      "name": "Superman hold",
+      "cues": [
+        "Lie face down, arms reaching forward.",
+        "Lift your arms, chest and legs a few inches. Look at the floor, not ahead."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "bird-dog",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "down",
+        "lifted"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "wall-sit",
+      "name": "Wall sit",
+      "cues": [
+        "Back flat on a wall, slide down until your knees are near 90 degrees.",
+        "Knees over ankles. Breathe; don't hold your breath."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "seated on wall"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "calf-raise",
+      "name": "Calf raise",
+      "cues": [
+        "Stand tall, hold a wall for balance.",
+        "Rise onto the balls of your feet, pause, lower slowly."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "down",
+        "up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "pike-push-up",
+      "name": "Pike push-up",
+      "cues": [
+        "Hips high in an upside-down V, hands shoulder-width.",
+        "Lower the top of your head toward the floor between your hands."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "incline-push-up",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "lateral-raise",
+      "name": "Lateral raise",
+      "cues": [
+        "Stand on the band or hold weights at your sides.",
+        "Lift your arms out to shoulder height with soft elbows. No swinging."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "water-jugs",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "arms down",
+        "arms out"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "curl",
+      "name": "Curl",
+      "cues": [
+        "Stand on the band or hold weights, palms forward.",
+        "Elbows stay pinned at your sides. Lower slowly."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "water-jugs",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "down",
+        "up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "chair-dip",
+      "name": "Chair dip",
+      "cues": [
+        "Hands on the edge of a sturdy chair, legs out in front.",
+        "Bend your elbows straight back, not out. Shoulders stay away from your ears."
+      ],
+      "sides": "none",
+      "gear": [
+        "chair"
+      ],
+      "standIn": null,
+      "easier": "bent-knee-dip",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "bent-knee-dip",
+      "name": "Bent-knee chair dip",
+      "cues": [
+        "Same as a chair dip with knees bent and feet close.",
+        "Use your legs as little as you can."
+      ],
+      "sides": "none",
+      "gear": [
+        "chair"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "chair-dip",
+      "view": "side",
+      "keyframes": [
+        "top",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "overhead-press",
+      "name": "Overhead press",
+      "cues": [
+        "Stand on the band or hold weights at your shoulders.",
+        "Press straight up without arching your back. Ribs stay down."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "water-jugs",
+      "easier": null,
+      "harder": "pike-push-up",
+      "view": "front",
+      "keyframes": [
+        "at shoulders",
+        "overhead"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "hammer-curl",
+      "name": "Hammer curl",
+      "cues": [
+        "Hold the band or weights with palms facing each other.",
+        "Same as a curl, thumbs up the whole time."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "water-jugs",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "down",
+        "up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "triceps-extension",
+      "name": "Overhead triceps extension",
+      "cues": [
+        "Hold one end of the band or one weight with both hands overhead.",
+        "Lower it behind your head by bending only at the elbows."
+      ],
+      "sides": "none",
+      "gear": [
+        "band"
+      ],
+      "standIn": "water-jugs",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "overhead",
+        "behind head"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "shoulder-tap",
+      "name": "Plank shoulder tap",
+      "cues": [
+        "High plank, feet a little wider than hips.",
+        "Tap the opposite shoulder without rocking your hips."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "knee-plank",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "plank",
+        "tap"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "squat-jump",
+      "name": "Squat jump",
+      "cues": [
+        "Squat down with your arms back.",
+        "Jump straight up and land softly back into the squat."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "squat-calf-raise",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "bottom",
+        "air"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "squat-calf-raise",
+      "name": "Squat to calf raise",
+      "cues": [
+        "Squat down, then stand and rise onto your toes.",
+        "Same rhythm as a jump with no landing."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "squat-jump",
+      "view": "side",
+      "keyframes": [
+        "bottom",
+        "on toes"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "skater-hop",
+      "name": "Skater hop",
+      "cues": [
+        "Hop sideways from one foot to the other.",
+        "Land softly on the outside leg, back foot sweeps behind."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "skater-step",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "land left",
+        "land right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "skater-step",
+      "name": "Skater step",
+      "cues": [
+        "Step wide to one side and sweep the other foot behind.",
+        "Stay low and keep it smooth."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "skater-hop",
+      "view": "front",
+      "keyframes": [
+        "step left",
+        "step right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "high-knees",
+      "name": "High knees",
+      "cues": [
+        "Run in place, driving your knees up.",
+        "Stay on the balls of your feet and pump your arms."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "march",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "knee left",
+        "knee right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "lateral-shuffle",
+      "name": "Lateral shuffle",
+      "cues": [
+        "Athletic stance, knees bent.",
+        "Shuffle three steps one way, three back. Feet never cross."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "side-step",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "wide",
+        "narrow"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "side-step",
+      "name": "Side step",
+      "cues": [
+        "Step side to side with soft knees.",
+        "Reach your arms out as you step for a bit more work."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "lateral-shuffle",
+      "view": "front",
+      "keyframes": [
+        "step left",
+        "step right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "split-jump",
+      "name": "Split jump",
+      "cues": [
+        "Start in a lunge.",
+        "Jump and switch legs in the air. Land softly with both knees bent."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "reverse-lunge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "lunge left",
+        "lunge right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "burpee",
+      "name": "Burpee, no push-up",
+      "cues": [
+        "Squat, hands down, jump your feet back to a plank.",
+        "Jump your feet in, stand and reach up. Keep your hips level in the plank."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "step-back-burpee",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "squat",
+        "plank",
+        "reach"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "step-back-burpee",
+      "name": "Step-back burpee",
+      "cues": [
+        "Hands down, step one foot back at a time to a plank.",
+        "Step back in and stand tall. No jumping."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "burpee",
+      "view": "side",
+      "keyframes": [
+        "squat",
+        "plank",
+        "stand"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "cat-cow",
+      "name": "Cat-cow",
+      "cues": [
+        "Hands under shoulders, knees under hips.",
+        "Breathe in as your belly drops and chest lifts; breathe out as you round your back."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "cow",
+        "cat"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "downward-dog",
+      "name": "Downward dog",
+      "cues": [
+        "From hands and knees, lift your hips up and back.",
+        "Press the floor away. Bend your knees if your back rounds."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "v shape"
+      ],
+      "modify": {
+        "shoulders": "Hands on a chair seat instead of the floor."
+      }
+    },
+    {
+      "id": "low-lunge",
+      "name": "Low lunge",
+      "cues": [
+        "One foot forward between your hands, back knee down.",
+        "Sink your hips forward and lift your chest."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "low lunge"
+      ],
+      "modify": {
+        "knees": "Pad the back knee with a folded blanket."
+      }
+    },
+    {
+      "id": "warrior-one",
+      "name": "Warrior one",
+      "cues": [
+        "Front knee bent over the ankle, back heel down, hips facing forward.",
+        "Reach your arms overhead without arching your lower back."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "warrior one"
+      ],
+      "modify": {
+        "lowerBack": "Hands on hips instead of overhead.",
+        "knees": "Shorten the stance."
+      }
+    },
+    {
+      "id": "warrior-two",
+      "name": "Warrior two",
+      "cues": [
+        "Wide stance, front knee bent, hips open to the side.",
+        "Arms reach long both ways; your gaze goes over the front hand."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "warrior two"
+      ],
+      "modify": {
+        "knees": "Bend the front knee less."
+      }
+    },
+    {
+      "id": "reverse-warrior",
+      "name": "Reverse warrior",
+      "cues": [
+        "From warrior two, flip your front palm up.",
+        "Reach up and back while the front knee stays bent."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "reverse warrior"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "triangle",
+      "name": "Triangle",
+      "cues": [
+        "Wide stance with straight legs, front toes forward.",
+        "Reach forward, then tip down to your shin or a block. Don't collapse your side."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "triangle"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "side-angle",
+      "name": "Side angle",
+      "cues": [
+        "From warrior two, rest your forearm on your front thigh.",
+        "Reach the top arm over your ear in one long line."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "side angle"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "chair-pose",
+      "name": "Chair pose",
+      "cues": [
+        "Feet together, sit back as if into a chair.",
+        "Arms up, weight in your heels, knees behind your toes."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "chair"
+      ],
+      "modify": {
+        "knees": "Sit back less deep, weight in your heels."
+      }
+    },
+    {
+      "id": "tree",
+      "name": "Tree",
+      "cues": [
+        "Stand on one leg, sole of the other foot on your calf or thigh.",
+        "Never press the foot into the knee. Hands at your chest or overhead."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "tree"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "half-moon",
+      "name": "Half moon",
+      "cues": [
+        "From triangle, bend the front knee and put a hand on a block ahead.",
+        "Lift the back leg level with your hip and open your chest to the side."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": "triangle",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "half moon"
+      ],
+      "modify": {
+        "knees": "Keep a soft bend in the standing knee and use a block."
+      }
+    },
+    {
+      "id": "bridge-pose",
+      "name": "Bridge",
+      "cues": [
+        "On your back, feet flat, arms by your sides.",
+        "Lift your hips and roll your shoulders under. Keep your knees in line with your feet."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "bridge"
+      ],
+      "modify": {
+        "lowerBack": "Lift only halfway; squeeze your glutes."
+      }
+    },
+    {
+      "id": "seated-fold",
+      "name": "Seated forward fold",
+      "cues": [
+        "Sit with legs straight out, knees soft.",
+        "Lengthen your spine first, then fold from the hips."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "folded"
+      ],
+      "modify": {
+        "lowerBack": "Bend your knees and sit on a folded blanket."
+      }
+    },
+    {
+      "id": "figure-four",
+      "name": "Figure-four stretch",
+      "cues": [
+        "On your back, cross one ankle over the opposite knee.",
+        "Pull the bottom leg toward you until you feel the outer hip."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "figure four"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "supine-twist",
+      "name": "Supine twist",
+      "cues": [
+        "On your back, hug one knee in, then let it fall across your body.",
+        "Both shoulders stay on the floor."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "twist"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "final-rest",
+      "name": "Final rest",
+      "cues": [
+        "Lie on your back, arms by your sides, palms up.",
+        "Let everything go heavy. Stay still."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "lying"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "centering",
+      "name": "Seated centering",
+      "cues": [
+        "Sit cross-legged on a folded blanket, hands on knees.",
+        "Lengthen up through the crown and breathe slowly through your nose."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "seated"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "thread-needle",
+      "name": "Thread the needle",
+      "cues": [
+        "From hands and knees, slide one arm under your chest.",
+        "Rest your shoulder and ear down; keep your hips over your knees."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "threaded"
+      ],
+      "modify": {
+        "shoulders": "Slide the arm only partway."
+      }
+    },
+    {
+      "id": "puppy",
+      "name": "Puppy pose",
+      "cues": [
+        "From hands and knees, walk your hands forward and lower your chest.",
+        "Hips stay over your knees. Let your upper back melt down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "puppy"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "sun-flow-a",
+      "name": "Sun flow, basic",
+      "cues": [
+        "Reach up, fold, half lift, step back to plank, lower to the floor, cobra, downward dog, step forward, rise.",
+        "One breath per movement. Knees down whenever you need them."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "sun-flow-b",
+      "view": "side",
+      "keyframes": [
+        "reach",
+        "fold",
+        "plank",
+        "cobra",
+        "down dog"
+      ],
+      "modify": {
+        "shoulders": "Lower your knees for the plank and skip cobra; stay in sphinx.",
+        "lowerBack": "Keep cobra low."
+      }
+    },
+    {
+      "id": "sun-flow-b",
+      "name": "Sun flow, strength",
+      "cues": [
+        "Chair pose, fold, plank, lower halfway, upward dog, downward dog, then a warrior one each side between rounds.",
+        "Lower slowly with elbows hugging in. Drop your knees for the lowering if your hips sag."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "sun-flow-a",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "chair",
+        "plank",
+        "low plank",
+        "up dog",
+        "warrior one"
+      ],
+      "modify": {
+        "shoulders": "Knees down for the lowering, then sphinx instead of upward dog.",
+        "lowerBack": "Swap upward dog for a low cobra."
+      }
+    },
+    {
+      "id": "crescent-lunge",
+      "name": "Crescent lunge",
+      "cues": [
+        "High lunge, back heel lifted, arms overhead.",
+        "Square your hips and draw the lower ribs in. Front knee over ankle."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "low-lunge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "crescent"
+      ],
+      "modify": {
+        "knees": "Shorten the stance so the front knee bends less."
+      }
+    },
+    {
+      "id": "pyramid",
+      "name": "Pyramid",
+      "cues": [
+        "Short stance, both legs straight, hips square.",
+        "Hinge over the front leg with a long spine; hands on blocks if the floor is far."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "pyramid"
+      ],
+      "modify": {
+        "lowerBack": "Hands on blocks and fold only halfway."
+      }
+    },
+    {
+      "id": "warrior-three",
+      "name": "Warrior three",
+      "cues": [
+        "From standing, hinge forward and lift one leg behind you.",
+        "Body and back leg form one line. Hands on hips or a chair to start."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": "chair",
+      "easier": "standing-knee-hold",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "warrior three"
+      ],
+      "modify": {
+        "lowerBack": "Hands on a chair, back leg lower."
+      }
+    },
+    {
+      "id": "standing-knee-hold",
+      "name": "Standing knee hold",
+      "cues": [
+        "Stand tall, hug one knee into your chest.",
+        "Stand tall through the standing leg; don't lean back."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "warrior-three",
+      "view": "front",
+      "keyframes": [
+        "knee held"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "goddess",
+      "name": "Goddess squat",
+      "cues": [
+        "Wide stance, toes turned out, sink your hips.",
+        "Knees track over your toes. Arms at cactus, shoulder blades down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "goddess"
+      ],
+      "modify": {
+        "knees": "Bend less; stop before any pinch."
+      }
+    },
+    {
+      "id": "wide-fold",
+      "name": "Wide-leg forward fold",
+      "cues": [
+        "Wide stance, feet parallel, hands on hips.",
+        "Fold from the hips with a long spine, hands to the floor or blocks."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "folded"
+      ],
+      "modify": {
+        "lowerBack": "Hands on blocks; don't round all the way down."
+      }
+    },
+    {
+      "id": "boat",
+      "name": "Boat",
+      "cues": [
+        "Sit tall, lean back slightly, lift your shins parallel to the floor.",
+        "Chest stays lifted. Hold behind your thighs to make it easier."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "boat"
+      ],
+      "modify": {
+        "lowerBack": "Keep your toes on the floor and hold behind your thighs."
+      }
+    },
+    {
+      "id": "dolphin",
+      "name": "Dolphin",
+      "cues": [
+        "Forearms down, hips lifted into an upside-down V.",
+        "Press your forearms down and lift away from the floor; bend your knees if you need to."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "puppy",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "dolphin"
+      ],
+      "modify": {
+        "shoulders": "Do puppy pose instead."
+      }
+    },
+    {
+      "id": "high-plank",
+      "name": "High plank hold",
+      "cues": [
+        "Hands under shoulders, body in one straight line.",
+        "Press the floor away and keep your hips level."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "knee-plank",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "plank"
+      ],
+      "modify": {
+        "shoulders": "Forearm plank or knee plank."
+      }
+    },
+    {
+      "id": "crow",
+      "name": "Crow",
+      "cues": [
+        "Squat, hands on the floor, knees against the backs of your upper arms.",
+        "Shift forward until your feet lift. Keep a block or pillow in front of your face."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "garland",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "crouch",
+        "balance"
+      ],
+      "modify": {
+        "shoulders": "Hold the garland squat instead.",
+        "knees": "Skip it; hold the garland squat on a block."
+      }
+    },
+    {
+      "id": "garland",
+      "name": "Garland squat",
+      "cues": [
+        "Feet wider than hips, sink into a deep squat, palms together.",
+        "Elbows press your knees open. Sit on a block if your heels lift."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": "crow",
+      "view": "front",
+      "keyframes": [
+        "squat"
+      ],
+      "modify": {
+        "knees": "Sit on a block and widen your feet.",
+        "lowerBack": "Sit on a block."
+      }
+    },
+    {
+      "id": "locust",
+      "name": "Locust",
+      "cues": [
+        "Lie face down, arms by your sides.",
+        "Lift your chest, arms and legs. Neck long, gaze down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "sphinx",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "down",
+        "lifted"
+      ],
+      "modify": {
+        "lowerBack": "Lift only your chest, or do sphinx instead."
+      }
+    },
+    {
+      "id": "sphinx",
+      "name": "Sphinx",
+      "cues": [
+        "Lie face down, forearms under your shoulders.",
+        "Draw your chest forward and keep your lower back relaxed."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "locust",
+      "view": "side",
+      "keyframes": [
+        "sphinx"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "lizard",
+      "name": "Lizard",
+      "cues": [
+        "Low lunge with both hands inside the front foot.",
+        "Keep your front knee over your ankle. Forearms down only if your hips allow."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": "low-lunge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "lizard"
+      ],
+      "modify": {
+        "knees": "Back knee down on a blanket; stay on your hands."
+      }
+    },
+    {
+      "id": "pigeon",
+      "name": "Pigeon",
+      "cues": [
+        "From down dog, bring one shin forward, back leg long behind you.",
+        "Keep your hips level, with a block under the front hip if it lifts. Never force the knee."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": "figure-four",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "upright",
+        "folded"
+      ],
+      "modify": {
+        "knees": "Do the figure-four stretch on your back instead."
+      }
+    },
+    {
+      "id": "reclined-toe",
+      "name": "Reclined leg stretch",
+      "cues": [
+        "On your back, loop a strap or towel around one foot, leg up.",
+        "Keep the other leg long and both hips down."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "strap"
+      ],
+      "standIn": "towel",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "leg up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "happy-baby",
+      "name": "Happy baby",
+      "cues": [
+        "On your back, hold the outsides of your feet, knees wide.",
+        "Let your lower back rest on the floor."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "happy baby"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "fighting-stance",
+      "name": "Fighting stance",
+      "cues": [
+        "Feet staggered, hands up by your cheeks, chin down.",
+        "Bounce lightly on the balls of your feet."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "stance"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "jab",
+      "name": "Jab",
+      "cues": [
+        "Punch straight out with your lead hand and snap it back.",
+        "Exhale on every punch; the other hand stays guarding your face."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "guard",
+        "jab"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "jab-cross",
+      "name": "Jab-cross",
+      "cues": [
+        "Jab, then punch straight with your rear hand.",
+        "Pivot the rear foot and turn your hips on the cross."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": "jab",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "jab",
+        "cross"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "hook",
+      "name": "Hook",
+      "cues": [
+        "Bend your elbow to 90 degrees and swing it level across.",
+        "Power comes from turning your hips and lead foot, not the arm."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "guard",
+        "hook"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "uppercut",
+      "name": "Uppercut",
+      "cues": [
+        "Dip your knees slightly and drive your fist up.",
+        "Keep the punch close to your body."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "dip",
+        "uppercut"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "front-kick",
+      "name": "Front kick",
+      "cues": [
+        "Lift your knee, then push your foot straight out.",
+        "Pull the foot back before you set it down. Hands stay up."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "knee-strike",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "knee up",
+        "kick"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "knee-strike",
+      "name": "Knee strike",
+      "cues": [
+        "Grab an imaginary target at chest height.",
+        "Drive your knee up and pull your hands down to meet it."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "front-kick",
+      "view": "side",
+      "keyframes": [
+        "reach",
+        "knee up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "side-kick",
+      "name": "Side kick",
+      "cues": [
+        "Turn sideways, lift your knee across your body.",
+        "Push your heel out to the side; lean your torso away for balance."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "knee-strike",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "chamber",
+        "kick"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "bounce",
+      "name": "Light bounce",
+      "cues": [
+        "Fighting stance, hands up.",
+        "Small, easy bounces to recover between combos."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "bounce up",
+        "bounce down"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "forearm-plank",
+      "name": "Forearm plank",
+      "cues": [
+        "Elbows under shoulders, body in one straight line.",
+        "Squeeze your glutes and pull your belly button in. Don't let your hips sag."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "knee-plank",
+      "harder": "shoulder-tap",
+      "view": "side",
+      "keyframes": [
+        "plank"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "knee-plank",
+      "name": "Knee plank",
+      "cues": [
+        "Forearms down, knees down, hips in line with your back.",
+        "Same tight core as a full plank."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "forearm-plank",
+      "view": "side",
+      "keyframes": [
+        "plank"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "dead-bug",
+      "name": "Dead bug",
+      "cues": [
+        "On your back, arms up, knees bent over your hips.",
+        "Lower the opposite arm and leg slowly. Keep your lower back on the floor."
+      ],
+      "sides": "alternating",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "start",
+        "reach"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "side-plank",
+      "name": "Side plank",
+      "cues": [
+        "On one forearm, feet stacked, body in a straight line.",
+        "Lift your hips; don't let them drop toward the floor."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "knee-side-plank",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "side plank"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "knee-side-plank",
+      "name": "Knee side plank",
+      "cues": [
+        "Same as a side plank with your knees bent and down.",
+        "Hips forward, in line with your shoulders."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "side-plank",
+      "view": "front",
+      "keyframes": [
+        "side plank"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "bird-dog",
+      "name": "Bird dog",
+      "cues": [
+        "Hands and knees, back flat.",
+        "Reach the opposite arm and leg long. Keep your hips level as if balancing a cup on your back."
+      ],
+      "sides": "alternating",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "superman",
+      "view": "side",
+      "keyframes": [
+        "start",
+        "reach"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "hollow-hold",
+      "name": "Hollow hold",
+      "cues": [
+        "On your back, press your lower back down, lift shoulders and legs.",
+        "Bend your knees to make it easier. Your lower back never lifts."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "dead-bug",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "hollow"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "mountain-climber",
+      "name": "Mountain climber",
+      "cues": [
+        "High plank, hands under shoulders.",
+        "Drive your knees toward your chest one at a time. Hips stay low."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "slow-climber",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "knee left",
+        "knee right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "slow-climber",
+      "name": "Slow mountain climber",
+      "cues": [
+        "High plank, step one knee in at a time.",
+        "Pause each step and keep your shoulders over your hands."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "mountain-climber",
+      "view": "side",
+      "keyframes": [
+        "knee left",
+        "knee right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "bridge-march",
+      "name": "Glute bridge march",
+      "cues": [
+        "Hold a glute bridge at the top.",
+        "Lift one foot at a time without your hips dropping."
+      ],
+      "sides": "alternating",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "glute-bridge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "bridge left",
+        "bridge right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "russian-twist",
+      "name": "Russian twist",
+      "cues": [
+        "Sit leaning back slightly, knees bent, heels down.",
+        "Turn your chest side to side, not just your arms."
+      ],
+      "sides": "alternating",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "twist left",
+        "twist right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "cues": [
+        "On your back, knees bent, fingertips behind your ears.",
+        "Curl your shoulders up with your belly. Don't pull on your neck."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "down",
+        "up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "bicycle",
+      "name": "Bicycle",
+      "cues": [
+        "On your back, hands behind your head, legs lifted.",
+        "Bring the opposite elbow toward the knee as the other leg reaches long. Slow beats fast."
+      ],
+      "sides": "alternating",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "crunch",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "twist left",
+        "twist right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "reverse-crunch",
+      "name": "Reverse crunch",
+      "cues": [
+        "On your back, knees bent at 90 degrees above your hips.",
+        "Curl your hips off the floor toward your chest, then lower slowly."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "down",
+        "curled"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "leg-raise",
+      "name": "Straight-leg raise",
+      "cues": [
+        "On your back, legs straight, hands under your hips.",
+        "Lower your legs only as far as your lower back stays down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "reverse-crunch",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "legs up",
+        "legs low"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "flutter-kick",
+      "name": "Flutter kick",
+      "cues": [
+        "On your back, legs straight and a few inches up.",
+        "Small quick kicks. Press your lower back into the floor."
+      ],
+      "sides": "alternating",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "dead-bug",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "kick left",
+        "kick right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "step-jack",
+      "name": "Step jack",
+      "cues": [
+        "Step one foot out to the side as your arms go overhead.",
+        "Step back in and switch sides. No jumping."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "out",
+        "in"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "shadow-boxing",
+      "name": "Shadow boxing",
+      "cues": [
+        "Fighting stance, hands up.",
+        "Easy jabs and crosses while you move your feet."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "jab",
+        "cross"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "butt-kick",
+      "name": "Butt kick",
+      "cues": [
+        "Jog in place, heels toward your glutes.",
+        "Stay tall and light on your feet."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "march",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "heel left",
+        "heel right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "march-reach",
+      "name": "March with arm reach",
+      "cues": [
+        "March in place, reaching one arm up as the opposite knee lifts.",
+        "Keep a steady rhythm."
+      ],
+      "sides": "alternating",
+      "gear": [],
+      "standIn": null,
+      "easier": "march",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "reach left",
+        "reach right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "knee-drive",
+      "name": "Standing knee drive",
+      "cues": [
+        "Stagger your feet, arms reaching up.",
+        "Pull your arms down as your back knee drives up. Switch halfway."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": "march",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "reach",
+        "knee up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "easy-walk",
+      "name": "Easy walk",
+      "cues": [
+        "Walk in place or around the room.",
+        "Let your breathing settle."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "step left",
+        "step right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "neck-stretch",
+      "name": "Neck side stretch",
+      "cues": [
+        "Sit or stand tall, tip your ear toward your shoulder.",
+        "Let the opposite shoulder drop. No pulling on your head."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "tipped"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "doorway-chest",
+      "name": "Doorway chest stretch",
+      "cues": [
+        "Forearms on a doorframe, elbows at shoulder height.",
+        "Step one foot through until you feel the chest open."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": "wall",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "stretching"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "cross-shoulder",
+      "name": "Cross-body shoulder stretch",
+      "cues": [
+        "Bring one arm across your chest.",
+        "Hold it above the elbow with the other hand. Shoulder stays down."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "stretching"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "hip-flexor",
+      "name": "Kneeling hip flexor stretch",
+      "cues": [
+        "Kneel on one knee, other foot forward.",
+        "Squeeze the glute of the back leg and shift your hips forward."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "stretching"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "seated-hamstring",
+      "name": "Seated hamstring stretch",
+      "cues": [
+        "Sit with one leg straight, the other foot against the inner thigh.",
+        "Fold toward the straight leg with a long back."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "stretching"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "quad-stretch",
+      "name": "Standing quad stretch",
+      "cues": [
+        "Hold a wall, grab one ankle behind you.",
+        "Knees side by side, hips pressed forward."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "stretching"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "calf-wall",
+      "name": "Calf stretch at a wall",
+      "cues": [
+        "Hands on a wall, one foot back, heel down.",
+        "Lean in with the back leg straight."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "stretching"
+      ],
+      "modify": {}
+    }
+  ]
+}

@@ -37,6 +37,16 @@ struct TodayView: View {
                                 .font(.system(size: 14))
                                 .foregroundStyle(Chalk.inkMuted)
                         }
+                        if StudioFeature.enabled {
+                        Button { controller.screen = .studio } label: {
+                            Image(systemName: "figure.mind.and.body")
+                                .font(.system(size: 22, weight: .regular))
+                                .foregroundStyle(Chalk.inkSoft)
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(StudioCopy.studio)
+                        }
                         Button { controller.screen = .profile } label: {
                             Image(systemName: "person.crop.circle")
                                 .font(.system(size: 24, weight: .regular))
@@ -127,10 +137,32 @@ struct TodayView: View {
                     .textCase(.uppercase)
             }
         case .finished(let line):
-            Text(line)
-                .font(Chalk.display(40))
-                .textCase(.uppercase)
-                .foregroundStyle(Chalk.ink)
+            VStack(alignment: .leading, spacing: 20) {
+                Text(line)
+                    .font(Chalk.display(40))
+                    .textCase(.uppercase)
+                    .foregroundStyle(Chalk.ink)
+                if StudioFeature.enabled, let suggestion = StudioLibrary.shared.session(controller.studioSuggestion()) {
+                    Button { controller.screen = .studioSession(suggestion.id) } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(StudioCopy.wantMore)
+                                .font(.system(size: 14))
+                                .foregroundStyle(Chalk.inkMuted)
+                            HStack {
+                                Text("\(suggestion.name) · \(suggestion.minutes) min")
+                                    .font(.system(size: 17, weight: .semibold))
+                                    .foregroundStyle(Chalk.ink)
+                                Spacer()
+                                Image(systemName: "arrow.right")
+                                    .foregroundStyle(Chalk.accent)
+                            }
+                        }
+                        .padding(16)
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.lineStrong, lineWidth: 1.5))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
         case .paused(let day):
             VStack(alignment: .leading, spacing: 8) {
                 Text(Copy.paused)
