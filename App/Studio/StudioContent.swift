@@ -186,3 +186,18 @@ extension StudioSettings {
         return ResolvedMove(movement: movement, cues: movement.cues, note: note)
     }
 }
+
+/// Studio ships dark in 1.0: visible in debug and TestFlight builds only.
+/// Turning it on for the App Store, or rolling it back, is this one switch plus a new build.
+enum StudioFeature {
+    static let shipsInAppStore = false
+
+    static var enabled: Bool {
+        #if DEBUG
+        return true
+        #else
+        if shipsInAppStore { return true }
+        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        #endif
+    }
+}

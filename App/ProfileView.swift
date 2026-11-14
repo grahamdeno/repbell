@@ -67,7 +67,9 @@ struct ProfileView: View {
                                     .foregroundStyle(Chalk.inkMuted)
                             }
                         }
-                        StudioProfileSection()
+                        if StudioFeature.enabled {
+                            StudioProfileSection()
+                        }
                         section(Copy.unlockSection) {
                             row(ProfileRow(label: "Status", value: model.unlocked ? Copy.unlocked : Copy.notUnlocked))
                             if !model.unlocked {

@@ -37,6 +37,7 @@ struct TodayView: View {
                                 .font(.system(size: 14))
                                 .foregroundStyle(Chalk.inkMuted)
                         }
+                        if StudioFeature.enabled {
                         Button { controller.screen = .studio } label: {
                             Image(systemName: "figure.mind.and.body")
                                 .font(.system(size: 22, weight: .regular))
@@ -45,6 +46,7 @@ struct TodayView: View {
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(StudioCopy.studio)
+                        }
                         Button { controller.screen = .profile } label: {
                             Image(systemName: "person.crop.circle")
                                 .font(.system(size: 24, weight: .regular))
@@ -140,7 +142,7 @@ struct TodayView: View {
                     .font(Chalk.display(40))
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
-                if let suggestion = StudioLibrary.shared.session(controller.studioSuggestion()) {
+                if StudioFeature.enabled, let suggestion = StudioLibrary.shared.session(controller.studioSuggestion()) {
                     Button { controller.screen = .studioSession(suggestion.id) } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(StudioCopy.wantMore)
