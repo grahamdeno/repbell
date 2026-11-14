@@ -91,8 +91,8 @@ final class StudioLibrary {
 final class StudioSettings {
     static let shared = StudioSettings()
 
-    static let allGear = ["bar", "band", "chair", "table", "block", "strap"]
-    static let zones = ["knees", "lowerBack", "shoulders"]
+    nonisolated static let allGear = ["bar", "band", "chair", "table", "block", "strap"]
+    nonisolated static let zones = ["knees", "lowerBack", "shoulders"]
 
     var mascot: String { didSet { save() } }
     var gear: Set<String> { didSet { save() } }
@@ -130,7 +130,7 @@ final class StudioSettings {
         session.gear.filter { $0 != "mat" && !gear.contains($0) }
     }
 
-    static func zoneLabel(_ zone: String) -> String {
+    nonisolated static func zoneLabel(_ zone: String) -> String {
         switch zone {
         case "knees": return "Knees"
         case "lowerBack": return "Lower back"
@@ -139,7 +139,7 @@ final class StudioSettings {
         }
     }
 
-    static func gearLabel(_ gear: String) -> String {
+    nonisolated static func gearLabel(_ gear: String) -> String {
         switch gear {
         case "bar": return "Pull-up bar"
         case "band": return "Bands or dumbbells"
