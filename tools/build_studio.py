@@ -91,6 +91,30 @@ M = [
     ("supine-twist", "Supine twist", "On your back, hug one knee in, then let it fall across your body.", "Both shoulders stay on the floor.", "each", ["mat"], None, None, None, "front", ["twist"]),
     ("final-rest", "Final rest", "Lie on your back, arms by your sides, palms up.", "Let everything go heavy. Stay still.", "none", ["mat"], None, None, None, "front", ["lying"]),
 
+    # Flow additions (45 and 90)
+    ("centering", "Seated centering", "Sit cross-legged on a folded blanket, hands on knees.", "Lengthen up through the crown and breathe slowly through your nose.", "none", ["mat"], None, None, None, "front", ["seated"]),
+    ("thread-needle", "Thread the needle", "From hands and knees, slide one arm under your chest.", "Rest your shoulder and ear down; keep your hips over your knees.", "each", ["mat"], None, None, None, "side", ["threaded"]),
+    ("puppy", "Puppy pose", "From hands and knees, walk your hands forward and lower your chest.", "Hips stay over your knees. Let your upper back melt down.", "none", ["mat"], None, None, None, "side", ["puppy"]),
+    ("sun-flow-a", "Sun flow, basic", "Reach up, fold, half lift, step back to plank, lower to the floor, cobra, downward dog, step forward, rise.", "One breath per movement. Knees down whenever you need them.", "none", ["mat"], None, None, "sun-flow-b", "side", ["reach", "fold", "plank", "cobra", "down dog"]),
+    ("sun-flow-b", "Sun flow, strength", "Chair pose, fold, plank, lower halfway, upward dog, downward dog, then a warrior one each side between rounds.", "Lower slowly with elbows hugging in. Drop your knees for the lowering if your hips sag.", "none", ["mat"], None, "sun-flow-a", None, "side", ["chair", "plank", "low plank", "up dog", "warrior one"]),
+    ("crescent-lunge", "Crescent lunge", "High lunge, back heel lifted, arms overhead.", "Square your hips and draw the lower ribs in. Front knee over ankle.", "each", ["mat"], None, "low-lunge", None, "side", ["crescent"]),
+    ("pyramid", "Pyramid", "Short stance, both legs straight, hips square.", "Hinge over the front leg with a long spine; hands on blocks if the floor is far.", "each", ["mat", "block"], "book", None, None, "side", ["pyramid"]),
+    ("warrior-three", "Warrior three", "From standing, hinge forward and lift one leg behind you.", "Body and back leg form one line. Hands on hips or a chair to start.", "each", ["mat"], "chair", "standing-knee-hold", None, "side", ["warrior three"]),
+    ("standing-knee-hold", "Standing knee hold", "Stand tall, hug one knee into your chest.", "Stand tall through the standing leg; don't lean back.", "each", ["mat"], None, None, "warrior-three", "front", ["knee held"]),
+    ("goddess", "Goddess squat", "Wide stance, toes turned out, sink your hips.", "Knees track over your toes. Arms at cactus, shoulder blades down.", "none", ["mat"], None, None, None, "front", ["goddess"]),
+    ("wide-fold", "Wide-leg forward fold", "Wide stance, feet parallel, hands on hips.", "Fold from the hips with a long spine, hands to the floor or blocks.", "none", ["mat", "block"], "book", None, None, "front", ["folded"]),
+    ("boat", "Boat", "Sit tall, lean back slightly, lift your shins parallel to the floor.", "Chest stays lifted. Hold behind your thighs to make it easier.", "none", ["mat"], None, None, None, "side", ["boat"]),
+    ("dolphin", "Dolphin", "Forearms down, hips lifted into an upside-down V.", "Press your forearms down and lift away from the floor; bend your knees if you need to.", "none", ["mat"], None, "puppy", None, "side", ["dolphin"]),
+    ("high-plank", "High plank hold", "Hands under shoulders, body in one straight line.", "Press the floor away and keep your hips level.", "none", ["mat"], None, "knee-plank", None, "side", ["plank"]),
+    ("crow", "Crow", "Squat, hands on the floor, knees against the backs of your upper arms.", "Shift forward until your feet lift. Keep a block or pillow in front of your face.", "none", ["mat"], None, "garland", None, "side", ["crouch", "balance"]),
+    ("garland", "Garland squat", "Feet wider than hips, sink into a deep squat, palms together.", "Elbows press your knees open. Sit on a block if your heels lift.", "none", ["mat", "block"], "book", None, "crow", "front", ["squat"]),
+    ("locust", "Locust", "Lie face down, arms by your sides.", "Lift your chest, arms and legs. Neck long, gaze down.", "none", ["mat"], None, "sphinx", None, "side", ["down", "lifted"]),
+    ("sphinx", "Sphinx", "Lie face down, forearms under your shoulders.", "Draw your chest forward and keep your lower back relaxed.", "none", ["mat"], None, None, "locust", "side", ["sphinx"]),
+    ("lizard", "Lizard", "Low lunge with both hands inside the front foot.", "Keep your front knee over your ankle. Forearms down only if your hips allow.", "each", ["mat", "block"], "book", "low-lunge", None, "side", ["lizard"]),
+    ("pigeon", "Pigeon", "From down dog, bring one shin forward, back leg long behind you.", "Keep your hips level, with a block under the front hip if it lifts. Never force the knee.", "each", ["mat", "block"], "book", "figure-four", None, "side", ["upright", "folded"]),
+    ("reclined-toe", "Reclined leg stretch", "On your back, loop a strap or towel around one foot, leg up.", "Keep the other leg long and both hips down.", "each", ["mat", "strap"], "towel", None, None, "side", ["leg up"]),
+    ("happy-baby", "Happy baby", "On your back, hold the outsides of your feet, knees wide.", "Let your lower back rest on the floor.", "none", ["mat"], None, None, None, "front", ["happy baby"]),
+
     # Strike
     ("fighting-stance", "Fighting stance", "Feet staggered, hands up by your cheeks, chin down.", "Bounce lightly on the balls of your feet.", "none", [], None, None, None, "front", ["stance"]),
     ("jab", "Jab", "Punch straight out with your lead hand and snap it back.", "Exhale on every punch; the other hand stays guarding your face.", "none", [], None, None, None, "front", ["guard", "jab"]),
@@ -140,6 +164,35 @@ M = [
     ("calf-wall", "Calf stretch at a wall", "Hands on a wall, one foot back, heel down.", "Lean in with the back leg straight.", "each", [], None, None, None, "side", ["stretching"]),
 ]
 
+
+MODS = {
+    "low-lunge": {"knees": "Pad the back knee with a folded blanket."},
+    "crescent-lunge": {"knees": "Shorten the stance so the front knee bends less."},
+    "lizard": {"knees": "Back knee down on a blanket; stay on your hands."},
+    "pigeon": {"knees": "Do the figure-four stretch on your back instead."},
+    "garland": {"knees": "Sit on a block and widen your feet.", "lowerBack": "Sit on a block."},
+    "goddess": {"knees": "Bend less; stop before any pinch."},
+    "chair-pose": {"knees": "Sit back less deep, weight in your heels."},
+    "warrior-one": {"lowerBack": "Hands on hips instead of overhead.", "knees": "Shorten the stance."},
+    "warrior-two": {"knees": "Bend the front knee less."},
+    "boat": {"lowerBack": "Keep your toes on the floor and hold behind your thighs."},
+    "locust": {"lowerBack": "Lift only your chest, or do sphinx instead."},
+    "bridge-pose": {"lowerBack": "Lift only halfway; squeeze your glutes."},
+    "seated-fold": {"lowerBack": "Bend your knees and sit on a folded blanket."},
+    "wide-fold": {"lowerBack": "Hands on blocks; don't round all the way down."},
+    "pyramid": {"lowerBack": "Hands on blocks and fold only halfway."},
+    "hamstring-fold": {"lowerBack": "Bend your knees deeply and rest your hands on your thighs."},
+    "sun-flow-a": {"shoulders": "Lower your knees for the plank and skip cobra; stay in sphinx.", "lowerBack": "Keep cobra low."},
+    "sun-flow-b": {"shoulders": "Knees down for the lowering, then sphinx instead of upward dog.", "lowerBack": "Swap upward dog for a low cobra."},
+    "downward-dog": {"shoulders": "Hands on a chair seat instead of the floor."},
+    "dolphin": {"shoulders": "Do puppy pose instead."},
+    "high-plank": {"shoulders": "Forearm plank or knee plank."},
+    "crow": {"shoulders": "Hold the garland squat instead.", "knees": "Skip it; hold the garland squat on a block."},
+    "thread-needle": {"shoulders": "Slide the arm only partway."},
+    "half-moon": {"knees": "Keep a soft bend in the standing knee and use a block."},
+    "warrior-three": {"lowerBack": "Hands on a chair, back leg lower."},
+}
+
 WARMUP = [("march", 45), ("arm-circles", 60), ("hip-circles", 30), ("good-morning", 45), ("inchworm", 60)]
 COOLDOWN = [("childs-pose", 45), ("wall-chest", 60), ("hamstring-fold", 45), ("breathing", 30)]
 
@@ -162,12 +215,26 @@ S = [
          blocks=[circuit(3, 45, 15, 90, ["pike-push-up", "lateral-raise", "curl", "chair-dip", "overhead-press", "hammer-curl", "triceps-extension", "shoulder-tap"])]),
     dict(id="jump", name="Jump", gear=[], free=False, warmup=True, cooldown=True,
          blocks=[circuit(4, 30, 30, 90, ["squat-jump", "skater-hop", "high-knees", "lateral-shuffle", "split-jump", "burpee"])]),
-    dict(id="flow", name="Flow", gear=["mat", "block"], free=False, warmup=False, cooldown=False,
-         blocks=[sequence([("breathing", 60), ("cat-cow", 90), ("downward-dog", 60), ("low-lunge", 60), ("downward-dog", 45),
-                           ("warrior-one", 60), ("warrior-two", 60), ("reverse-warrior", 45), ("triangle", 60), ("side-angle", 45),
-                           ("downward-dog", 45), ("chair-pose", 45), ("tree", 60), ("half-moon", 45), ("childs-pose", 60),
-                           ("bridge-pose", 60), ("seated-fold", 90), ("figure-four", 75), ("supine-twist", 60),
-                           ("final-rest", 240)], rest=10)]),
+    dict(id="flow-45", name="Flow 45", gear=["mat", "block", "strap"], free=False, warmup=False, cooldown=False,
+         blocks=[sequence([("centering", 90), ("cat-cow", 90), ("thread-needle", 45), ("downward-dog", 60),
+                           ("puppy", 60), ("sun-flow-a", 360), ("warrior-one", 45), ("crescent-lunge", 45), ("warrior-two", 45), ("side-angle", 40),
+                           ("triangle", 45), ("pyramid", 45), ("downward-dog", 45), ("chair-pose", 45), ("tree", 45),
+                           ("warrior-three", 30), ("high-plank", 45), ("boat", 40), ("locust", 40),
+                           ("bridge-pose", 60), ("lizard", 60), ("figure-four", 60), ("reclined-toe", 60),
+                           ("supine-twist", 45), ("final-rest", 240)], rest=10)]),
+    dict(id="flow-90", name="Flow 90", gear=["mat", "block", "strap"], free=False, warmup=False, cooldown=False,
+         blocks=[sequence([("centering", 180), ("cat-cow", 120), ("thread-needle", 60), ("puppy", 60),
+                           ("downward-dog", 90), ("low-lunge", 60), ("downward-dog", 60),
+                           ("sun-flow-a", 360), ("sun-flow-b", 420),
+                           ("crescent-lunge", 60), ("warrior-two", 60), ("reverse-warrior", 40), ("side-angle", 50),
+                           ("triangle", 60), ("pyramid", 60), ("wide-fold", 90), ("goddess", 60),
+                           ("downward-dog", 60), ("chair-pose", 60), ("standing-knee-hold", 40), ("tree", 60),
+                           ("warrior-three", 45), ("half-moon", 50),
+                           ("high-plank", 60), ("side-plank", 30), ("dolphin", 60), ("boat", 45), ("boat", 45),
+                           ("garland", 60), ("crow", 45), ("childs-pose", 60),
+                           ("sphinx", 60), ("locust", 45), ("locust", 45), ("bridge-pose", 60), ("bridge-pose", 60),
+                           ("happy-baby", 60), ("lizard", 75), ("pigeon", 120), ("reclined-toe", 90),
+                           ("seated-fold", 120), ("supine-twist", 60), ("final-rest", 480)], rest=10)]),
     dict(id="strike", name="Strike", gear=[], free=False, warmup=True, cooldown=True,
          blocks=[dict(circuit(6, 20, 0, 30, ["fighting-stance", "jab", "jab-cross", "hook", "uppercut", "front-kick", "knee-strike", "side-kick", "bounce"]), easyFirstRound=True)]),
     dict(id="core", name="Core", gear=["mat"], free=False, warmup=True, cooldown=True,
@@ -183,8 +250,8 @@ S = [
 ]
 
 SUGGEST = {
-    "testDay": ["flow", "stretch"],
-    "dayAfterTest": ["stretch", "flow"],
+    "testDay": ["flow-45", "stretch"],
+    "dayAfterTest": ["stretch", "flow-45"],
     "pushDay": ["lower-back", "core", "easy-cardio", "ab-finisher"],
     "never_on_pushDay": ["upper", "shoulders-arms"],
 }
@@ -199,8 +266,12 @@ def main():
             sys.exit(f"duplicate id {mid}")
         ids.add(mid)
         movements.append({"id": mid, "name": name, "cues": [setup, fault], "sides": sides, "gear": gear,
-                          "standIn": stand, "easier": easier, "harder": harder, "view": view, "keyframes": keys})
+                          "standIn": stand, "easier": easier, "harder": harder, "view": view, "keyframes": keys,
+                          "modify": MODS.get(mid, {})})
     by_id = {m["id"]: m for m in movements}
+    for k in MODS:
+        if k not in by_id:
+            sys.exit(f"MODS refers to missing {k}")
     errors = []
     for m in movements:
         for ref in ("easier", "harder"):

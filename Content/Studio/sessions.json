@@ -42,12 +42,12 @@
   ],
   "suggest": {
     "testDay": [
-      "flow",
+      "flow-45",
       "stretch"
     ],
     "dayAfterTest": [
       "stretch",
-      "flow"
+      "flow-45"
     ],
     "pushDay": [
       "lower-back",
@@ -1764,11 +1764,12 @@
       ]
     },
     {
-      "id": "flow",
-      "name": "Flow",
+      "id": "flow-45",
+      "name": "Flow 45",
       "gear": [
         "mat",
-        "block"
+        "block",
+        "strap"
       ],
       "free": false,
       "warmup": false,
@@ -1779,43 +1780,51 @@
           "rest": 10,
           "moves": [
             {
-              "id": "breathing",
-              "seconds": 60
+              "id": "centering",
+              "seconds": 90
             },
             {
               "id": "cat-cow",
               "seconds": 90
             },
             {
-              "id": "downward-dog",
-              "seconds": 60
-            },
-            {
-              "id": "low-lunge",
-              "seconds": 60
-            },
-            {
-              "id": "downward-dog",
+              "id": "thread-needle",
               "seconds": 45
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 60
+            },
+            {
+              "id": "puppy",
+              "seconds": 60
+            },
+            {
+              "id": "sun-flow-a",
+              "seconds": 360
             },
             {
               "id": "warrior-one",
-              "seconds": 60
-            },
-            {
-              "id": "warrior-two",
-              "seconds": 60
-            },
-            {
-              "id": "reverse-warrior",
               "seconds": 45
             },
             {
-              "id": "triangle",
-              "seconds": 60
+              "id": "crescent-lunge",
+              "seconds": 45
+            },
+            {
+              "id": "warrior-two",
+              "seconds": 45
             },
             {
               "id": "side-angle",
+              "seconds": 40
+            },
+            {
+              "id": "triangle",
+              "seconds": 45
+            },
+            {
+              "id": "pyramid",
               "seconds": 45
             },
             {
@@ -1828,31 +1837,43 @@
             },
             {
               "id": "tree",
-              "seconds": 60
-            },
-            {
-              "id": "half-moon",
               "seconds": 45
             },
             {
-              "id": "childs-pose",
-              "seconds": 60
+              "id": "warrior-three",
+              "seconds": 30
+            },
+            {
+              "id": "high-plank",
+              "seconds": 45
+            },
+            {
+              "id": "boat",
+              "seconds": 40
+            },
+            {
+              "id": "locust",
+              "seconds": 40
             },
             {
               "id": "bridge-pose",
               "seconds": 60
             },
             {
-              "id": "seated-fold",
-              "seconds": 90
+              "id": "lizard",
+              "seconds": 60
             },
             {
               "id": "figure-four",
-              "seconds": 75
+              "seconds": 60
+            },
+            {
+              "id": "reclined-toe",
+              "seconds": 60
             },
             {
               "id": "supine-twist",
-              "seconds": 60
+              "seconds": 45
             },
             {
               "id": "final-rest",
@@ -1861,17 +1882,17 @@
           ]
         }
       ],
-      "minutes": 37,
+      "minutes": 46,
       "timeline": [
         {
           "type": "getReady",
           "seconds": 10,
-          "next": "breathing"
+          "next": "centering"
         },
         {
           "type": "move",
-          "id": "breathing",
-          "seconds": 60
+          "id": "centering",
+          "seconds": 90
         },
         {
           "type": "rest",
@@ -1886,6 +1907,28 @@
         {
           "type": "rest",
           "seconds": 10,
+          "next": "thread-needle"
+        },
+        {
+          "type": "move",
+          "id": "thread-needle",
+          "side": "left",
+          "seconds": 45
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "thread-needle"
+        },
+        {
+          "type": "move",
+          "id": "thread-needle",
+          "side": "right",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
           "next": "downward-dog"
         },
         {
@@ -1896,34 +1939,22 @@
         {
           "type": "rest",
           "seconds": 10,
-          "next": "low-lunge"
+          "next": "puppy"
         },
         {
           "type": "move",
-          "id": "low-lunge",
-          "side": "left",
-          "seconds": 60
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "low-lunge"
-        },
-        {
-          "type": "move",
-          "id": "low-lunge",
-          "side": "right",
+          "id": "puppy",
           "seconds": 60
         },
         {
           "type": "rest",
           "seconds": 10,
-          "next": "downward-dog"
+          "next": "sun-flow-a"
         },
         {
           "type": "move",
-          "id": "downward-dog",
-          "seconds": 45
+          "id": "sun-flow-a",
+          "seconds": 360
         },
         {
           "type": "rest",
@@ -1934,7 +1965,7 @@
           "type": "move",
           "id": "warrior-one",
           "side": "left",
-          "seconds": 60
+          "seconds": 45
         },
         {
           "type": "switch",
@@ -1945,7 +1976,29 @@
           "type": "move",
           "id": "warrior-one",
           "side": "right",
-          "seconds": 60
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "crescent-lunge"
+        },
+        {
+          "type": "move",
+          "id": "crescent-lunge",
+          "side": "left",
+          "seconds": 45
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "crescent-lunge"
+        },
+        {
+          "type": "move",
+          "id": "crescent-lunge",
+          "side": "right",
+          "seconds": 45
         },
         {
           "type": "rest",
@@ -1956,7 +2009,7 @@
           "type": "move",
           "id": "warrior-two",
           "side": "left",
-          "seconds": 60
+          "seconds": 45
         },
         {
           "type": "switch",
@@ -1967,29 +2020,29 @@
           "type": "move",
           "id": "warrior-two",
           "side": "right",
-          "seconds": 60
+          "seconds": 45
         },
         {
           "type": "rest",
           "seconds": 10,
-          "next": "reverse-warrior"
+          "next": "side-angle"
         },
         {
           "type": "move",
-          "id": "reverse-warrior",
+          "id": "side-angle",
           "side": "left",
-          "seconds": 45
+          "seconds": 40
         },
         {
           "type": "switch",
           "seconds": 5,
-          "next": "reverse-warrior"
+          "next": "side-angle"
         },
         {
           "type": "move",
-          "id": "reverse-warrior",
+          "id": "side-angle",
           "side": "right",
-          "seconds": 45
+          "seconds": 40
         },
         {
           "type": "rest",
@@ -2000,7 +2053,7 @@
           "type": "move",
           "id": "triangle",
           "side": "left",
-          "seconds": 60
+          "seconds": 45
         },
         {
           "type": "switch",
@@ -2011,27 +2064,27 @@
           "type": "move",
           "id": "triangle",
           "side": "right",
-          "seconds": 60
+          "seconds": 45
         },
         {
           "type": "rest",
           "seconds": 10,
-          "next": "side-angle"
+          "next": "pyramid"
         },
         {
           "type": "move",
-          "id": "side-angle",
+          "id": "pyramid",
           "side": "left",
           "seconds": 45
         },
         {
           "type": "switch",
           "seconds": 5,
-          "next": "side-angle"
+          "next": "pyramid"
         },
         {
           "type": "move",
-          "id": "side-angle",
+          "id": "pyramid",
           "side": "right",
           "seconds": 45
         },
@@ -2064,6 +2117,691 @@
           "type": "move",
           "id": "tree",
           "side": "left",
+          "seconds": 45
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "tree"
+        },
+        {
+          "type": "move",
+          "id": "tree",
+          "side": "right",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "warrior-three"
+        },
+        {
+          "type": "move",
+          "id": "warrior-three",
+          "side": "left",
+          "seconds": 30
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "warrior-three"
+        },
+        {
+          "type": "move",
+          "id": "warrior-three",
+          "side": "right",
+          "seconds": 30
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "high-plank"
+        },
+        {
+          "type": "move",
+          "id": "high-plank",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "boat"
+        },
+        {
+          "type": "move",
+          "id": "boat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "locust"
+        },
+        {
+          "type": "move",
+          "id": "locust",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "bridge-pose"
+        },
+        {
+          "type": "move",
+          "id": "bridge-pose",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "lizard"
+        },
+        {
+          "type": "move",
+          "id": "lizard",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "lizard"
+        },
+        {
+          "type": "move",
+          "id": "lizard",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "figure-four"
+        },
+        {
+          "type": "move",
+          "id": "figure-four",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "figure-four"
+        },
+        {
+          "type": "move",
+          "id": "figure-four",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 30,
+          "next": "reclined-toe"
+        },
+        {
+          "type": "move",
+          "id": "reclined-toe",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "reclined-toe"
+        },
+        {
+          "type": "move",
+          "id": "reclined-toe",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "supine-twist"
+        },
+        {
+          "type": "move",
+          "id": "supine-twist",
+          "side": "left",
+          "seconds": 45
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "supine-twist"
+        },
+        {
+          "type": "move",
+          "id": "supine-twist",
+          "side": "right",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "final-rest"
+        },
+        {
+          "type": "move",
+          "id": "final-rest",
+          "seconds": 240
+        }
+      ]
+    },
+    {
+      "id": "flow-90",
+      "name": "Flow 90",
+      "gear": [
+        "mat",
+        "block",
+        "strap"
+      ],
+      "free": false,
+      "warmup": false,
+      "cooldown": false,
+      "blocks": [
+        {
+          "kind": "sequence",
+          "rest": 10,
+          "moves": [
+            {
+              "id": "centering",
+              "seconds": 180
+            },
+            {
+              "id": "cat-cow",
+              "seconds": 120
+            },
+            {
+              "id": "thread-needle",
+              "seconds": 60
+            },
+            {
+              "id": "puppy",
+              "seconds": 60
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 90
+            },
+            {
+              "id": "low-lunge",
+              "seconds": 60
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 60
+            },
+            {
+              "id": "sun-flow-a",
+              "seconds": 360
+            },
+            {
+              "id": "sun-flow-b",
+              "seconds": 420
+            },
+            {
+              "id": "crescent-lunge",
+              "seconds": 60
+            },
+            {
+              "id": "warrior-two",
+              "seconds": 60
+            },
+            {
+              "id": "reverse-warrior",
+              "seconds": 40
+            },
+            {
+              "id": "side-angle",
+              "seconds": 50
+            },
+            {
+              "id": "triangle",
+              "seconds": 60
+            },
+            {
+              "id": "pyramid",
+              "seconds": 60
+            },
+            {
+              "id": "wide-fold",
+              "seconds": 90
+            },
+            {
+              "id": "goddess",
+              "seconds": 60
+            },
+            {
+              "id": "downward-dog",
+              "seconds": 60
+            },
+            {
+              "id": "chair-pose",
+              "seconds": 60
+            },
+            {
+              "id": "standing-knee-hold",
+              "seconds": 40
+            },
+            {
+              "id": "tree",
+              "seconds": 60
+            },
+            {
+              "id": "warrior-three",
+              "seconds": 45
+            },
+            {
+              "id": "half-moon",
+              "seconds": 50
+            },
+            {
+              "id": "high-plank",
+              "seconds": 60
+            },
+            {
+              "id": "side-plank",
+              "seconds": 30
+            },
+            {
+              "id": "dolphin",
+              "seconds": 60
+            },
+            {
+              "id": "boat",
+              "seconds": 45
+            },
+            {
+              "id": "boat",
+              "seconds": 45
+            },
+            {
+              "id": "garland",
+              "seconds": 60
+            },
+            {
+              "id": "crow",
+              "seconds": 45
+            },
+            {
+              "id": "childs-pose",
+              "seconds": 60
+            },
+            {
+              "id": "sphinx",
+              "seconds": 60
+            },
+            {
+              "id": "locust",
+              "seconds": 45
+            },
+            {
+              "id": "locust",
+              "seconds": 45
+            },
+            {
+              "id": "bridge-pose",
+              "seconds": 60
+            },
+            {
+              "id": "bridge-pose",
+              "seconds": 60
+            },
+            {
+              "id": "happy-baby",
+              "seconds": 60
+            },
+            {
+              "id": "lizard",
+              "seconds": 75
+            },
+            {
+              "id": "pigeon",
+              "seconds": 120
+            },
+            {
+              "id": "reclined-toe",
+              "seconds": 90
+            },
+            {
+              "id": "seated-fold",
+              "seconds": 120
+            },
+            {
+              "id": "supine-twist",
+              "seconds": 60
+            },
+            {
+              "id": "final-rest",
+              "seconds": 480
+            }
+          ]
+        }
+      ],
+      "minutes": 91,
+      "timeline": [
+        {
+          "type": "getReady",
+          "seconds": 10,
+          "next": "centering"
+        },
+        {
+          "type": "move",
+          "id": "centering",
+          "seconds": 180
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "cat-cow"
+        },
+        {
+          "type": "move",
+          "id": "cat-cow",
+          "seconds": 120
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "thread-needle"
+        },
+        {
+          "type": "move",
+          "id": "thread-needle",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "thread-needle"
+        },
+        {
+          "type": "move",
+          "id": "thread-needle",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "puppy"
+        },
+        {
+          "type": "move",
+          "id": "puppy",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "downward-dog"
+        },
+        {
+          "type": "move",
+          "id": "downward-dog",
+          "seconds": 90
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "low-lunge"
+        },
+        {
+          "type": "move",
+          "id": "low-lunge",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "low-lunge"
+        },
+        {
+          "type": "move",
+          "id": "low-lunge",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "downward-dog"
+        },
+        {
+          "type": "move",
+          "id": "downward-dog",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "sun-flow-a"
+        },
+        {
+          "type": "move",
+          "id": "sun-flow-a",
+          "seconds": 360
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "sun-flow-b"
+        },
+        {
+          "type": "move",
+          "id": "sun-flow-b",
+          "seconds": 420
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "crescent-lunge"
+        },
+        {
+          "type": "move",
+          "id": "crescent-lunge",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "crescent-lunge"
+        },
+        {
+          "type": "move",
+          "id": "crescent-lunge",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "warrior-two"
+        },
+        {
+          "type": "move",
+          "id": "warrior-two",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "warrior-two"
+        },
+        {
+          "type": "move",
+          "id": "warrior-two",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "reverse-warrior"
+        },
+        {
+          "type": "move",
+          "id": "reverse-warrior",
+          "side": "left",
+          "seconds": 40
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "reverse-warrior"
+        },
+        {
+          "type": "move",
+          "id": "reverse-warrior",
+          "side": "right",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "side-angle"
+        },
+        {
+          "type": "move",
+          "id": "side-angle",
+          "side": "left",
+          "seconds": 50
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "side-angle"
+        },
+        {
+          "type": "move",
+          "id": "side-angle",
+          "side": "right",
+          "seconds": 50
+        },
+        {
+          "type": "rest",
+          "seconds": 30,
+          "next": "triangle"
+        },
+        {
+          "type": "move",
+          "id": "triangle",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "triangle"
+        },
+        {
+          "type": "move",
+          "id": "triangle",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "pyramid"
+        },
+        {
+          "type": "move",
+          "id": "pyramid",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "pyramid"
+        },
+        {
+          "type": "move",
+          "id": "pyramid",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "wide-fold"
+        },
+        {
+          "type": "move",
+          "id": "wide-fold",
+          "seconds": 90
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "goddess"
+        },
+        {
+          "type": "move",
+          "id": "goddess",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "downward-dog"
+        },
+        {
+          "type": "move",
+          "id": "downward-dog",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "chair-pose"
+        },
+        {
+          "type": "move",
+          "id": "chair-pose",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "standing-knee-hold"
+        },
+        {
+          "type": "move",
+          "id": "standing-knee-hold",
+          "side": "left",
+          "seconds": 40
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "standing-knee-hold"
+        },
+        {
+          "type": "move",
+          "id": "standing-knee-hold",
+          "side": "right",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "tree"
+        },
+        {
+          "type": "move",
+          "id": "tree",
+          "side": "left",
           "seconds": 60
         },
         {
@@ -2080,13 +2818,35 @@
         {
           "type": "rest",
           "seconds": 10,
+          "next": "warrior-three"
+        },
+        {
+          "type": "move",
+          "id": "warrior-three",
+          "side": "left",
+          "seconds": 45
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "warrior-three"
+        },
+        {
+          "type": "move",
+          "id": "warrior-three",
+          "side": "right",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
           "next": "half-moon"
         },
         {
           "type": "move",
           "id": "half-moon",
           "side": "left",
-          "seconds": 45
+          "seconds": 50
         },
         {
           "type": "switch",
@@ -2097,6 +2857,88 @@
           "type": "move",
           "id": "half-moon",
           "side": "right",
+          "seconds": 50
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "high-plank"
+        },
+        {
+          "type": "move",
+          "id": "high-plank",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "side-plank"
+        },
+        {
+          "type": "move",
+          "id": "side-plank",
+          "side": "left",
+          "seconds": 30
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "side-plank"
+        },
+        {
+          "type": "move",
+          "id": "side-plank",
+          "side": "right",
+          "seconds": 30
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "dolphin"
+        },
+        {
+          "type": "move",
+          "id": "dolphin",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "boat"
+        },
+        {
+          "type": "move",
+          "id": "boat",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "boat"
+        },
+        {
+          "type": "move",
+          "id": "boat",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "garland"
+        },
+        {
+          "type": "move",
+          "id": "garland",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "crow"
+        },
+        {
+          "type": "move",
+          "id": "crow",
           "seconds": 45
         },
         {
@@ -2112,6 +2954,36 @@
         {
           "type": "rest",
           "seconds": 10,
+          "next": "sphinx"
+        },
+        {
+          "type": "move",
+          "id": "sphinx",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "locust"
+        },
+        {
+          "type": "move",
+          "id": "locust",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "locust"
+        },
+        {
+          "type": "move",
+          "id": "locust",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
           "next": "bridge-pose"
         },
         {
@@ -2122,34 +2994,98 @@
         {
           "type": "rest",
           "seconds": 10,
-          "next": "seated-fold"
+          "next": "bridge-pose"
         },
         {
           "type": "move",
-          "id": "seated-fold",
-          "seconds": 90
+          "id": "bridge-pose",
+          "seconds": 60
         },
         {
           "type": "rest",
           "seconds": 10,
-          "next": "figure-four"
+          "next": "happy-baby"
         },
         {
           "type": "move",
-          "id": "figure-four",
+          "id": "happy-baby",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "lizard"
+        },
+        {
+          "type": "move",
+          "id": "lizard",
           "side": "left",
           "seconds": 75
         },
         {
           "type": "switch",
           "seconds": 5,
-          "next": "figure-four"
+          "next": "lizard"
         },
         {
           "type": "move",
-          "id": "figure-four",
+          "id": "lizard",
           "side": "right",
           "seconds": 75
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "pigeon"
+        },
+        {
+          "type": "move",
+          "id": "pigeon",
+          "side": "left",
+          "seconds": 120
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "pigeon"
+        },
+        {
+          "type": "move",
+          "id": "pigeon",
+          "side": "right",
+          "seconds": 120
+        },
+        {
+          "type": "rest",
+          "seconds": 30,
+          "next": "reclined-toe"
+        },
+        {
+          "type": "move",
+          "id": "reclined-toe",
+          "side": "left",
+          "seconds": 90
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "reclined-toe"
+        },
+        {
+          "type": "move",
+          "id": "reclined-toe",
+          "side": "right",
+          "seconds": 90
+        },
+        {
+          "type": "rest",
+          "seconds": 10,
+          "next": "seated-fold"
+        },
+        {
+          "type": "move",
+          "id": "seated-fold",
+          "seconds": 120
         },
         {
           "type": "rest",
@@ -2181,7 +3117,7 @@
         {
           "type": "move",
           "id": "final-rest",
-          "seconds": 240
+          "seconds": 480
         }
       ]
     },

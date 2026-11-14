@@ -17,7 +17,8 @@
       "keyframes": [
         "knee up left",
         "knee up right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "arm-circles",
@@ -35,7 +36,8 @@
       "keyframes": [
         "arms out",
         "arms circling"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "hip-circles",
@@ -53,7 +55,8 @@
       "keyframes": [
         "hips left",
         "hips right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "good-morning",
@@ -71,7 +74,8 @@
       "keyframes": [
         "standing",
         "hinged"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "inchworm",
@@ -91,7 +95,8 @@
       "keyframes": [
         "fold",
         "plank"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "childs-pose",
@@ -110,7 +115,8 @@
       "view": "side",
       "keyframes": [
         "resting"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "wall-chest",
@@ -128,7 +134,8 @@
       "keyframes": [
         "arm on wall",
         "turned away"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "hamstring-fold",
@@ -145,7 +152,10 @@
       "view": "side",
       "keyframes": [
         "folded"
-      ]
+      ],
+      "modify": {
+        "lowerBack": "Bend your knees deeply and rest your hands on your thighs."
+      }
     },
     {
       "id": "breathing",
@@ -163,7 +173,8 @@
       "keyframes": [
         "breath in",
         "breath out"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "push-up",
@@ -181,7 +192,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "knee-push-up",
@@ -201,7 +213,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "incline-push-up",
@@ -221,7 +234,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "wide-push-up",
@@ -239,7 +253,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "decline-push-up",
@@ -259,7 +274,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "diamond-push-up",
@@ -277,7 +293,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "band-row",
@@ -297,7 +314,8 @@
       "keyframes": [
         "arms long",
         "elbows back"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "towel-row",
@@ -315,7 +333,8 @@
       "keyframes": [
         "leaning back",
         "pulled in"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "underhand-band-row",
@@ -335,7 +354,8 @@
       "keyframes": [
         "arms long",
         "elbows back"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "pull-up",
@@ -355,7 +375,8 @@
       "keyframes": [
         "hang",
         "chin over bar"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "negative-pull-up",
@@ -376,7 +397,8 @@
       "keyframes": [
         "chin over bar",
         "hang"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "chin-up",
@@ -396,7 +418,8 @@
       "keyframes": [
         "hang",
         "chin over bar"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "table-row",
@@ -416,7 +439,8 @@
       "keyframes": [
         "arms long",
         "chest up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "bent-knee-table-row",
@@ -436,7 +460,8 @@
       "keyframes": [
         "arms long",
         "chest up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "squat",
@@ -454,7 +479,8 @@
       "keyframes": [
         "standing",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "chair-squat",
@@ -474,7 +500,8 @@
       "keyframes": [
         "standing",
         "seated tap"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "reverse-lunge",
@@ -492,7 +519,8 @@
       "keyframes": [
         "standing",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "static-lunge",
@@ -510,7 +538,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "glute-bridge",
@@ -530,7 +559,8 @@
       "keyframes": [
         "down",
         "up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "split-squat",
@@ -550,7 +580,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "superman",
@@ -570,7 +601,8 @@
       "keyframes": [
         "down",
         "lifted"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "wall-sit",
@@ -587,7 +619,8 @@
       "view": "side",
       "keyframes": [
         "seated on wall"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "calf-raise",
@@ -605,7 +638,8 @@
       "keyframes": [
         "down",
         "up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "pike-push-up",
@@ -625,7 +659,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "lateral-raise",
@@ -645,7 +680,8 @@
       "keyframes": [
         "arms down",
         "arms out"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "curl",
@@ -665,7 +701,8 @@
       "keyframes": [
         "down",
         "up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "chair-dip",
@@ -685,7 +722,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "bent-knee-dip",
@@ -705,7 +743,8 @@
       "keyframes": [
         "top",
         "bottom"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "overhead-press",
@@ -725,7 +764,8 @@
       "keyframes": [
         "at shoulders",
         "overhead"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "hammer-curl",
@@ -745,7 +785,8 @@
       "keyframes": [
         "down",
         "up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "triceps-extension",
@@ -765,7 +806,8 @@
       "keyframes": [
         "overhead",
         "behind head"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "shoulder-tap",
@@ -783,7 +825,8 @@
       "keyframes": [
         "plank",
         "tap"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "squat-jump",
@@ -801,7 +844,8 @@
       "keyframes": [
         "bottom",
         "air"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "squat-calf-raise",
@@ -819,7 +863,8 @@
       "keyframes": [
         "bottom",
         "on toes"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "skater-hop",
@@ -837,7 +882,8 @@
       "keyframes": [
         "land left",
         "land right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "skater-step",
@@ -855,7 +901,8 @@
       "keyframes": [
         "step left",
         "step right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "high-knees",
@@ -873,7 +920,8 @@
       "keyframes": [
         "knee left",
         "knee right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "lateral-shuffle",
@@ -891,7 +939,8 @@
       "keyframes": [
         "wide",
         "narrow"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "side-step",
@@ -909,7 +958,8 @@
       "keyframes": [
         "step left",
         "step right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "split-jump",
@@ -927,7 +977,8 @@
       "keyframes": [
         "lunge left",
         "lunge right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "burpee",
@@ -946,7 +997,8 @@
         "squat",
         "plank",
         "reach"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "step-back-burpee",
@@ -965,7 +1017,8 @@
         "squat",
         "plank",
         "stand"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "cat-cow",
@@ -985,7 +1038,8 @@
       "keyframes": [
         "cow",
         "cat"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "downward-dog",
@@ -1004,7 +1058,10 @@
       "view": "side",
       "keyframes": [
         "v shape"
-      ]
+      ],
+      "modify": {
+        "shoulders": "Hands on a chair seat instead of the floor."
+      }
     },
     {
       "id": "low-lunge",
@@ -1023,7 +1080,10 @@
       "view": "side",
       "keyframes": [
         "low lunge"
-      ]
+      ],
+      "modify": {
+        "knees": "Pad the back knee with a folded blanket."
+      }
     },
     {
       "id": "warrior-one",
@@ -1042,7 +1102,11 @@
       "view": "side",
       "keyframes": [
         "warrior one"
-      ]
+      ],
+      "modify": {
+        "lowerBack": "Hands on hips instead of overhead.",
+        "knees": "Shorten the stance."
+      }
     },
     {
       "id": "warrior-two",
@@ -1061,7 +1125,10 @@
       "view": "front",
       "keyframes": [
         "warrior two"
-      ]
+      ],
+      "modify": {
+        "knees": "Bend the front knee less."
+      }
     },
     {
       "id": "reverse-warrior",
@@ -1080,7 +1147,8 @@
       "view": "front",
       "keyframes": [
         "reverse warrior"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "triangle",
@@ -1100,7 +1168,8 @@
       "view": "front",
       "keyframes": [
         "triangle"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "side-angle",
@@ -1119,7 +1188,8 @@
       "view": "front",
       "keyframes": [
         "side angle"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "chair-pose",
@@ -1138,7 +1208,10 @@
       "view": "side",
       "keyframes": [
         "chair"
-      ]
+      ],
+      "modify": {
+        "knees": "Sit back less deep, weight in your heels."
+      }
     },
     {
       "id": "tree",
@@ -1157,7 +1230,8 @@
       "view": "front",
       "keyframes": [
         "tree"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "half-moon",
@@ -1177,7 +1251,10 @@
       "view": "front",
       "keyframes": [
         "half moon"
-      ]
+      ],
+      "modify": {
+        "knees": "Keep a soft bend in the standing knee and use a block."
+      }
     },
     {
       "id": "bridge-pose",
@@ -1196,7 +1273,10 @@
       "view": "side",
       "keyframes": [
         "bridge"
-      ]
+      ],
+      "modify": {
+        "lowerBack": "Lift only halfway; squeeze your glutes."
+      }
     },
     {
       "id": "seated-fold",
@@ -1215,7 +1295,10 @@
       "view": "side",
       "keyframes": [
         "folded"
-      ]
+      ],
+      "modify": {
+        "lowerBack": "Bend your knees and sit on a folded blanket."
+      }
     },
     {
       "id": "figure-four",
@@ -1234,7 +1317,8 @@
       "view": "side",
       "keyframes": [
         "figure four"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "supine-twist",
@@ -1253,7 +1337,8 @@
       "view": "front",
       "keyframes": [
         "twist"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "final-rest",
@@ -1272,7 +1357,501 @@
       "view": "front",
       "keyframes": [
         "lying"
-      ]
+      ],
+      "modify": {}
+    },
+    {
+      "id": "centering",
+      "name": "Seated centering",
+      "cues": [
+        "Sit cross-legged on a folded blanket, hands on knees.",
+        "Lengthen up through the crown and breathe slowly through your nose."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "seated"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "thread-needle",
+      "name": "Thread the needle",
+      "cues": [
+        "From hands and knees, slide one arm under your chest.",
+        "Rest your shoulder and ear down; keep your hips over your knees."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "threaded"
+      ],
+      "modify": {
+        "shoulders": "Slide the arm only partway."
+      }
+    },
+    {
+      "id": "puppy",
+      "name": "Puppy pose",
+      "cues": [
+        "From hands and knees, walk your hands forward and lower your chest.",
+        "Hips stay over your knees. Let your upper back melt down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "puppy"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "sun-flow-a",
+      "name": "Sun flow, basic",
+      "cues": [
+        "Reach up, fold, half lift, step back to plank, lower to the floor, cobra, downward dog, step forward, rise.",
+        "One breath per movement. Knees down whenever you need them."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "sun-flow-b",
+      "view": "side",
+      "keyframes": [
+        "reach",
+        "fold",
+        "plank",
+        "cobra",
+        "down dog"
+      ],
+      "modify": {
+        "shoulders": "Lower your knees for the plank and skip cobra; stay in sphinx.",
+        "lowerBack": "Keep cobra low."
+      }
+    },
+    {
+      "id": "sun-flow-b",
+      "name": "Sun flow, strength",
+      "cues": [
+        "Chair pose, fold, plank, lower halfway, upward dog, downward dog, then a warrior one each side between rounds.",
+        "Lower slowly with elbows hugging in. Drop your knees for the lowering if your hips sag."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "sun-flow-a",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "chair",
+        "plank",
+        "low plank",
+        "up dog",
+        "warrior one"
+      ],
+      "modify": {
+        "shoulders": "Knees down for the lowering, then sphinx instead of upward dog.",
+        "lowerBack": "Swap upward dog for a low cobra."
+      }
+    },
+    {
+      "id": "crescent-lunge",
+      "name": "Crescent lunge",
+      "cues": [
+        "High lunge, back heel lifted, arms overhead.",
+        "Square your hips and draw the lower ribs in. Front knee over ankle."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "low-lunge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "crescent"
+      ],
+      "modify": {
+        "knees": "Shorten the stance so the front knee bends less."
+      }
+    },
+    {
+      "id": "pyramid",
+      "name": "Pyramid",
+      "cues": [
+        "Short stance, both legs straight, hips square.",
+        "Hinge over the front leg with a long spine; hands on blocks if the floor is far."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "pyramid"
+      ],
+      "modify": {
+        "lowerBack": "Hands on blocks and fold only halfway."
+      }
+    },
+    {
+      "id": "warrior-three",
+      "name": "Warrior three",
+      "cues": [
+        "From standing, hinge forward and lift one leg behind you.",
+        "Body and back leg form one line. Hands on hips or a chair to start."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": "chair",
+      "easier": "standing-knee-hold",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "warrior three"
+      ],
+      "modify": {
+        "lowerBack": "Hands on a chair, back leg lower."
+      }
+    },
+    {
+      "id": "standing-knee-hold",
+      "name": "Standing knee hold",
+      "cues": [
+        "Stand tall, hug one knee into your chest.",
+        "Stand tall through the standing leg; don't lean back."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "warrior-three",
+      "view": "front",
+      "keyframes": [
+        "knee held"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "goddess",
+      "name": "Goddess squat",
+      "cues": [
+        "Wide stance, toes turned out, sink your hips.",
+        "Knees track over your toes. Arms at cactus, shoulder blades down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "goddess"
+      ],
+      "modify": {
+        "knees": "Bend less; stop before any pinch."
+      }
+    },
+    {
+      "id": "wide-fold",
+      "name": "Wide-leg forward fold",
+      "cues": [
+        "Wide stance, feet parallel, hands on hips.",
+        "Fold from the hips with a long spine, hands to the floor or blocks."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "folded"
+      ],
+      "modify": {
+        "lowerBack": "Hands on blocks; don't round all the way down."
+      }
+    },
+    {
+      "id": "boat",
+      "name": "Boat",
+      "cues": [
+        "Sit tall, lean back slightly, lift your shins parallel to the floor.",
+        "Chest stays lifted. Hold behind your thighs to make it easier."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "boat"
+      ],
+      "modify": {
+        "lowerBack": "Keep your toes on the floor and hold behind your thighs."
+      }
+    },
+    {
+      "id": "dolphin",
+      "name": "Dolphin",
+      "cues": [
+        "Forearms down, hips lifted into an upside-down V.",
+        "Press your forearms down and lift away from the floor; bend your knees if you need to."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "puppy",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "dolphin"
+      ],
+      "modify": {
+        "shoulders": "Do puppy pose instead."
+      }
+    },
+    {
+      "id": "high-plank",
+      "name": "High plank hold",
+      "cues": [
+        "Hands under shoulders, body in one straight line.",
+        "Press the floor away and keep your hips level."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "knee-plank",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "plank"
+      ],
+      "modify": {
+        "shoulders": "Forearm plank or knee plank."
+      }
+    },
+    {
+      "id": "crow",
+      "name": "Crow",
+      "cues": [
+        "Squat, hands on the floor, knees against the backs of your upper arms.",
+        "Shift forward until your feet lift. Keep a block or pillow in front of your face."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "garland",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "crouch",
+        "balance"
+      ],
+      "modify": {
+        "shoulders": "Hold the garland squat instead.",
+        "knees": "Skip it; hold the garland squat on a block."
+      }
+    },
+    {
+      "id": "garland",
+      "name": "Garland squat",
+      "cues": [
+        "Feet wider than hips, sink into a deep squat, palms together.",
+        "Elbows press your knees open. Sit on a block if your heels lift."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": null,
+      "harder": "crow",
+      "view": "front",
+      "keyframes": [
+        "squat"
+      ],
+      "modify": {
+        "knees": "Sit on a block and widen your feet.",
+        "lowerBack": "Sit on a block."
+      }
+    },
+    {
+      "id": "locust",
+      "name": "Locust",
+      "cues": [
+        "Lie face down, arms by your sides.",
+        "Lift your chest, arms and legs. Neck long, gaze down."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": "sphinx",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "down",
+        "lifted"
+      ],
+      "modify": {
+        "lowerBack": "Lift only your chest, or do sphinx instead."
+      }
+    },
+    {
+      "id": "sphinx",
+      "name": "Sphinx",
+      "cues": [
+        "Lie face down, forearms under your shoulders.",
+        "Draw your chest forward and keep your lower back relaxed."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": "locust",
+      "view": "side",
+      "keyframes": [
+        "sphinx"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "lizard",
+      "name": "Lizard",
+      "cues": [
+        "Low lunge with both hands inside the front foot.",
+        "Keep your front knee over your ankle. Forearms down only if your hips allow."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": "low-lunge",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "lizard"
+      ],
+      "modify": {
+        "knees": "Back knee down on a blanket; stay on your hands."
+      }
+    },
+    {
+      "id": "pigeon",
+      "name": "Pigeon",
+      "cues": [
+        "From down dog, bring one shin forward, back leg long behind you.",
+        "Keep your hips level, with a block under the front hip if it lifts. Never force the knee."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "block"
+      ],
+      "standIn": "book",
+      "easier": "figure-four",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "upright",
+        "folded"
+      ],
+      "modify": {
+        "knees": "Do the figure-four stretch on your back instead."
+      }
+    },
+    {
+      "id": "reclined-toe",
+      "name": "Reclined leg stretch",
+      "cues": [
+        "On your back, loop a strap or towel around one foot, leg up.",
+        "Keep the other leg long and both hips down."
+      ],
+      "sides": "each",
+      "gear": [
+        "mat",
+        "strap"
+      ],
+      "standIn": "towel",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "leg up"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "happy-baby",
+      "name": "Happy baby",
+      "cues": [
+        "On your back, hold the outsides of your feet, knees wide.",
+        "Let your lower back rest on the floor."
+      ],
+      "sides": "none",
+      "gear": [
+        "mat"
+      ],
+      "standIn": null,
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "happy baby"
+      ],
+      "modify": {}
     },
     {
       "id": "fighting-stance",
@@ -1289,7 +1868,8 @@
       "view": "front",
       "keyframes": [
         "stance"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "jab",
@@ -1307,7 +1887,8 @@
       "keyframes": [
         "guard",
         "jab"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "jab-cross",
@@ -1325,7 +1906,8 @@
       "keyframes": [
         "jab",
         "cross"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "hook",
@@ -1343,7 +1925,8 @@
       "keyframes": [
         "guard",
         "hook"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "uppercut",
@@ -1361,7 +1944,8 @@
       "keyframes": [
         "dip",
         "uppercut"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "front-kick",
@@ -1379,7 +1963,8 @@
       "keyframes": [
         "knee up",
         "kick"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "knee-strike",
@@ -1397,7 +1982,8 @@
       "keyframes": [
         "reach",
         "knee up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "side-kick",
@@ -1415,7 +2001,8 @@
       "keyframes": [
         "chamber",
         "kick"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "bounce",
@@ -1433,7 +2020,8 @@
       "keyframes": [
         "bounce up",
         "bounce down"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "forearm-plank",
@@ -1452,7 +2040,8 @@
       "view": "side",
       "keyframes": [
         "plank"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "knee-plank",
@@ -1471,7 +2060,8 @@
       "view": "side",
       "keyframes": [
         "plank"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "dead-bug",
@@ -1491,7 +2081,8 @@
       "keyframes": [
         "start",
         "reach"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "side-plank",
@@ -1510,7 +2101,8 @@
       "view": "front",
       "keyframes": [
         "side plank"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "knee-side-plank",
@@ -1529,7 +2121,8 @@
       "view": "front",
       "keyframes": [
         "side plank"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "bird-dog",
@@ -1549,7 +2142,8 @@
       "keyframes": [
         "start",
         "reach"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "hollow-hold",
@@ -1568,7 +2162,8 @@
       "view": "side",
       "keyframes": [
         "hollow"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "mountain-climber",
@@ -1586,7 +2181,8 @@
       "keyframes": [
         "knee left",
         "knee right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "slow-climber",
@@ -1604,7 +2200,8 @@
       "keyframes": [
         "knee left",
         "knee right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "bridge-march",
@@ -1624,7 +2221,8 @@
       "keyframes": [
         "bridge left",
         "bridge right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "russian-twist",
@@ -1644,7 +2242,8 @@
       "keyframes": [
         "twist left",
         "twist right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "crunch",
@@ -1664,7 +2263,8 @@
       "keyframes": [
         "down",
         "up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "bicycle",
@@ -1684,7 +2284,8 @@
       "keyframes": [
         "twist left",
         "twist right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "reverse-crunch",
@@ -1704,7 +2305,8 @@
       "keyframes": [
         "down",
         "curled"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "leg-raise",
@@ -1724,7 +2326,8 @@
       "keyframes": [
         "legs up",
         "legs low"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "flutter-kick",
@@ -1744,7 +2347,8 @@
       "keyframes": [
         "kick left",
         "kick right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "step-jack",
@@ -1762,7 +2366,8 @@
       "keyframes": [
         "out",
         "in"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "shadow-boxing",
@@ -1780,7 +2385,8 @@
       "keyframes": [
         "jab",
         "cross"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "butt-kick",
@@ -1798,7 +2404,8 @@
       "keyframes": [
         "heel left",
         "heel right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "march-reach",
@@ -1816,7 +2423,8 @@
       "keyframes": [
         "reach left",
         "reach right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "knee-drive",
@@ -1834,7 +2442,8 @@
       "keyframes": [
         "reach",
         "knee up"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "easy-walk",
@@ -1852,7 +2461,8 @@
       "keyframes": [
         "step left",
         "step right"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "neck-stretch",
@@ -1869,7 +2479,8 @@
       "view": "front",
       "keyframes": [
         "tipped"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "doorway-chest",
@@ -1886,7 +2497,8 @@
       "view": "side",
       "keyframes": [
         "stretching"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "cross-shoulder",
@@ -1903,7 +2515,8 @@
       "view": "front",
       "keyframes": [
         "stretching"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "hip-flexor",
@@ -1922,7 +2535,8 @@
       "view": "side",
       "keyframes": [
         "stretching"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "seated-hamstring",
@@ -1941,7 +2555,8 @@
       "view": "side",
       "keyframes": [
         "stretching"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "quad-stretch",
@@ -1958,7 +2573,8 @@
       "view": "side",
       "keyframes": [
         "stretching"
-      ]
+      ],
+      "modify": {}
     },
     {
       "id": "calf-wall",
@@ -1975,7 +2591,8 @@
       "view": "side",
       "keyframes": [
         "stretching"
-      ]
+      ],
+      "modify": {}
     }
   ]
 }
