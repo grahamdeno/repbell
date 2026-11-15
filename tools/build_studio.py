@@ -115,6 +115,34 @@ M = [
     ("reclined-toe", "Reclined leg stretch", "On your back, loop a strap or towel around one foot, leg up.", "Keep the other leg long and both hips down.", "each", ["mat", "strap"], "towel", None, None, "side", ["leg up"]),
     ("happy-baby", "Happy baby", "On your back, hold the outsides of your feet, knees wide.", "Let your lower back rest on the floor.", "none", ["mat"], None, None, None, "front", ["happy baby"]),
 
+    # Kettlebell
+    ("kettlebell-swing", "Kettlebell swing", "Feet wider than hips, bell a foot in front. Hike it back between your legs, then snap your hips forward.", "The hips drive the bell to chest height. Your arms only guide it. Don't squat it or lift with your shoulders.", "none", ["kettlebell"], "good-morning", "kb-deadlift", None, "side", ["hiked", "float"]),
+    ("kb-deadlift", "Kettlebell deadlift", "Bell between your feet. Push your hips back, flat back, grip the handle.", "Stand up by driving through your heels. Keep the bell close to your legs.", "none", ["kettlebell"], "good-morning", None, "kettlebell-swing", "side", ["bottom", "top"]),
+    ("goblet-squat", "Goblet squat", "Hold the bell by the horns at your chest, elbows down.", "Sit between your heels with your chest up. Elbows brush the inside of your knees.", "none", ["kettlebell"], "squat", "squat", None, "front", ["standing", "bottom"]),
+    ("kb-press", "Kettlebell press", "Bell resting on your forearm at the shoulder, wrist straight.", "Press straight up and lock out. Squeeze your glutes so your back doesn't arch.", "each", ["kettlebell"], "pike-push-up", None, None, "front", ["racked", "overhead"]),
+    ("kb-row", "Kettlebell row", "Staggered stance, free hand on your knee or a chair, flat back.", "Pull the bell to your hip. Elbow close, no twisting.", "each", ["kettlebell"], "table-row", None, None, "side", ["arm long", "pulled"]),
+    ("halo", "Kettlebell halo", "Hold the bell upside down by the horns at your chest.", "Circle it slowly around your head, close to your neck. Ribs stay down.", "none", ["kettlebell"], "arm-circles", None, None, "front", ["front", "behind"]),
+    ("half-get-up", "Half get-up", "Lie on your back, one bell pressed straight up over your shoulder, same-side knee bent.", "Roll to your elbow, then your hand, eyes on the bell the whole time. Lower back down slowly.", "each", ["kettlebell", "mat"], "dead-bug", None, None, "front", ["lying", "elbow", "hand"]),
+    ("suitcase-carry", "Suitcase carry", "Hold one bell at your side like a suitcase.", "Walk tall without leaning toward the bell. Switch hands halfway.", "each", ["kettlebell"], "march", None, None, "front", ["step left", "step right"]),
+    ("farmer-carry", "Farmer carry", "A heavy bell or the bag in each hand, or the bag hugged at your chest.", "Walk slowly and tall, shoulders down, grip hard the whole time.", "none", ["kettlebell"], "march", None, None, "front", ["step left", "step right"]),
+
+    # Gi bag and grip
+    ("gi-row", "Gi bag row", "Grip the gi sleeves or lapels tied to the bag. Hinge forward with a flat back.", "Row the bag to your belly and squeeze your shoulder blades. Let your grip do the work, not your wrists.", "none", ["gi-bag"], "table-row", None, None, "side", ["arms long", "pulled"]),
+    ("gi-drag", "Gi bag drag", "Grip the gi with both hands, sit low, arms long.", "Walk backward in short steps, dragging the bag. Stay low, like breaking a posture on the mat.", "none", ["gi-bag"], "towel-row", None, None, "side", ["step", "pull"]),
+    ("gi-hold", "Gi grip hold", "Lift the bag off the floor by the gi and stand tall.", "Hold as long as the timer runs. Switch grips (sleeve, lapel, pistol) between rounds.", "none", ["gi-bag"], "towel-row", None, None, "front", ["holding"]),
+    ("grip-squeeze", "Fist squeeze", "Arms forward, hands open wide.", "Squeeze into the hardest fist you can, hold a second, then spread your fingers wide. Repeat.", "none", [], None, None, "rice-grab", "front", ["open", "fist"]),
+    ("rice-grab", "Rice bucket grab", "Push one hand deep into the rice.", "Clench a fist as hard as you can, then open it fully. Fast and hard.", "each", ["rice-bucket"], "grip-squeeze", "grip-squeeze", None, "front", ["open", "fist"]),
+    ("rice-twist", "Rice bucket twist", "Hand deep in the rice, fist closed.", "Turn your wrist side to side as far as it goes, against the rice.", "each", ["rice-bucket"], "grip-squeeze", None, None, "front", ["turned in", "turned out"]),
+    ("rice-spread", "Rice bucket spread", "Hand deep in the rice, fingers together.", "Spread your fingers as wide as you can against the rice, then bring them back.", "each", ["rice-bucket"], "grip-squeeze", None, None, "front", ["closed", "spread"]),
+
+    # Balance
+    ("single-leg-balance", "Single-leg balance", "Stand on one foot, the other knee lifted to hip height.", "Soft standing knee, hips level. Look at one spot ahead.", "each", [], None, None, "board-stand", "front", ["balancing"]),
+    ("single-leg-reach", "Single-leg reach", "Balance on one leg.", "Hinge and reach both hands toward the floor ahead while the free leg reaches back. Return tall.", "each", [], None, "single-leg-balance", None, "side", ["tall", "reaching"]),
+    ("board-stand", "Board balance", "Stand on the balance board, feet shoulder-width, knees soft.", "Keep both edges off the floor. Arms out if you need them, then bring them in.", "none", ["balance-board"], "single-leg-balance", "single-leg-balance", "board-squat", "front", ["balancing"]),
+    ("board-squat", "Board squat", "Stand balanced on the board.", "Squat slowly, keeping the board level, then stand. Small range is fine.", "none", ["balance-board"], "squat", "board-stand", None, "front", ["standing", "squat"]),
+    ("board-rock", "Board rock", "Stand on the board.", "Tip slowly side to side, touching each edge down, under control.", "none", ["balance-board"], "side-step", None, None, "front", ["left", "right"]),
+    ("board-plank", "Board plank", "Hands on the board, feet back in a high plank.", "Keep the board level and your body in one line.", "none", ["balance-board"], "high-plank", "high-plank", None, "side", ["plank"]),
+
     # Strike
     ("fighting-stance", "Fighting stance", "Feet staggered, hands up by your cheeks, chin down.", "Bounce lightly on the balls of your feet.", "none", [], None, None, None, "front", ["stance"]),
     ("jab", "Jab", "Punch straight out with your lead hand and snap it back.", "Exhale on every punch; the other hand stays guarding your face.", "none", [], None, None, None, "front", ["guard", "jab"]),
@@ -235,6 +263,12 @@ S = [
                            ("sphinx", 60), ("locust", 45), ("locust", 45), ("bridge-pose", 60), ("bridge-pose", 60),
                            ("happy-baby", 60), ("lizard", 75), ("pigeon", 120), ("reclined-toe", 90),
                            ("seated-fold", 120), ("supine-twist", 60), ("final-rest", 480)], rest=10)]),
+    dict(id="grip-pull", name="Grip and pull", gear=["gi-bag", "kettlebell", "rice-bucket"], free=False, warmup=True, cooldown=True,
+         blocks=[circuit(4, 40, 20, 90, ["gi-row", "kettlebell-swing", "gi-drag", "rice-grab", "gi-hold", "farmer-carry", "rice-twist", "rice-spread"])]),
+    dict(id="kettlebell", name="Kettlebell", gear=["kettlebell"], free=False, warmup=True, cooldown=True,
+         blocks=[circuit(4, 40, 20, 90, ["kettlebell-swing", "goblet-squat", "kb-press", "kb-row", "kb-deadlift", "halo", "half-get-up", "suitcase-carry"])]),
+    dict(id="balance", name="Balance", gear=["balance-board"], free=False, warmup=True, cooldown=True,
+         blocks=[circuit(3, 40, 20, 60, ["board-stand", "single-leg-balance", "board-squat", "single-leg-reach", "board-rock", "board-plank"])]),
     dict(id="strike", name="Strike", gear=[], free=False, warmup=True, cooldown=True,
          blocks=[dict(circuit(6, 20, 0, 30, ["fighting-stance", "jab", "jab-cross", "hook", "uppercut", "front-kick", "knee-strike", "side-kick", "bounce"]), easyFirstRound=True)]),
     dict(id="core", name="Core", gear=["mat"], free=False, warmup=True, cooldown=True,
