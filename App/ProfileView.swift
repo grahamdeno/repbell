@@ -1,102 +1,60 @@
 import RepBellEngine
 import SwiftUI
 
+/// Your numbers: what you've done and what it shows. Controls live in Settings.
 struct ProfileView: View {
     @Environment(ProgramController.self) private var controller
-    @State private var confirmStartOver = false
-    @State private var restoring = false
-    @State private var alertRows: [ProfileRow] = []
-    @State private var testMessage: String?
-    @Environment(\.openURL) private var openURL
-    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        let model = controller.profileSnapshot()
+        let model = controller.insightsModel()
         ScreenChrome(top: 28) {
             VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(Copy.profileTitle)
+                        .font(Chalk.display(48))
+                        .textCase(.uppercase)
+                    Spacer()
+                    Button { controller.screen = .settings } label: {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 22))
+                            .foregroundStyle(Chalk.inkSoft)
+                            .frame(width: 44, height: 44)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Copy.settingsTitle)
+                }
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
-                        Text(Copy.profileTitle)
-                            .font(Chalk.display(48))
-                            .textCase(.uppercase)
-                        if !model.run.isEmpty {
-                            section(Copy.thisRun) { rows(model.run) }
-                        }
-                        section(Copy.yourRecord) {
-                            if model.record.isEmpty {
-                                Text(Copy.recordEmpty)
-                                    .font(.system(size: 15))
-                                    .foregroundStyle(Chalk.inkMuted)
-                            } else {
-                                rows(model.record)
+                        if let run = model.run {
+                            maxHero(run)
+                            ProfileSection(model.runIsCurrent ? Copy.thisRun : Copy.lastRun) {
+                                StatGrid(stats: model.runStats)
                             }
-                        }
-                        if !model.schedule.isEmpty {
-                            section(Copy.scheduleTitle) {
-                                rows(model.schedule)
-                                Text(Copy.scheduleNote)
-                                    .font(.system(size: 14))
-                                    .foregroundStyle(Chalk.inkMuted)
-                            }
-                        }
-                        section(Copy.alertsCheckTitle) {
-                            rows(alertRows)
-                            if alertRows.contains(where: { $0.value == "Off" || $0.value == "Not asked yet" || $0.value.hasPrefix("On (") }) {
-                                Text(Copy.alertsFixHint)
-                                    .font(.system(size: 14))
-                                    .foregroundStyle(Chalk.inkSoft)
-                                TextLink(title: Copy.openSettings) {
-                                    if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
-                                        openURL(url)
+                            if !run.observations.isEmpty {
+                                ProfileSection(Copy.observations) {
+                                    VStack(alignment: .leading, spacing: 14) {
+                                        ForEach(Array(run.observations.enumerated()), id: \.offset) { _, note in
+                                            ObservationRow(note: note) { controller.screen = .settings }
+                                        }
                                     }
                                 }
                             }
-                            Text(Copy.alertsCheckBody)
-                                .font(.system(size: 14))
-                                .foregroundStyle(Chalk.inkMuted)
-                            SecondaryButton(title: Copy.sendTestAlert, height: 56) {
-                                Task {
-                                    let sent = await Notifier.sendTestAlert()
-                                    testMessage = sent ? Copy.testAlertSent : Copy.testAlertFailed
-                                    await loadAlertRows()
-                                }
-                            }
-                            if let testMessage {
-                                Text(testMessage)
-                                    .font(.system(size: 14))
-                                    .foregroundStyle(Chalk.inkMuted)
-                            }
-                        }
-                        if StudioFeature.enabled {
-                            StudioProfileSection()
-                        }
-                        section(Copy.unlockSection) {
-                            row(ProfileRow(label: "Status", value: model.unlocked ? Copy.unlocked : Copy.notUnlocked))
-                            if !model.unlocked {
-                                TextLink(title: Copy.restorePurchase) {
-                                    guard !restoring else { return }
-                                    restoring = true
-                                    Task {
-                                        await controller.restorePurchases()
-                                        restoring = false
-                                    }
-                                }
-                                if let message = controller.unlockMessage {
-                                    Text(message)
-                                        .font(.system(size: 14))
-                                        .foregroundStyle(Chalk.inkMuted)
-                                }
-                            }
-                        }
-                        section(Copy.startOverTitle) {
-                            Text(Copy.startOverBody)
-                                .font(.system(size: 15))
+                        } else {
+                            Text(Copy.insightsEmpty)
+                                .font(.system(size: 16))
                                 .foregroundStyle(Chalk.inkSoft)
-                            SecondaryButton(title: Copy.startOverTitle, height: 56) { confirmStartOver = true }
                         }
-                        TextLink(title: Copy.aboutTitle) { controller.screen = .about }
+                        if !model.allTime.isEmpty {
+                            ProfileSection(Copy.allTime) { StatGrid(stats: model.allTime) }
+                        }
+                        if StudioFeature.enabled, !model.studio.isEmpty {
+                            ProfileSection(StudioCopy.studio) { StatGrid(stats: model.studio) }
+                        }
+                        if !model.record.isEmpty {
+                            ProfileSection(Copy.yourRecord) { ProfileRows(items: model.record) }
+                        }
                     }
-                    .padding(.bottom, 16)
+                    .padding(.vertical, 16)
                 }
                 .scrollIndicators(.hidden)
                 SecondaryButton(title: Copy.back) {
@@ -105,45 +63,139 @@ struct ProfileView: View {
                 .padding(.top, 12)
             }
         }
-        .task { await loadAlertRows() }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { Task { await loadAlertRows() } }
-        }
-        .confirmationDialog(Copy.startOverConfirmTitle, isPresented: $confirmStartOver, titleVisibility: .visible) {
-            Button(Copy.startOverTitle, role: .destructive) { controller.startOver() }
-            Button(Copy.back, role: .cancel) {}
-        } message: {
-            Text(Copy.startOverConfirmBody)
-        }
-    }
-
-    private func loadAlertRows() async {
-        await controller.refreshAlerts()
-        alertRows = await Notifier.diagnostics()
     }
 
     @ViewBuilder
-    private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+    private func maxHero(_ run: RunInsights) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(Copy.yourMax)
+                .font(Chalk.display(18, weight: .bold))
+                .tracking(0.8)
+                .textCase(.uppercase)
+                .foregroundStyle(Chalk.inkMuted)
+            if run.maxes.isEmpty {
+                Text(Copy.testOnDayOne)
+                    .font(.system(size: 17))
+                    .foregroundStyle(Chalk.inkSoft)
+            } else {
+                HStack(alignment: .lastTextBaseline, spacing: 10) {
+                    ForEach(Array(run.maxes.enumerated()), id: \.offset) { index, max in
+                        if index > 0 {
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(Chalk.inkFaint)
+                        }
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("\(max.reps)")
+                                .font(Chalk.display(index == run.maxes.count - 1 ? 72 : 44))
+                                .foregroundStyle(index == run.maxes.count - 1 ? Chalk.accent : Chalk.ink)
+                            Text("Day \(max.day)")
+                                .font(.system(size: 13))
+                                .foregroundStyle(Chalk.inkMuted)
+                        }
+                    }
+                }
+                if let gain = run.gainPercent {
+                    Text(gain >= 0 ? "Up \(gain)%" : "Down \(-gain)%")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(gain >= 0 ? Chalk.accent : Chalk.inkSoft)
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+struct ProfileStat: Identifiable, Equatable {
+    var id: String { label }
+    var label: String
+    var value: String
+}
+
+struct StatGrid: View {
+    var stats: [ProfileStat]
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+            ForEach(stats) { stat in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(stat.value)
+                        .font(Chalk.display(30))
+                        .foregroundStyle(Chalk.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                    Text(stat.label)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Chalk.inkMuted)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(14)
+                .background(Chalk.surface)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .accessibilityElement(children: .combine)
+            }
+        }
+    }
+}
+
+private struct ObservationRow: View {
+    var note: RunInsights.Observation
+    var openSchedule: () -> Void
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Capsule().fill(Chalk.accent).frame(width: 4)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(note.text)
+                    .font(.system(size: 16))
+                    .foregroundStyle(Chalk.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                if note.link == .schedule {
+                    Button(Copy.changeSchedule, action: openSchedule)
+                        .font(.system(size: 15))
+                        .foregroundStyle(Chalk.accent)
+                        .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+}
+
+struct ProfileSection<Content: View>: View {
+    var title: String
+    var content: Content
+
+    init(_ title: String, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.content = content()
+    }
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(Chalk.display(22, weight: .bold))
                 .tracking(0.8)
                 .textCase(.uppercase)
                 .foregroundStyle(Chalk.inkMuted)
-            content()
+            content
         }
     }
+}
 
-    @ViewBuilder
-    private func rows(_ items: [ProfileRow]) -> some View {
+struct ProfileRows: View {
+    var items: [ProfileRow]
+
+    var body: some View {
         VStack(spacing: 0) {
-            ForEach(items) { item in
-                row(item)
-            }
+            ForEach(items) { item in ProfileRowView(item: item) }
         }
     }
+}
 
-    private func row(_ item: ProfileRow) -> some View {
+struct ProfileRowView: View {
+    var item: ProfileRow
+
+    var body: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(item.label)
                 .font(.system(size: 16))
@@ -155,9 +207,7 @@ struct ProfileView: View {
                 .multilineTextAlignment(.trailing)
         }
         .padding(.vertical, 12)
-        .overlay(alignment: .bottom) {
-            Rectangle().fill(Chalk.line).frame(height: 1)
-        }
+        .overlay(alignment: .bottom) { Rectangle().fill(Chalk.line).frame(height: 1) }
         .accessibilityElement(children: .combine)
     }
 }

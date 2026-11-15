@@ -30,6 +30,29 @@ extension Copy {
         "Day \(day): \(grouped(repsToday)) push-ups. Every set done."
     }
     static let profileLabel = "Profile"
+    static let settingsTitle = "Settings"
+    static let lastRun = "Last run"
+    static let observations = "What we noticed"
+    static let allTime = "All time"
+    static let yourMax = "Your max"
+    static let testOnDayOne = "Test on Day 1 to set it."
+    static let insightsEmpty = "Your numbers show up here once you start a run."
+    static let changeSchedule = "Change your times"
+    static let wakeLabel = "Wake"
+    static let endOfDayLabel = "End of day"
+    static let saveTimes = "Save times"
+    static let timesSaved = "Saved. Your sets are re-spaced from now."
+    static let scheduleChangeNote = "Changes take effect from now. Sets you've done stay as they are."
+
+    static func windowPreview(before: Int, after: Int, last: ClockTime?) -> String {
+        let diff = after - before
+        let change: String
+        if diff == 0 { change = "Same number of sets left today" }
+        else if diff > 0 { change = diff == 1 ? "1 more set today" : "\(diff) more sets today" }
+        else { change = -diff == 1 ? "1 fewer set today" : "\(-diff) fewer sets today" }
+        if let last { return "From now: \(change), last set at \(Copy.clock(last))." }
+        return "From now: \(change)."
+    }
     static let alertsCheckTitle = "Alerts check"
     static let alertsCheckBody = "Tap below, then lock your phone or switch apps. A sample alert arrives in 10 seconds."
     static let sendTestAlert = "Send a test alert"

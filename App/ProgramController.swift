@@ -18,6 +18,7 @@ enum Screen: Equatable {
     case about
     case paywall
     case profile
+    case settings
     case studio
     case studioSession(String)
     case studioPlayer(String)
@@ -267,6 +268,90 @@ final class ProgramController {
         case 2, 9: return "stretch"
         default: return day % 2 == 0 ? "lower-back" : "core"
         }
+    }
+
+    // MARK: Schedule changes
+
+    func currentWindow() -> (wake: ClockTime, bed: ClockTime)? {
+        guard let run = library.current else { return nil }
+        return ScheduleEngine.window(for: run.input, at: CivilDateTime.local(Date()))
+    }
+
+    func previewWindow(wake: ClockTime, bed: ClockTime) -> (before: Int, after: Int, last: ClockTime?)? {
+        guard let run = library.current, !run.ended else { return nil }
+        return ScheduleEngine.previewWindowChange(run.input, wake: wake, bed: bed, at: CivilDateTime.local(Date()))
+    }
+
+    /// Takes effect from now: sets already done stay, the rest of today and every later day re-space.
+    func changeWindow(wake: ClockTime, bed: ClockTime) {
+        let now = CivilDateTime.local(Date())
+        draftWake = wake
+        draftBed = bed
+        update { $0.input.events.append(.window(wake: wake, bed: bed, at: now)) }
+        Task { await refreshAlerts() }
+    }
+
+    // MARK: Insights
+
+    func insightsModel() -> InsightsModel {
+        let now = CivilDateTime.local(Date())
+        var model = InsightsModel()
+        let source = library.current ?? library.history.last
+        model.runIsCurrent = library.current != nil
+        if let source {
+            let insights = InsightsEngine.run(source.input, now: source.pausedAt ?? now)
+            model.run = insights
+            var stats: [ProfileStat] = []
+            if let number = source.input.dayNumber(on: (source.pausedAt ?? now).date), model.runIsCurrent {
+                stats.append(ProfileStat(label: "Day", value: source.ended ? "Done" : "\(min(number, 15)) of 14"))
+            }
+            stats.append(ProfileStat(label: "Push-ups", value: Copy.grouped(insights.pushUps)))
+            stats.append(ProfileStat(label: "Sets done", value: "\(insights.setsDone)"))
+            stats.append(ProfileStat(label: "Sets missed", value: "\(insights.setsMissed)"))
+            if let onTime = insights.onTimePercent {
+                stats.append(ProfileStat(label: "On time", value: "\(onTime)%"))
+            }
+            if let median = insights.medianResponseMinutes {
+                stats.append(ProfileStat(label: "Typical response", value: median == 0 ? "Instant" : "\(median) min"))
+            }
+            if insights.bestPerfectStreak > 0 {
+                stats.append(ProfileStat(label: "Perfect days in a row", value: "\(insights.bestPerfectStreak)"))
+            }
+            if insights.snoozes > 0 {
+                stats.append(ProfileStat(label: "In 10 used", value: "\(insights.snoozes)"))
+            }
+            model.runStats = stats
+        }
+
+        let runs = library.history + (library.current.map { [$0] } ?? [])
+        if runs.count > 1 || !library.history.isEmpty {
+            let totals = runs.map { InsightsEngine.run($0.input, now: $0.pausedAt ?? now) }
+            let best = totals.flatMap(\.maxes).map(\.reps).max()
+            model.allTime = [
+                ProfileStat(label: "Push-ups", value: Copy.grouped(totals.reduce(0) { $0 + $1.pushUps })),
+                ProfileStat(label: "Runs", value: "\(runs.count)"),
+            ] + (best.map { [ProfileStat(label: "Best max", value: "\($0)")] } ?? [])
+        }
+
+        let log = StudioSettings.shared.log
+        if !log.isEmpty {
+            let minutes = log.reduce(0) { $0 + $1.minutes }
+            let favorite = Dictionary(grouping: log, by: \.name).max { $0.value.count < $1.value.count }?.key
+            model.studio = [
+                ProfileStat(label: "Sessions", value: "\(log.count)"),
+                ProfileStat(label: "Minutes", value: Copy.grouped(minutes)),
+            ] + (favorite.map { [ProfileStat(label: "Most done", value: $0)] } ?? [])
+        }
+
+        model.record = library.history.reversed().map { run in
+            let resolved = ScheduleEngine.resolve(run.input, now: now)
+            let start = resolved.day(1)?.testReps ?? run.input.dayOneMax
+            if let end = resolved.day(15)?.testReps {
+                return ProfileRow(label: Self.dateLabel(run.input.start), value: "\(start) → \(end)")
+            }
+            return ProfileRow(label: Self.dateLabel(run.input.start), value: "\(start), ended early")
+        }
+        return model
     }
 
     func profileSnapshot() -> ProfileSnapshot {
@@ -681,6 +766,15 @@ struct ProfileRow: Identifiable, Equatable {
     var id: String { label + value }
     var label: String
     var value: String
+}
+
+struct InsightsModel {
+    var run: RunInsights?
+    var runIsCurrent = false
+    var runStats: [ProfileStat] = []
+    var allTime: [ProfileStat] = []
+    var studio: [ProfileStat] = []
+    var record: [ProfileRow] = []
 }
 
 struct ProfileSnapshot: Equatable {

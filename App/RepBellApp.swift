@@ -39,6 +39,7 @@ struct RootView: View {
             case .about: AboutView()
             case .paywall: PaywallView()
             case .profile: ProfileView()
+            case .settings: SettingsView()
             case .studio: StudioView()
             case .studioSession(let id): StudioSessionView(sessionID: id)
             case .studioPlayer(let id): StudioPlayerView(sessionID: id)
