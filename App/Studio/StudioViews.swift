@@ -238,7 +238,13 @@ struct StudioPlayerView: View {
                     .tracking(0.8)
                     .textCase(.uppercase)
                     .foregroundStyle(step.isMove ? Chalk.accent : Chalk.inkMuted)
-                MascotStage(movement: move?.movement, sessionID: session.id, resting: !step.isMove)
+                CoachStage(
+                    movementID: move?.movement.id,
+                    side: step.isMove ? step.side : session.timeline.dropFirst(index + 1).first(where: \.isMove)?.side,
+                    resting: !step.isMove,
+                    sessionID: session.id,
+                    paused: paused
+                )
                     .frame(maxWidth: .infinity)
                     .frame(height: 220)
                 Text(move?.movement.name ?? "")

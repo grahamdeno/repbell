@@ -1612,8 +1612,8 @@
       "id": "boat",
       "name": "Boat",
       "cues": [
-        "Sit tall, lean back slightly, lift your shins parallel to the floor.",
-        "Chest stays lifted. Hold behind your thighs to make it easier."
+        "Sit tall, lean back, lift both legs long and reach your arms forward.",
+        "Chest stays lifted. Bend your knees, shins level, to make it easier."
       ],
       "sides": "none",
       "gear": [
@@ -2208,7 +2208,7 @@
       "name": "Glute bridge march",
       "cues": [
         "Hold a glute bridge at the top.",
-        "Lift one foot at a time without your hips dropping."
+        "Lift one knee toward your chest, set it down, switch. Hips stay level."
       ],
       "sides": "alternating",
       "gear": [
