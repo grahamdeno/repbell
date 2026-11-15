@@ -35,9 +35,9 @@ enum Notifier {
     /// Builds the full set of requests the run needs, removes only stale ones, then adds or replaces the rest.
     /// Callers must not run two refills at once; ProgramController serializes them.
     @discardableResult
-    static func refill(library: LibraryFile) async -> AlertReport {
+    static func refill(library: LibraryFile, holdUntil: Date? = nil) async -> AlertReport {
         let center = UNUserNotificationCenter.current()
-        let desired = desiredRequests(library: library)
+        let desired = desiredRequests(library: library, holdUntil: holdUntil)
         let wanted = Set(desired.map(\.identifier))
         let pending = await center.pendingNotificationRequests()
         let stale = pending.map(\.identifier).filter { ($0.hasPrefix("set.") || $0.hasPrefix("note.")) && !wanted.contains($0) }
@@ -59,13 +59,15 @@ enum Notifier {
         return report
     }
 
-    private static func desiredRequests(library: LibraryFile) -> [UNNotificationRequest] {
+    private static func desiredRequests(library: LibraryFile, holdUntil: Date?) -> [UNNotificationRequest] {
         guard let run = library.current, run.pausedAt == nil, !run.ended else { return [] }
         let now = CivilDateTime.local(Date())
         let resolved = ScheduleEngine.resolve(run.input, now: now)
         var requests: [UNNotificationRequest] = []
         for alert in resolved.alertQueue(at: now).pending where library.allows(day: alert.day) {
             guard let date = alert.at.foundationDate(), date > Date() else { continue }
+            // During a Studio session, set alerts wait. The set stays due until the next one, so nothing is lost.
+            if let holdUntil, date < holdUntil { continue }
             let content = UNMutableNotificationContent()
             content.title = Copy.setAlertTitle(reps: alert.reps)
             content.body = Copy.setAlertBody(index: alert.index, total: alert.total, day: alert.day)

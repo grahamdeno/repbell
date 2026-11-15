@@ -258,6 +258,35 @@ final class ProgramController {
         }
     }
 
+    // MARK: Studio alert hold
+
+    /// While set, set alerts that would fire before this time are held back.
+    var studioHoldUntil: Date? = UserDefaults.standard.object(forKey: "studio.holdUntil") as? Date {
+        didSet { UserDefaults.standard.set(studioHoldUntil, forKey: "studio.holdUntil") }
+    }
+
+    /// Set alerts that would fire in the next so many minutes.
+    func setsDuring(minutes: Int) -> Int {
+        guard let run = library.current, run.pausedAt == nil, !run.ended else { return 0 }
+        let now = CivilDateTime.local(Date())
+        let end = Date().addingTimeInterval(TimeInterval(minutes * 60))
+        let resolved = ScheduleEngine.resolve(run.input, now: now)
+        return resolved.alertQueue(at: now).pending.filter { alert in
+            library.allows(day: alert.day) && (alert.at.foundationDate().map { $0 < end } ?? false)
+        }.count
+    }
+
+    func holdAlerts(minutes: Int) {
+        studioHoldUntil = Date().addingTimeInterval(TimeInterval((minutes + 5) * 60))
+        Task { await refreshAlerts() }
+    }
+
+    func releaseAlerts() {
+        guard studioHoldUntil != nil else { return }
+        studioHoldUntil = nil
+        Task { await refreshAlerts() }
+    }
+
     /// One Studio session to suggest, by push-up day. Upper body work is never suggested on a push day.
     func studioSuggestion() -> String {
         guard let run = library.current, !run.ended else { return "flow-45" }
@@ -521,7 +550,7 @@ final class ProgramController {
     }
 
     private func performAlertRefresh() async {
-        await Notifier.refill(library: library)
+        await Notifier.refill(library: library, holdUntil: studioHoldUntil.flatMap { $0 > Date() ? $0 : nil })
         if let run = library.current {
             await TestAlarms.sync(run: run, allows: { self.library.allows(day: $0) })
         } else {
