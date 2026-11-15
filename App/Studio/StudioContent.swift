@@ -97,6 +97,8 @@ final class StudioSettings {
     var mascot: String { didSet { save() } }
     var gear: Set<String> { didSet { save() } }
     var easyOn: Set<String> { didSet { save() } }
+    /// Save finished sessions to Apple Health.
+    var health: Bool { didSet { save() } }
     private(set) var log: [StudioLogEntry]
 
     private let defaults = UserDefaults.standard
@@ -105,6 +107,7 @@ final class StudioSettings {
         mascot = defaults.string(forKey: "studio.mascot") ?? "him"
         gear = Set(defaults.stringArray(forKey: "studio.gear") ?? ["chair", "table"])
         easyOn = Set(defaults.stringArray(forKey: "studio.easyOn") ?? [])
+        health = defaults.bool(forKey: "studio.health")
         if let data = defaults.data(forKey: "studio.log"), let entries = try? JSONDecoder().decode([StudioLogEntry].self, from: data) {
             log = entries
         } else {
@@ -116,6 +119,7 @@ final class StudioSettings {
         defaults.set(mascot, forKey: "studio.mascot")
         defaults.set(Array(gear), forKey: "studio.gear")
         defaults.set(Array(easyOn), forKey: "studio.easyOn")
+        defaults.set(health, forKey: "studio.health")
     }
 
     func record(session: StudioSession, seconds: Int) {
