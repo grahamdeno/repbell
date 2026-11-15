@@ -3122,6 +3122,1636 @@
       ]
     },
     {
+      "id": "grip-pull",
+      "name": "Grip and pull",
+      "gear": [
+        "gi-bag",
+        "kettlebell",
+        "rice-bucket"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 4,
+          "work": 40,
+          "rest": 20,
+          "restBetweenRounds": 90,
+          "moves": [
+            "gi-row",
+            "kettlebell-swing",
+            "gi-drag",
+            "rice-grab",
+            "gi-hold",
+            "farmer-carry",
+            "rice-twist",
+            "rice-spread"
+          ]
+        }
+      ],
+      "minutes": 45,
+      "timeline": [
+        {
+          "type": "getReady",
+          "seconds": 10,
+          "next": "march"
+        },
+        {
+          "type": "move",
+          "id": "march",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "arm-circles"
+        },
+        {
+          "type": "move",
+          "id": "arm-circles",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "hip-circles"
+        },
+        {
+          "type": "move",
+          "id": "hip-circles",
+          "seconds": 30
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "good-morning"
+        },
+        {
+          "type": "move",
+          "id": "good-morning",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "inchworm"
+        },
+        {
+          "type": "move",
+          "id": "inchworm",
+          "seconds": 60
+        },
+        {
+          "type": "transition",
+          "seconds": 30,
+          "next": "gi-row"
+        },
+        {
+          "type": "move",
+          "id": "gi-row",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 30,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-drag"
+        },
+        {
+          "type": "move",
+          "id": "gi-drag",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 30,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-hold"
+        },
+        {
+          "type": "move",
+          "id": "gi-hold",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "farmer-carry"
+        },
+        {
+          "type": "move",
+          "id": "farmer-carry",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "roundRest",
+          "seconds": 90,
+          "next": "gi-row"
+        },
+        {
+          "type": "move",
+          "id": "gi-row",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-drag"
+        },
+        {
+          "type": "move",
+          "id": "gi-drag",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-hold"
+        },
+        {
+          "type": "move",
+          "id": "gi-hold",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "farmer-carry"
+        },
+        {
+          "type": "move",
+          "id": "farmer-carry",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "roundRest",
+          "seconds": 90,
+          "next": "gi-row"
+        },
+        {
+          "type": "move",
+          "id": "gi-row",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-drag"
+        },
+        {
+          "type": "move",
+          "id": "gi-drag",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-hold"
+        },
+        {
+          "type": "move",
+          "id": "gi-hold",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "farmer-carry"
+        },
+        {
+          "type": "move",
+          "id": "farmer-carry",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "roundRest",
+          "seconds": 90,
+          "next": "gi-row"
+        },
+        {
+          "type": "move",
+          "id": "gi-row",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-drag"
+        },
+        {
+          "type": "move",
+          "id": "gi-drag",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-grab"
+        },
+        {
+          "type": "move",
+          "id": "rice-grab",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "gi-hold"
+        },
+        {
+          "type": "move",
+          "id": "gi-hold",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "farmer-carry"
+        },
+        {
+          "type": "move",
+          "id": "farmer-carry",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-twist"
+        },
+        {
+          "type": "move",
+          "id": "rice-twist",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "rice-spread"
+        },
+        {
+          "type": "move",
+          "id": "rice-spread",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "transition",
+          "seconds": 30,
+          "next": "childs-pose"
+        },
+        {
+          "type": "move",
+          "id": "childs-pose",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "wall-chest"
+        },
+        {
+          "type": "move",
+          "id": "wall-chest",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "wall-chest"
+        },
+        {
+          "type": "move",
+          "id": "wall-chest",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "hamstring-fold"
+        },
+        {
+          "type": "move",
+          "id": "hamstring-fold",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "breathing"
+        },
+        {
+          "type": "move",
+          "id": "breathing",
+          "seconds": 30
+        }
+      ]
+    },
+    {
+      "id": "kettlebell",
+      "name": "Kettlebell",
+      "gear": [
+        "kettlebell"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 4,
+          "work": 40,
+          "rest": 20,
+          "restBetweenRounds": 90,
+          "moves": [
+            "kettlebell-swing",
+            "goblet-squat",
+            "kb-press",
+            "kb-row",
+            "kb-deadlift",
+            "halo",
+            "half-get-up",
+            "suitcase-carry"
+          ]
+        }
+      ],
+      "minutes": 45,
+      "timeline": [
+        {
+          "type": "getReady",
+          "seconds": 10,
+          "next": "march"
+        },
+        {
+          "type": "move",
+          "id": "march",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "arm-circles"
+        },
+        {
+          "type": "move",
+          "id": "arm-circles",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "hip-circles"
+        },
+        {
+          "type": "move",
+          "id": "hip-circles",
+          "seconds": 30
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "good-morning"
+        },
+        {
+          "type": "move",
+          "id": "good-morning",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "inchworm"
+        },
+        {
+          "type": "move",
+          "id": "inchworm",
+          "seconds": 60
+        },
+        {
+          "type": "transition",
+          "seconds": 30,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "goblet-squat"
+        },
+        {
+          "type": "move",
+          "id": "goblet-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-deadlift"
+        },
+        {
+          "type": "move",
+          "id": "kb-deadlift",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "halo"
+        },
+        {
+          "type": "move",
+          "id": "halo",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "roundRest",
+          "seconds": 90,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "goblet-squat"
+        },
+        {
+          "type": "move",
+          "id": "goblet-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-deadlift"
+        },
+        {
+          "type": "move",
+          "id": "kb-deadlift",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "halo"
+        },
+        {
+          "type": "move",
+          "id": "halo",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "roundRest",
+          "seconds": 90,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "goblet-squat"
+        },
+        {
+          "type": "move",
+          "id": "goblet-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-deadlift"
+        },
+        {
+          "type": "move",
+          "id": "kb-deadlift",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "halo"
+        },
+        {
+          "type": "move",
+          "id": "halo",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "roundRest",
+          "seconds": 90,
+          "next": "kettlebell-swing"
+        },
+        {
+          "type": "move",
+          "id": "kettlebell-swing",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "goblet-squat"
+        },
+        {
+          "type": "move",
+          "id": "goblet-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-press"
+        },
+        {
+          "type": "move",
+          "id": "kb-press",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "kb-row"
+        },
+        {
+          "type": "move",
+          "id": "kb-row",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "kb-deadlift"
+        },
+        {
+          "type": "move",
+          "id": "kb-deadlift",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "halo"
+        },
+        {
+          "type": "move",
+          "id": "halo",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "half-get-up"
+        },
+        {
+          "type": "move",
+          "id": "half-get-up",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "suitcase-carry"
+        },
+        {
+          "type": "move",
+          "id": "suitcase-carry",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "transition",
+          "seconds": 30,
+          "next": "childs-pose"
+        },
+        {
+          "type": "move",
+          "id": "childs-pose",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "wall-chest"
+        },
+        {
+          "type": "move",
+          "id": "wall-chest",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "wall-chest"
+        },
+        {
+          "type": "move",
+          "id": "wall-chest",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "hamstring-fold"
+        },
+        {
+          "type": "move",
+          "id": "hamstring-fold",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "breathing"
+        },
+        {
+          "type": "move",
+          "id": "breathing",
+          "seconds": 30
+        }
+      ]
+    },
+    {
+      "id": "balance",
+      "name": "Balance",
+      "gear": [
+        "balance-board"
+      ],
+      "free": false,
+      "warmup": true,
+      "cooldown": true,
+      "blocks": [
+        {
+          "kind": "circuit",
+          "rounds": 3,
+          "work": 40,
+          "rest": 20,
+          "restBetweenRounds": 60,
+          "moves": [
+            "board-stand",
+            "single-leg-balance",
+            "board-squat",
+            "single-leg-reach",
+            "board-rock",
+            "board-plank"
+          ]
+        }
+      ],
+      "minutes": 29,
+      "timeline": [
+        {
+          "type": "getReady",
+          "seconds": 10,
+          "next": "march"
+        },
+        {
+          "type": "move",
+          "id": "march",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "arm-circles"
+        },
+        {
+          "type": "move",
+          "id": "arm-circles",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "hip-circles"
+        },
+        {
+          "type": "move",
+          "id": "hip-circles",
+          "seconds": 30
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "good-morning"
+        },
+        {
+          "type": "move",
+          "id": "good-morning",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "inchworm"
+        },
+        {
+          "type": "move",
+          "id": "inchworm",
+          "seconds": 60
+        },
+        {
+          "type": "transition",
+          "seconds": 30,
+          "next": "board-stand"
+        },
+        {
+          "type": "move",
+          "id": "board-stand",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "single-leg-balance"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-balance",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "single-leg-balance"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-balance",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-squat"
+        },
+        {
+          "type": "move",
+          "id": "board-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "single-leg-reach"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-reach",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "single-leg-reach"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-reach",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-rock"
+        },
+        {
+          "type": "move",
+          "id": "board-rock",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-plank"
+        },
+        {
+          "type": "move",
+          "id": "board-plank",
+          "seconds": 40
+        },
+        {
+          "type": "roundRest",
+          "seconds": 60,
+          "next": "board-stand"
+        },
+        {
+          "type": "move",
+          "id": "board-stand",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "single-leg-balance"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-balance",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "single-leg-balance"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-balance",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-squat"
+        },
+        {
+          "type": "move",
+          "id": "board-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "single-leg-reach"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-reach",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "single-leg-reach"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-reach",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-rock"
+        },
+        {
+          "type": "move",
+          "id": "board-rock",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-plank"
+        },
+        {
+          "type": "move",
+          "id": "board-plank",
+          "seconds": 40
+        },
+        {
+          "type": "roundRest",
+          "seconds": 60,
+          "next": "board-stand"
+        },
+        {
+          "type": "move",
+          "id": "board-stand",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "single-leg-balance"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-balance",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "single-leg-balance"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-balance",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-squat"
+        },
+        {
+          "type": "move",
+          "id": "board-squat",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "single-leg-reach"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-reach",
+          "side": "left",
+          "seconds": 17
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "single-leg-reach"
+        },
+        {
+          "type": "move",
+          "id": "single-leg-reach",
+          "side": "right",
+          "seconds": 17
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-rock"
+        },
+        {
+          "type": "move",
+          "id": "board-rock",
+          "seconds": 40
+        },
+        {
+          "type": "rest",
+          "seconds": 20,
+          "next": "board-plank"
+        },
+        {
+          "type": "move",
+          "id": "board-plank",
+          "seconds": 40
+        },
+        {
+          "type": "transition",
+          "seconds": 30,
+          "next": "childs-pose"
+        },
+        {
+          "type": "move",
+          "id": "childs-pose",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "wall-chest"
+        },
+        {
+          "type": "move",
+          "id": "wall-chest",
+          "side": "left",
+          "seconds": 60
+        },
+        {
+          "type": "switch",
+          "seconds": 5,
+          "next": "wall-chest"
+        },
+        {
+          "type": "move",
+          "id": "wall-chest",
+          "side": "right",
+          "seconds": 60
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "hamstring-fold"
+        },
+        {
+          "type": "move",
+          "id": "hamstring-fold",
+          "seconds": 45
+        },
+        {
+          "type": "rest",
+          "seconds": 5,
+          "next": "breathing"
+        },
+        {
+          "type": "move",
+          "id": "breathing",
+          "seconds": 30
+        }
+      ]
+    },
+    {
       "id": "strike",
       "name": "Strike",
       "gear": [],

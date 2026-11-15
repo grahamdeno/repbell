@@ -1854,6 +1854,460 @@
       "modify": {}
     },
     {
+      "id": "kettlebell-swing",
+      "name": "Kettlebell swing",
+      "cues": [
+        "Feet wider than hips, bell a foot in front. Hike it back between your legs, then snap your hips forward.",
+        "The hips drive the bell to chest height. Your arms only guide it. Don't squat it or lift with your shoulders."
+      ],
+      "sides": "none",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "good-morning",
+      "easier": "kb-deadlift",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "hiked",
+        "float"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "kb-deadlift",
+      "name": "Kettlebell deadlift",
+      "cues": [
+        "Bell between your feet. Push your hips back, flat back, grip the handle.",
+        "Stand up by driving through your heels. Keep the bell close to your legs."
+      ],
+      "sides": "none",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "good-morning",
+      "easier": null,
+      "harder": "kettlebell-swing",
+      "view": "side",
+      "keyframes": [
+        "bottom",
+        "top"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "goblet-squat",
+      "name": "Goblet squat",
+      "cues": [
+        "Hold the bell by the horns at your chest, elbows down.",
+        "Sit between your heels with your chest up. Elbows brush the inside of your knees."
+      ],
+      "sides": "none",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "squat",
+      "easier": "squat",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "standing",
+        "bottom"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "kb-press",
+      "name": "Kettlebell press",
+      "cues": [
+        "Bell resting on your forearm at the shoulder, wrist straight.",
+        "Press straight up and lock out. Squeeze your glutes so your back doesn't arch."
+      ],
+      "sides": "each",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "pike-push-up",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "racked",
+        "overhead"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "kb-row",
+      "name": "Kettlebell row",
+      "cues": [
+        "Staggered stance, free hand on your knee or a chair, flat back.",
+        "Pull the bell to your hip. Elbow close, no twisting."
+      ],
+      "sides": "each",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "table-row",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "arm long",
+        "pulled"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "halo",
+      "name": "Kettlebell halo",
+      "cues": [
+        "Hold the bell upside down by the horns at your chest.",
+        "Circle it slowly around your head, close to your neck. Ribs stay down."
+      ],
+      "sides": "none",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "arm-circles",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "front",
+        "behind"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "half-get-up",
+      "name": "Half get-up",
+      "cues": [
+        "Lie on your back, one bell pressed straight up over your shoulder, same-side knee bent.",
+        "Roll to your elbow, then your hand, eyes on the bell the whole time. Lower back down slowly."
+      ],
+      "sides": "each",
+      "gear": [
+        "kettlebell",
+        "mat"
+      ],
+      "standIn": "dead-bug",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "lying",
+        "elbow",
+        "hand"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "suitcase-carry",
+      "name": "Suitcase carry",
+      "cues": [
+        "Hold one bell at your side like a suitcase.",
+        "Walk tall without leaning toward the bell. Switch hands halfway."
+      ],
+      "sides": "each",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "march",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "step left",
+        "step right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "farmer-carry",
+      "name": "Farmer carry",
+      "cues": [
+        "A heavy bell or the bag in each hand, or the bag hugged at your chest.",
+        "Walk slowly and tall, shoulders down, grip hard the whole time."
+      ],
+      "sides": "none",
+      "gear": [
+        "kettlebell"
+      ],
+      "standIn": "march",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "step left",
+        "step right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "gi-row",
+      "name": "Gi bag row",
+      "cues": [
+        "Grip the gi sleeves or lapels tied to the bag. Hinge forward with a flat back.",
+        "Row the bag to your belly and squeeze your shoulder blades. Let your grip do the work, not your wrists."
+      ],
+      "sides": "none",
+      "gear": [
+        "gi-bag"
+      ],
+      "standIn": "table-row",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "arms long",
+        "pulled"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "gi-drag",
+      "name": "Gi bag drag",
+      "cues": [
+        "Grip the gi with both hands, sit low, arms long.",
+        "Walk backward in short steps, dragging the bag. Stay low, like breaking a posture on the mat."
+      ],
+      "sides": "none",
+      "gear": [
+        "gi-bag"
+      ],
+      "standIn": "towel-row",
+      "easier": null,
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "step",
+        "pull"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "gi-hold",
+      "name": "Gi grip hold",
+      "cues": [
+        "Lift the bag off the floor by the gi and stand tall.",
+        "Hold as long as the timer runs. Switch grips (sleeve, lapel, pistol) between rounds."
+      ],
+      "sides": "none",
+      "gear": [
+        "gi-bag"
+      ],
+      "standIn": "towel-row",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "holding"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "grip-squeeze",
+      "name": "Fist squeeze",
+      "cues": [
+        "Arms forward, hands open wide.",
+        "Squeeze into the hardest fist you can, hold a second, then spread your fingers wide. Repeat."
+      ],
+      "sides": "none",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "rice-grab",
+      "view": "front",
+      "keyframes": [
+        "open",
+        "fist"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "rice-grab",
+      "name": "Rice bucket grab",
+      "cues": [
+        "Push one hand deep into the rice.",
+        "Clench a fist as hard as you can, then open it fully. Fast and hard."
+      ],
+      "sides": "each",
+      "gear": [
+        "rice-bucket"
+      ],
+      "standIn": "grip-squeeze",
+      "easier": "grip-squeeze",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "open",
+        "fist"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "rice-twist",
+      "name": "Rice bucket twist",
+      "cues": [
+        "Hand deep in the rice, fist closed.",
+        "Turn your wrist side to side as far as it goes, against the rice."
+      ],
+      "sides": "each",
+      "gear": [
+        "rice-bucket"
+      ],
+      "standIn": "grip-squeeze",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "turned in",
+        "turned out"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "rice-spread",
+      "name": "Rice bucket spread",
+      "cues": [
+        "Hand deep in the rice, fingers together.",
+        "Spread your fingers as wide as you can against the rice, then bring them back."
+      ],
+      "sides": "each",
+      "gear": [
+        "rice-bucket"
+      ],
+      "standIn": "grip-squeeze",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "closed",
+        "spread"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "single-leg-balance",
+      "name": "Single-leg balance",
+      "cues": [
+        "Stand on one foot, the other knee lifted to hip height.",
+        "Soft standing knee, hips level. Look at one spot ahead."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": null,
+      "harder": "board-stand",
+      "view": "front",
+      "keyframes": [
+        "balancing"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "single-leg-reach",
+      "name": "Single-leg reach",
+      "cues": [
+        "Balance on one leg.",
+        "Hinge and reach both hands toward the floor ahead while the free leg reaches back. Return tall."
+      ],
+      "sides": "each",
+      "gear": [],
+      "standIn": null,
+      "easier": "single-leg-balance",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "tall",
+        "reaching"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "board-stand",
+      "name": "Board balance",
+      "cues": [
+        "Stand on the balance board, feet shoulder-width, knees soft.",
+        "Keep both edges off the floor. Arms out if you need them, then bring them in."
+      ],
+      "sides": "none",
+      "gear": [
+        "balance-board"
+      ],
+      "standIn": "single-leg-balance",
+      "easier": "single-leg-balance",
+      "harder": "board-squat",
+      "view": "front",
+      "keyframes": [
+        "balancing"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "board-squat",
+      "name": "Board squat",
+      "cues": [
+        "Stand balanced on the board.",
+        "Squat slowly, keeping the board level, then stand. Small range is fine."
+      ],
+      "sides": "none",
+      "gear": [
+        "balance-board"
+      ],
+      "standIn": "squat",
+      "easier": "board-stand",
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "standing",
+        "squat"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "board-rock",
+      "name": "Board rock",
+      "cues": [
+        "Stand on the board.",
+        "Tip slowly side to side, touching each edge down, under control."
+      ],
+      "sides": "none",
+      "gear": [
+        "balance-board"
+      ],
+      "standIn": "side-step",
+      "easier": null,
+      "harder": null,
+      "view": "front",
+      "keyframes": [
+        "left",
+        "right"
+      ],
+      "modify": {}
+    },
+    {
+      "id": "board-plank",
+      "name": "Board plank",
+      "cues": [
+        "Hands on the board, feet back in a high plank.",
+        "Keep the board level and your body in one line."
+      ],
+      "sides": "none",
+      "gear": [
+        "balance-board"
+      ],
+      "standIn": "high-plank",
+      "easier": "high-plank",
+      "harder": null,
+      "view": "side",
+      "keyframes": [
+        "plank"
+      ],
+      "modify": {}
+    },
+    {
       "id": "fighting-stance",
       "name": "Fighting stance",
       "cues": [

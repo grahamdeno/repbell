@@ -91,7 +91,7 @@ final class StudioLibrary {
 final class StudioSettings {
     static let shared = StudioSettings()
 
-    nonisolated static let allGear = ["bar", "band", "chair", "table", "block", "strap"]
+    nonisolated static let allGear = ["bar", "band", "kettlebell", "gi-bag", "balance-board", "rice-bucket", "chair", "table", "block", "strap"]
     nonisolated static let zones = ["knees", "lowerBack", "shoulders"]
 
     var mascot: String { didSet { save() } }
@@ -151,6 +151,10 @@ final class StudioSettings {
         case "table": return "Sturdy table"
         case "block": return "Yoga block"
         case "strap": return "Strap or towel"
+        case "kettlebell": return "Kettlebell"
+        case "gi-bag": return "Sandbag with a gi"
+        case "balance-board": return "Balance board"
+        case "rice-bucket": return "Bucket of rice"
         default: return gear.capitalized
         }
     }
