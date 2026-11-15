@@ -98,6 +98,7 @@ private struct StudioRow: View {
 struct StudioSessionView: View {
     @Environment(ProgramController.self) private var controller
     var sessionID: String
+    @State private var askHold = false
     private var settings: StudioSettings { StudioSettings.shared }
 
     var body: some View {
@@ -146,12 +147,26 @@ struct StudioSessionView: View {
                     PrimaryButton(title: StudioCopy.start) {
                         if session.free || controller.library.unlocked {
                             Haptics.play(.tap)
-                            controller.screen = .studioPlayer(session.id)
+                            if controller.setsDuring(minutes: session.minutes) > 0 {
+                                askHold = true
+                            } else {
+                                controller.screen = .studioPlayer(session.id)
+                            }
                         } else {
                             controller.screen = .paywall
                         }
                     }
                     .padding(.top, 12)
+                    .confirmationDialog(StudioCopy.holdTitle, isPresented: $askHold, titleVisibility: .visible) {
+                        Button(StudioCopy.holdYes) {
+                            controller.holdAlerts(minutes: session.minutes)
+                            controller.screen = .studioPlayer(session.id)
+                        }
+                        Button(StudioCopy.holdNo) { controller.screen = .studioPlayer(session.id) }
+                        Button(Copy.back, role: .cancel) {}
+                    } message: {
+                        Text(StudioCopy.holdBody(controller.setsDuring(minutes: session.minutes)))
+                    }
                 }
             }
         } else {
@@ -221,6 +236,7 @@ struct StudioPlayerView: View {
                     Spacer()
                     Button {
                         save(session)
+                        controller.releaseAlerts()
                         controller.screen = .studioSession(session.id)
                     } label: {
                         Image(systemName: "xmark")
@@ -353,6 +369,7 @@ struct StudioPlayerView: View {
 
     private func complete(_ session: StudioSession) {
         finished = true
+        controller.releaseAlerts()
         clearSaved()
         settings.record(session: session, seconds: elapsed)
         if settings.health {
@@ -572,6 +589,14 @@ enum StudioCopy {
     static let iHave = "I have"
     static let goEasyOn = "Go easy on"
     static let wantMore = "Want more?"
+    static let holdTitle = "Hold set alerts?"
+    static let holdYes = "Hold until I finish"
+    static let holdNo = "Keep them on"
+
+    static func holdBody(_ count: Int) -> String {
+        let sets = count == 1 ? "A set comes due" : "\(count) sets come due"
+        return "\(sets) during this session. Held sets wait on Today until the next one, so you can do them after."
+    }
     static let safety = "Stop if you feel sharp pain or dizziness. Every hard move has an easier version: swipe or tap Skip, or set Go easy on in Profile."
 
     static func meta(_ s: StudioSession) -> String {
