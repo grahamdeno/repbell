@@ -54,6 +54,16 @@ struct RootView: View {
             }
         }
         .onOpenURL { url in
+            // repbell://studio/<session-id> opens that Studio session (used by Padwork).
+            if url.host == "studio" {
+                let id = url.lastPathComponent
+                if !id.isEmpty, id != "/", StudioLibrary.shared.session(id) != nil {
+                    controller.screen = .studioSession(id)
+                } else {
+                    controller.screen = .studio
+                }
+                return
+            }
             if url.host == "test", let run = controller.library.current {
                 let now = CivilDateTime.local(Date())
                 let day = run.input.dayNumber(on: now.date) ?? 1

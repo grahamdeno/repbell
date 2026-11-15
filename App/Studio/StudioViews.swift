@@ -349,6 +349,10 @@ struct StudioPlayerView: View {
         finished = true
         clearSaved()
         settings.record(session: session, seconds: elapsed)
+        if settings.health {
+            let seconds = elapsed
+            Task { await StudioHealth.save(session: session, seconds: seconds) }
+        }
         Haptics.play(.dayComplete)
     }
 
@@ -520,6 +524,20 @@ struct StudioProfileSection: View {
                 .tint(Chalk.accent)
                 .foregroundStyle(Chalk.inkSoft)
             }
+            if StudioHealth.available {
+                Toggle(StudioCopy.saveToHealth, isOn: Binding(
+                    get: { settings.health },
+                    set: { on in
+                        if on {
+                            Task { settings.health = await StudioHealth.enable() }
+                        } else {
+                            settings.health = false
+                        }
+                    }
+                ))
+                .tint(Chalk.accent)
+                .foregroundStyle(Chalk.inkSoft)
+            }
             if !settings.log.isEmpty {
                 Text(StudioCopy.sessionsDone(settings.log.count, minutes: settings.log.reduce(0) { $0 + $1.minutes }))
                     .font(.system(size: 14))
@@ -531,6 +549,7 @@ struct StudioProfileSection: View {
 
 enum StudioCopy {
     static let studio = "Studio"
+    static let saveToHealth = "Save sessions to Apple Health"
     static let suggested = "Suggested today"
     static let allSessions = "All sessions"
     static let free = "Free"
