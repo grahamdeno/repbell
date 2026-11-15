@@ -103,7 +103,7 @@ M = [
     ("standing-knee-hold", "Standing knee hold", "Stand tall, hug one knee into your chest.", "Stand tall through the standing leg; don't lean back.", "each", ["mat"], None, None, "warrior-three", "front", ["knee held"]),
     ("goddess", "Goddess squat", "Wide stance, toes turned out, sink your hips.", "Knees track over your toes. Arms at cactus, shoulder blades down.", "none", ["mat"], None, None, None, "front", ["goddess"]),
     ("wide-fold", "Wide-leg forward fold", "Wide stance, feet parallel, hands on hips.", "Fold from the hips with a long spine, hands to the floor or blocks.", "none", ["mat", "block"], "book", None, None, "front", ["folded"]),
-    ("boat", "Boat", "Sit tall, lean back slightly, lift your shins parallel to the floor.", "Chest stays lifted. Hold behind your thighs to make it easier.", "none", ["mat"], None, None, None, "side", ["boat"]),
+    ("boat", "Boat", "Sit tall, lean back, lift both legs long and reach your arms forward.", "Chest stays lifted. Bend your knees, shins level, to make it easier.", "none", ["mat"], None, None, None, "side", ["boat"]),
     ("dolphin", "Dolphin", "Forearms down, hips lifted into an upside-down V.", "Press your forearms down and lift away from the floor; bend your knees if you need to.", "none", ["mat"], None, "puppy", None, "side", ["dolphin"]),
     ("high-plank", "High plank hold", "Hands under shoulders, body in one straight line.", "Press the floor away and keep your hips level.", "none", ["mat"], None, "knee-plank", None, "side", ["plank"]),
     ("crow", "Crow", "Squat, hands on the floor, knees against the backs of your upper arms.", "Shift forward until your feet lift. Keep a block or pillow in front of your face.", "none", ["mat"], None, "garland", None, "side", ["crouch", "balance"]),
@@ -136,7 +136,7 @@ M = [
     ("hollow-hold", "Hollow hold", "On your back, press your lower back down, lift shoulders and legs.", "Bend your knees to make it easier. Your lower back never lifts.", "none", ["mat"], None, "dead-bug", None, "side", ["hollow"]),
     ("mountain-climber", "Mountain climber", "High plank, hands under shoulders.", "Drive your knees toward your chest one at a time. Hips stay low.", "alternating", [], None, "slow-climber", None, "side", ["knee left", "knee right"]),
     ("slow-climber", "Slow mountain climber", "High plank, step one knee in at a time.", "Pause each step and keep your shoulders over your hands.", "alternating", [], None, None, "mountain-climber", "side", ["knee left", "knee right"]),
-    ("bridge-march", "Glute bridge march", "Hold a glute bridge at the top.", "Lift one foot at a time without your hips dropping.", "alternating", ["mat"], None, "glute-bridge", None, "side", ["bridge left", "bridge right"]),
+    ("bridge-march", "Glute bridge march", "Hold a glute bridge at the top.", "Lift one knee toward your chest, set it down, switch. Hips stay level.", "alternating", ["mat"], None, "glute-bridge", None, "side", ["bridge left", "bridge right"]),
     ("russian-twist", "Russian twist", "Sit leaning back slightly, knees bent, heels down.", "Turn your chest side to side, not just your arms.", "alternating", ["mat"], None, None, None, "front", ["twist left", "twist right"]),
 
     # Abs
