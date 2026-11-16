@@ -35,6 +35,11 @@ struct TodaySnapshot: Equatable {
         case next(time: String, reps: Int, line: String)
         case finished(String)
         case paused(Int)
+
+        var isFinished: Bool {
+            if case .finished = self { return true }
+            return false
+        }
     }
 
     var hero: Hero
