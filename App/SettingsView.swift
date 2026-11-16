@@ -32,10 +32,27 @@ struct SettingsView: View {
                             StudioProfileSection()
                         }
                         purchase
-                        ProfileSection(Copy.startOverTitle) {
+                        ProfileSection(Copy.programSection) {
+                            if let run = controller.library.current, !run.ended {
+                                if run.pausedAt == nil {
+                                    Text(Copy.pauseBody)
+                                        .font(.system(size: 15))
+                                        .foregroundStyle(Chalk.inkSoft)
+                                    SecondaryButton(title: Copy.pauseTitle, height: 56) {
+                                        controller.pause()
+                                        controller.screen = .today
+                                    }
+                                } else {
+                                    PrimaryButton(title: Copy.resume) {
+                                        controller.resume()
+                                        controller.screen = .today
+                                    }
+                                }
+                            }
                             Text(Copy.startOverBody)
                                 .font(.system(size: 15))
                                 .foregroundStyle(Chalk.inkSoft)
+                                .padding(.top, 8)
                             SecondaryButton(title: Copy.startOverTitle, height: 56) { confirmStartOver = true }
                         }
                         TextLink(title: Copy.aboutTitle) { controller.screen = .about }
@@ -107,7 +124,7 @@ struct SettingsView: View {
     // MARK: Alerts
 
     private var alerts: some View {
-        ProfileSection(Copy.alertsCheckTitle) {
+        ProfileSection(Copy.alertsSection) {
             ProfileRows(items: alertRows)
             if alertRows.contains(where: { $0.value == "Off" || $0.value == "Not asked yet" || $0.value.hasPrefix("On (") }) {
                 Text(Copy.alertsFixHint)

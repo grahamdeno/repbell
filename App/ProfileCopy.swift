@@ -1,11 +1,11 @@
 import RepBellEngine
 
 extension Copy {
-    static let profileTitle = "Profile"
+    static let profileTitle = "Progress"
     static let thisRun = "This run"
     static let yourRecord = "Your record"
-    static let scheduleTitle = "Schedule"
-    static let unlockSection = "Unlock"
+    static let scheduleTitle = "Your day"
+    static let unlockSection = "Purchase"
     static let startOverTitle = "Start over"
     static let startOverBody = "Ends this run and takes you back to setup. Your record and your unlock are kept."
     static let startOverConfirmTitle = "Start over?"
@@ -16,9 +16,9 @@ extension Copy {
     static let notUnlocked = "Days 1 to 3 of your first run are free"
     static let restorePurchase = "Restore purchase"
     static let restoreNone = "No purchase found for this Apple Account."
-    static let busyCaption = "Pauses alerts for an hour. Sets in that hour count as missed."
-    static let busySheetTitle = "Pause alerts for an hour?"
-    static let busyPause = "Pause for 1 hour"
+    static let busyCaption = "Turns off alerts for an hour. Sets in that hour count as missed."
+    static let busySheetTitle = "Skip the next hour?"
+    static let busyPause = "Skip the next hour"
     static let undo = "Undo"
     static let didIt = "Done"
     static let dayDone = "Day done"
@@ -29,10 +29,13 @@ extension Copy {
     static func dayDoneLine(day: Int, repsToday: Int) -> String {
         "Day \(day): \(grouped(repsToday)) push-ups. Every set done."
     }
-    static let profileLabel = "Profile"
+    static let profileLabel = "Progress"
+    static let alertsSection = "Alerts"
+    static let programSection = "Program"
+    static let pauseBody = "Stops alerts and holds your place. Resume from Today when you're ready."
     static let settingsTitle = "Settings"
     static let lastRun = "Last run"
-    static let observations = "What we noticed"
+    static let observations = "Patterns"
     static let allTime = "All time"
     static let yourMax = "Your max"
     static let testOnDayOne = "Test on Day 1 to set it."
