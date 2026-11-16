@@ -587,7 +587,7 @@ struct StudioProfileSection: View {
 }
 
 enum StudioCopy {
-    static let studio = "Studio"
+    static let studio = "Workouts"
     static let saveToHealth = "Save sessions to Apple Health"
     static let suggested = "Suggested today"
     static let allSessions = "More sessions"

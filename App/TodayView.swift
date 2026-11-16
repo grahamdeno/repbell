@@ -32,28 +32,6 @@ struct TodayView: View {
                             .tracking(0.8)
                             .textCase(.uppercase)
                         Spacer()
-                        if let maxText = model.maxText {
-                            Text(maxText)
-                                .font(.system(size: 14))
-                                .foregroundStyle(Chalk.inkMuted)
-                        }
-                        if StudioFeature.enabled {
-                        Button { controller.screen = .studio } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "figure.mind.and.body")
-                                    .font(.system(size: 16, weight: .semibold))
-                                Text(StudioCopy.studio)
-                                    .font(.system(size: 15, weight: .semibold))
-                            }
-                            .foregroundStyle(Chalk.inkSoft)
-                            .padding(.horizontal, 12)
-                            .frame(height: 36)
-                            .overlay(Capsule().stroke(Chalk.lineStrong, lineWidth: 1.5))
-                            .frame(minHeight: 44)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(StudioCopy.studio)
-                        }
                         Button { controller.screen = .profile } label: {
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.system(size: 24, weight: .regular))
@@ -212,6 +190,28 @@ struct TodayView: View {
                         .foregroundStyle(Chalk.inkMuted)
                         .multilineTextAlignment(.center)
                 }
+            }
+            if StudioFeature.enabled, !model.hero.isFinished {
+                Button { controller.screen = .studio } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: "dumbbell")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Chalk.accent)
+                        Text(StudioCopy.studio)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Chalk.ink)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Chalk.inkFaint)
+                    }
+                    .padding(.horizontal, 16)
+                    .frame(height: 52)
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.line, lineWidth: 1.5))
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 4)
             }
             if case .paused = model.hero {
                 EmptyView()
