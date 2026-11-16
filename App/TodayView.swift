@@ -39,16 +39,23 @@ struct TodayView: View {
                         }
                         if StudioFeature.enabled {
                         Button { controller.screen = .studio } label: {
-                            Image(systemName: "figure.mind.and.body")
-                                .font(.system(size: 22, weight: .regular))
-                                .foregroundStyle(Chalk.inkSoft)
-                                .frame(width: 44, height: 44)
+                            HStack(spacing: 6) {
+                                Image(systemName: "figure.mind.and.body")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(StudioCopy.studio)
+                                    .font(.system(size: 15, weight: .semibold))
+                            }
+                            .foregroundStyle(Chalk.inkSoft)
+                            .padding(.horizontal, 12)
+                            .frame(height: 36)
+                            .overlay(Capsule().stroke(Chalk.lineStrong, lineWidth: 1.5))
+                            .frame(minHeight: 44)
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(StudioCopy.studio)
                         }
                         Button { controller.screen = .profile } label: {
-                            Image(systemName: "person.crop.circle")
+                            Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.system(size: 24, weight: .regular))
                                 .foregroundStyle(Chalk.inkSoft)
                                 .frame(width: 44, height: 44)

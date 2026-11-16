@@ -347,7 +347,7 @@ final class ProgramController {
                 stats.append(ProfileStat(label: "Perfect days in a row", value: "\(insights.bestPerfectStreak)"))
             }
             if insights.snoozes > 0 {
-                stats.append(ProfileStat(label: "In 10 used", value: "\(insights.snoozes)"))
+                stats.append(ProfileStat(label: "Snoozed", value: "\(insights.snoozes)"))
             }
             model.runStats = stats
         }

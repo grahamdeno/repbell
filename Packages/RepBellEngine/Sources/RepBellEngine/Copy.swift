@@ -39,7 +39,7 @@ public enum Copy {
 
     public static let done = "Done"
     public static let inTen = "In 10 min"
-    public static let busy = "Busy for 1 hour"
+    public static let busy = "Skip the next hour"
     public static let somethingHurts = "Something hurts?"
     public static let back = "Back"
     public static let share = "Share"

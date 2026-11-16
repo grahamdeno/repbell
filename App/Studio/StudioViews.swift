@@ -40,10 +40,26 @@ struct StudioView: View {
                             }
                         }
                         VStack(alignment: .leading, spacing: 0) {
-                            StudioEyebrow(StudioCopy.allSessions)
-                            ForEach(others) { session in
-                                Button { open(session) } label: { StudioRow(session: session) }
-                                    .buttonStyle(.plain)
+                            ForEach(StudioCopy.groups, id: \.name) { group in
+                                let members = others.filter { group.ids.contains($0.id) }
+                                if !members.isEmpty {
+                                    StudioEyebrow(group.name)
+                                        .padding(.top, 16)
+                                    ForEach(members) { session in
+                                        Button { open(session) } label: { StudioRow(session: session) }
+                                            .buttonStyle(.plain)
+                                    }
+                                }
+                            }
+                            let grouped = Set(StudioCopy.groups.flatMap(\.ids))
+                            let rest = others.filter { !grouped.contains($0.id) }
+                            if !rest.isEmpty {
+                                StudioEyebrow(StudioCopy.allSessions)
+                                    .padding(.top, 16)
+                                ForEach(rest) { session in
+                                    Button { open(session) } label: { StudioRow(session: session) }
+                                        .buttonStyle(.plain)
+                                }
                             }
                         }
                     }
@@ -529,7 +545,7 @@ struct StudioProfileSection: View {
                 Spacer()
                 MascotPicker()
             }
-            Text(StudioCopy.iHave).font(.system(size: 16, weight: .semibold)).foregroundStyle(Chalk.ink)
+            Text("\(StudioCopy.iHave) · \(settings.gear.count)").font(.system(size: 16, weight: .semibold)).foregroundStyle(Chalk.ink)
             ForEach(StudioSettings.allGear, id: \.self) { item in
                 Toggle(StudioSettings.gearLabel(item), isOn: Binding(
                     get: { settings.gear.contains(item) },
@@ -574,7 +590,15 @@ enum StudioCopy {
     static let studio = "Studio"
     static let saveToHealth = "Save sessions to Apple Health"
     static let suggested = "Suggested today"
-    static let allSessions = "All sessions"
+    static let allSessions = "More sessions"
+
+    /// How the Studio list is grouped. The suggested session always sits above these.
+    static let groups: [(name: String, ids: [String])] = [
+        ("Strength", ["upper", "lower-back", "shoulders-arms", "kettlebell", "grip-pull"]),
+        ("Conditioning", ["jump", "strike", "easy-cardio"]),
+        ("Core", ["core", "ab-finisher"]),
+        ("Mobility", ["flow-45", "flow-90", "stretch", "balance"]),
+    ]
     static let free = "Free"
     static let start = "Start"
     static let mascot = "Coach"
@@ -586,7 +610,7 @@ enum StudioCopy {
     static let end = "End session"
     static let sessionDone = "Session done"
     static let backToToday = "Done"
-    static let iHave = "I have"
+    static let iHave = "My gear"
     static let goEasyOn = "Go easy on"
     static let wantMore = "Want more?"
     static let holdTitle = "Hold set alerts?"
