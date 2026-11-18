@@ -247,3 +247,55 @@ Newest first. All Nov 12, 2026.
 - [x] 4. App Store record and bundle IDs.
 - [ ] 5. Repo and v1 build on a branch, with CI; schedule engine first with all 13 tests passing. Nothing merges until Graham says ship. Model: Sonnet.
 - [ ] 6. Graham runs the full 14 days on TestFlight.
+
+## Backlog: 1.1 and later
+
+Approved ideas not in a frozen release. Each is shaped before it is built.
+
+### Epic: Day start and alarms that ring through silent
+
+**Status:** Idea approved by Graham, Nov 17, 2026. Next: Shape (Opus).
+
+**Goal:** set alarms reach the user when the phone is on silent, and the user stays in control of the noise.
+
+**Context:**
+- Set alerts are Time Sensitive banners and deliver correctly (verified Nov 17, 2026); silent mode mutes their sound by design.
+- AlarmKit (iOS 26, already the minimum) is used for test-morning alarms on days 1, 8 and 15. AlarmKit alarms break through Silent and Focus with user consent and surface on a paired Watch.
+- An app cannot take over the screen on its own. The only full-screen moment is the system alarm screen, whose layout Apple controls.
+
+**Story 1, Morning screen.** As a user, I want a full-screen start to each program day so that I see the day's plan and choose Ring or Quiet.
+- Given a program day, when the wake alarm rings and I tap it, then the app opens to the day-start screen with the day number, today's set count and the Ring/Quiet choice.
+- Given yesterday I chose Quiet, when today's day-start screen opens, then Quiet is preselected and one tap starts the day.
+- Given I never open the day-start screen, when sets come due, then the day uses yesterday's choice (Ring on the first day).
+
+**Story 2, Ringing set alarms.** As a user, I want set alarms to ring through silent mode on Ring days so that I don't miss them.
+- Given a Ring day, when a set is due, then an AlarmKit alarm rings even with the phone on silent or in Focus.
+- Given a Quiet day, when a set is due, then it arrives as a Time Sensitive banner with a Watch tap, as today.
+
+**Story 3, Quiet next.** As a user, I want each ringing alarm to offer "Quiet next" so that I can mute the next set without opening the app.
+- Given an alarm is ringing, when I tap Quiet next, then the next set arrives as a banner with a Watch tap and no sound.
+- Given an alarm is ringing, when I tap Got it, then the next set rings.
+
+**Story 4, Quiet streak.** As a user, I want a missed quiet alert to keep the next one quiet so that the app does not ring while I am busy.
+- Given a quiet alert goes unacknowledged, when the next set is due, then it is also quiet.
+- Given a quiet streak, when I tap a quiet banner, log a set, or open the app, then the streak ends and the next set rings.
+- Given a quiet streak still running at the end of the day, when the next program day starts, then the day-start choice applies.
+
+**Decisions (Nov 17, 2026):**
+- The day-start choice carries over from the previous day as the preselected default; it is still shown every morning.
+- Any acknowledgment ends a quiet streak: tapping a quiet banner, logging a set, or opening the app.
+- Day-start copy encourages and never guilts (for example "Day 5. 6 sets today."), never counts of missed sets.
+
+**Out of scope:** Critical Alerts; changes to the program schedule.
+
+**Open questions (for Shape):**
+1. Morning alarm on every program day, or only test days? Recommendation: every program day, since it is the only way to reach the day-start screen.
+2. Keep "Busy for 1 hour"? Recommendation: keep. It silences an hour and marks those sets missed; Quiet next mutes one set and marks nothing.
+3. Dense days: Day 10 has 61 sets, every 15 minutes. Consider ringing only every second or fourth set on dense days, or capping rings per hour.
+4. Confirm AlarmKit supports a custom secondary button that runs an App Intent (for Quiet next), and any limit on how many alarms an app can schedule.
+
+**Steps:**
+1. Shape: AlarmKit API check; edge cases (Watch, iPad, VoiceOver, Reduce Motion, big text, test mornings, Busy for 1 hour); copy; mockup from the design system. Model: Opus.
+2. Graham approves the shaped stories. Graham.
+3. Plan the release and freeze scope. Opus proposes, Graham picks.
+4. Build from Ready stories. Model: Sonnet.
