@@ -16,6 +16,7 @@ enum Screen: Equatable {
     case hurts
     case result
     case paywall
+    case rerun
     case studioPlayer(String)
 }
 
@@ -530,30 +531,50 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
-    func runAgain() {
+    /// "Run it again" on the result: a review screen with the times and Tomorrow or Today.
+    func reviewRerun() {
+        if library.rerunNeedsUnlock {
+            screen = .paywall
+            return
+        }
+        if let window = currentWindow() {
+            draftWake = window.wake
+            draftBed = window.bed
+        }
+        screen = .rerun
+    }
+
+    /// The max the next run starts from.
+    func rerunMax() -> Int {
+        latestMax() ?? library.current?.input.dayOneMax ?? 0
+    }
+
+    func runAgain(startToday: Bool = false) {
         correctingDay = nil
         endedOnDay = nil
         if library.rerunNeedsUnlock {
             screen = .paywall
             return
         }
-        let maxReps = latestMax() ?? library.current?.input.dayOneMax ?? 0
-        let wake = library.current?.input.wake ?? draftWake
-        let bed = library.current?.input.bed ?? draftBed
+        let maxReps = rerunMax()
+        let wake = draftWake
+        let bed = draftBed
         if let current = library.current, !library.history.contains(where: { $0.input.start == current.input.start && $0.ended }) {
             var ended = current
             ended.ended = true
             library.history.append(ended)
         }
         library.current = nil
-        draftWake = wake
-        draftBed = bed
-        draftStartsToday = false
+        draftStartsToday = startToday
         library.runsStarted += 1
-        let input = RunInput(dayOneMax: maxReps, wake: wake, bed: bed, start: CivilDate.today().addingDays(1), retestEnabled: true)
+        let input = Rerun.input(maxReps: maxReps, wake: wake, bed: bed, startToday: startToday, today: CivilDate.today())
         library.current = PersistedRun(input: input)
         persist()
-        screen = .ready
+        if startToday && CivilDateTime.local(Date()).minutes >= wake.minutesFromMidnight {
+            openCounter(day: 1, preserve: false)
+        } else {
+            screen = .ready
+        }
         Task { await refreshAlerts() }
     }
 

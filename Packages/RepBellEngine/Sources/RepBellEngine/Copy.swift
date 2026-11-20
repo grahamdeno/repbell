@@ -80,6 +80,12 @@ public enum Copy {
     public static let todaysSets = "Today's sets"
     public static let wordmark = "Rep Bell"
 
+    public static let rerunHeadline = "Run it\nagain"
+
+    public static func rerunBody(max: Int) -> String {
+        max > 0 ? "Your new run starts from your max of \(max). Check your times, then pick a start." : "Check your times, then pick a start."
+    }
+
     public static func runEnded(day: Int) -> String {
         "Run ended · Day \(day)"
     }

@@ -222,7 +222,7 @@ writing or the media is remade with a tool whose terms clearly allow the use.
 Browse screens on a navigation stack with swipe-back (UX-10); program settings in sections with a direct Settings
 entry (UX-11, the part outside Build E).
 
-### 10. Run it again review screen (later; UX-30)
+### 10. Run it again review screen (in 1.0, group 9; built; UX-30)
 
 ### 11. Watch: complication, Busy on the wrist, the number's color rule (later; UX-32)
 

@@ -77,6 +77,7 @@ struct RootView: View {
         case .hurts: HurtsView()
         case .result: ResultView()
         case .paywall: PaywallView()
+        case .rerun: RerunView()
         case .studioPlayer(let id): StudioPlayerView(sessionID: id)
         }
     }
