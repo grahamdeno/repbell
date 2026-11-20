@@ -426,7 +426,8 @@ final class ProgramController {
         return FitMyTime.focus(programDay: day)
     }
 
-    private var fitSeed = Int(Date().timeIntervalSince1970) % 1000
+    /// Changes with each build, so the session screen redraws for "Another one".
+    private(set) var fitSeed = Int(Date().timeIntervalSince1970) % 1000
 
     /// Whether a Workouts session waits until after Day 15 (upper-body work during a run).
     func workoutHeld(_ id: String) -> Bool {

@@ -63,4 +63,20 @@ final class FitMyTimeTests: XCTestCase {
         XCTAssertEqual(FitMyTime.focus(programDay: 5), .core)
         XCTAssertEqual(FitMyTime.focus(programDay: nil), .fullBody)
     }
+
+    // Left-over time is spread over the cool-down, so no single stretch runs long.
+    func testLeftoverSpreadAcrossCoolDown() {
+        for minutes in [30, 45] {
+            let steps = FitMyTime.build(minutes: minutes, pools: pools, seed: 1)
+            let breathing = steps.last { $0.id == "breathing" }!
+            XCTAssertLessThanOrEqual(breathing.seconds, 90, "\(minutes) min")
+        }
+    }
+
+    // The rest before the cool-down names the cool-down's first move.
+    func testRestBeforeCoolDownNamesIt() {
+        let steps = FitMyTime.build(minutes: 15, pools: pools, seed: 2)
+        let firstCool = steps.firstIndex { $0.id == "childs-pose" }!
+        XCTAssertEqual(steps[firstCool - 1].next, "childs-pose")
+    }
 }

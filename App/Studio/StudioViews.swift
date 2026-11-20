@@ -162,6 +162,17 @@ private struct StudioRow: View {
 struct StudioSessionView: View {
     @Environment(ProgramController.self) private var controller
     var sessionID: String
+
+    var body: some View {
+        // Fit my time rebuilds the session for "Another one"; the seed redraws this screen.
+        StudioSessionContent(sessionID: sessionID)
+            .id(sessionID == FitMyTime.sessionID ? controller.fitSeed : 0)
+    }
+}
+
+private struct StudioSessionContent: View {
+    @Environment(ProgramController.self) private var controller
+    var sessionID: String
     @State private var askHold = false
     private var settings: StudioSettings { StudioSettings.shared }
 

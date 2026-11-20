@@ -95,6 +95,13 @@ public enum FitMyTime {
 
         // Cool-down: the last move (breathing) always closes the session; the others fit in the time left.
         // Then any seconds left go to the last move, so it ends exactly on time.
+        // The last rest before the cool-down names the cool-down's first move.
+        if let lastRest = steps.lastIndex(where: { $0.type == "rest" || $0.type == "roundRest" }), lastRest == steps.count - 1,
+           let first = pools.coolDown.first {
+            let rest = steps[lastRest]
+            steps[lastRest] = Step(type: "rest", seconds: rest.seconds, id: nil, next: first.id, side: nil)
+        }
+        let coolStart = steps.count
         if let final = pools.coolDown.last {
             let length = { (move: Move) in move.eachSide ? 50 : 30 }
             var chosen: [Move] = []
@@ -112,9 +119,19 @@ public enum FitMyTime {
                 place(move, seconds: length(move), into: &steps, used: &used)
             }
         }
-        if used < total, let last = steps.lastIndex(where: { $0.type == "move" }) {
+        // Spread any seconds left over the cool-down holds, so no single stretch runs long.
+        let holds = steps.indices.filter { $0 >= coolStart && steps[$0].type == "move" }
+        if used < total, !holds.isEmpty {
+            let extra = total - used
+            for (n, i) in holds.enumerated() {
+                let share = extra / holds.count + (n < extra % holds.count ? 1 : 0)
+                let step = steps[i]
+                steps[i] = Step(type: step.type, seconds: step.seconds + share, id: step.id, next: step.next, side: step.side)
+            }
+            used = total
+        } else if used < total, let last = steps.lastIndex(where: { $0.type == "move" }) {
             let step = steps[last]
-            steps[last] = Step(type: step.type, seconds: step.seconds + (total - used), id: step.id, next: nil, side: step.side)
+            steps[last] = Step(type: step.type, seconds: step.seconds + (total - used), id: step.id, next: step.next, side: step.side)
             used = total
         }
         return steps

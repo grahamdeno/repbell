@@ -119,7 +119,9 @@ final class StudioLibrary {
             if !missing.isEmpty && self.movements[move.standIn ?? ""] == nil { return nil }
             return FitMyTime.Move(id: id, eachSide: move.sides == "each")
         }
-        let main = mainMoves(of: sources).filter { !held.contains($0) }.compactMap(usable)
+        // Lying-down closers aren't main moves, and planks and sun flows load the push-up muscles.
+        let notMain: Set<String> = ["final-rest", "centering", "high-plank", "sun-flow-a", "sun-flow-b", "side-plank", "dolphin", "crow"]
+        let main = mainMoves(of: sources).filter { !held.contains($0) && !notMain.contains($0) }.compactMap(usable)
         let pools = FitMyTime.Pools(
             warmUp: FitMyTimePools.warmUp.compactMap(usable),
             main: main,
