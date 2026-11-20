@@ -216,7 +216,7 @@ originals are kept, and the terms that applied. No build shows coach media until
 writing or the media is remade with a tool whose terms clearly allow the use.
 - Open: Graham's approval of the read-back is not on record. Until then it is applied as a gate, as CLAUDE.md says.
 
-### 9. Navigation (later; not yet shaped)
+### 9. Navigation (in 1.0, group 5; built)
 Browse screens on a navigation stack with swipe-back (UX-10); program settings in sections with a direct Settings
 entry (UX-11, the part outside Build E).
 

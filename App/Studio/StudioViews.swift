@@ -625,7 +625,7 @@ enum StudioCopy {
         let sets = count == 1 ? "A set comes due" : "\(count) sets come due"
         return "\(sets) during this session. Held sets wait on Today until the next one, so you can do them after."
     }
-    static let safety = "Stop if you feel sharp pain or dizziness. Every hard move has an easier version: swipe or tap Skip, or set Go easy on in Settings."
+    static let safety = "Stop if you feel sharp pain or dizziness. Every hard move has an easier version: swipe or tap Skip, or set Go easy on in Workouts settings."
 
     static func meta(_ s: StudioSession) -> String {
         let gear = s.gear.filter { $0 != "mat" }.map { StudioSettings.gearLabel($0).lowercased() }
