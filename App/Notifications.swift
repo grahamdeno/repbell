@@ -121,6 +121,11 @@ enum Notifier {
         }
     }
 
+    static func isAuthorized() async -> Bool {
+        let status = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+        return status == .authorized || status == .provisional || status == .ephemeral
+    }
+
     /// Live picture of what iOS will and won't do with Rep Bell's alerts.
     static func diagnostics() async -> [ProfileRow] {
         let center = UNUserNotificationCenter.current()
@@ -134,6 +139,7 @@ enum Notifier {
         if settings.scheduledDeliverySetting == .enabled {
             rows.append(ProfileRow(label: "Scheduled Summary", value: "On (alerts held back)"))
         }
+        rows.append(ProfileRow(label: "Test-day alarm", value: await TestAlarms.statusLabel()))
         rows.append(ProfileRow(label: "Set alerts queued", value: "\(pending.count)"))
         let next = pending.compactMap { request -> Date? in
             if let calendar = request.trigger as? UNCalendarNotificationTrigger { return calendar.nextTriggerDate() }

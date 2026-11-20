@@ -66,6 +66,12 @@ final class ProgramController {
     var draftStartsToday = false
     var draftCount = 0
     var alertsDenied = false
+    /// The date the person chose "Not yet" on the test counter. The counter doesn't open by itself again that day.
+    var testDeferredOn: CivilDate?
+    /// Set while the Day 15 number is being corrected from the result screen.
+    var correctingDay: Int?
+    /// The program day the current run was ended on, kept while the app runs for the result heading.
+    private var endedOnDay: Int?
     var unlockMessage: String?
     var showBusyConfirm = false
     var celebration: Celebration?
@@ -111,6 +117,27 @@ final class ProgramController {
         _ = await TestAlarms.authorizationGranted()
         alertsDenied = !notes
         guard notes else { return }
+        await finishSetup()
+    }
+
+    /// Called when the person comes back from Settings: if notifications are now on, setup finishes by itself.
+    func recheckAlerts() async {
+        guard alertsDenied, library.current == nil else { return }
+        if await Notifier.isAuthorized() {
+            _ = await TestAlarms.authorizationGranted()
+            guard alertsDenied, library.current == nil else { return }
+            alertsDenied = false
+            await finishSetup()
+        }
+    }
+
+    /// Finishes setup without alerts. Today still shows each set when it's due.
+    func startWithoutAlerts() async {
+        guard library.current == nil else { return }
+        await finishSetup()
+    }
+
+    private func finishSetup() async {
         createRun(startToday: draftStartsToday)
         if draftStartsToday && CivilDateTime.local(Date()).minutes >= draftWake.minutesFromMidnight {
             openCounter(day: 1, preserve: false)
@@ -130,9 +157,31 @@ final class ProgramController {
 
     func openCounter(day: Int, preserve: Bool) {
         if !preserve {
+            correctingDay = nil
             draftCount = startingCount(for: day)
         }
         screen = .counter(day)
+    }
+
+    /// "Not yet" on the counter: back to Today, where the test stays ready.
+    func deferTest() {
+        if correctingDay != nil {
+            correctingDay = nil
+            screen = .result
+            return
+        }
+        testDeferredOn = CivilDateTime.local(Date()).date
+        screen = library.current == nil ? .promise : .today
+    }
+
+    /// "Fix my number" on the result: reopens the counter at the logged Day 15 number.
+    func fixFinalNumber() {
+        guard let run = library.current, !run.ended else { return }
+        let resolved = ScheduleEngine.resolve(run.input, now: run.pausedAt ?? CivilDateTime.local(Date()))
+        guard let logged = resolved.day(15)?.testReps else { return }
+        correctingDay = 15
+        draftCount = logged
+        screen = .counter(15)
     }
 
     func adjustCount(by delta: Int) {
@@ -140,7 +189,17 @@ final class ProgramController {
     }
 
     func showConfirm(day: Int) {
-        guard draftCount >= 1 else { return }
+        guard TestFlow.canSubmit(count: draftCount) else { return }
+        if let correcting = correctingDay, correcting == day {
+            correctingDay = nil
+            var corrected = false
+            update { corrected = $0.input.correctTest(day: day, reps: draftCount) }
+            if corrected {
+                screen = .result
+                Haptics.play(.testLogged)
+                return
+            }
+        }
         if day == 15 {
             commitTest(day: day, reps: draftCount)
             return
@@ -226,6 +285,8 @@ final class ProgramController {
     }
 
     func startOver() {
+        correctingDay = nil
+        endedOnDay = nil
         let now = CivilDateTime.local(Date())
         if let run = library.current {
             let resolved = ScheduleEngine.resolve(run.input, now: run.pausedAt ?? now)
@@ -473,8 +534,15 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
+    /// The program day the run ended on, for the result heading.
+    func endedDay() -> Int? {
+        guard let run = library.current, run.ended else { return nil }
+        return endedOnDay ?? run.input.lastLoggedDay
+    }
+
     func endProgram() {
         guard var run = library.current else { return }
+        endedOnDay = run.input.dayNumber(on: (run.pausedAt ?? CivilDateTime.local(Date())).date)
         run.ended = true
         run.pausedAt = nil
         library.current = run
@@ -485,6 +553,8 @@ final class ProgramController {
     }
 
     func runAgain() {
+        correctingDay = nil
+        endedOnDay = nil
         if library.rerunNeedsUnlock {
             screen = .paywall
             return
@@ -568,6 +638,9 @@ final class ProgramController {
 
     func onActive() async {
         await refreshEntitlements()
+        if screen == .alerts {
+            await recheckAlerts()
+        }
         if screen == .today || screen == .ready {
             if jumpToFreshTest() { return }
         }
@@ -703,16 +776,8 @@ final class ProgramController {
 
     @discardableResult
     private func jumpToFreshTest() -> Bool {
-        guard let run = library.current, !run.ended, run.pausedAt == nil else { return false }
         let now = CivilDateTime.local(Date())
-        guard let number = run.input.dayNumber(on: now.date) else { return false }
-        let template = DayTemplate.day(number)
-        guard template.isTest else { return false }
-        let resolved = ScheduleEngine.resolve(run.input, now: now)
-        guard resolved.day(number)?.testReps == nil else { return false }
-        let wakeMinutes = run.input.wake.minutesFromMidnight
-        let delta = now.minutes - wakeMinutes
-        guard delta >= 0 && delta <= 90 else { return false }
+        guard let number = TestFlow.counterToOpen(run: library.current, now: now, deferredOn: testDeferredOn) else { return false }
         openCounter(day: number, preserve: false)
         return true
     }

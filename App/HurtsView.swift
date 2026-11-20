@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HurtsView: View {
     @Environment(ProgramController.self) private var controller
+    @State private var confirmEnd = false
 
     var body: some View {
         let day = controller.library.current?.input.dayNumber(on: CivilDateTime.local(Date()).date) ?? 1
@@ -18,10 +19,16 @@ struct HurtsView: View {
                     .lineSpacing(4)
                 Spacer(minLength: 16)
                 option(title: Copy.pauseTitle, detail: Copy.pauseDetail(day: day)) { controller.pause() }
-                option(title: Copy.endTitle, detail: Copy.endDetail) { controller.endProgram() }
+                option(title: Copy.endTitle, detail: Copy.endDetail) { confirmEnd = true }
                 TextLink(title: Copy.back) { controller.screen = .today }
                     .frame(maxWidth: .infinity)
             }
+        }
+        .confirmationDialog(Copy.endConfirmTitle, isPresented: $confirmEnd, titleVisibility: .visible) {
+            Button(Copy.endConfirmButton, role: .destructive) { controller.endProgram() }
+            Button(Copy.back, role: .cancel) {}
+        } message: {
+            Text(Copy.endConfirmBody)
         }
     }
 

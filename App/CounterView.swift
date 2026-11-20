@@ -30,8 +30,12 @@ struct CounterView: View {
                     SecondaryButton(title: "+1") { controller.adjustCount(by: 1) }
                         .accessibilityLabel("Add one")
                     PrimaryButton(title: Copy.done) { controller.showConfirm(day: day) }
-                        .opacity(controller.draftCount >= 1 ? 1 : 0.4)
+                        .disabled(!TestFlow.canSubmit(count: controller.draftCount))
+                        .opacity(TestFlow.canSubmit(count: controller.draftCount) ? 1 : 0.4)
                 }
+                TextLink(title: Copy.notYet) { controller.deferTest() }
+                    .frame(maxWidth: .infinity)
+                    .accessibilityHint(Copy.notYetDetail)
             }
         }
         .sensoryFeedback(.selection, trigger: controller.draftCount)
