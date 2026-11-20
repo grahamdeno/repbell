@@ -17,15 +17,14 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 ## Where things stand (20 Nov 2026)
 
 - **Store:** nothing released. App Store Connect record "Rep Bell: 14-Day Push-Ups", Apple ID 6834201034, iOS 1.0 in
-  Prepare for Submission. Version 1.0 (build 1) in the project. Internal TestFlight only.
-- **Code:** `main` at `4d32ad1`. The first build (12 to 15 Nov) was made before this repo followed the playbook.
-  It includes the program, Progress, Settings, a paywall, and Workouts with coach clips and Apple Health.
-- **Reviews so far:** gap review (16 to 17 Nov), design evaluation by code read (36 findings), independent review of
-  it (20 Nov). All findings are in `docs/audit/findings.md` as UX-1 to UX-41.
-- **Decided 20 Nov:** what 1.0 is, and the 1.0 scope, frozen (see Decision log and Release scope).
-- **1.0 runs under an exception to the playbook:** Rep Bell Product (Opus) shapes, builds and merges the whole scope,
-  and stops only where Graham's input is required.
-- **Next step:** Product builds the scope in the order under Release scope.
+  Prepare for Submission. Internal TestFlight only.
+- **1.0 scope:** frozen 20 Nov 2026 and built under the 1.0 exception (PRs #22 to #29). Groups 5 (navigation) and 6
+  (Build D) were built in the other order, D first. Groups 8 to 13 merged as one PR because they were stacked.
+- **Not built:** the Watch face complication (needs a new bundle ID, which needs Graham's approval).
+- **Next:** one internal TestFlight build from `main` (standing test build go), Graham's checks on his phone, the
+  Stage 5 UX walk, then the Fable go-live assessment. Graham reviews every "decided by Product under the 1.0
+  exception" line in the Decision log before any ship go.
+- **App Privacy answer to set at release (Grok, from approved text):** Data Not Collected.
 
 ## Product specifics
 
