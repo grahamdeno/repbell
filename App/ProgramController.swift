@@ -395,22 +395,22 @@ final class ProgramController {
             model.run = insights
             var stats: [ProfileStat] = []
             if let number = source.input.dayNumber(on: (source.pausedAt ?? now).date), model.runIsCurrent {
-                stats.append(ProfileStat(label: "Day", value: Copy.progressDay(number, ended: source.ended)))
+                stats.append(ProfileStat(label: Copy.ProgressLabel.day, value: Copy.progressDay(number, ended: source.ended)))
             }
-            stats.append(ProfileStat(label: "Push-ups", value: Copy.grouped(insights.pushUps)))
-            stats.append(ProfileStat(label: "Sets done", value: "\(insights.setsDone)"))
-            stats.append(ProfileStat(label: "Sets missed", value: "\(insights.setsMissed)"))
+            stats.append(ProfileStat(label: Copy.ProgressLabel.pushUps, value: Copy.grouped(insights.pushUps)))
+            stats.append(ProfileStat(label: Copy.ProgressLabel.setsDone, value: "\(insights.setsDone)"))
+            stats.append(ProfileStat(label: Copy.ProgressLabel.setsMissed, value: "\(insights.setsMissed)"))
             if let onTime = insights.onTimePercent {
-                stats.append(ProfileStat(label: "On time", value: "\(onTime)%"))
+                stats.append(ProfileStat(label: Copy.ProgressLabel.onTime, value: "\(onTime)%"))
             }
             if let median = insights.medianResponseMinutes {
-                stats.append(ProfileStat(label: "Typical response", value: median == 0 ? "Instant" : "\(median) min"))
+                stats.append(ProfileStat(label: Copy.ProgressLabel.typicalResponse, value: median == 0 ? "Instant" : "\(median) min"))
             }
             if insights.bestPerfectStreak > 0 {
-                stats.append(ProfileStat(label: "Perfect days in a row", value: "\(insights.bestPerfectStreak)"))
+                stats.append(ProfileStat(label: Copy.ProgressLabel.perfectDays, value: "\(insights.bestPerfectStreak)"))
             }
             if insights.snoozes > 0 {
-                stats.append(ProfileStat(label: "Snoozed", value: "\(insights.snoozes)"))
+                stats.append(ProfileStat(label: Copy.ProgressLabel.snoozed, value: "\(insights.snoozes)"))
             }
             model.runStats = stats
         }

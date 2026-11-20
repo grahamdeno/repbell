@@ -168,6 +168,19 @@ public enum Copy {
         return "Alerts off until \(clock(until)) · \(sets)"
     }
 
+    /// The numbers Progress keeps (roadmap item 5, decision of 20 Nov 2026). `DailyLoopTests` checks the set.
+    public enum ProgressLabel {
+        public static let day = "Day"
+        public static let pushUps = "Push-ups"
+        public static let setsDone = "Sets done"
+        public static let setsMissed = "Sets missed"
+        public static let onTime = "On time"
+        public static let typicalResponse = "Typical response"
+        public static let perfectDays = "Perfect days in a row"
+        public static let snoozed = "Snoozed"
+        public static let all = [day, pushUps, setsDone, setsMissed, onTime, typicalResponse, perfectDays, snoozed]
+    }
+
     /// The Day row on Progress. Day 15 is the final test, never "15 of 14".
     public static func progressDay(_ number: Int, ended: Bool) -> String {
         if ended { return "Done" }

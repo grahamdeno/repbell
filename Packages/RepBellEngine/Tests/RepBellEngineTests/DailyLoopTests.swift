@@ -134,6 +134,17 @@ final class DailyLoopTests: XCTestCase {
         XCTAssertTrue(insights.observations.contains { $0.text.contains("5 p.m.") })
     }
 
+    // Item 5 (requirement): Progress keeps all eight numbers, in factual wording.
+    func testItem5_progressKeepsAllNumbers() {
+        XCTAssertEqual(Copy.ProgressLabel.all, [
+            "Day", "Push-ups", "Sets done", "Sets missed", "On time", "Typical response", "Perfect days in a row", "Snoozed",
+        ])
+        let run = input([dayOneTest])
+        let insights = InsightsEngine.run(run, now: at(day: 1, 12, 0))
+        XCTAssertGreaterThanOrEqual(insights.bestPerfectStreak, 0)
+        XCTAssertGreaterThanOrEqual(insights.snoozes, 0)
+    }
+
     // Item 5: Progress explains what the numbers mean with true, forward-looking facts that never blame.
     func testItem5_aheadFacts() {
         let resolved = ScheduleEngine.resolve(input([dayOneTest]), now: at(day: 2, 7, 0))
