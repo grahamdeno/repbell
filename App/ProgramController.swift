@@ -100,6 +100,9 @@ final class ProgramController {
         library = loaded
         screen = .promise
         screen = Self.openingScreen(for: loaded)
+        #if DEBUG
+        if let state = Self.screenshotState { applyScreenshot(state) }
+        #endif
     }
 
     /// Opens a browse screen on top of the current flow screen.
@@ -707,6 +710,10 @@ final class ProgramController {
     }
 
     func onActive() async {
+        #if DEBUG
+        // Screenshot mode holds the screen it opened on; no jumps, no alert changes.
+        if Self.screenshotState != nil { return }
+        #endif
         await refreshEntitlements()
         // Opening the app is an acknowledgment: a run of quiet sets ends, and the next set rings.
         RingStore.update { $0.acknowledge(at: CivilDateTime.local(Date())) }
@@ -841,6 +848,10 @@ final class ProgramController {
     }
 
     private func persist() {
+        #if DEBUG
+        // Screenshot mode never writes over the stored record.
+        if Self.screenshotState != nil { return }
+        #endif
         LibraryDisk.save(library)
         PhoneSessionBridge.shared.push(library)
     }

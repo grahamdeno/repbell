@@ -1,0 +1,39 @@
+onboarding-promise	Onboarding	Promise (step 1)	No run stored
+onboarding-wake	Onboarding	Wake time (step 2)	No run stored; opened on the step
+onboarding-bed	Onboarding	Bedtime (step 3)	No run stored; opened on the step
+onboarding-start	Onboarding	Start day (step 4)	No run stored; opened on the step
+onboarding-alerts	Onboarding	Allow alerts, not yet asked	No run stored; opened on the step
+onboarding-alerts-denied	Onboarding	Allow alerts, denied	Alerts-denied flag set
+onboarding-ready	Onboarding	Ready (step 5)	No run stored; opened on the step
+day-start	Day start	Ring or Quiet choice	Day 9 run, no choice made today
+today-day1-before-test	Today	Day 1 before the test	Run starts today, wake 2 hours ahead
+today-set-due	Today	Set due now	Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago
+today-between-sets	Today	Between sets	Day 3, 4 sets done, next in 25 min
+today-missed	Today	Some sets missed	Day 5, 3 of 7 sets missed
+today-busy	Today	Busy active, Undo strip	Day 3, Busy tapped 5 min ago
+today-finished	Today	Day finished	Day 4, every set done, window closed
+today-paused	Today	Paused	Day 6, paused an hour ago
+today-day8-test	Today	Day 8 test morning	Day 8, woke 30 min ago, re-test not logged
+today-day15	Today	Day 15	Day 15, final test not logged
+counter-zero	Counter	At 0	Day 1 test, count 0
+counter-mid	Counter	Mid-count	Day 1 test, count 23
+counter-day8-high	Counter	High number	Day 8 re-test, count 64
+confirm	Confirm	Test confirm (Recount is the link on this screen; it reopens the counter)	Day 1, 40 logged
+celebration-set	Celebration	After an in-app set	Day 3 Today with the set celebration shown
+celebration-day	Celebration	Finished day	Day 3 Today with the day celebration shown
+desk-stretch	Desk stretch	Start screen	Day 3 Today with the first stretch shown
+result-final	Result	End of a run	Day 15 final test logged, 40 to 58
+result-ended	Result	Ended early (Something hurts)	Run ended on Day 6
+rerun	Run it again	Review screen	From the Day 15 result
+hurts	Something hurts?	Pause and End options	Day 9 run
+paywall	Paywall	Not reachable in 1.0 (nothing is locked); shown for the record	Opened directly
+progress	Progress	Partway through a run	Day 9, real-looking logs
+settings	Settings	Top	Day 9 run
+alerts-check	Alerts check	Diagnostics	From Settings
+about	About	About	From Settings
+workouts	Workouts	List	Day 9 run (upper-body sessions under After Day 15)
+workout-settings	Workouts settings	Gear, Go easy on, Health (replaces Coach settings)	From Workouts
+workout-session	Workouts session	Core	From Workouts
+fit-my-time	Fit my time	Pick the minutes	From Workouts
+fit-session	Fit my time	A 15-minute session	Built from Fit my time
+player	Workouts player	Core, first step	Opened on the player

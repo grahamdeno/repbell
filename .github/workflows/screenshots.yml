@@ -1,0 +1,36 @@
+name: Screenshots
+
+# Manual only. Builds the Debug app for the Simulator, captures the screens in scripts/screenshot_states.tsv,
+# and pushes them to a new branch screenshots/run-<n> with only docs/screenshots/ changed.
+# Uploads nothing to Apple, archives nothing, never touches main.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    name: Capture screenshots
+    runs-on: macos-26
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and capture
+        run: bash scripts/screenshots.sh
+
+      - name: Write the README
+        run: python3 scripts/screenshot_readme.py
+
+      - name: Push to a screenshots branch
+        run: |
+          set -euo pipefail
+          BRANCH="screenshots/run-${{ github.run_number }}"
+          rm -f docs/screenshots/.capture-log.txt
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add docs/screenshots
+          git commit -m "Add current-build screenshots for design review"
+          git push origin "$BRANCH"

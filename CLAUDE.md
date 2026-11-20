@@ -23,6 +23,10 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 
 - `.github/workflows/ci.yml` runs on every pull request and every push to `main`. It runs the privacy guard, the engine tests and
   compiles the iPhone app, Watch app and widget. It archives nothing, uploads nothing and writes nothing to App Store Connect.
+- `.github/workflows/screenshots.yml` (manual run only) builds the Debug app for the Simulator, captures screenshots
+  and pushes them to a new `screenshots/run-<n>` branch. It uploads nothing to Apple and never touches `main`; the
+  screenshots reach `main` only through a PR on a merge go. The Debug-only `-RBScreenshot` launch argument it uses
+  (`App/ScreenshotMode.swift`, `ScreenshotSeeds` in the engine) is not compiled into Release builds.
 - There is no `testflight` branch trigger, no `release` branch, no site and no listing workflow in this repo.
 - A merge to `main` uploads nothing.
 - Any change to a workflow, branch or path trigger updates this list in the same PR.

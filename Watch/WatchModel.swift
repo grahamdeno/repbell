@@ -10,6 +10,17 @@ final class WatchModel: NSObject, WCSessionDelegate {
     var hasPhone = false
 
     func start() {
+        #if DEBUG
+        // Screenshot mode: `-RBScreenshot watch-<state>` loads a seeded run and skips the phone.
+        if let state = ScreenshotSeeds.requestedState(), state.hasPrefix("watch-") {
+            let phoneState = "today-" + state.dropFirst("watch-".count)
+            if let seed = ScreenshotSeeds.library(for: phoneState) {
+                library = seed.library
+                hasPhone = true
+            }
+            return
+        }
+        #endif
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()
