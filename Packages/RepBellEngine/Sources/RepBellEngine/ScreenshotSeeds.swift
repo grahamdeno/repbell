@@ -112,7 +112,7 @@ public enum ScreenshotSeeds {
         case "today-day8-test", "counter-day8-high":
             var input = withTests(run(day: 8, now: now, wakeOffset: -30), upTo: 8)
             input = fillPastDays(input, through: 7, now: now)
-            return Seed(library: file(input), note: "Day 8, woke 30 min ago, re-test not logged")
+            return Seed(library: file(input), note: "Day 8, woke 30 min ago, re-test not logged (after noon the fallback applies)")
         case "today-day15":
             var input = withTests(run(day: 15, now: now, wakeOffset: -30), upTo: 15)
             input = fillPastDays(input, through: 14, now: now)
