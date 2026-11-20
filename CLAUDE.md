@@ -21,7 +21,7 @@ Anything below uploads a build or changes something live. Check this list before
 
 Everything not listed here uploads and deploys nothing. If you find a trigger that isn't listed, stop and add it.
 
-- `.github/workflows/ci.yml` runs on every push and pull request. It runs the privacy guard, the engine tests and
+- `.github/workflows/ci.yml` runs on every pull request and every push to `main`. It runs the privacy guard, the engine tests and
   compiles the iPhone app, Watch app and widget. It archives nothing, uploads nothing and writes nothing to App Store Connect.
 - There is no `testflight` branch trigger, no `release` branch, no site and no listing workflow in this repo.
 - A merge to `main` uploads nothing.
