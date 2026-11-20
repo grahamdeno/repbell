@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 # Compile and test only. This workflow does not archive, notarize, upload to
 # TestFlight, or submit anything to App Store Connect.
 jobs:

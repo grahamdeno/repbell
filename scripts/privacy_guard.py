@@ -17,24 +17,59 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCE_DIRS = ["App", "Watch", "Widget", "Packages/RepBellEngine/Sources"]
 
+IMPORT = r"^\s*(?:@\w+\s+)*import\s+(?:\w+\s+)?"
+
 # (rule name, pattern, why)
 SOURCE_RULES = [
     ("network: URLSession", re.compile(r"\bURLSession\b"), "no network calls"),
-    ("network: Network framework", re.compile(r"^\s*import\s+Network\b", re.M), "no network calls"),
+    ("network: Network framework", re.compile(IMPORT + r"Network\b", re.M), "no network calls"),
     ("network: sockets", re.compile(r"\b(NWConnection|NWListener|CFStream|InputStream\(url|OutputStream\(url)\b"), "no network calls"),
     ("network: web URL literal", re.compile(r"\"https?://"), "no web addresses in code"),
-    ("network: WebKit", re.compile(r"^\s*import\s+WebKit\b", re.M), "no web views"),
-    ("network: CloudKit", re.compile(r"^\s*import\s+CloudKit\b", re.M), "no cloud sync"),
+    ("network: remote loaders", re.compile(r"\b(URLComponents|AVPlayer\(url|AsyncImage\()"), "no remote media or built-up web addresses"),
+    ("network: WebKit", re.compile(IMPORT + r"WebKit\b", re.M), "no web views"),
+    ("network: CloudKit", re.compile(IMPORT + r"CloudKit\b", re.M), "no cloud sync"),
     ("analytics or SDK", re.compile(
-        r"^\s*import\s+(Firebase\w*|FirebaseAnalytics|Crashlytics|Sentry|Amplitude\w*|Mixpanel|Segment\w*|"
+        IMPORT + r"(Firebase\w*|Crashlytics|Sentry|Amplitude\w*|Mixpanel|Segment\w*|"
         r"AppsFlyer\w*|Adjust\w*|FBSDK\w*|FacebookCore|Bugsnag|Datadog\w*|PostHog|RevenueCat|Purchases|"
         r"OneSignal\w*|Branch|Heap|Instabug)\b", re.M), "no analytics or third-party SDKs"),
-    ("Health read access", re.compile(r"requestAuthorization\(toShare:[^)]*read:\s*(?!\[\]\s*\))[^)]"), "Health is write only"),
 ]
+
+HEALTH_CALL = re.compile(r"requestAuthorization\s*\(")
+HEALTH_READ = re.compile(r"\bread\s*:\s*(\[[^\]]*\]|[\w.]+)", re.S)
+
+
+def health_reads(text):
+    """True when any HealthKit authorization request asks to read something."""
+    for call in HEALTH_CALL.finditer(text):
+        window = text[call.end():call.end() + 600]
+        if "toShare" not in window[:200]:
+            continue
+        match = HEALTH_READ.search(window)
+        if match and re.sub(r"\s", "", match.group(1)) != "[]":
+            return True
+    return False
 
 
 def violations_in_source(text):
-    return [(name, why) for name, pattern, why in SOURCE_RULES if pattern.search(text)]
+    found = [(name, why) for name, pattern, why in SOURCE_RULES if pattern.search(text)]
+    if health_reads(text):
+        found.append(("Health read access", "Health is write only"))
+    return found
+
+
+ENTITLEMENT_BANS = ("com.apple.developer.icloud", "ubiquity", "aps-environment", "com.apple.developer.healthkit.access")
+
+
+def violations_in_entitlements(data):
+    found = []
+    for key, value in data.items():
+        if key == "com.apple.developer.healthkit.access":
+            if value:
+                found.append(("Health read access", f"entitlement {key} lists {value}"))
+            continue
+        if any(key.startswith(ban) for ban in ENTITLEMENT_BANS):
+            found.append(("cloud or push", f"entitlement {key}"))
+    return found
 
 
 def violations_in_plist(data):
@@ -73,10 +108,18 @@ def violations_in_paths(paths):
 def check_repo():
     problems = []
     for folder in SOURCE_DIRS:
-        for file in sorted((ROOT / folder).rglob("*.swift")):
+        base = ROOT / folder
+        files = sorted(base.rglob("*.swift")) if base.is_dir() else []
+        if not files:
+            problems.append(f"{folder}: missing or has no Swift files, so nothing was checked")
+        for file in files:
             for name, why in violations_in_source(file.read_text(encoding="utf-8")):
                 problems.append(f"{file.relative_to(ROOT)}: {name} ({why})")
-    for plist in sorted(ROOT.glob("*/Info.plist")):
+    for ent in sorted(p for p in ROOT.rglob("*.entitlements") if ".git" not in p.parts):
+        with ent.open("rb") as handle:
+            for name, why in violations_in_entitlements(plistlib.load(handle)):
+                problems.append(f"{ent.relative_to(ROOT)}: {name} ({why})")
+    for plist in sorted(p for p in ROOT.rglob("Info.plist") if ".git" not in p.parts):
         with plist.open("rb") as handle:
             for name, why in violations_in_plist(plistlib.load(handle)):
                 problems.append(f"{plist.relative_to(ROOT)}: {name} ({why})")
@@ -84,7 +127,7 @@ def check_repo():
         problems.append(f"RepBell.xcodeproj: {name} ({why})")
     for name, why in violations_in_package((ROOT / "Packages/RepBellEngine/Package.swift").read_text(encoding="utf-8")):
         problems.append(f"Packages/RepBellEngine/Package.swift: {name} ({why})")
-    files = [p.relative_to(ROOT) for p in ROOT.rglob("*") if p.is_file() and ".git" not in p.parts]
+    files = [p.relative_to(ROOT) for folder in ("App", "Watch", "Widget") for p in (ROOT / folder).rglob("*") if p.is_file()]
     for name, why in violations_in_paths(files):
         problems.append(f"{name}: {why}")
     return problems
@@ -99,7 +142,8 @@ def self_test():
         "network: WebKit": "import WebKit\n",
         "network: CloudKit": "import CloudKit\n",
         "analytics or SDK": "import FirebaseAnalytics\n",
-        "Health read access": "try await store.requestAuthorization(toShare: [w], read: [HKObjectType.workoutType()])",
+        "Health read access": "try await store.requestAuthorization(toShare: [HKObjectType.workoutType()], read: [HKObjectType.workoutType()])",
+        "network: remote loaders": "let p = AVPlayer(url: remote)",
     }
     failures = []
     for rule, sample in bad_sources.items():
@@ -112,6 +156,33 @@ def self_test():
     )
     if violations_in_source(clean):
         failures.append(f"clean source flagged: {violations_in_source(clean)}")
+    more_bad = [
+        "try await store.requestAuthorization(\n    toShare: [HKObjectType.workoutType()],\n    read: [HKQuantityType(.stepCount)]\n)",
+        "try await store.requestAuthorization(toShare: types, read: readTypes)",
+        "@preconcurrency import Network\n",
+        "@_implementationOnly import FirebaseAnalytics\n",
+    ]
+    for sample in more_bad:
+        if not violations_in_source(sample):
+            failures.append(f"missed: {sample!r}")
+    more_clean = [
+        "try await store.requestAuthorization(toShare: types, read: [])",
+        "try await store.requestAuthorization(toShare: [HKObjectType.workoutType()], read: [ ])",
+        "try await store.requestAuthorization(\n  toShare: [HKObjectType.workoutType()],\n  read: []\n)",
+        "UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])",
+    ]
+    for sample in more_clean:
+        if violations_in_source(sample):
+            failures.append(f"clean sample flagged: {sample!r} -> {violations_in_source(sample)}")
+    if not violations_in_entitlements({"com.apple.developer.icloud-services": ["CloudKit"]}):
+        failures.append("iCloud entitlement missed")
+    if not violations_in_entitlements({"aps-environment": "production"}):
+        failures.append("push entitlement missed")
+    if not violations_in_entitlements({"com.apple.developer.healthkit.access": ["health-records"]}):
+        failures.append("Health records entitlement missed")
+    if violations_in_entitlements({"com.apple.developer.healthkit": True, "com.apple.developer.healthkit.access": [],
+                                   "com.apple.security.application-groups": ["group.x"]}):
+        failures.append("allowed entitlements flagged")
     if not violations_in_plist({"NSHealthShareUsageDescription": "x"}):
         failures.append("Health read description missed")
     if violations_in_plist({"NSHealthUpdateUsageDescription": "x"}):
