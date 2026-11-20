@@ -1,4 +1,5 @@
 import CoreHaptics
+import RepBellEngine
 import UIKit
 
 /// Strong, playful haptic patterns for the app's success moments.
@@ -78,15 +79,8 @@ enum Haptics {
                 rumble(0.22, 0.14, 0.8, 0.2),
             ]
         case .dayComplete:
-            // Rising four-beat roll ending in a big hit.
-            return [
-                hit(0, 0.5, 0.8),
-                hit(0.1, 0.65, 0.8),
-                hit(0.2, 0.8, 0.8),
-                hit(0.3, 0.92, 0.8),
-                hit(0.48, 1.0, 0.25),
-                rumble(0.48, 0.3, 1.0, 0.15),
-            ]
+            // Bursts that build from light to strong and ease back (finished day and Day 15).
+            return CelebrationHaptics.dayComplete().map { hit($0.time, Float($0.intensity), 0.6) }
         case .testLogged:
             // Heavy drumroll, then a snap.
             var roll: [CHHapticEvent] = (0..<11).map { step in

@@ -73,7 +73,6 @@ final class ProgramController {
     /// The program day the current run was ended on, kept while the app runs for the result heading.
     private var endedOnDay: Int?
     var unlockMessage: String?
-    var showBusyConfirm = false
     var celebration: Celebration?
 
     private init() {
@@ -222,7 +221,7 @@ final class ProgramController {
             if day == 1 { run.input.dayOneMax = reps }
         }
         screen = day == 15 ? .result : .today
-        Haptics.play(day == 15 ? .result : .testLogged)
+        Haptics.play(day == 15 ? .dayComplete : .testLogged)
         Task { await refreshAlerts() }
     }
 
@@ -262,15 +261,13 @@ final class ProgramController {
 
     /// When the current Busy hour ends, if one is running.
     func activeBusyEnd() -> CivilDateTime? {
+        activeBusy()?.until
+    }
+
+    /// The Busy hour running now: when alerts return and how many sets it marked missed.
+    func activeBusy() -> (until: CivilDateTime, skipped: Int)? {
         guard let run = library.current else { return nil }
-        let now = CivilDateTime.local(Date())
-        for event in run.input.events.reversed() {
-            if case .busy(let at) = event {
-                let end = at.adding(minutes: 60)
-                return end > now ? end : nil
-            }
-        }
-        return nil
+        return ScheduleEngine.activeBusy(run.input, now: CivilDateTime.local(Date()))
     }
 
     func undoBusy() {
@@ -398,7 +395,7 @@ final class ProgramController {
             model.run = insights
             var stats: [ProfileStat] = []
             if let number = source.input.dayNumber(on: (source.pausedAt ?? now).date), model.runIsCurrent {
-                stats.append(ProfileStat(label: "Day", value: source.ended ? "Done" : "\(min(number, 15)) of 14"))
+                stats.append(ProfileStat(label: "Day", value: Copy.progressDay(number, ended: source.ended)))
             }
             stats.append(ProfileStat(label: "Push-ups", value: Copy.grouped(insights.pushUps)))
             stats.append(ProfileStat(label: "Sets done", value: "\(insights.setsDone)"))
@@ -496,9 +493,10 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
+    /// "Busy for 1 hour": one tap, no sheet. The strip on Today shows what it did and offers Undo.
     func confirmBusy() {
         let now = CivilDateTime.local(Date())
-        showBusyConfirm = false
+        guard activeBusyEnd() == nil else { return }
         update { $0.input.events.append(.busy(at: now)) }
         Haptics.play(.tap)
         Task { await refreshAlerts() }

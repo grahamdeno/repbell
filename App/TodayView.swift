@@ -15,10 +15,6 @@ struct TodayView: View {
             }
         }
         .animation(.easeOut(duration: 0.2), value: controller.celebration)
-        .sheet(isPresented: Bindable(controller).showBusyConfirm) {
-            BusySheet()
-                .environment(controller)
-        }
     }
 
     @ViewBuilder
@@ -100,7 +96,7 @@ struct TodayView: View {
                     .font(Chalk.display(44))
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
-                Text(Copy.counterPrompt)
+                Text(Copy.testHeroBody)
                     .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
             }
@@ -169,24 +165,26 @@ struct TodayView: View {
                 PrimaryButton(title: Copy.resume) { controller.resume() }
             default:
                 if let due = controller.dueSet() {
-                    PrimaryButton(title: Copy.doneSet(due.reps)) { controller.logDone(day: due.day, index: due.index, celebrate: true) }
+                    HStack(spacing: ChalkTokens.Space.s3) {
+                        PrimaryButton(title: Copy.doneSet(due.reps)) { controller.logDone(day: due.day, index: due.index, celebrate: true) }
+                            .layoutPriority(1)
+                        SecondaryButton(title: Copy.inTen) { controller.logSnooze(day: due.day, index: due.index) }
+                    }
                 }
-                if let end = controller.activeBusyEnd() {
+                if let busy = controller.activeBusy() {
                     HStack {
-                        Text(Copy.busyActive(Copy.clock(end)))
+                        Text(Copy.busyStrip(until: busy.until, skipped: busy.skipped))
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(Chalk.inkSoft)
-                        Spacer()
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer(minLength: ChalkTokens.Space.s2)
                         TextLink(title: Copy.undo) { controller.undoBusy() }
                     }
-                    .padding(.leading, 16)
-                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.line, lineWidth: 1.5))
+                    .padding(.leading, ChalkTokens.Space.s4)
+                    .outlinedCard(radius: ChalkTokens.Radius.button, color: Chalk.line)
+                    .accessibilityElement(children: .contain)
                 } else if model.showBusy {
-                    SecondaryButton(title: Copy.busy, height: 56) { controller.showBusyConfirm = true }
-                    Text(Copy.busyCaption)
-                        .font(.footnote)
-                        .foregroundStyle(Chalk.inkMuted)
-                        .multilineTextAlignment(.center)
+                    SecondaryButton(title: Copy.busy, height: 56) { controller.confirmBusy() }
                 }
             }
             if StudioFeature.enabled, !model.hero.isFinished {

@@ -151,7 +151,7 @@ are not settled (item 8).
 **Steps:** 1. Shape as Build A (Opus). 2. Build (Sonnet). 3. Full diff review (Opus). 4. Health wording and privacy
 answers (Opus drafts, Graham approves, Grok sets).
 
-### 2. Story: a celebration after every in-app set, a larger one for a finished day (approved 2026-11-20)
+### 2. Story: a celebration after every in-app set, a larger one for a finished day (approved 2026-11-20; built in group 6)
 As someone logging a set in the app, I want a short full-screen moment, so each set feels done.
 - Given a set logged in the app, a full-screen celebration shows for 1.5 seconds, and a tap dismisses it at once.
 - Given a finished day or Day 15, a larger, longer celebration plays with a haptic pattern that builds from light to
@@ -165,7 +165,7 @@ As someone logging a set in the app, I want a short full-screen moment, so each 
 **Steps:** 1. Shape with a mockup and the haptic pattern, Build D (Opus). 2. Build (Sonnet). 3. Device check of the
 haptics (Graham).
 
-### 3. Story: Busy is one tap (approved 2026-11-20)
+### 3. Story: Busy is one tap (approved 2026-11-20; built in group 6)
 As someone about to be unavailable, I want one tap to quiet the next hour, so I'm not confirming twice.
 - Given Today, when I tap "Busy for 1 hour", alerts stop at once and no sheet appears.
 - Then a strip shows: alerts off until [time], [n] sets count as missed, Undo.
@@ -182,7 +182,7 @@ In 1.0 no paywall can be reached on any day or rerun, and no copy mentions free 
 
 **Steps:** 1. Shape as Build A (Opus). 2. Build (Sonnet). 3. Full diff review (Opus).
 
-### 5. Requirement and story: Progress numbers (approved 2026-11-20)
+### 5. Requirement and story: Progress numbers (approved 2026-11-20; built in groups 6 and 7)
 **Requirement:** Progress shows Day, Push-ups, Sets done, Sets missed, On time, Typical response, Perfect days in a
 row and Snoozed, in factual wording. Enforced by a test that lists those labels.
 

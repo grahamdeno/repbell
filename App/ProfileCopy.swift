@@ -16,9 +16,6 @@ extension Copy {
     static let notUnlocked = "Not unlocked"
     static let restorePurchase = "Restore purchase"
     static let restoreNone = "No purchase found for this Apple Account."
-    static let busyCaption = "Turns off alerts for an hour. Sets in that hour count as missed."
-    static let busySheetTitle = "Skip the next hour?"
-    static let busyPause = "Skip the next hour"
     static let undo = "Undo"
     static let didIt = "Done"
     static let dayDone = "Day done"
@@ -36,6 +33,11 @@ extension Copy {
     static let settingsTitle = "Settings"
     static let lastRun = "Last run"
     static let observations = "Patterns"
+    static let aheadTitle = "What's ahead"
+
+    static func gainLine(_ gain: Int, throughDay: Int) -> String {
+        gain >= 0 ? "Up \(gain)% from Day 1 to Day \(throughDay)" : "Down \(-gain)% from Day 1 to Day \(throughDay)"
+    }
     static let allTime = "All time"
     static let yourMax = "Your max"
     static let testOnDayOne = "Test on Day 1 to set it."
