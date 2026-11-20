@@ -11,6 +11,15 @@ public struct PersistedRun: Equatable, Codable, Sendable {
         self.pausedAt = pausedAt
         self.ended = ended
     }
+
+    private enum CodingKeys: String, CodingKey { case input, pausedAt, ended }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        input = try c.decode(RunInput.self, forKey: .input)
+        pausedAt = try c.decodeIfPresent(CivilDateTime.self, forKey: .pausedAt)
+        ended = try c.decodeIfPresent(Bool.self, forKey: .ended) ?? false
+    }
 }
 
 public struct LibraryFile: Equatable, Codable, Sendable {
@@ -28,6 +37,17 @@ public struct LibraryFile: Equatable, Codable, Sendable {
         self.unlocked = unlocked
         self.current = current
         self.history = history
+    }
+
+    private enum CodingKeys: String, CodingKey { case runsStarted, unlocked, current, history }
+
+    /// Missing fields decode with defaults, so a stored record is never lost.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        runsStarted = try c.decodeIfPresent(Int.self, forKey: .runsStarted) ?? 0
+        unlocked = try c.decodeIfPresent(Bool.self, forKey: .unlocked) ?? false
+        current = try c.decodeIfPresent(PersistedRun.self, forKey: .current)
+        history = try c.decodeIfPresent([PersistedRun].self, forKey: .history) ?? []
     }
 
     public var isFirstRun: Bool { runsStarted <= 1 }

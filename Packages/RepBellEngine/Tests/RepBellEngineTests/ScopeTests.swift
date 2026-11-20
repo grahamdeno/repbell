@@ -69,11 +69,29 @@ final class ScopeTests: XCTestCase {
     // Data safety: a library saved by the first build (with `unlocked` and `runsStarted`) still decodes.
     func testStoredLibraryFromFirstBuildStillDecodes() throws {
         let json = """
-        {"runsStarted":2,"unlocked":false,"history":[],"current":{"input":{"dayOneMax":40,"wake":{"hour":7,"minute":0},"bed":{"hour":23,"minute":0},"start":{"year":2026,"month":11,"day":16},"retestEnabled":true,"events":[],"shifts":[]},"ended":false}}
+        {"runsStarted":2,"unlocked":false,"history":[],"current":{"input":{"dayOneMax":40,"wake":{"hour":7,"minute":0},"bed":{"hour":23,"minute":0},"start":{"year":2026,"month":11,"day":16},"retestEnabled":true,"events":[{"done":{"day":1,"index":0,"at":{"date":{"year":2026,"month":11,"day":16},"minutes":480}}}],"shifts":[{"day":3,"minutes":1440}]},"ended":false}}
         """
         let library = try JSONDecoder().decode(LibraryFile.self, from: Data(json.utf8))
         XCTAssertEqual(library.runsStarted, 2)
         XCTAssertEqual(library.current?.input.dayOneMax, 40)
+        XCTAssertEqual(library.current?.input.events.count, 1)
+        XCTAssertEqual(library.current?.input.shifts.count, 1)
         XCTAssertTrue(library.allows(day: 9))
+    }
+
+    // Data safety: a record missing fields added later still loads with defaults, and round-trips.
+    func testStoredLibraryWithMissingFieldsStillDecodes() throws {
+        let json = """
+        {"current":{"input":{"dayOneMax":40,"wake":{"hour":7,"minute":0},"bed":{"hour":23,"minute":0},"start":{"year":2026,"month":11,"day":16}}}}
+        """
+        let library = try JSONDecoder().decode(LibraryFile.self, from: Data(json.utf8))
+        XCTAssertEqual(library.runsStarted, 0)
+        XCTAssertEqual(library.history.count, 0)
+        XCTAssertEqual(library.current?.ended, false)
+        XCTAssertEqual(library.current?.input.retestEnabled, true)
+        XCTAssertEqual(library.current?.input.events.count, 0)
+        XCTAssertEqual(library.current?.input.shifts.count, 0)
+        let again = try JSONDecoder().decode(LibraryFile.self, from: JSONEncoder().encode(library))
+        XCTAssertEqual(again, library)
     }
 }
