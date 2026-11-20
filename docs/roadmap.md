@@ -209,6 +209,8 @@ payment version (Opus, with a Fable strategy review of the boundary and price).
 ### 7. Epic: payment (later; not yet shaped)
 The free and paid boundary and the price; a paywall with a way out and Restore (UX-1); correct purchase messages
 (UX-13); a locked day that starts while the app is open (UX-37); item 6.
+Also: Settings lost its Purchase section (unlock status and Restore purchase) in the 1.0 Settings rebuild. It must
+come back, behind `Features.payment`, before payment is turned on.
 
 ### 8. Requirement R-1: every coach image and clip has a recorded origin (read back 17 Nov 2026; approval not recorded)
 Each batch of coach media is logged in `docs/provenance.md`: the tool and plan, the date, the prompt, where the
@@ -216,7 +218,7 @@ originals are kept, and the terms that applied. No build shows coach media until
 writing or the media is remade with a tool whose terms clearly allow the use.
 - Open: Graham's approval of the read-back is not on record. Until then it is applied as a gate, as CLAUDE.md says.
 
-### 9. Navigation (later; not yet shaped)
+### 9. Navigation (in 1.0, group 5; built)
 Browse screens on a navigation stack with swipe-back (UX-10); program settings in sections with a direct Settings
 entry (UX-11, the part outside Build E).
 

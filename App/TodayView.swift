@@ -26,14 +26,24 @@ struct TodayView: View {
                         Text(model.eyebrow)
                             .eyebrow()
                         Spacer()
-                        Button { controller.screen = .profile } label: {
+                        Button { controller.open(.progress) } label: {
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.title2)
                                 .foregroundStyle(Chalk.inkSoft)
                                 .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(PressFade())
                         .accessibilityLabel(Copy.profileLabel)
+                        Button { controller.open(.settings) } label: {
+                            Image(systemName: "gearshape")
+                                .font(.title2)
+                                .foregroundStyle(Chalk.inkSoft)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(PressFade())
+                        .accessibilityLabel(Copy.settingsTitle)
                     }
                     if !model.bars.isEmpty {
                         DayBars(marks: model.bars)
@@ -122,7 +132,7 @@ struct TodayView: View {
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
                 if StudioFeature.enabled, let suggestion = StudioLibrary.shared.session(controller.studioSuggestion()) {
-                    Button { controller.screen = .studioSession(suggestion.id) } label: {
+                    Button { controller.open(.workoutSession(suggestion.id)) } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(StudioCopy.wantMore)
                                 .font(.subheadline)
@@ -188,7 +198,7 @@ struct TodayView: View {
                 }
             }
             if StudioFeature.enabled, !model.hero.isFinished {
-                Button { controller.screen = .studio } label: {
+                Button { controller.open(.workouts) } label: {
                     HStack(spacing: 10) {
                         Image(systemName: "dumbbell")
                             .font(.body.weight(.semibold))

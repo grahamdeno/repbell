@@ -34,10 +34,8 @@ struct HurtsView: View {
 }
 
 struct AboutView: View {
-    @Environment(ProgramController.self) private var controller
-
     var body: some View {
-        ScreenChrome(top: 28) {
+        ScreenChrome(top: 8) {
             VStack(alignment: .leading, spacing: 20) {
                 Text(Copy.aboutTitle)
                     .font(Chalk.display(48))
@@ -46,10 +44,6 @@ struct AboutView: View {
                     .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                     .lineSpacing(4)
-                Spacer()
-                SecondaryButton(title: Copy.back) {
-                    controller.screen = controller.library.current == nil ? .promise : .profile
-                }
             }
         }
     }

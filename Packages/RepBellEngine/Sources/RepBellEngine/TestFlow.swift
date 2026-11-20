@@ -43,3 +43,17 @@ extension RunInput {
         return found
     }
 }
+
+/// The wake and bedtime choices, the same in setup and Settings (UX-26).
+public enum TimeChoices {
+    /// 4:00 a.m. to 11:30 a.m., every 30 minutes.
+    public static let wake: [ClockTime] = stride(from: 4 * 60, through: 11 * 60 + 30, by: 30).map {
+        ClockTime(hour: $0 / 60, minute: $0 % 60)
+    }
+
+    /// 8:00 p.m. to 2:00 a.m., every 30 minutes.
+    public static let bed: [ClockTime] = stride(from: 20 * 60, through: 26 * 60, by: 30).map { minutes in
+        let wrapped = minutes % 1440
+        return ClockTime(hour: wrapped / 60, minute: wrapped % 60)
+    }
+}
