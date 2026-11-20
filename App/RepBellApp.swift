@@ -93,6 +93,7 @@ struct RootView: View {
         case .workouts: StudioView()
         case .workoutSettings: WorkoutSettingsView()
         case .workoutSession(let id): StudioSessionView(sessionID: id)
+        case .fitMyTime: FitMyTimeView()
         }
     }
 }

@@ -30,6 +30,28 @@ struct StudioView: View {
                 }
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
+                        Button { controller.open(.fitMyTime) } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(StudioCopy.fitTitle)
+                                        .font(Chalk.display(32))
+                                        .textCase(.uppercase)
+                                        .foregroundStyle(Chalk.ink)
+                                    Text(StudioCopy.fitRowDetail)
+                                        .font(.subheadline)
+                                        .foregroundStyle(Chalk.inkMuted)
+                                }
+                                Spacer()
+                                Image(systemName: "timer")
+                                    .font(.title2)
+                                    .foregroundStyle(Chalk.accent)
+                            }
+                            .padding(ChalkTokens.Space.s4)
+                            .frame(minHeight: ChalkTokens.minimumTarget)
+                            .outlinedCard()
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(PressFade())
                         if let suggested {
                             VStack(alignment: .leading, spacing: 10) {
                                 StudioEyebrow(StudioCopy.suggested)
@@ -140,6 +162,17 @@ private struct StudioRow: View {
 struct StudioSessionView: View {
     @Environment(ProgramController.self) private var controller
     var sessionID: String
+
+    var body: some View {
+        // Fit my time rebuilds the session for "Another one"; the seed redraws this screen.
+        StudioSessionContent(sessionID: sessionID)
+            .id(sessionID == FitMyTime.sessionID ? controller.fitSeed : 0)
+    }
+}
+
+private struct StudioSessionContent: View {
+    @Environment(ProgramController.self) private var controller
+    var sessionID: String
     @State private var askHold = false
     private var settings: StudioSettings { StudioSettings.shared }
 
@@ -176,6 +209,11 @@ struct StudioSessionView: View {
                                     }
                                     .padding(.vertical, 10)
                                     .overlay(alignment: .bottom) { Rectangle().fill(Chalk.line).frame(height: 1) }
+                                }
+                            }
+                            if session.id == FitMyTime.sessionID {
+                                SecondaryButton(title: StudioCopy.anotherOne, size: .compact) {
+                                    controller.fitMyTime(minutes: session.minutes)
                                 }
                             }
                             Text(StudioCopy.safety)
@@ -615,6 +653,21 @@ struct StudioProfileSection: View {
 
 enum StudioCopy {
     static let studio = "Workouts"
+    static let fitTitle = "Fit my time"
+    static let fitRowDetail = "Pick the minutes you have. Rep Bell builds the session."
+    static let fitHeadline = "How long\ndo you have?"
+    static let anotherOne = "Another one"
+
+    static func fitName(_ minutes: Int) -> String { "Fit my time · \(minutes) min" }
+
+    static func fitFocusLine(_ focus: FitMyTime.Focus) -> String {
+        switch focus {
+        case .mobility: return "Today: mobility and stretching, easy on the push-up muscles."
+        case .legs: return "Today: legs and back, so your push-up muscles rest."
+        case .core: return "Today: core and easy cardio, so your push-up muscles rest."
+        case .fullBody: return "Today: full body."
+        }
+    }
     static let settingsTitle = "Workouts settings"
     static let missing = "This session isn't in this version of Rep Bell."
     static let saveToHealth = "Save sessions to Apple Health"
@@ -697,5 +750,48 @@ enum StudioCopy {
 
     static func sessionsDone(_ count: Int, minutes: Int) -> String {
         count == 1 ? "1 session done · \(minutes) min" : "\(count) sessions done · \(minutes) min"
+    }
+}
+
+/// Fit my time: one decision, the minutes. The focus follows the program day.
+struct FitMyTimeView: View {
+    @Environment(ProgramController.self) private var controller
+    private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+
+    var body: some View {
+        ScreenChrome(top: 8) {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(StudioCopy.fitHeadline)
+                    .font(Chalk.display(48))
+                    .textCase(.uppercase)
+                    .foregroundStyle(Chalk.ink)
+                    .accessibilityAddTraits(.isHeader)
+                Text(StudioCopy.fitFocusLine(controller.fitFocus()))
+                    .font(.body)
+                    .foregroundStyle(Chalk.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(FitMyTime.choices, id: \.self) { minutes in
+                        Button { controller.fitMyTime(minutes: minutes) } label: {
+                            VStack(spacing: 0) {
+                                Text("\(minutes)")
+                                    .font(Chalk.display(56))
+                                    .foregroundStyle(Chalk.accent)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                Text("min")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Chalk.inkMuted)
+                            }
+                            .frame(maxWidth: .infinity, minHeight: 96)
+                            .outlinedCard()
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(PressFade())
+                        .accessibilityLabel("\(minutes) minutes")
+                    }
+                }
+            }
+        }
     }
 }

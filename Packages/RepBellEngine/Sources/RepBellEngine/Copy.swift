@@ -107,9 +107,22 @@ public enum Copy {
         "\(name), \(seconds) seconds. \(cue)"
     }
 
-    public static func switchSides(at seconds: Int) -> String {
-        "Switch sides at \(seconds) seconds."
+    public static func eachSideNote(seconds: Int) -> String {
+        "\(seconds) seconds on each side."
     }
+
+    public static let deskStretchStart = "Start"
+
+    public static func deskStretchSeconds(_ seconds: Int) -> String {
+        "Hold for \(seconds) seconds."
+    }
+    public static let deskStretchEndEarly = "End early"
+    public static let getInPosition = "Get into position"
+    public static let holdIt = "Hold"
+    public static let leftSide = "Left side"
+    public static let rightSide = "Right side"
+    public static let switchSidesTitle = "Switch sides"
+    public static let stretchDone = "Stretch done"
 
     public static let switchSidesNow = "Switch sides."
 

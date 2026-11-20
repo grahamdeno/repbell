@@ -61,6 +61,8 @@ final class StudioLibrary {
     let movements: [String: StudioMovement]
     let sessions: [StudioSession]
     let suggest: [String: [String]]
+    /// The session last built by Fit my time.
+    var fitted: StudioSession?
 
     private init() {
         let decoder = JSONDecoder()
@@ -82,8 +84,63 @@ final class StudioLibrary {
         }
     }
 
-    func session(_ id: String) -> StudioSession? { sessions.first { $0.id == id } }
+    func session(_ id: String) -> StudioSession? {
+        if id == FitMyTime.sessionID { return fitted }
+        return sessions.first { $0.id == id }
+    }
+
+    /// Moves of the named sessions, past their shared warm-up and before their shared cool-down.
+    private func mainMoves(of ids: [String]) -> [String] {
+        var out: [String] = []
+        for id in ids {
+            guard let session = sessions.first(where: { $0.id == id }) else { continue }
+            for item in session.outline where !FitMyTimePools.warmUp.contains(item.id) && !FitMyTimePools.coolDown.contains(item.id) {
+                if !out.contains(item.id) { out.append(item.id) }
+            }
+        }
+        return out
+    }
+
+    /// Builds a Fit my time session for the focus, the person's gear and the program rule, and keeps it.
+    @MainActor
+    func fit(minutes: Int, focus: FitMyTime.Focus, seed: Int, settings: StudioSettings, runActive: Bool) -> StudioSession {
+        let sources: [String]
+        switch focus {
+        case .legs: sources = ["lower-back", "jump"]
+        case .core: sources = ["core", "ab-finisher", "easy-cardio"]
+        case .mobility: sources = ["stretch", "flow-45"]
+        case .fullBody: sources = ["lower-back", "core", "upper", "easy-cardio"]
+        }
+        // During a run, moves from upper-body sessions stay out, even if they're also elsewhere.
+        let held = runActive ? Set(mainMoves(of: Array(WorkoutRules.upperBody))) : []
+        let usable = { (id: String) -> FitMyTime.Move? in
+            guard let move = self.movements[id] else { return nil }
+            let missing = move.gear.filter { $0 != "mat" && !settings.gear.contains($0) }
+            if !missing.isEmpty && self.movements[move.standIn ?? ""] == nil { return nil }
+            return FitMyTime.Move(id: id, eachSide: move.sides == "each")
+        }
+        // Lying-down closers aren't main moves, and planks and sun flows load the push-up muscles.
+        let notMain: Set<String> = ["final-rest", "centering", "high-plank", "sun-flow-a", "sun-flow-b", "side-plank", "dolphin", "crow"]
+        let main = mainMoves(of: sources).filter { !held.contains($0) && !notMain.contains($0) }.compactMap(usable)
+        let pools = FitMyTime.Pools(
+            warmUp: FitMyTimePools.warmUp.compactMap(usable),
+            main: main,
+            coolDown: FitMyTimePools.coolDown.compactMap(usable)
+        )
+        let steps = FitMyTime.build(minutes: minutes, pools: pools, seed: seed).map {
+            StudioStep(type: $0.type, seconds: $0.seconds, id: $0.id, next: $0.next, side: $0.side, pace: nil, role: nil)
+        }
+        let session = StudioSession(id: FitMyTime.sessionID, name: StudioCopy.fitName(minutes), gear: [], free: true, minutes: minutes, timeline: steps)
+        fitted = session
+        return session
+    }
     func movement(_ id: String?) -> StudioMovement? { id.flatMap { movements[$0] } }
+}
+
+/// The shared warm-up and cool-down moves every Workouts session uses.
+enum FitMyTimePools {
+    static let warmUp = ["march", "arm-circles", "hip-circles", "good-morning", "inchworm"]
+    static let coolDown = ["childs-pose", "wall-chest", "hamstring-fold", "breathing"]
 }
 
 /// Studio settings and history, kept apart from the push-up library file.
