@@ -70,7 +70,8 @@ final class ProgramController {
     var testDeferredOn: CivilDate?
     /// Set while the Day 15 number is being corrected from the result screen.
     var correctingDay: Int?
-    var alarmsDenied = false
+    /// The program day the current run was ended on, kept while the app runs for the result heading.
+    private var endedOnDay: Int?
     var unlockMessage: String?
     var showBusyConfirm = false
     var celebration: Celebration?
@@ -113,7 +114,7 @@ final class ProgramController {
 
     func allowAlerts() async {
         let notes = await Notifier.requestAuthorization()
-        alarmsDenied = !(await TestAlarms.authorizationGranted())
+        _ = await TestAlarms.authorizationGranted()
         alertsDenied = !notes
         guard notes else { return }
         await finishSetup()
@@ -123,14 +124,16 @@ final class ProgramController {
     func recheckAlerts() async {
         guard alertsDenied, library.current == nil else { return }
         if await Notifier.isAuthorized() {
+            _ = await TestAlarms.authorizationGranted()
+            guard alertsDenied, library.current == nil else { return }
             alertsDenied = false
-            alarmsDenied = !(await TestAlarms.authorizationGranted())
             await finishSetup()
         }
     }
 
     /// Finishes setup without alerts. Today still shows each set when it's due.
     func startWithoutAlerts() async {
+        guard library.current == nil else { return }
         await finishSetup()
     }
 
@@ -154,6 +157,7 @@ final class ProgramController {
 
     func openCounter(day: Int, preserve: Bool) {
         if !preserve {
+            correctingDay = nil
             draftCount = startingCount(for: day)
         }
         screen = .counter(day)
@@ -172,7 +176,7 @@ final class ProgramController {
 
     /// "Fix my number" on the result: reopens the counter at the logged Day 15 number.
     func fixFinalNumber() {
-        guard let run = library.current else { return }
+        guard let run = library.current, !run.ended else { return }
         let resolved = ScheduleEngine.resolve(run.input, now: run.pausedAt ?? CivilDateTime.local(Date()))
         guard let logged = resolved.day(15)?.testReps else { return }
         correctingDay = 15
@@ -188,10 +192,13 @@ final class ProgramController {
         guard TestFlow.canSubmit(count: draftCount) else { return }
         if let correcting = correctingDay, correcting == day {
             correctingDay = nil
-            update { $0.input.correctTest(day: day, reps: draftCount) }
-            screen = .result
-            Haptics.play(.testLogged)
-            return
+            var corrected = false
+            update { corrected = $0.input.correctTest(day: day, reps: draftCount) }
+            if corrected {
+                screen = .result
+                Haptics.play(.testLogged)
+                return
+            }
         }
         if day == 15 {
             commitTest(day: day, reps: draftCount)
@@ -278,6 +285,8 @@ final class ProgramController {
     }
 
     func startOver() {
+        correctingDay = nil
+        endedOnDay = nil
         let now = CivilDateTime.local(Date())
         if let run = library.current {
             let resolved = ScheduleEngine.resolve(run.input, now: run.pausedAt ?? now)
@@ -528,12 +537,12 @@ final class ProgramController {
     /// The program day the run ended on, for the result heading.
     func endedDay() -> Int? {
         guard let run = library.current, run.ended else { return nil }
-        let lastEvent = run.input.events.map(\.at).max()
-        return lastEvent.flatMap { run.input.dayNumber(on: $0.date) }.map { min($0, 14) }
+        return endedOnDay ?? run.input.lastLoggedDay
     }
 
     func endProgram() {
         guard var run = library.current else { return }
+        endedOnDay = run.input.dayNumber(on: (run.pausedAt ?? CivilDateTime.local(Date())).date)
         run.ended = true
         run.pausedAt = nil
         library.current = run
@@ -544,6 +553,8 @@ final class ProgramController {
     }
 
     func runAgain() {
+        correctingDay = nil
+        endedOnDay = nil
         if library.rerunNeedsUnlock {
             screen = .paywall
             return

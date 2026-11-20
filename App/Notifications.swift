@@ -121,12 +121,12 @@ enum Notifier {
         }
     }
 
-    /// Live picture of what iOS will and won't do with Rep Bell's alerts.
     static func isAuthorized() async -> Bool {
         let status = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
         return status == .authorized || status == .provisional || status == .ephemeral
     }
 
+    /// Live picture of what iOS will and won't do with Rep Bell's alerts.
     static func diagnostics() async -> [ProfileRow] {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()

@@ -21,6 +21,11 @@ public enum TestFlow {
 }
 
 extension RunInput {
+    /// The program day of the latest logged event, used to head an ended run after a relaunch.
+    public var lastLoggedDay: Int? {
+        events.map(\.at).max().flatMap { dayNumber(on: $0.date) }
+    }
+
     /// Corrects the number logged for a test day. The test keeps its original time, so nothing else in the
     /// schedule moves. Returns false when that day has no logged test.
     @discardableResult

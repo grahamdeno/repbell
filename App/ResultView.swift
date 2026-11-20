@@ -20,7 +20,7 @@ struct ResultView: View {
                         .font(.system(size: 16))
                         .foregroundStyle(Chalk.inkSoft)
                 }
-                if numbers.end != nil {
+                if numbers.end != nil, controller.library.current?.ended == false {
                     TextLink(title: Copy.fixMyNumber) { controller.fixFinalNumber() }
                 }
                 Spacer(minLength: 12)

@@ -84,6 +84,15 @@ final class TestFlowTests: XCTestCase {
         XCTAssertFalse(Copy.endConfirmBody.contains("!"))
     }
 
+    // UX-18: after a relaunch, an ended run is headed by the day of its last logged event, Day 15 included.
+    func testUX18_lastLoggedDay() {
+        XCTAssertNil(run().input.lastLoggedDay)
+        let five = run(events: [.done(day: 5, index: 0, at: at(day: 5, 8, 0))]).input
+        XCTAssertEqual(five.lastLoggedDay, 5)
+        let fifteen = run(events: [.test(day: 15, reps: 60, at: at(day: 15, 7, 5))]).input
+        XCTAssertEqual(fifteen.lastLoggedDay, 15)
+    }
+
     // UX-12: the alerts-denied screen says what happened and how to go on.
     func testUX12_deniedCopyGivesAWayOn() {
         XCTAssertTrue(Copy.alertsDeniedBody.contains("Settings"))
