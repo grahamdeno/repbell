@@ -508,6 +508,7 @@ final class ProgramController {
         library.current = run
         persist()
         screen = .today
+        path.removeAll()
         Task { await refreshAlerts() }
     }
 
@@ -618,7 +619,8 @@ final class ProgramController {
         if screen == .alerts {
             await recheckAlerts()
         }
-        if screen == .today || screen == .ready {
+        // Only from Today or Ready itself, never over Settings or Progress (unsaved changes stay put).
+        if path.isEmpty, screen == .today || screen == .ready {
             if jumpToFreshTest() { return }
         }
         await refreshAlerts()

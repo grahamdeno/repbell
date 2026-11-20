@@ -216,11 +216,15 @@ struct TimeChoiceRow: View {
     @Binding var selection: ClockTime
 
     var body: some View {
-        let options = choices.contains(selection) ? choices : (choices + [selection]).sorted { $0.minutesFromMidnight < $1.minutesFromMidnight }
+        // A time saved by an earlier build may sit off the grid; it's kept, in order from the first choice.
+        let first = choices.first?.minutesFromMidnight ?? 0
+        let order = { (time: ClockTime) in (time.minutesFromMidnight - first + 1440) % 1440 }
+        let options = choices.contains(selection) ? choices : (choices + [selection]).sorted { order($0) < order($1) }
         HStack {
             Text(label)
                 .font(.body)
                 .foregroundStyle(Chalk.inkSoft)
+                .accessibilityHidden(true)
             Spacer()
             Picker(label, selection: $selection) {
                 ForEach(options, id: \.self) { time in
@@ -230,6 +234,7 @@ struct TimeChoiceRow: View {
             .pickerStyle(.menu)
             .tint(Chalk.accent)
             .labelsHidden()
+            .frame(minHeight: ChalkTokens.minimumTarget)
         }
         .frame(minHeight: ChalkTokens.minimumTarget)
     }

@@ -209,6 +209,8 @@ payment version (Opus, with a Fable strategy review of the boundary and price).
 ### 7. Epic: payment (later; not yet shaped)
 The free and paid boundary and the price; a paywall with a way out and Restore (UX-1); correct purchase messages
 (UX-13); a locked day that starts while the app is open (UX-37); item 6.
+Also: Settings lost its Purchase section (unlock status and Restore purchase) in the 1.0 Settings rebuild. It must
+come back, behind `Features.payment`, before payment is turned on.
 
 ### 8. Requirement R-1: every coach image and clip has a recorded origin (read back 17 Nov 2026; approval not recorded)
 Each batch of coach media is logged in `docs/provenance.md`: the tool and plan, the date, the prompt, where the
