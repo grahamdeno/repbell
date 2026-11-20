@@ -78,6 +78,7 @@ struct RootView: View {
         case .result: ResultView()
         case .paywall: PaywallView()
         case .rerun: RerunView()
+        case .dayStart: DayStartView()
         case .studioPlayer(let id): StudioPlayerView(sessionID: id)
         }
     }

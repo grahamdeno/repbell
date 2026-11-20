@@ -80,6 +80,24 @@ public enum Copy {
     public static let todaysSets = "Today's sets"
     public static let wordmark = "Rep Bell"
 
+    public static let ringTitle = "Ring"
+    public static let ringDetail = "Set alarms ring, even on silent."
+    public static let quietTitle = "Quiet"
+    public static let quietDetail = "Sets arrive as silent banners, with a tap on your Watch."
+    public static let quietNext = "Quiet next"
+    public static let gotIt = "Got it"
+    public static let startTheDayButton = "Start the day"
+
+    /// The day-start headline and the morning alarm: the day and its set count, never missed sets.
+    public static func dayStart(day: Int, sets: Int) -> String {
+        let count = sets == 1 ? "1 set" : "\(sets) sets"
+        return "Day \(day).\n\(count) today."
+    }
+
+    public static func morningAlarm(day: Int, sets: Int) -> String {
+        dayStart(day: day, sets: sets).replacingOccurrences(of: "\n", with: " ")
+    }
+
     public static let rerunHeadline = "Run it\nagain"
 
     public static func rerunBody(max: Int) -> String {

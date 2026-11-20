@@ -17,6 +17,7 @@ enum Screen: Equatable {
     case result
     case paywall
     case rerun
+    case dayStart
     case studioPlayer(String)
 }
 
@@ -184,6 +185,23 @@ final class ProgramController {
         screen = .counter(day)
     }
 
+    /// The day-start choice: Ring or Quiet for today. Tomorrow preselects it.
+    func chooseDay(_ mode: DayMode) {
+        let now = CivilDateTime.local(Date())
+        RingStore.update { $0.choose(mode, on: now.date) }
+        Haptics.play(.tap)
+        screen = .today
+        Task { await refreshAlerts() }
+    }
+
+    /// For the day-start screen.
+    func dayStartModel() -> (day: Int, sets: Int, preselected: DayMode) {
+        let now = CivilDateTime.local(Date())
+        guard let run = library.current, let number = run.input.dayNumber(on: now.date) else { return (1, 0, .ring) }
+        let sets = ScheduleEngine.resolve(run.input, now: now).day(number)?.sets.count ?? 0
+        return (number, sets, RingStore.state.preselected(on: now.date))
+    }
+
     /// "Not yet" on the counter: back to Today, where the test stays ready.
     func deferTest() {
         if correctingDay != nil {
@@ -249,6 +267,7 @@ final class ProgramController {
 
     func logDone(day: Int, index: Int, celebrate: Bool = false) {
         let now = CivilDateTime.local(Date())
+        RingStore.update { $0.acknowledge(at: now) }
         update { $0.input.events.append(.done(day: day, index: index, at: now)) }
         if let run = library.current, let resolved = ScheduleEngine.resolve(run.input, now: now).day(day) {
             let finished = !resolved.sets.isEmpty && !resolved.sets.contains { $0.status == .upcoming }
@@ -625,7 +644,9 @@ final class ProgramController {
     }
 
     private func performAlertRefresh() async {
-        await Notifier.refill(library: library, holdUntil: studioHoldUntil.flatMap { $0 > Date() ? $0 : nil })
+        let hold = studioHoldUntil.flatMap { $0 > Date() ? $0 : nil }
+        await Notifier.refill(library: library, holdUntil: hold, ringing: SetAlarms.ringingIDs(library: library), quiet: RingStore.state.quietActive)
+        await SetAlarms.sync(library: library, holdUntil: hold)
         if let run = library.current {
             await TestAlarms.sync(run: run, allows: { self.library.allows(day: $0) })
         } else {
@@ -638,12 +659,17 @@ final class ProgramController {
 
     func onActive() async {
         await refreshEntitlements()
+        // Opening the app is an acknowledgment: a run of quiet sets ends, and the next set rings.
+        RingStore.update { $0.acknowledge(at: CivilDateTime.local(Date())) }
         if screen == .alerts {
             await recheckAlerts()
         }
         // Only from Today or Ready itself, never over Settings or Progress (unsaved changes stay put).
         if path.isEmpty, screen == .today || screen == .ready {
             if jumpToFreshTest() { return }
+            if RingPlan.showDayStart(run: library.current, state: RingStore.state, now: CivilDateTime.local(Date())) {
+                screen = .dayStart
+            }
         }
         await refreshAlerts()
     }

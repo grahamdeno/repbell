@@ -228,7 +228,7 @@ entry (UX-11, the part outside Build E).
 
 ### 12. Apple Health for push-ups (in 1.0, group 11; built)
 
-### 13. Epic: Day start and alarms that ring through silent
+### 13. Epic: Day start and alarms that ring through silent (in 1.0, group 12; built)
 
 **Status:** Idea approved by Graham, Nov 17, 2026. Next: Shape (Opus).
 

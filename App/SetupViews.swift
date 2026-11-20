@@ -236,3 +236,35 @@ private struct AlertRow: View {
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(Chalk.line, lineWidth: 1.5))
     }
 }
+
+/// The start of each program day: the day, its sets, and Ring or Quiet, with yesterday's choice first.
+struct DayStartView: View {
+    @Environment(ProgramController.self) private var controller
+
+    var body: some View {
+        let model = controller.dayStartModel()
+        ScreenChrome(top: 24) {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(Copy.dayProgress(model.day))
+                    .eyebrow(Chalk.inkMuted)
+                Text(Copy.dayStart(day: model.day, sets: model.sets))
+                    .font(Chalk.display(56))
+                    .textCase(.uppercase)
+                    .foregroundStyle(Chalk.ink)
+                    .accessibilityAddTraits(.isHeader)
+                Spacer(minLength: 16)
+                let ringFirst = model.preselected == .ring
+                ChoiceCard(title: ringFirst ? Copy.ringTitle : Copy.quietTitle,
+                           detail: ringFirst ? Copy.ringDetail : Copy.quietDetail,
+                           recommended: true) {
+                    controller.chooseDay(ringFirst ? .ring : .quiet)
+                }
+                ChoiceCard(title: ringFirst ? Copy.quietTitle : Copy.ringTitle,
+                           detail: ringFirst ? Copy.quietDetail : Copy.ringDetail,
+                           recommended: false) {
+                    controller.chooseDay(ringFirst ? .quiet : .ring)
+                }
+            }
+        }
+    }
+}
