@@ -59,7 +59,7 @@ public enum Copy {
     public static let aboutBody = "Rep Bell runs the 14-day program popularized as Hit the Deck by The Modern Rogue. The same schedule belongs to a longer tradition, sometimes called the Evil Russian program. Rep Bell is not endorsed by The Modern Rogue or anyone else."
 
     public static let unlockTitle = "Unlock the full program"
-    public static let unlockBody = "The first three days are free. One time, $4.99, for the rest of this run and every rerun."
+    public static let unlockBody = "One purchase opens the full program and every rerun."
     public static let unlockButton = "Unlock"
     public static let unlockMissing = "The unlock is not available yet."
 

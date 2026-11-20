@@ -88,7 +88,7 @@ private struct StudioRow: View {
                     Text(session.name)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(missing.isEmpty ? Chalk.ink : Chalk.inkMuted)
-                    if session.free {
+                    if Features.payment && session.free {
                         Text(StudioCopy.free)
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(Chalk.accent)
@@ -127,7 +127,6 @@ struct StudioSessionView: View {
                             Text(StudioCopy.meta(session))
                                 .font(.system(size: 15))
                                 .foregroundStyle(Chalk.inkSoft)
-                            MascotPicker()
                             if !settings.easyOn.isEmpty {
                                 Text(StudioCopy.easyNote(settings.easyOn))
                                     .font(.system(size: 14))
@@ -161,7 +160,7 @@ struct StudioSessionView: View {
                     }
                     .scrollIndicators(.hidden)
                     PrimaryButton(title: StudioCopy.start) {
-                        if session.free || controller.library.unlocked {
+                        if !Features.payment || session.free || controller.library.unlocked {
                             Haptics.play(.tap)
                             if controller.setsDuring(minutes: session.minutes) > 0 {
                                 askHold = true
@@ -188,19 +187,6 @@ struct StudioSessionView: View {
         } else {
             ScreenChrome { SecondaryButton(title: Copy.back) { controller.screen = .studio } }
         }
-    }
-}
-
-struct MascotPicker: View {
-    @Bindable private var settings = StudioSettings.shared
-
-    var body: some View {
-        Picker(StudioCopy.mascot, selection: $settings.mascot) {
-            Text(StudioCopy.him).tag("him")
-            Text(StudioCopy.her).tag("her")
-        }
-        .pickerStyle(.segmented)
-        .frame(maxWidth: 220)
     }
 }
 
@@ -270,13 +256,8 @@ struct StudioPlayerView: View {
                     .tracking(0.8)
                     .textCase(.uppercase)
                     .foregroundStyle(step.isMove ? Chalk.accent : Chalk.inkMuted)
-                CoachStage(
-                    movementID: move?.movement.id,
-                    side: step.isMove ? step.side : session.timeline.dropFirst(index + 1).first(where: \.isMove)?.side,
-                    resting: !step.isMove,
-                    sessionID: session.id,
-                    paused: paused
-                )
+                MascotStage(movement: move?.movement, sessionID: session.id, resting: !step.isMove)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     .frame(maxWidth: .infinity)
                     .frame(height: 220)
                 Text(move?.movement.name ?? "")
@@ -421,7 +402,7 @@ struct StudioPlayerView: View {
     }
 }
 
-/// Placeholder stage until the puppet art lands: a large figure symbol chosen by session.
+/// The Workouts figure: a large system figure chosen by session. Coach media stays out until R-1 is met.
 struct MascotStage: View {
     var movement: StudioMovement?
     var sessionID: String
@@ -540,11 +521,6 @@ struct StudioProfileSection: View {
                 .tracking(0.8)
                 .textCase(.uppercase)
                 .foregroundStyle(Chalk.inkMuted)
-            HStack {
-                Text(StudioCopy.mascot).font(.system(size: 16)).foregroundStyle(Chalk.inkSoft)
-                Spacer()
-                MascotPicker()
-            }
             Text("\(StudioCopy.iHave) · \(settings.gear.count)").font(.system(size: 16, weight: .semibold)).foregroundStyle(Chalk.ink)
             ForEach(StudioSettings.allGear, id: \.self) { item in
                 Toggle(StudioSettings.gearLabel(item), isOn: Binding(
@@ -601,9 +577,6 @@ enum StudioCopy {
     ]
     static let free = "Free"
     static let start = "Start"
-    static let mascot = "Coach"
-    static let him = "Him"
-    static let her = "Her"
     static let pause = "Pause"
     static let resume = "Resume"
     static let skip = "Skip"

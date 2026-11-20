@@ -80,7 +80,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         UNUserNotificationCenter.current().delegate = self
         Notifier.install()
         PhoneSessionBridge.shared.start()
-        Unlocker.listen()
+        if Features.payment {
+            Unlocker.listen()
+        }
         BGTaskScheduler.shared.register(forTaskWithIdentifier: Notifier.refreshID, using: nil) { task in
             guard let refresh = task as? BGAppRefreshTask else { return }
             refresh.expirationHandler = {}

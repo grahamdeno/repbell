@@ -11,6 +11,15 @@ public struct PersistedRun: Equatable, Codable, Sendable {
         self.pausedAt = pausedAt
         self.ended = ended
     }
+
+    private enum CodingKeys: String, CodingKey { case input, pausedAt, ended }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        input = try c.decode(RunInput.self, forKey: .input)
+        pausedAt = try c.decodeIfPresent(CivilDateTime.self, forKey: .pausedAt)
+        ended = try c.decodeIfPresent(Bool.self, forKey: .ended) ?? false
+    }
 }
 
 public struct LibraryFile: Equatable, Codable, Sendable {
@@ -30,14 +39,41 @@ public struct LibraryFile: Equatable, Codable, Sendable {
         self.history = history
     }
 
+    private enum CodingKeys: String, CodingKey { case runsStarted, unlocked, current, history }
+
+    /// Missing fields decode with defaults, so a stored record is never lost.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        runsStarted = try c.decodeIfPresent(Int.self, forKey: .runsStarted) ?? 0
+        unlocked = try c.decodeIfPresent(Bool.self, forKey: .unlocked) ?? false
+        current = try c.decodeIfPresent(PersistedRun.self, forKey: .current)
+        history = try c.decodeIfPresent([PersistedRun].self, forKey: .history) ?? []
+    }
+
     public var isFirstRun: Bool { runsStarted <= 1 }
 
-    /// Days 1 to 3 of the first run are free. Everything else needs the one-time unlock.
+    /// Whether a program day can be used. With payment off (1.0) every day of every run is open.
     public func allows(day: Int) -> Bool {
+        guard Features.payment else { return true }
         if unlocked { return true }
         if isFirstRun && (1...3).contains(day) { return true }
         return false
     }
+
+    /// Whether the app must ask for the unlock before showing the current run at this moment.
+    /// Always false while payment is off.
+    public func needsUnlock(at now: CivilDateTime) -> Bool {
+        guard Features.payment, let current, !current.ended else { return false }
+        if !unlocked && !isFirstRun { return true }
+        let moment = current.pausedAt ?? now
+        if current.pausedAt == nil, let number = current.input.dayNumber(on: moment.date), !allows(day: number) {
+            return true
+        }
+        return false
+    }
+
+    /// Whether starting another run needs the unlock. Always false while payment is off.
+    public var rerunNeedsUnlock: Bool { Features.payment && !unlocked }
 
     public func resolved(at now: CivilDateTime) -> ResolvedRun? {
         guard let current else { return nil }

@@ -1,7 +1,7 @@
 import Foundation
 import HealthKit
 
-/// Saves finished Studio sessions to Apple Health as workouts. Off until turned on in Profile.
+/// Saves finished Studio sessions to Apple Health as workouts. Write only: Rep Bell never reads Health data. Off until turned on in Settings.
 enum StudioHealth {
     private static let store = HKHealthStore()
 

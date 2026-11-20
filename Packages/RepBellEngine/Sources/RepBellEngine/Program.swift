@@ -179,6 +179,22 @@ public struct RunInput: Equatable, Codable, Sendable {
         self.shifts = shifts
     }
 
+    private enum CodingKeys: String, CodingKey {
+        case dayOneMax, wake, bed, start, retestEnabled, events, shifts
+    }
+
+    /// Fields added after the first build decode with defaults, so a stored run is never lost.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        dayOneMax = try c.decodeIfPresent(Int.self, forKey: .dayOneMax) ?? 0
+        wake = try c.decode(ClockTime.self, forKey: .wake)
+        bed = try c.decode(ClockTime.self, forKey: .bed)
+        start = try c.decode(CivilDate.self, forKey: .start)
+        retestEnabled = try c.decodeIfPresent(Bool.self, forKey: .retestEnabled) ?? true
+        events = try c.decodeIfPresent([LogEvent].self, forKey: .events) ?? []
+        shifts = try c.decodeIfPresent([TimeShift].self, forKey: .shifts) ?? []
+    }
+
     public func date(forDay number: Int) -> CivilDate {
         start.addingDays(number - 1)
     }

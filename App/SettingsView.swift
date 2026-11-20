@@ -31,7 +31,9 @@ struct SettingsView: View {
                         if StudioFeature.enabled {
                             StudioProfileSection()
                         }
-                        purchase
+                        if Features.payment {
+                            purchase
+                        }
                         ProfileSection(Copy.programSection) {
                             if let run = controller.library.current, !run.ended {
                                 if run.pausedAt == nil {
