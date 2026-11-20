@@ -68,6 +68,8 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-20 | **Fit my time joins 1.0** (item 15), with a 5-minute option; and a Workouts button joins the top of Today | Graham's decision to add both; he asked for Product's best calls on the details |
+| 2026-11-20 | Fit my time details: name "Fit my time"; choices 5, 10, 15, 20, 30 and 45 minutes; one decision (the minutes), with the focus set by program day (test mornings and the day after: mobility; other even days: legs and back; odd days: core and easy cardio; no run: full body); warm-up, main moves in 40-second blocks with 20-second rests (two-sided moves split with a switch), cool-down always ending with breathing, timed to end exactly on the minute; during a run no move from an upper-body session; gear the person lacks is skipped unless a stand-in exists; "Another one" reshuffles; first row in Workouts | Decided by Product under the 1.0 exception |
 | 2026-11-20 | **1.0 scope is open again, not frozen.** Graham expects to add what he finds he needs while living on the test builds. New items join 1.0 as he approves them | Graham's decision |
 | 2026-11-20 | **Desk stretch joins 1.0** (item 14). Name "Desk stretch"; at most once an hour | Graham's decision to add it to 1.0; name and frequency decided by Product under the 1.0 exception |
 | 2026-11-20 | The Health read permission text is back: Apple rejects any HealthKit app without it, even one that only saves (TestFlight run 15 failed on this). It says Rep Bell does not read Health data; the app still asks for no read access, and the privacy guard checks both | Found by the failed upload; decided by Product under the 1.0 exception |
@@ -289,6 +291,18 @@ set also undoes some desk time.
 - Off by default; the program doesn't change.
 
 **Out of scope:** a stretch screen on the Watch itself; stretches chosen by the person.
+
+### 15. Story: Fit my time (approved 2026-11-20; in 1.0; built)
+As someone with a gap in my day, I want to say how much time I have and get one session made to fit, so I can use
+the time without choosing moves myself.
+- Given Workouts, when I tap Fit my time and pick 5, 10, 15, 20, 30 or 45 minutes, Rep Bell builds one session that
+  lasts exactly that long.
+- It has a warm-up and a cool-down; the middle comes from the Workouts moves, with their cues.
+- It respects my gear, Go easy on, and the program: no upper-body pushing or pulling during the 14 days, mobility
+  on test mornings and the day after.
+- It plays, holds set alerts and saves to Health like any session. "Another one" gives a different mix.
+
+**Out of scope:** choosing the focus; saving a built session.
 
 ## Small follow-ups
 

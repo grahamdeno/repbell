@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import RepBellEngine
 
 /// Saves finished Studio sessions to Apple Health as workouts. Write only: Rep Bell never reads Health data. Off until turned on in Settings.
 enum StudioHealth {
@@ -50,7 +51,7 @@ enum StudioHealth {
         case "stretch": return .flexibility
         case "strike": return .kickboxing
         case "core", "ab-finisher": return .coreTraining
-        case "upper", "lower-back", "shoulders-arms": return .functionalStrengthTraining
+        case "upper", "lower-back", "shoulders-arms", FitMyTime.sessionID: return .functionalStrengthTraining
         case "jump": return .highIntensityIntervalTraining
         case "easy-cardio": return .mixedCardio
         default: return .other

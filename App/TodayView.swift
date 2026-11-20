@@ -30,6 +30,17 @@ struct TodayView: View {
                         Text(model.eyebrow)
                             .eyebrow()
                         Spacer()
+                        if StudioFeature.enabled {
+                            Button { controller.open(.workouts) } label: {
+                                Image(systemName: "dumbbell")
+                                    .font(.title2)
+                                    .foregroundStyle(Chalk.inkSoft)
+                                    .frame(width: 44, height: 44)
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(PressFade())
+                            .accessibilityLabel(StudioCopy.studio)
+                        }
                         Button { controller.open(.progress) } label: {
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.title2)

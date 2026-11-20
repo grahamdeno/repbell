@@ -31,6 +31,7 @@ enum Browse: Hashable {
     case workouts
     case workoutSettings
     case workoutSession(String)
+    case fitMyTime
 }
 
 enum SetMark: Equatable {
@@ -400,6 +401,32 @@ final class ProgramController {
         studioHoldUntil = nil
         Task { await refreshAlerts() }
     }
+
+    /// Builds a Fit my time session and opens it. "Another one" calls this again with a new seed.
+    func fitMyTime(minutes: Int) {
+        fitSeed += 1
+        let now = CivilDateTime.local(Date())
+        let day = library.current.flatMap { $0.ended ? nil : $0.input.dayNumber(on: ($0.pausedAt ?? now).date) }
+        _ = StudioLibrary.shared.fit(
+            minutes: minutes,
+            focus: FitMyTime.focus(programDay: day),
+            seed: fitSeed,
+            settings: StudioSettings.shared,
+            runActive: WorkoutRules.runIsActive(library.current, now: now)
+        )
+        if path.last != .workoutSession(FitMyTime.sessionID) {
+            open(.workoutSession(FitMyTime.sessionID))
+        }
+    }
+
+    /// The focus Fit my time will use today, for the screen's line.
+    func fitFocus() -> FitMyTime.Focus {
+        let now = CivilDateTime.local(Date())
+        let day = library.current.flatMap { $0.ended ? nil : $0.input.dayNumber(on: ($0.pausedAt ?? now).date) }
+        return FitMyTime.focus(programDay: day)
+    }
+
+    private var fitSeed = Int(Date().timeIntervalSince1970) % 1000
 
     /// Whether a Workouts session waits until after Day 15 (upper-body work during a run).
     func workoutHeld(_ id: String) -> Bool {
