@@ -47,7 +47,7 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
   day, Day 9 and Day 10 (46 and 61 sets), a day with missed sets, paused, run ended, alerts denied, alarm permission
   denied, Health denied, iPhone without a Watch, time zone change, a rerun.
 - **Uploads and deploys:** see CLAUDE.md, "Uploads and deploys in this repo".
-- **Guard:** none yet. The on-device promise is not enforced by CI (see Small follow-ups).
+- **Guard:** `scripts/privacy_guard.py` enforces the on-device promise in CI, with a self-test.
 - **Device checks:** alerts and Time Sensitive delivery, the test alarm through Silent and Focus, Watch actions and
   Double Tap, the widget, haptics, VoiceOver, Reduce Motion, Larger Text, Health permission.
 - **Websites:** none yet for Rep Bell. tangomike.app (grahamdeno/tangomike) lists Graham's apps.

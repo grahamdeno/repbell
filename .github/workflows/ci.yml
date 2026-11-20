@@ -7,12 +7,22 @@ on:
 # Compile and test only. This workflow does not archive, notarize, upload to
 # TestFlight, or submit anything to App Store Connect.
 jobs:
+  guard:
+    name: Privacy guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Self-test the guard
+        run: python3 scripts/privacy_guard.py --self-test
+      - name: Check the on-device promise
+        run: python3 scripts/privacy_guard.py
+
   engine:
     name: Schedule engine tests
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
-      - name: Run the 13 schedule engine tests
+      - name: Run the engine tests
         run: swift test --package-path Packages/RepBellEngine
 
   apps:
