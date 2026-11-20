@@ -30,6 +30,22 @@ struct ProfileView: View {
                             ProfileSection(model.runIsCurrent ? Copy.thisRun : Copy.lastRun) {
                                 StatGrid(stats: model.runStats)
                             }
+                            if model.runIsCurrent, !run.ahead.isEmpty {
+                                ProfileSection(Copy.aheadTitle) {
+                                    VStack(alignment: .leading, spacing: 14) {
+                                        ForEach(run.ahead, id: \.self) { line in
+                                            HStack(alignment: .top, spacing: 12) {
+                                                Capsule().fill(Chalk.ink).frame(width: 4)
+                                                Text(line)
+                                                    .font(.body)
+                                                    .foregroundStyle(Chalk.ink)
+                                                    .fixedSize(horizontal: false, vertical: true)
+                                            }
+                                            .accessibilityElement(children: .combine)
+                                        }
+                                    }
+                                }
+                            }
                             if !run.observations.isEmpty {
                                 ProfileSection(Copy.observations) {
                                     VStack(alignment: .leading, spacing: 14) {
@@ -92,8 +108,8 @@ struct ProfileView: View {
                         }
                     }
                 }
-                if let gain = run.gainPercent {
-                    Text(gain >= 0 ? "Up \(gain)%" : "Down \(-gain)%")
+                if let gain = run.gainPercent, let through = run.gainThroughDay {
+                    Text(Copy.gainLine(gain, throughDay: through))
                         .font(.body.weight(.semibold))
                         .foregroundStyle(gain >= 0 ? Chalk.accent : Chalk.inkSoft)
                 }
@@ -201,47 +217,5 @@ struct ProfileRowView: View {
         .padding(.vertical, 12)
         .overlay(alignment: .bottom) { Rectangle().fill(Chalk.line).frame(height: 1) }
         .accessibilityElement(children: .combine)
-    }
-}
-
-struct BusySheet: View {
-    @Environment(ProgramController.self) private var controller
-
-    var body: some View {
-        let skipped = controller.setsInNextHour()
-        let resume = Copy.clock(controller.busyUntil())
-        VStack(alignment: .leading, spacing: 16) {
-            Text(Copy.busySheetTitle)
-                .font(Chalk.display(34))
-                .textCase(.uppercase)
-                .foregroundStyle(Chalk.ink)
-            if skipped.isEmpty {
-                Text(Copy.busyNothingSkipped(resume: resume))
-                    .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
-            } else {
-                Text(Copy.busySkipIntro(count: skipped.count))
-                    .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(skipped) { set in
-                        Text(Copy.skippedRow(time: set.alert.map { Copy.clock($0) } ?? "", reps: set.reps))
-                            .font(.body.weight(.semibold))
-                            .foregroundStyle(Chalk.ink)
-                    }
-                }
-                Text(Copy.busyResume(resume))
-                    .font(.subheadline)
-                    .foregroundStyle(Chalk.inkMuted)
-            }
-            Spacer(minLength: 8)
-            PrimaryButton(title: Copy.busyPause) { controller.confirmBusy() }
-            SecondaryButton(title: Copy.back, height: 56) { controller.showBusyConfirm = false }
-        }
-        .padding(24)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Chalk.ground.ignoresSafeArea())
-        .presentationDetents([.medium, .large])
-        .presentationBackground(Chalk.ground)
     }
 }

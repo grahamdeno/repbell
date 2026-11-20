@@ -16,9 +16,6 @@ extension Copy {
     static let notUnlocked = "Not unlocked"
     static let restorePurchase = "Restore purchase"
     static let restoreNone = "No purchase found for this Apple Account."
-    static let busyCaption = "Turns off alerts for an hour. Sets in that hour count as missed."
-    static let busySheetTitle = "Skip the next hour?"
-    static let busyPause = "Skip the next hour"
     static let undo = "Undo"
     static let didIt = "Done"
     static let dayDone = "Day done"
@@ -36,6 +33,11 @@ extension Copy {
     static let settingsTitle = "Settings"
     static let lastRun = "Last run"
     static let observations = "Patterns"
+    static let aheadTitle = "What's ahead"
+
+    static func gainLine(_ gain: Int, throughDay: Int) -> String {
+        gain >= 0 ? "Up \(gain)% from Day 1 to Day \(throughDay)" : "Down \(-gain)% from Day 1 to Day \(throughDay)"
+    }
     static let allTime = "All time"
     static let yourMax = "Your max"
     static let testOnDayOne = "Test on Day 1 to set it."
@@ -66,27 +68,12 @@ extension Copy {
     static let alertsFixHint = "Something above is Off. Open Settings, tap Rep Bell, then Notifications, and turn on Allow Notifications, Banners, Sounds and Time Sensitive."
     static let openSettings = "Open Settings"
 
-    static func busyNothingSkipped(resume: String) -> String {
-        "No sets fall in the next hour, so nothing is skipped. Alerts resume at \(resume)."
-    }
 
-    static func busySkipIntro(count: Int) -> String {
-        count == 1 ? "This set will count as missed:" : "These \(count) sets will count as missed:"
-    }
 
-    static func busyResume(_ resume: String) -> String {
-        "Alerts resume at \(resume). Your max and the rest of the program don't change, and you can undo this."
-    }
 
-    static func busyActive(_ until: String) -> String {
-        "Alerts paused until \(until)"
-    }
 
     static func doneSet(_ reps: Int) -> String {
         "I did \(reps)"
     }
 
-    static func skippedRow(time: String, reps: Int) -> String {
-        "\(time) · \(reps) push-ups"
-    }
 }

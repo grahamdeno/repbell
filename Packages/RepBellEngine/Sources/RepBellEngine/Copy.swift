@@ -49,7 +49,7 @@ public enum Copy {
 
     public static let done = "Done"
     public static let inTen = "In 10 min"
-    public static let busy = "Skip the next hour"
+    public static let busy = "Busy for 1 hour"
     public static let somethingHurts = "Something hurts?"
     public static let back = "Back"
     public static let share = "Share"
@@ -75,7 +75,8 @@ public enum Copy {
 
     public static let paused = "Paused"
     public static let resume = "Resume"
-    public static let startTest = "Start the test"
+    public static let startTest = "Log my test"
+    public static let testHeroBody = "Do as many as you can, good form. Then log the number."
     public static let todaysSets = "Today's sets"
     public static let wordmark = "Rep Bell"
 
@@ -154,6 +155,57 @@ public enum Copy {
 
     public static func busyConfirm(until: CivilDateTime) -> String {
         "Alerts off until \(clock(until)) Sets in this hour count as missed."
+    }
+
+    /// The strip shown while Busy runs: when alerts return and how many sets count as missed.
+    public static func busyStrip(until: CivilDateTime, skipped: Int) -> String {
+        let sets: String
+        switch skipped {
+        case 0: sets = "No sets missed"
+        case 1: sets = "1 set counts as missed"
+        default: sets = "\(skipped) sets count as missed"
+        }
+        return "Alerts off until \(clock(until)) · \(sets)"
+    }
+
+    /// The numbers Progress keeps (roadmap item 5, decision of 20 Nov 2026). `DailyLoopTests` checks the set.
+    public enum ProgressLabel {
+        public static let day = "Day"
+        public static let pushUps = "Push-ups"
+        public static let setsDone = "Sets done"
+        public static let setsMissed = "Sets missed"
+        public static let onTime = "On time"
+        public static let typicalResponse = "Typical response"
+        public static let perfectDays = "Perfect days in a row"
+        public static let snoozed = "Snoozed"
+        public static let all = [day, pushUps, setsDone, setsMissed, onTime, typicalResponse, perfectDays, snoozed]
+    }
+
+    /// The Day row on Progress. Day 15 is the final test, never "15 of 14".
+    public static func progressDay(_ number: Int, ended: Bool) -> String {
+        if ended { return "Done" }
+        if number >= 15 { return "Final test" }
+        return "\(max(1, number)) of 14"
+    }
+
+    /// Widget lines for each state (UX-15).
+    public static func widgetLines(_ state: WidgetState) -> (title: String, big: String, detail: String) {
+        switch state {
+        case .notStarted:
+            return (wordmark, "14", "Your max goes up.")
+        case .startsOn(let wake):
+            return ("Day 1", hourMinute(wake), "Test when you wake")
+        case .testToday(let day, let wake):
+            return ("Test today · Day \(day)", hourMinute(wake), "As many as you can")
+        case .next(let day, let at, let reps):
+            return (widgetNext(at), "\(reps)", widgetReps(reps: reps, day: day))
+        case .dayDone(let day, let done, let total, let reps):
+            return (dayProgress(day), "\(done) of \(total)", "\(grouped(reps)) push-ups today")
+        case .paused(let day):
+            return (paused, "Day \(day)", "Resume in the app")
+        case .finished:
+            return (wordmark, "15", "Run complete")
+        }
     }
 
     public static func hardDay(sets: Int, reps: Int) -> String {

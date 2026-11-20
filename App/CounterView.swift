@@ -88,7 +88,7 @@ struct CounterView: View {
                     originY = value.startLocation.y
                 }
                 let startY = originY ?? value.startLocation.y
-                let delta = Int(((startY - value.location.y) / 14).rounded())
+                let delta = CounterMath.reps(forDrag: Double(startY - value.location.y))
                 controller.draftCount = min(500, max(0, (originCount ?? 0) + delta))
             }
             .onEnded { _ in

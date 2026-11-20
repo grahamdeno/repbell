@@ -1,5 +1,6 @@
 import RepBellEngine
 import SwiftUI
+import UIKit
 
 /// Full-screen "you did it" moment after logging a set in the app.
 struct CelebrationView: View {
@@ -21,11 +22,11 @@ struct CelebrationView: View {
                 ZStack {
                     Circle()
                         .stroke(Chalk.accent.opacity(ring || reduceMotion ? 0 : 0.6), lineWidth: 6)
-                        .frame(width: 220, height: 220)
+                        .frame(width: celebration.dayComplete ? 280 : 220, height: celebration.dayComplete ? 280 : 220)
                         .scaleEffect(ring ? 1.6 : 0.8)
                     Circle()
                         .fill(Chalk.accent)
-                        .frame(width: 180, height: 180)
+                        .frame(width: celebration.dayComplete ? 230 : 180, height: celebration.dayComplete ? 230 : 180)
                         .scaleEffect(scale(0.2))
                     Image(systemName: "checkmark")
                         .font(.system(size: 88, weight: .black))
@@ -73,11 +74,14 @@ struct CelebrationView: View {
                 withAnimation(.easeOut(duration: 0.2)) { shown = true }
             } else {
                 withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) { shown = true }
-                withAnimation(.easeOut(duration: 0.9)) { ring = true }
+                // A finished day rings out more slowly.
+                withAnimation(.easeOut(duration: celebration.dayComplete ? 1.6 : 0.9)) { ring = true }
             }
         }
         .task {
-            try? await Task.sleep(for: .seconds(celebration.dayComplete ? 3.5 : 2.5))
+            // With VoiceOver on it waits for a tap, so it can be read in full.
+            guard let seconds = CelebrationTiming.autoDismiss(dayComplete: celebration.dayComplete, voiceOverRunning: UIAccessibility.isVoiceOverRunning) else { return }
+            try? await Task.sleep(for: .seconds(seconds))
             dismiss()
         }
     }

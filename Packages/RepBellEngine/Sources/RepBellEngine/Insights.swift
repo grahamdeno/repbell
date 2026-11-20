@@ -17,7 +17,12 @@ public struct RunInsights: Equatable, Sendable {
     }
 
     public var maxes: [Max] = []
+    /// Gain from the Day 1 test to the latest test, by the same whole-number rule as the result card.
     public var gainPercent: Int?
+    /// The test day the gain runs to (8 or 15).
+    public var gainThroughDay: Int?
+    /// Forward-looking facts for Progress (roadmap item 5). True, from the person's own log, never blaming.
+    public var ahead: [String] = []
     public var setsDone = 0
     public var setsMissed = 0
     public var onTimePercent: Int?
@@ -44,7 +49,8 @@ public enum InsightsEngine {
             }
         }
         if let first = out.maxes.first, let last = out.maxes.last, out.maxes.count > 1, first.reps > 0 {
-            out.gainPercent = Int((Double(last.reps - first.reps) / Double(first.reps) * 100).rounded())
+            out.gainPercent = Copy.percentGain(from: first.reps, to: last.reps)
+            out.gainThroughDay = last.day
         }
 
         let sets = resolved.days.filter { $0.number <= 14 }.flatMap(\.sets)
@@ -87,14 +93,53 @@ public enum InsightsEngine {
         }
 
         out.observations = observations(out, sets: sets, responses: responses)
+        out.ahead = ahead(resolved, now: now, insights: out)
         return out
+    }
+
+    /// What's coming and what the work so far adds up to. Facts only; nothing about missed sets.
+    static func ahead(_ resolved: ResolvedRun, now: CivilDateTime, insights: RunInsights) -> [String] {
+        var lines: [String] = []
+        let today = resolved.input.dayNumber(on: now.date)
+
+        let program = resolved.days.filter { $0.number <= 14 }
+        if let best = program.filter({ $0.loggedReps > 0 }).max(by: { $0.loggedReps < $1.loggedReps }) {
+            lines.append("Biggest day so far: Day \(best.number), \(Copy.grouped(best.loggedReps)) push-ups.")
+        }
+
+        if let today, today <= 14 {
+            let left = program.filter { $0.number >= today }.flatMap(\.sets).filter { $0.status == .upcoming }
+            let reps = left.reduce(0) { $0 + $1.reps }
+            // Week 2 numbers are only known once Day 8 has its max, so the count waits until then.
+            let weekTwoKnown = today > 8 || resolved.day(8)?.sets.isEmpty == false
+            if !left.isEmpty && weekTwoKnown {
+                let sets = left.count == 1 ? "1 set" : "\(left.count) sets"
+                lines.append("\(sets) left in this run, about \(Copy.grouped(reps)) push-ups, before the final test.")
+            }
+            if today < 14, let next = resolved.day(today + 1) {
+                if next.isTest {
+                    if next.number != 8 || resolved.input.retestEnabled {
+                        lines.append("Tomorrow, Day \(next.number): your re-test.")
+                    }
+                } else if !next.sets.isEmpty {
+                    lines.append("Tomorrow, Day \(next.number): \(next.sets.count) sets of \(next.reps).")
+                }
+            } else if today == 14 {
+                lines.append("Tomorrow: the final test.")
+            }
+            let daysLeft = 15 - today
+            if daysLeft > 1 {
+                lines.append("\(daysLeft) days to the final test.")
+            }
+        }
+        return lines
     }
 
     private static func observations(_ insights: RunInsights, sets: [ScheduledSet], responses: [(minutes: Int, hour: Int)]) -> [RunInsights.Observation] {
         var notes: [RunInsights.Observation] = []
 
         if let gain = insights.gainPercent, gain > 0, let last = insights.maxes.last {
-            notes.append(.init(text: "Your max is up \(gain)% since Day 1, to \(last.reps).", link: nil))
+            notes.append(.init(text: "Your max is up \(gain)% from Day 1 to Day \(last.day), to \(last.reps).", link: nil))
         }
 
         // Where the misses cluster.
@@ -103,7 +148,7 @@ public enum InsightsEngine {
             let evening = missed.filter { $0.grid.minutes >= 17 * 60 }.count
             let morning = missed.filter { $0.grid.minutes < 12 * 60 }.count
             if Double(evening) / Double(missed.count) >= 0.5 {
-                notes.append(.init(text: "Most of your missed sets come after 5 pm. An earlier end of day would cut them.", link: .schedule))
+                notes.append(.init(text: "Most of your missed sets come after 5 p.m. An earlier end of day would cut them.", link: .schedule))
             } else if Double(morning) / Double(missed.count) >= 0.5 {
                 notes.append(.init(text: "Most of your missed sets come before noon. A later wake time would cut them.", link: .schedule))
             }

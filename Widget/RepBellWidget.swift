@@ -18,6 +18,7 @@ struct NextSetEntry: TimelineEntry {
     var reps: String
     var detail: String
     var day: String
+    var refreshAt: Date? = nil
 }
 
 struct NextSetProvider: TimelineProvider {
@@ -31,31 +32,25 @@ struct NextSetProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<NextSetEntry>) -> Void) {
         let current = entry()
-        let refresh = current.date.addingTimeInterval(15 * 60)
+        // Refresh at the next set's time, or in 15 minutes, whichever comes first.
+        let soon = Date().addingTimeInterval(15 * 60)
+        let refresh = min(current.refreshAt ?? soon, soon)
         completion(Timeline(entries: [current], policy: .after(refresh)))
     }
 
     private func entry() -> NextSetEntry {
         FontRegistration.register(bundle: .main)
         let now = Date()
-        guard let library = LibraryDisk.load().current else {
-            return NextSetEntry(date: now, title: Copy.wordmark, reps: "14", detail: "Your max goes up.", day: "")
+        let state = WidgetState.make(run: LibraryDisk.load().current, now: CivilDateTime.local(now))
+        let lines = Copy.widgetLines(state)
+        var refreshAt: Date?
+        var day = ""
+        if case .next(let number, let at, _) = state {
+            // Only a future set time; an overdue set waits for the regular refresh.
+            refreshAt = at.foundationDate().flatMap { $0 > now ? $0.addingTimeInterval(60) : nil }
+            day = Copy.dayProgress(number)
         }
-        let moment = CivilDateTime.local(now)
-        let resolved = ScheduleEngine.resolve(library.input, now: library.pausedAt ?? moment)
-        guard let number = library.input.dayNumber(on: moment.date), let day = resolved.day(number) else {
-            return NextSetEntry(date: now, title: "Day 1", reps: Copy.hourMinute(library.input.wake), detail: Copy.withYourTest, day: "")
-        }
-        if let next = day.sets.first(where: { $0.status == .upcoming }), let alert = next.alert {
-            return NextSetEntry(
-                date: alert.foundationDate() ?? now,
-                title: Copy.widgetNext(alert),
-                reps: "\(next.reps)",
-                detail: Copy.widgetReps(reps: next.reps, day: number),
-                day: Copy.dayProgress(number)
-            )
-        }
-        return NextSetEntry(date: now, title: Copy.dayProgress(number), reps: "\(day.doneCount)", detail: "of \(day.sets.count)", day: Copy.dayProgress(number))
+        return NextSetEntry(date: now, title: lines.title, reps: lines.big, detail: lines.detail, day: day, refreshAt: refreshAt)
     }
 }
 
@@ -108,7 +103,7 @@ struct NextSetView: View {
                     .foregroundStyle(Chalk.accent)
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
-                Text(entry.title)
+                Text(entry.day.isEmpty ? entry.detail : entry.title)
                     .font(.footnote)
                     .foregroundStyle(Chalk.ink)
                     .lineLimit(2)
