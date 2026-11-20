@@ -13,7 +13,7 @@ struct StudioView: View {
         let others = library.sessions
             .filter { $0.id != suggested?.id }
             .sorted { settings.missingGear($0).count < settings.missingGear($1).count }
-        ScreenChrome(top: 16) {
+        ScreenChrome(top: 16, scrolls: false) {
             VStack(alignment: .leading, spacing: 0) {
                 StudioTopBar(title: StudioCopy.studio) { controller.screen = controller.library.current == nil ? .promise : .today }
                 ScrollView {
@@ -28,7 +28,7 @@ struct StudioView: View {
                                             .textCase(.uppercase)
                                             .foregroundStyle(Chalk.onAccent)
                                         Text(StudioCopy.meta(suggested))
-                                            .font(.system(size: 15, weight: .medium))
+                                            .font(.subheadline.weight(.medium))
                                             .foregroundStyle(Chalk.onAccent.opacity(0.8))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,16 +86,16 @@ private struct StudioRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
                     Text(session.name)
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.headline)
                         .foregroundStyle(missing.isEmpty ? Chalk.ink : Chalk.inkMuted)
                     if Features.payment && session.free {
                         Text(StudioCopy.free)
-                            .font(.system(size: 12, weight: .semibold))
+                            .font(.caption.weight(.semibold))
                             .foregroundStyle(Chalk.accent)
                     }
                 }
                 Text(missing.isEmpty ? StudioCopy.meta(session) : StudioCopy.standIns(session))
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             }
             Spacer()
@@ -119,17 +119,17 @@ struct StudioSessionView: View {
 
     var body: some View {
         if let session = StudioLibrary.shared.session(sessionID) {
-            ScreenChrome(top: 16) {
+            ScreenChrome(top: 16, scrolls: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     StudioTopBar(title: session.name) { controller.screen = .studio }
                     ScrollView {
                         VStack(alignment: .leading, spacing: 18) {
                             Text(StudioCopy.meta(session))
-                                .font(.system(size: 15))
+                                .font(.subheadline)
                                 .foregroundStyle(Chalk.inkSoft)
                             if !settings.easyOn.isEmpty {
                                 Text(StudioCopy.easyNote(settings.easyOn))
-                                    .font(.system(size: 14))
+                                    .font(.subheadline)
                                     .foregroundStyle(Chalk.inkMuted)
                             }
                             VStack(spacing: 0) {
@@ -137,15 +137,15 @@ struct StudioSessionView: View {
                                     let move = settings.resolve(item.id)
                                     HStack(alignment: .firstTextBaseline, spacing: 12) {
                                         Text("\(index + 1)")
-                                            .font(.system(size: 14, weight: .semibold).monospacedDigit())
+                                            .font(.subheadline.weight(.semibold).monospacedDigit())
                                             .foregroundStyle(Chalk.accent)
                                             .frame(width: 26, alignment: .leading)
                                         Text(move?.movement.name ?? item.id)
-                                            .font(.system(size: 16))
+                                            .font(.body)
                                             .foregroundStyle(Chalk.ink)
                                         Spacer()
                                         Text(StudioCopy.clock(item.seconds))
-                                            .font(.system(size: 15).monospacedDigit())
+                                            .font(.subheadline.monospacedDigit())
                                             .foregroundStyle(Chalk.inkMuted)
                                     }
                                     .padding(.vertical, 10)
@@ -153,7 +153,7 @@ struct StudioSessionView: View {
                                 }
                             }
                             Text(StudioCopy.safety)
-                                .font(.system(size: 13))
+                                .font(.footnote)
                                 .foregroundStyle(Chalk.inkMuted)
                         }
                         .padding(.vertical, 12)
@@ -233,7 +233,7 @@ struct StudioPlayerView: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Text("\(session.name) · \(movesBefore) of \(movesTotal)")
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                     Spacer()
                     Button {
@@ -242,7 +242,7 @@ struct StudioPlayerView: View {
                         controller.screen = .studioSession(session.id)
                     } label: {
                         Image(systemName: "xmark")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
                             .foregroundStyle(Chalk.inkSoft)
                             .frame(width: 44, height: 44)
                     }
@@ -252,10 +252,7 @@ struct StudioPlayerView: View {
                 ProgressView(value: Double(index), total: Double(max(1, session.timeline.count)))
                     .tint(Chalk.accent)
                 Text(StudioCopy.stepLabel(step))
-                    .font(Chalk.display(22, weight: .bold))
-                    .tracking(0.8)
-                    .textCase(.uppercase)
-                    .foregroundStyle(step.isMove ? Chalk.accent : Chalk.inkMuted)
+                    .eyebrow(step.isMove ? Chalk.accent : Chalk.inkMuted)
                 MascotStage(movement: move?.movement, sessionID: session.id, resting: !step.isMove)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .frame(maxWidth: .infinity)
@@ -270,12 +267,12 @@ struct StudioPlayerView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         ForEach(move.cues, id: \.self) { cue in
                             Text(cue)
-                                .font(.system(size: 16))
+                                .font(.body)
                                 .foregroundStyle(Chalk.inkSoft)
                         }
                         if let note = move.note {
                             Text(note)
-                                .font(.system(size: 14, weight: .medium))
+                                .font(.subheadline.weight(.medium))
                                 .foregroundStyle(Chalk.accent)
                         }
                     }
@@ -284,9 +281,14 @@ struct StudioPlayerView: View {
                 HStack(alignment: .center) {
                     Text(StudioCopy.clock(remaining))
                         .font(Chalk.display(72))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                         .monospacedDigit()
                         .foregroundStyle(paused ? Chalk.inkMuted : Chalk.ink)
                     Spacer()
+                    controlButton("backward.end.fill", label: StudioCopy.previous) { jump(session, by: -1) }
+                        .disabled(index == 0)
+                        .opacity(index == 0 ? 0.4 : 1)
                     controlButton(paused ? "play.fill" : "pause.fill", label: paused ? StudioCopy.resume : StudioCopy.pause) {
                         paused.toggle()
                         Haptics.play(.tap)
@@ -295,7 +297,7 @@ struct StudioPlayerView: View {
                 }
                 if let next = upcomingName(session) {
                     Text(StudioCopy.next(next))
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                 }
             }
@@ -307,17 +309,21 @@ struct StudioPlayerView: View {
                 if value.translation.width > 60 { jump(session, by: -1) }
             }
         )
+        .accessibilityAction(named: StudioCopy.previous) { jump(session, by: -1) }
+        .accessibilityAction(named: paused ? StudioCopy.resume : StudioCopy.pause) { paused.toggle() }
+        .accessibilityAction(named: StudioCopy.skip) { jump(session, by: 1) }
     }
 
     private func controlButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: 26, weight: .semibold))
+                .font(.title2.weight(.semibold))
                 .foregroundStyle(Chalk.ink)
                 .frame(width: 64, height: 64)
                 .overlay(Circle().stroke(Chalk.lineStrong, lineWidth: 1.5))
+                .contentShape(Circle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressFade())
         .accessibilityLabel(label)
     }
 
@@ -407,6 +413,7 @@ struct MascotStage: View {
     var movement: StudioMovement?
     var sessionID: String
     var resting: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
@@ -414,7 +421,7 @@ struct MascotStage: View {
             Image(systemName: symbol)
                 .font(.system(size: 110, weight: .regular))
                 .foregroundStyle(resting ? Chalk.inkFaint : Chalk.accent)
-                .symbolEffect(.pulse, isActive: !resting)
+                .symbolEffect(.pulse, isActive: !resting && !reduceMotion)
         }
         .accessibilityHidden(true)
     }
@@ -436,6 +443,7 @@ struct MascotStage: View {
 
 struct StudioDoneView: View {
     @Environment(ProgramController.self) private var controller
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     var session: StudioSession
     var seconds: Int
     @State private var shown = false
@@ -446,18 +454,19 @@ struct StudioDoneView: View {
             VStack(spacing: 20) {
                 Spacer()
                 ZStack {
-                    Circle().fill(Chalk.accent).frame(width: 180, height: 180).scaleEffect(shown ? 1 : 0.2)
+                    Circle().fill(Chalk.accent).frame(width: 180, height: 180).scaleEffect(shown || reduceMotion ? 1 : 0.2)
                     Image(systemName: "checkmark")
                         .font(.system(size: 88, weight: .black))
                         .foregroundStyle(Chalk.onAccent)
-                        .scaleEffect(shown ? 1 : 0.1)
+                        .scaleEffect(shown || reduceMotion ? 1 : 0.1)
                 }
+                .accessibilityHidden(true)
                 Text(StudioCopy.sessionDone)
                     .font(Chalk.display(56))
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
                 Text(StudioCopy.doneLine(session, seconds: seconds))
-                    .font(.system(size: 17))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                 Spacer()
                 PrimaryButton(title: StudioCopy.backToToday) {
@@ -467,7 +476,9 @@ struct StudioDoneView: View {
                 .padding(.bottom, 24)
             }
         }
-        .onAppear { withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { shown = true } }
+        .onAppear {
+            withAnimation(reduceMotion ? .easeOut(duration: 0.2) : .spring(response: 0.45, dampingFraction: 0.6)) { shown = true }
+        }
     }
 }
 
@@ -481,7 +492,7 @@ struct StudioTopBar: View {
         HStack(spacing: 8) {
             Button(action: back) {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.title3.weight(.semibold))
                     .foregroundStyle(Chalk.inkSoft)
                     .frame(width: 44, height: 44, alignment: .leading)
             }
@@ -503,10 +514,7 @@ struct StudioEyebrow: View {
     init(_ text: String) { self.text = text }
     var body: some View {
         Text(text)
-            .font(Chalk.display(18, weight: .bold))
-            .tracking(0.8)
-            .textCase(.uppercase)
-            .foregroundStyle(Chalk.inkMuted)
+            .eyebrow(Chalk.inkMuted)
     }
 }
 
@@ -517,11 +525,8 @@ struct StudioProfileSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(StudioCopy.studio)
-                .font(Chalk.display(22, weight: .bold))
-                .tracking(0.8)
-                .textCase(.uppercase)
-                .foregroundStyle(Chalk.inkMuted)
-            Text("\(StudioCopy.iHave) · \(settings.gear.count)").font(.system(size: 16, weight: .semibold)).foregroundStyle(Chalk.ink)
+                .eyebrow(Chalk.inkMuted)
+            Text("\(StudioCopy.iHave) · \(settings.gear.count)").font(.body.weight(.semibold)).foregroundStyle(Chalk.ink)
             ForEach(StudioSettings.allGear, id: \.self) { item in
                 Toggle(StudioSettings.gearLabel(item), isOn: Binding(
                     get: { settings.gear.contains(item) },
@@ -530,7 +535,7 @@ struct StudioProfileSection: View {
                 .tint(Chalk.accent)
                 .foregroundStyle(Chalk.inkSoft)
             }
-            Text(StudioCopy.goEasyOn).font(.system(size: 16, weight: .semibold)).foregroundStyle(Chalk.ink)
+            Text(StudioCopy.goEasyOn).font(.body.weight(.semibold)).foregroundStyle(Chalk.ink)
             ForEach(StudioSettings.zones, id: \.self) { zone in
                 Toggle(StudioSettings.zoneLabel(zone), isOn: Binding(
                     get: { settings.easyOn.contains(zone) },
@@ -555,7 +560,7 @@ struct StudioProfileSection: View {
             }
             if !settings.log.isEmpty {
                 Text(StudioCopy.sessionsDone(settings.log.count, minutes: settings.log.reduce(0) { $0 + $1.minutes }))
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             }
         }
@@ -580,6 +585,7 @@ enum StudioCopy {
     static let pause = "Pause"
     static let resume = "Resume"
     static let skip = "Skip"
+    static let previous = "Previous"
     static let end = "End session"
     static let sessionDone = "Session done"
     static let backToToday = "Done"
@@ -594,7 +600,7 @@ enum StudioCopy {
         let sets = count == 1 ? "A set comes due" : "\(count) sets come due"
         return "\(sets) during this session. Held sets wait on Today until the next one, so you can do them after."
     }
-    static let safety = "Stop if you feel sharp pain or dizziness. Every hard move has an easier version: swipe or tap Skip, or set Go easy on in Profile."
+    static let safety = "Stop if you feel sharp pain or dizziness. Every hard move has an easier version: swipe or tap Skip, or set Go easy on in Settings."
 
     static func meta(_ s: StudioSession) -> String {
         let gear = s.gear.filter { $0 != "mat" }.map { StudioSettings.gearLabel($0).lowercased() }

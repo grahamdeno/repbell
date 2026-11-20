@@ -28,13 +28,11 @@ struct TodayView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(alignment: .firstTextBaseline) {
                         Text(model.eyebrow)
-                            .font(Chalk.display(22, weight: .bold))
-                            .tracking(0.8)
-                            .textCase(.uppercase)
+                            .eyebrow()
                         Spacer()
                         Button { controller.screen = .profile } label: {
                             Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.system(size: 24, weight: .regular))
+                                .font(.title2)
                                 .foregroundStyle(Chalk.inkSoft)
                                 .frame(width: 44, height: 44)
                         }
@@ -49,23 +47,23 @@ struct TodayView: View {
                 hero(model)
                 if let fallback = model.fallback {
                     Text(fallback)
-                        .font(.system(size: 15))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkSoft)
                 }
                 if let title = model.tallyTitle, let detail = model.tallyDetail {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text(title)
-                                .font(.system(size: 15, weight: .semibold))
+                                .font(.subheadline.weight(.semibold))
                             Spacer()
                             Text(detail)
-                                .font(.system(size: 14))
+                                .font(.subheadline)
                                 .foregroundStyle(Chalk.inkMuted)
                         }
                         SetTally(marks: model.marks)
                         if let soFar = model.soFar {
                             Text(soFar)
-                                .font(.system(size: 14))
+                                .font(.subheadline)
                                 .foregroundStyle(Chalk.inkMuted)
                         }
                     }
@@ -82,7 +80,7 @@ struct TodayView: View {
         case .waiting(let eyebrow, let time, let title, let detail):
             VStack(alignment: .leading, spacing: 8) {
                 Text(eyebrow)
-                    .font(.system(size: 15, weight: .medium))
+                    .font(.subheadline.weight(.medium))
                     .foregroundStyle(Chalk.inkMuted)
                 Text(time)
                     .font(Chalk.display(150))
@@ -93,7 +91,7 @@ struct TodayView: View {
                     .font(Chalk.display(44))
                     .textCase(.uppercase)
                 Text(detail)
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
             }
         case .test:
@@ -103,13 +101,13 @@ struct TodayView: View {
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
                 Text(Copy.counterPrompt)
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
             }
         case .next(let time, let reps, let line):
             VStack(alignment: .leading, spacing: 4) {
                 Text(time)
-                    .font(.system(size: 15, weight: .medium))
+                    .font(.subheadline.weight(.medium))
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(reps)")
                     .font(Chalk.display(160))
@@ -131,11 +129,11 @@ struct TodayView: View {
                     Button { controller.screen = .studioSession(suggestion.id) } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(StudioCopy.wantMore)
-                                .font(.system(size: 14))
+                                .font(.subheadline)
                                 .foregroundStyle(Chalk.inkMuted)
                             HStack {
                                 Text("\(suggestion.name) · \(suggestion.minutes) min")
-                                    .font(.system(size: 17, weight: .semibold))
+                                    .font(.body.weight(.semibold))
                                     .foregroundStyle(Chalk.ink)
                                 Spacer()
                                 Image(systemName: "arrow.right")
@@ -155,7 +153,7 @@ struct TodayView: View {
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.accent)
                 Text(Copy.pauseDetail(day: day))
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
             }
         }
@@ -176,7 +174,7 @@ struct TodayView: View {
                 if let end = controller.activeBusyEnd() {
                     HStack {
                         Text(Copy.busyActive(Copy.clock(end)))
-                            .font(.system(size: 15, weight: .medium))
+                            .font(.subheadline.weight(.medium))
                             .foregroundStyle(Chalk.inkSoft)
                         Spacer()
                         TextLink(title: Copy.undo) { controller.undoBusy() }
@@ -186,7 +184,7 @@ struct TodayView: View {
                 } else if model.showBusy {
                     SecondaryButton(title: Copy.busy, height: 56) { controller.showBusyConfirm = true }
                     Text(Copy.busyCaption)
-                        .font(.system(size: 13))
+                        .font(.footnote)
                         .foregroundStyle(Chalk.inkMuted)
                         .multilineTextAlignment(.center)
                 }
@@ -195,18 +193,18 @@ struct TodayView: View {
                 Button { controller.screen = .studio } label: {
                     HStack(spacing: 10) {
                         Image(systemName: "dumbbell")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.body.weight(.semibold))
                             .foregroundStyle(Chalk.accent)
                         Text(StudioCopy.studio)
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.body.weight(.semibold))
                             .foregroundStyle(Chalk.ink)
                         Spacer()
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Chalk.inkFaint)
                     }
                     .padding(.horizontal, 16)
-                    .frame(height: 52)
+                    .frame(minHeight: 52)
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.line, lineWidth: 1.5))
                     .contentShape(Rectangle())
                 }
@@ -225,33 +223,52 @@ struct TodayView: View {
 
 private struct SetTally: View {
     var marks: [SetMark]
+    @Environment(\.colorSchemeContrast) private var contrast
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 11)
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 6) {
+        LazyVGrid(columns: columns, alignment: .center, spacing: 6) {
             ForEach(Array(marks.enumerated()), id: \.offset) { _, mark in
                 markView(mark)
+                    .frame(height: 30)
             }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Copy.todaysSets)
+        .accessibilityValue(Copy.tallySpoken(marks: marks.map(\.spoken)))
     }
 
     @ViewBuilder
     private func markView(_ mark: SetMark) -> some View {
+        let radius = ChalkTokens.Radius.set
         switch mark {
         case .done:
-            RoundedRectangle(cornerRadius: 6).fill(Chalk.ink).frame(height: 22)
+            RoundedRectangle(cornerRadius: radius).fill(Chalk.ink).frame(height: 22)
         case .current:
-            RoundedRectangle(cornerRadius: 6).fill(Chalk.accent).frame(height: 22)
+            // Taller, with a ring, so the current set never relies on color alone.
+            RoundedRectangle(cornerRadius: radius)
+                .fill(Chalk.accent)
+                .frame(height: 30)
+                .overlay(RoundedRectangle(cornerRadius: radius).stroke(Chalk.ink, lineWidth: 2))
         case .upcoming:
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Chalk.lineStrong, lineWidth: 1.5)
+            RoundedRectangle(cornerRadius: radius)
+                .stroke(Chalk.markOutline(contrast), lineWidth: 1.5)
                 .frame(height: 22)
         case .missed:
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Chalk.inkFaint, style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
+            RoundedRectangle(cornerRadius: radius)
+                .stroke(Chalk.markOutline(contrast), style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
                 .frame(height: 22)
+        }
+    }
+}
+
+extension SetMark {
+    var spoken: Copy.SpokenMark {
+        switch self {
+        case .done: .done
+        case .missed: .missed
+        case .current: .current
+        case .upcoming: .upcoming
         }
     }
 }

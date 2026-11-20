@@ -133,6 +133,21 @@ public enum Copy {
         "\(done) of \(total) done, \(missed) missed"
     }
 
+    public enum SpokenMark: Sendable { case done, missed, current, upcoming }
+
+    /// What VoiceOver reads for today's tally, for example "4 done, 1 missed, set 6 next".
+    public static func tallySpoken(marks: [SpokenMark]) -> String {
+        let done = marks.filter { $0 == .done }.count
+        let missed = marks.filter { $0 == .missed }.count
+        var parts = ["\(done) done", "\(missed) missed"]
+        if let current = marks.firstIndex(of: .current) {
+            parts.append("set \(current + 1) next")
+        } else if !marks.isEmpty {
+            parts.append("no sets left")
+        }
+        return parts.joined(separator: ", ")
+    }
+
     public static func repsSoFar(_ reps: Int) -> String {
         "\(grouped(reps)) push-ups so far today"
     }

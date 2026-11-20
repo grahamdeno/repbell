@@ -17,7 +17,7 @@ struct SettingsView: View {
     @State private var restoring = false
 
     var body: some View {
-        ScreenChrome(top: 28) {
+        ScreenChrome(top: 28, scrolls: false) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(Copy.settingsTitle)
                     .font(Chalk.display(48))
@@ -38,7 +38,7 @@ struct SettingsView: View {
                             if let run = controller.library.current, !run.ended {
                                 if run.pausedAt == nil {
                                     Text(Copy.pauseBody)
-                                        .font(.system(size: 15))
+                                        .font(.subheadline)
                                         .foregroundStyle(Chalk.inkSoft)
                                     SecondaryButton(title: Copy.pauseTitle, height: 56) {
                                         controller.pause()
@@ -52,7 +52,7 @@ struct SettingsView: View {
                                 }
                             }
                             Text(Copy.startOverBody)
-                                .font(.system(size: 15))
+                                .font(.subheadline)
                                 .foregroundStyle(Chalk.inkSoft)
                                 .padding(.top, 8)
                             SecondaryButton(title: Copy.startOverTitle, height: 56) { confirmStartOver = true }
@@ -96,7 +96,7 @@ struct SettingsView: View {
                 .tint(Chalk.accent)
             if let preview {
                 Text(Copy.windowPreview(before: preview.before, after: preview.after, last: preview.last))
-                    .font(.system(size: 15))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkSoft)
                     .fixedSize(horizontal: false, vertical: true)
                 PrimaryButton(title: Copy.saveTimes) {
@@ -106,11 +106,11 @@ struct SettingsView: View {
                 }
             } else if let savedNote {
                 Text(savedNote)
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             } else {
                 Text(Copy.scheduleChangeNote)
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             }
         }
@@ -130,7 +130,7 @@ struct SettingsView: View {
             ProfileRows(items: alertRows)
             if alertRows.contains(where: { $0.value == "Off" || $0.value == "Not asked yet" || $0.value.hasPrefix("On (") }) {
                 Text(Copy.alertsFixHint)
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkSoft)
                 TextLink(title: Copy.openSettings) {
                     if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
@@ -139,7 +139,7 @@ struct SettingsView: View {
                 }
             }
             Text(Copy.alertsCheckBody)
-                .font(.system(size: 14))
+                .font(.subheadline)
                 .foregroundStyle(Chalk.inkMuted)
             SecondaryButton(title: Copy.sendTestAlert, height: 56) {
                 Task {
@@ -150,7 +150,7 @@ struct SettingsView: View {
             }
             if let testMessage {
                 Text(testMessage)
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             }
         }
@@ -177,7 +177,7 @@ struct SettingsView: View {
                 }
                 if let message = controller.unlockMessage {
                     Text(message)
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                 }
             }

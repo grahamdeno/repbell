@@ -18,18 +18,18 @@ struct WatchRoot: View {
             } else {
                 VStack(spacing: 6) {
                     Text("14")
-                        .font(.custom("BarlowCondensed-ExtraBold", size: 48))
-                        .foregroundStyle(Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255))
+                        .font(Chalk.display(48, weight: .extraBold))
+                        .foregroundStyle(Chalk.accent)
                     Text("Open Rep Bell on iPhone.")
-                        .font(.system(size: 13))
-                        .foregroundStyle(Color(red: 0xC9 / 255, green: 0xC6 / 255, blue: 0xC0 / 255))
+                        .font(.footnote)
+                        .foregroundStyle(Chalk.inkSoft)
                         .multilineTextAlignment(.center)
                 }
                 .padding(8)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black)
+        .background(Chalk.groundWatch)
     }
 }
 
@@ -42,31 +42,31 @@ private struct WatchAlert: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Set \(set.index) of \(total)")
-                .font(.system(size: 13))
-                .foregroundStyle(Color(red: 0xA3 / 255, green: 0xA0 / 255, blue: 0x9A / 255))
+                .font(.footnote)
+                .foregroundStyle(Chalk.inkMuted)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text("\(set.reps)")
-                    .font(.custom("BarlowCondensed-ExtraBold", size: 72))
-                    .foregroundStyle(Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255))
+                    .font(Chalk.display(72, weight: .extraBold))
+                    .foregroundStyle(Chalk.accent)
                 Text("now")
-                    .font(.custom("BarlowCondensed-Bold", size: 24))
+                    .font(Chalk.display(24, weight: .bold))
                     .textCase(.uppercase)
             }
             Spacer(minLength: 4)
             Button(Copy.done) { model.done(day: day, index: set.index) }
-                .font(.system(size: 16, weight: .semibold))
+                .font(.body.weight(.semibold))
                 .frame(maxWidth: .infinity)
-                .frame(height: 44)
-                .background(Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255))
-                .foregroundStyle(Color(red: 0x12 / 255, green: 0x12 / 255, blue: 0x12 / 255))
+                .frame(minHeight: 44)
+                .background(Chalk.accent)
+                .foregroundStyle(Chalk.onAccent)
                 .clipShape(Capsule())
                 .buttonStyle(.plain)
             Button(Copy.inTen) { model.snooze(day: day, index: set.index) }
-                .font(.system(size: 16, weight: .medium))
+                .font(.body.weight(.medium))
                 .frame(maxWidth: .infinity)
-                .frame(height: 44)
-                .background(Color(red: 0x26 / 255, green: 0x26 / 255, blue: 0x24 / 255))
-                .foregroundStyle(Color(red: 0xF2 / 255, green: 0xF0 / 255, blue: 0xEB / 255))
+                .frame(minHeight: 44)
+                .background(Chalk.watchSecondary)
+                .foregroundStyle(Chalk.ink)
                 .clipShape(Capsule())
                 .buttonStyle(.plain)
         }
@@ -85,16 +85,16 @@ private struct WatchToday: View {
         let next = day?.sets.first { $0.status == .upcoming }
         VStack(alignment: .leading, spacing: 2) {
             Text(Copy.dayProgress(min(number, 14)))
-                .font(.custom("BarlowCondensed-Bold", size: 17))
+                .font(Chalk.display(17, weight: .bold))
                 .textCase(.uppercase)
-                .foregroundStyle(Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255))
+                .foregroundStyle(Chalk.accent)
             if let next, let alert = next.alert {
                 Text("Next at \(Copy.clock(alert))")
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color(red: 0xA3 / 255, green: 0xA0 / 255, blue: 0x9A / 255))
+                    .font(.footnote)
+                    .foregroundStyle(Chalk.inkMuted)
                 Text("\(next.reps)")
-                    .font(.custom("BarlowCondensed-ExtraBold", size: 64))
-                    .foregroundStyle(Color(red: 0xF2 / 255, green: 0xF0 / 255, blue: 0xEB / 255))
+                    .font(Chalk.display(64, weight: .extraBold))
+                    .foregroundStyle(Chalk.ink)
             }
             Spacer(minLength: 4)
             if let day {
@@ -106,14 +106,14 @@ private struct WatchToday: View {
                             .frame(height: 8)
                             .overlay {
                                 if set.status == .missed {
-                                    Capsule().stroke(Color(red: 0x6E / 255, green: 0x6B / 255, blue: 0x66 / 255), style: StrokeStyle(lineWidth: 1, dash: [2, 1]))
+                                    Capsule().stroke(Chalk.inkFaint, style: StrokeStyle(lineWidth: 1, dash: [2, 1]))
                                 }
                             }
                     }
                 }
                 Text(Copy.watchTally(done: day.doneCount, total: day.sets.count, reps: day.loggedReps))
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color(red: 0xA3 / 255, green: 0xA0 / 255, blue: 0x9A / 255))
+                    .font(.footnote)
+                    .foregroundStyle(Chalk.inkMuted)
             }
         }
         .padding(.horizontal, 4)
@@ -122,8 +122,8 @@ private struct WatchToday: View {
 
     private func fill(_ set: ScheduledSet, current: Int?) -> Color {
         if set.status == .missed { return .clear }
-        if set.index == current { return Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255) }
-        if set.status == .done { return Color(red: 0xF2 / 255, green: 0xF0 / 255, blue: 0xEB / 255) }
-        return Color(red: 0x2E / 255, green: 0x2D / 255, blue: 0x2A / 255)
+        if set.index == current { return Chalk.accent }
+        if set.status == .done { return Chalk.ink }
+        return Chalk.line
     }
 }

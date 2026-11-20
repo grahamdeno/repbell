@@ -66,7 +66,7 @@ enum TestAlarms {
         let attributes = AlarmAttributes<RepBellAlarmMetadata>(
             presentation: AlarmPresentation(alert: alert),
             metadata: RepBellAlarmMetadata(day: day),
-            tintColor: Color(red: 1, green: 106.0 / 255, blue: 19.0 / 255)
+            tintColor: Chalk.accent
         )
         let configuration = AlarmManager.AlarmConfiguration.alarm(
             schedule: .fixed(date),
