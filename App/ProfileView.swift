@@ -53,8 +53,13 @@ struct ProfileView: View {
                         if !model.allTime.isEmpty {
                             ProfileSection(Copy.allTime) { StatGrid(stats: model.allTime) }
                         }
-                        if StudioFeature.enabled, !model.studio.isEmpty {
-                            ProfileSection(StudioCopy.studio) { StatGrid(stats: model.studio) }
+                        if StudioFeature.enabled {
+                            ProfileSection(StudioCopy.studio) {
+                                if !model.studio.isEmpty {
+                                    StatGrid(stats: model.studio)
+                                }
+                                SettingsRow(title: StudioCopy.openWorkouts) { controller.open(.workouts) }
+                            }
                         }
                         if !model.record.isEmpty {
                             ProfileSection(Copy.yourRecord) { ProfileRows(items: model.record) }

@@ -11,8 +11,9 @@ struct StudioView: View {
     var body: some View {
         let suggested = library.session(controller.studioSuggestion())
         let others = library.sessions
-            .filter { $0.id != suggested?.id }
+            .filter { $0.id != suggested?.id && !controller.workoutHeld($0.id) }
             .sorted { settings.missingGear($0).count < settings.missingGear($1).count }
+        let held = library.sessions.filter { controller.workoutHeld($0.id) }
         ScreenChrome(top: 16, scrolls: false) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .center) {
@@ -72,6 +73,19 @@ struct StudioView: View {
                                         .buttonStyle(.plain)
                                 }
                             }
+                            if !held.isEmpty {
+                                StudioEyebrow(StudioCopy.afterDay15)
+                                    .padding(.top, 16)
+                                Text(StudioCopy.heldReason)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Chalk.inkMuted)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .padding(.top, 4)
+                                ForEach(held) { session in
+                                    Button { open(session) } label: { StudioRow(session: session, held: true) }
+                                        .buttonStyle(PressFade())
+                                }
+                            }
                         }
                     }
                     .padding(.vertical, 12)
@@ -89,23 +103,24 @@ struct StudioView: View {
 
 private struct StudioRow: View {
     var session: StudioSession
+    var held = false
     private var settings: StudioSettings { StudioSettings.shared }
 
     var body: some View {
-        let missing = settings.missingGear(session)
+        let missing = held ? [] : settings.missingGear(session)
         HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
                     Text(session.name)
                         .font(.headline)
-                        .foregroundStyle(missing.isEmpty ? Chalk.ink : Chalk.inkMuted)
+                        .foregroundStyle(missing.isEmpty && !held ? Chalk.ink : Chalk.inkMuted)
                     if Features.payment && session.free {
                         Text(StudioCopy.free)
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(Chalk.accent)
                     }
                 }
-                Text(missing.isEmpty ? StudioCopy.meta(session) : StudioCopy.standIns(session))
+                Text(held ? StudioCopy.heldShort : (missing.isEmpty ? StudioCopy.meta(session) : StudioCopy.standIns(session)))
                     .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             }
@@ -170,6 +185,13 @@ struct StudioSessionView: View {
                         .padding(.vertical, 12)
                     }
                     .scrollIndicators(.hidden)
+                    if controller.workoutHeld(session.id) {
+                        Text(StudioCopy.heldReason)
+                            .font(.subheadline)
+                            .foregroundStyle(Chalk.inkSoft)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.top, 12)
+                    }
                     PrimaryButton(title: StudioCopy.start) {
                         if !Features.payment || session.free || controller.library.unlocked {
                             Haptics.play(.tap)
@@ -183,6 +205,7 @@ struct StudioSessionView: View {
                         }
                     }
                     .padding(.top, 12)
+                    .disabled(controller.workoutHeld(session.id))
                     .confirmationDialog(StudioCopy.holdTitle, isPresented: $askHold, titleVisibility: .visible) {
                         Button(StudioCopy.holdYes) {
                             controller.holdAlerts(minutes: session.minutes)
@@ -597,6 +620,10 @@ enum StudioCopy {
     static let saveToHealth = "Save sessions to Apple Health"
     static let suggested = "Suggested today"
     static let allSessions = "More sessions"
+    static let afterDay15 = "After Day 15"
+    static let heldReason = "The program works best with no other upper-body training for the 14 days. These open after your final test."
+    static let heldShort = "Opens after your final test"
+    static let openWorkouts = "Workouts"
 
     /// How the Studio list is grouped. The suggested session always sits above these.
     static let groups: [(name: String, ids: [String])] = [

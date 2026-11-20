@@ -360,6 +360,11 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
+    /// Whether a Workouts session waits until after Day 15 (upper-body work during a run).
+    func workoutHeld(_ id: String) -> Bool {
+        WorkoutRules.isHeld(id, run: library.current, now: CivilDateTime.local(Date()))
+    }
+
     /// One Studio session to suggest, by push-up day. Upper body work is never suggested on a push day.
     func studioSuggestion() -> String {
         guard let run = library.current, !run.ended else { return "flow-45" }
