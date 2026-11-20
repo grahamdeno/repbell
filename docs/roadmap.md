@@ -224,7 +224,7 @@ entry (UX-11, the part outside Build E).
 
 ### 10. Run it again review screen (in 1.0, group 9; built; UX-30)
 
-### 11. Watch: complication, Busy on the wrist, the number's color rule (later; UX-32)
+### 11. Watch: complication, Busy on the wrist, the number's color rule (in 1.0, group 10; built except the complication, which needs Graham's approval of a new bundle ID; UX-32)
 
 ### 12. Apple Health for push-ups (later; from the plan's v1 scope table)
 
