@@ -21,8 +21,8 @@ Anything below uploads a build or changes something live. Check this list before
 
 Everything not listed here uploads and deploys nothing. If you find a trigger that isn't listed, stop and add it.
 
-- `.github/workflows/ci.yml` runs on every push and pull request. It runs the schedule engine tests and compiles the
-  iPhone app, Watch app and widget. It archives nothing, uploads nothing and writes nothing to App Store Connect.
+- `.github/workflows/ci.yml` runs on every pull request and every push to `main`. It runs the privacy guard, the engine tests and
+  compiles the iPhone app, Watch app and widget. It archives nothing, uploads nothing and writes nothing to App Store Connect.
 - There is no `testflight` branch trigger, no `release` branch, no site and no listing workflow in this repo.
 - A merge to `main` uploads nothing.
 - Any change to a workflow, branch or path trigger updates this list in the same PR.
@@ -49,8 +49,9 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 - **Plain words. No military metaphors.**
 - **Secrets** are never printed or committed.
 - **On the device.** No account, no server, no analytics and no third-party SDKs. The only data that leaves the app
-  is a finished Workouts session written to Apple Health, when the person allows it. There is no CI guard for this
-  yet; adding one is a roadmap follow-up.
+  is a finished session written to Apple Health, write only, when the person allows it. `scripts/privacy_guard.py`
+  enforces this in CI (network calls, web URLs, analytics and SDK imports, remote packages, Health read access, video
+  files in the build), with a self-test.
 - **Never gate a feature on receipt type** (sandbox, TestFlight or production). Features are switched by a build
   setting.
 - **Generated coach media stays out of every build** until requirement R-1 (recorded origin and usage rights) is met.
@@ -76,4 +77,4 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 - Always reviewed in full here, besides the playbook's list: `Packages/RepBellEngine/**` (schedule engine, stored
   runs in `Library.swift`), `App/Notifications.swift`, `App/TestAlarms.swift`, `App/ProgramController.swift`,
   `App/Restore.swift`, `App/RepBell.storekit`, `App/Studio/StudioHealth.swift`, every `Info.plist` and
-  `.entitlements` file, and `.github/workflows/**`.
+  `.entitlements` file, `.github/workflows/**` and `scripts/privacy_guard.py`.
