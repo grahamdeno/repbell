@@ -47,13 +47,18 @@ enum DeskStretchStore {
     }
 }
 
-/// One 30-second stretch after a set. Done or Skip; nothing is recorded either way.
+/// One stretch after a set: a start screen, a get-ready, the hold (each side on its own), then done.
+/// Nothing counts until Start. The only big Done is at the end.
 struct DeskStretchView: View {
     var stretch: DeskStretch.Stretch
     var finish: () -> Void
 
-    @State private var remaining = DeskStretch.seconds
-    @State private var running = true
+    private enum Stage: Equatable { case ready, running(Int), finished }
+
+    @State private var stage: Stage = .ready
+    @State private var remaining = 0
+
+    private var phases: [DeskStretch.Phase] { DeskStretch.phases(stretch) }
 
     var body: some View {
         ZStack {
@@ -63,7 +68,7 @@ struct DeskStretchView: View {
                     Text(Copy.deskStretchTitle)
                         .eyebrow(Chalk.accent)
                     Text(stretch.name)
-                        .font(Chalk.display(44))
+                        .font(Chalk.display(40))
                         .textCase(.uppercase)
                         .foregroundStyle(Chalk.ink)
                         .fixedSize(horizontal: false, vertical: true)
@@ -76,35 +81,99 @@ struct DeskStretchView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
-                    Text(StudioCopy.clock(remaining))
-                        .font(Chalk.display(96))
-                        .monospacedDigit()
-                        .foregroundStyle(remaining == 0 ? Chalk.inkMuted : Chalk.accent)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .accessibilityLabel(Copy.deskStretchTimer(seconds: remaining))
-                    if let note = DeskStretch.sideNote(stretch) {
-                        Text(note)
-                            .font(.subheadline)
-                            .foregroundStyle(Chalk.inkMuted)
-                    }
+                    stageView
                     Spacer(minLength: 12)
-                    PrimaryButton(title: Copy.done, action: finish)
-                    TextLink(title: Copy.deskStretchSkip, action: finish)
-                        .frame(maxWidth: .infinity)
+                    controls
                 }
             }
         }
-        .task {
-            while remaining > 0 && !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(1))
-                remaining -= 1
-                if remaining == DeskStretch.seconds / 2 && stretch.eachSide {
-                    Haptics.play(.tap)
-                    UIAccessibility.post(notification: .announcement, argument: Copy.switchSidesNow)
-                }
+        .task(id: stage) { await run() }
+    }
+
+    @ViewBuilder
+    private var stageView: some View {
+        switch stage {
+        case .ready:
+            Text(DeskStretch.sideNote(stretch) ?? Copy.deskStretchSeconds(DeskStretch.seconds))
+                .font(.subheadline)
+                .foregroundStyle(Chalk.inkMuted)
+        case .running(let index):
+            VStack(alignment: .leading, spacing: 4) {
+                Text(label(phases[index].kind))
+                    .font(Chalk.display(32, weight: .bold))
+                    .textCase(.uppercase)
+                    .foregroundStyle(isHold(phases[index].kind) ? Chalk.accent : Chalk.inkSoft)
+                    .accessibilityAddTraits(.updatesFrequently)
+                Text(StudioCopy.clock(remaining))
+                    .font(Chalk.display(96))
+                    .monospacedDigit()
+                    .foregroundStyle(isHold(phases[index].kind) ? Chalk.accent : Chalk.inkMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .accessibilityLabel(Copy.deskStretchTimer(seconds: remaining))
             }
-            if remaining == 0 { Haptics.play(.setDone) }
+        case .finished:
+            Text(Copy.stretchDone)
+                .font(Chalk.display(48))
+                .textCase(.uppercase)
+                .foregroundStyle(Chalk.ink)
         }
+    }
+
+    @ViewBuilder
+    private var controls: some View {
+        switch stage {
+        case .ready:
+            PrimaryButton(title: Copy.deskStretchStart) { stage = .running(0) }
+            TextLink(title: Copy.deskStretchSkip, action: finish)
+                .frame(maxWidth: .infinity)
+        case .running:
+            TextLink(title: Copy.deskStretchEndEarly, action: finish)
+                .frame(maxWidth: .infinity)
+        case .finished:
+            PrimaryButton(title: Copy.done, action: finish)
+        }
+    }
+
+    private func run() async {
+        guard case .running(let index) = stage, index < phases.count else { return }
+        let phase = phases[index]
+        remaining = phase.seconds
+        announce(phase.kind)
+        while remaining > 0 {
+            try? await Task.sleep(for: .seconds(1))
+            if Task.isCancelled { return }
+            remaining -= 1
+        }
+        if index + 1 < phases.count {
+            stage = .running(index + 1)
+        } else {
+            Haptics.play(.setDone)
+            UIAccessibility.post(notification: .announcement, argument: Copy.stretchDone)
+            stage = .finished
+        }
+    }
+
+    private func announce(_ kind: DeskStretch.PhaseKind) {
+        if case .getInPosition = kind {} else { Haptics.play(.tap) }
+        UIAccessibility.post(notification: .announcement, argument: label(kind))
+    }
+
+    private func label(_ kind: DeskStretch.PhaseKind) -> String {
+        switch kind {
+        case .getInPosition: return Copy.getInPosition
+        case .switchSides: return Copy.switchSidesTitle
+        case .hold(let side):
+            switch side {
+            case "left": return Copy.leftSide
+            case "right": return Copy.rightSide
+            default: return Copy.holdIt
+            }
+        }
+    }
+
+    private func isHold(_ kind: DeskStretch.PhaseKind) -> Bool {
+        if case .hold = kind { return true }
+        return false
     }
 }

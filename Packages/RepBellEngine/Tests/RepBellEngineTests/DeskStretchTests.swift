@@ -32,7 +32,7 @@ final class DeskStretchTests: XCTestCase {
     func testThirtySecondsAndSideNotes() {
         XCTAssertEqual(DeskStretch.seconds, 30)
         let hip = DeskStretch.all.first { $0.id == "hip-flexor" }!
-        XCTAssertEqual(DeskStretch.sideNote(hip), "Switch sides at 15 seconds.")
+        XCTAssertEqual(DeskStretch.sideNote(hip), "20 seconds on each side.")
         let doorway = DeskStretch.all.first { $0.id == "doorway-chest" }!
         XCTAssertNil(DeskStretch.sideNote(doorway))
     }
@@ -45,5 +45,15 @@ final class DeskStretchTests: XCTestCase {
                 XCTAssertFalse(line.contains("!"), line)
             }
         }
+    }
+
+    // Nothing counts until Start; then a get-ready, and each side held on its own with a switch between.
+    func testPhasesStartWithGetReadyAndSplitSides() {
+        let hip = DeskStretch.all.first { $0.id == "hip-flexor" }!
+        XCTAssertEqual(DeskStretch.phases(hip).map(\.kind), [.getInPosition, .hold(side: "left"), .switchSides, .hold(side: "right")])
+        XCTAssertEqual(DeskStretch.phases(hip).map(\.seconds), [5, 20, 5, 20])
+        let doorway = DeskStretch.all.first { $0.id == "doorway-chest" }!
+        XCTAssertEqual(DeskStretch.phases(doorway).map(\.kind), [.getInPosition, .hold(side: nil)])
+        XCTAssertEqual(DeskStretch.phases(doorway).last?.seconds, 30)
     }
 }

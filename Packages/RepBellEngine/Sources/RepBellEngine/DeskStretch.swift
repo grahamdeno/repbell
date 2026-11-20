@@ -44,8 +44,40 @@ public enum DeskStretch {
         return (i, all[i])
     }
 
+    /// The steps of one stretch, after the person taps Start.
+    public enum PhaseKind: Equatable, Sendable {
+        case getInPosition
+        case hold(side: String?)
+        case switchSides
+    }
+
+    public struct Phase: Equatable, Sendable {
+        public let kind: PhaseKind
+        public let seconds: Int
+    }
+
+    public static let getReadySeconds = 5
+    public static let perSideSeconds = 20
+    public static let switchSeconds = 5
+
+    /// Get into position, then hold. A stretch done on each side holds each side on its own, with a switch between.
+    public static func phases(_ stretch: Stretch) -> [Phase] {
+        if stretch.eachSide {
+            return [
+                Phase(kind: .getInPosition, seconds: getReadySeconds),
+                Phase(kind: .hold(side: "left"), seconds: perSideSeconds),
+                Phase(kind: .switchSides, seconds: switchSeconds),
+                Phase(kind: .hold(side: "right"), seconds: perSideSeconds),
+            ]
+        }
+        return [
+            Phase(kind: .getInPosition, seconds: getReadySeconds),
+            Phase(kind: .hold(side: nil), seconds: seconds),
+        ]
+    }
+
     /// The line under the timer for a stretch done on both sides.
     public static func sideNote(_ stretch: Stretch) -> String? {
-        stretch.eachSide ? Copy.switchSides(at: seconds / 2) : nil
+        stretch.eachSide ? Copy.eachSideNote(seconds: perSideSeconds) : nil
     }
 }

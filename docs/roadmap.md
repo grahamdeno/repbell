@@ -68,6 +68,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-20 | Desk stretch flow fixed after Graham's first use (it started without warning, and a Done button mid-stretch ended it): a start screen with Start and Skip; 5 seconds to get into position; then the hold, with two-sided stretches held 20 seconds per side, a 5-second Switch sides between, and each side named on screen, with a haptic and a VoiceOver cue; End early is the only control while it runs; Stretch done and the only big Done come at the end | Graham's report; flow decided by Product under the 1.0 exception |
 | 2026-11-20 | **Fit my time joins 1.0** (item 15), with a 5-minute option; and a Workouts button joins the top of Today | Graham's decision to add both; he asked for Product's best calls on the details |
 | 2026-11-20 | Fit my time details: name "Fit my time"; choices 5, 10, 15, 20, 30 and 45 minutes; one decision (the minutes), with the focus set by program day (test mornings and the day after: mobility; other even days: legs and back; odd days: core and easy cardio; no run: full body); warm-up, main moves in 40-second blocks with 20-second rests (two-sided moves split with a switch), cool-down always ending with breathing, timed to end exactly on the minute; during a run no move from an upper-body session; gear the person lacks is skipped unless a stand-in exists; "Another one" reshuffles; first row in Workouts | Decided by Product under the 1.0 exception |
 | 2026-11-20 | **1.0 scope is open again, not frozen.** Graham expects to add what he finds he needs while living on the test builds. New items join 1.0 as he approves them | Graham's decision |
@@ -283,8 +284,9 @@ entry (UX-11, the part outside Build E).
 ### 14. Story: Desk stretch after a set (approved 2026-11-20; in 1.0; built)
 As someone who sits all day, I want each push-up set to end with one short stretch for sitting posture, so every
 set also undoes some desk time.
-- Given Desk stretch is on in Settings, when I log a set, Rep Bell shows one stretch with its name, two cues and a
-  30-second timer; stretches done on each side say when to switch.
+- Given Desk stretch is on in Settings, when I log a set, Rep Bell shows one stretch with its name and two cues;
+  nothing counts until I tap Start, then 5 seconds to get into position, then the hold (two-sided stretches: 20
+  seconds per side with a Switch sides step); Done appears only at the end.
 - It rotates through hip flexor, doorway chest, neck, wall chest and seated hamstring (the Workouts cues).
 - At most once an hour. Done or Skip; nothing is recorded either way.
 - A set logged from an alert or the Watch brings the stretch as a quiet notification, which also shows on the Watch.
