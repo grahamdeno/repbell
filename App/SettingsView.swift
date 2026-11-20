@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var testMessage: String?
     @State private var confirmStartOver = false
     @State private var pushUpsToHealth = PushUpHealthStore.enabled
+    @State private var deskStretchOn = DeskStretchStore.enabled
 
     var body: some View {
         ScreenChrome(top: 8, scrolls: false) {
@@ -138,6 +139,20 @@ struct SettingsView: View {
                     }
                 }
             }
+            Toggle(Copy.deskStretchSetting, isOn: Binding(
+                get: { deskStretchOn },
+                set: { on in
+                    DeskStretchStore.enabled = on
+                    deskStretchOn = on
+                }
+            ))
+            .tint(Chalk.accent)
+            .foregroundStyle(Chalk.inkSoft)
+            .frame(minHeight: ChalkTokens.minimumTarget)
+            Text(Copy.deskStretchDetail)
+                .font(.footnote)
+                .foregroundStyle(Chalk.inkMuted)
+                .fixedSize(horizontal: false, vertical: true)
             if StudioHealth.available {
                 Toggle(Copy.pushUpsToHealth, isOn: Binding(
                     get: { pushUpsToHealth },

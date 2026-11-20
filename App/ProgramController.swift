@@ -71,7 +71,11 @@ final class ProgramController {
     var library: LibraryFile
     /// Changing the flow screen closes any browse screens on top of it.
     var screen: Screen {
-        didSet { if oldValue != screen { path.removeAll() } }
+        didSet {
+            if oldValue != screen { path.removeAll() }
+            // A stretch only waits on Today; leaving drops it so it can't appear hours later.
+            if screen != .today { deskStretch = nil }
+        }
     }
     var path: [Browse] = []
     var draftWake = ClockTime(hour: 7, minute: 0)
@@ -87,6 +91,8 @@ final class ProgramController {
     private var endedOnDay: Int?
     var unlockMessage: String?
     var celebration: Celebration?
+    /// A desk stretch to show once the celebration is gone.
+    var deskStretch: DeskStretch.Stretch?
 
     private init() {
         let loaded = LibraryDisk.load()
@@ -272,7 +278,18 @@ final class ProgramController {
     func logDone(day: Int, index: Int, celebrate: Bool = false) {
         let now = CivilDateTime.local(Date())
         RingStore.update { $0.acknowledge(at: now) }
+        let wasUpcoming = library.current.map { run in
+            ScheduleEngine.resolve(run.input, now: now).day(day)?.sets.first { $0.index == index }?.status == .upcoming
+        } ?? false
         update { $0.input.events.append(.done(day: day, index: index, at: now)) }
+        // Only a set that was really still to do brings a stretch, so a repeated Done doesn't use up the hour.
+        if wasUpcoming, let run = library.current, !run.ended, let stretch = DeskStretchStore.takeDue(now: now) {
+            if UIApplication.shared.applicationState == .active, screen == .today {
+                deskStretch = stretch
+            } else {
+                DeskStretchStore.notify(stretch)
+            }
+        }
         if let run = library.current, let resolved = ScheduleEngine.resolve(run.input, now: now).day(day) {
             let finished = !resolved.sets.isEmpty && !resolved.sets.contains { $0.status == .upcoming }
             Haptics.play(finished ? .dayComplete : .setDone)

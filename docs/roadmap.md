@@ -68,6 +68,8 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-20 | **1.0 scope is open again, not frozen.** Graham expects to add what he finds he needs while living on the test builds. New items join 1.0 as he approves them | Graham's decision |
+| 2026-11-20 | **Desk stretch joins 1.0** (item 14). Name "Desk stretch"; at most once an hour | Graham's decision to add it to 1.0; name and frequency decided by Product under the 1.0 exception |
 | 2026-11-20 | The Health read permission text is back: Apple rejects any HealthKit app without it, even one that only saves (TestFlight run 15 failed on this). It says Rep Bell does not read Health data; the app still asks for no read access, and the privacy guard checks both | Found by the failed upload; decided by Product under the 1.0 exception |
 | 2026-11-20 | **1.0 scope frozen** as listed under Release scope: Builds A to F, the Progress insights story, all of UX-11, a CI guard for the on-device promise, navigation, Run it again, the Watch items, Apple Health for push-ups, and the day-start alarms epic. Payment and coach media stay out | Graham's decision |
 | 2026-11-20 | **Exception to the playbook for 1.0 only.** Rep Bell Product (Opus) takes every item in the 1.0 scope from shaping through build and merge without read-backs, shape approvals, mockup picks or per-PR go-aheads. Graham gave a standing merge go for the 1.0 scope (merge each PR once CI is green) and a standing test build go (one internal TestFlight upload when the scope is merged, plus one per fix round). No ship go is given. Each PR on the always-review list is reviewed by a separate agent that did not write it. Design and wording choices are recorded here as "decided by Product under the 1.0 exception" for Graham to review. Steps that can't be undone are unchanged | Graham's decision, to reach a test build without stops |
@@ -97,7 +99,7 @@ Newest first. Refined decisions only.
 
 ## Release scope
 
-- **1.0:** proposed and **frozen 20 Nov 2026**, under the 1.0 exception. Built in this order, one PR per item or small
+- **1.0:** proposed 20 Nov 2026, frozen, then **reopened the same day at Graham's call**; items join as he approves them. Under the 1.0 exception. Built in this order, one PR per item or small
   group:
 
 | # | Group | Contents | Review |
@@ -275,6 +277,18 @@ entry (UX-11, the part outside Build E).
 2. Graham approves the shaped stories. Graham.
 3. Plan the release and freeze scope. Opus proposes, Graham picks.
 4. Build from Ready stories. Model: Sonnet.
+
+### 14. Story: Desk stretch after a set (approved 2026-11-20; in 1.0; built)
+As someone who sits all day, I want each push-up set to end with one short stretch for sitting posture, so every
+set also undoes some desk time.
+- Given Desk stretch is on in Settings, when I log a set, Rep Bell shows one stretch with its name, two cues and a
+  30-second timer; stretches done on each side say when to switch.
+- It rotates through hip flexor, doorway chest, neck, wall chest and seated hamstring (the Workouts cues).
+- At most once an hour. Done or Skip; nothing is recorded either way.
+- A set logged from an alert or the Watch brings the stretch as a quiet notification, which also shows on the Watch.
+- Off by default; the program doesn't change.
+
+**Out of scope:** a stretch screen on the Watch itself; stretches chosen by the person.
 
 ## Small follow-ups
 
