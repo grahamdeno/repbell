@@ -310,7 +310,10 @@ struct StudioPlayerView: View {
             }
         )
         .accessibilityAction(named: StudioCopy.previous) { jump(session, by: -1) }
-        .accessibilityAction(named: paused ? StudioCopy.resume : StudioCopy.pause) { paused.toggle() }
+        .accessibilityAction(named: paused ? StudioCopy.resume : StudioCopy.pause) {
+            paused.toggle()
+            Haptics.play(.tap)
+        }
         .accessibilityAction(named: StudioCopy.skip) { jump(session, by: 1) }
     }
 

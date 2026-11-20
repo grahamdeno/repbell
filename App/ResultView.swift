@@ -59,6 +59,8 @@ struct ResultCard: View {
                         .foregroundStyle(Chalk.inkMuted)
                     Text("\(start)")
                         .font(Chalk.display(72))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                         .foregroundStyle(Chalk.inkFaint)
                 }
                 Image(systemName: "arrow.right")

@@ -47,6 +47,8 @@ private struct WatchAlert: View {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text("\(set.reps)")
                     .font(Chalk.display(72, weight: .extraBold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                     .foregroundStyle(Chalk.accent)
                 Text("now")
                     .font(Chalk.display(24, weight: .bold))
@@ -72,6 +74,8 @@ private struct WatchAlert: View {
         }
         .padding(.horizontal, 6)
         .padding(.top, 8)
+        // Done and In 10 stay on screen at every text size.
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 }
 
@@ -94,6 +98,8 @@ private struct WatchToday: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(next.reps)")
                     .font(Chalk.display(64, weight: .extraBold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                     .foregroundStyle(Chalk.ink)
             }
             Spacer(minLength: 4)
