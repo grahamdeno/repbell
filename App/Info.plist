@@ -35,6 +35,8 @@
 	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.healthcare-fitness</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Rep Bell does not read your Health data. It only saves your finished Workouts sessions and push-ups when you turn that on.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Rep Bell saves your finished Workouts sessions and push-ups to Apple Health. It does not read your Health data.</string>
 	<key>NSAlarmKitUsageDescription</key>

@@ -51,7 +51,8 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 - **On the device.** No account, no server, no analytics and no third-party SDKs. The only data that leaves the app
   is a finished session written to Apple Health, write only, when the person allows it. `scripts/privacy_guard.py`
   enforces this in CI (network calls, web URLs, analytics and SDK imports, remote packages, Health read access, video
-  files in the build), with a self-test.
+  files in the build), with a self-test. Apple requires `NSHealthShareUsageDescription` in any HealthKit app, so it
+  stays, saying Rep Bell does not read Health data; removing it makes the TestFlight upload fail.
 - **Never gate a feature on receipt type** (sandbox, TestFlight or production). Features are switched by a build
   setting.
 - **Generated coach media stays out of every build** until requirement R-1 (recorded origin and usage rights) is met.
