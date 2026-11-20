@@ -485,7 +485,7 @@ final class ProgramController {
     }
 
     func runAgain() {
-        guard library.unlocked else {
+        if library.rerunNeedsUnlock {
             screen = .paywall
             return
         }
@@ -524,6 +524,7 @@ final class ProgramController {
     }
 
     func refreshEntitlements() async {
+        guard Features.payment else { return }
         if await Unlocker.hasUnlock() {
             library.unlocked = true
             persist()
@@ -608,9 +609,6 @@ final class ProgramController {
                 )
             }
             return snapshot(resolved: ScheduleEngine.resolve(run.input, now: now), run: run, now: now, hero: .finished(Copy.endDetail))
-        }
-        if !library.allows(day: number) {
-            return TodaySnapshot(hero: .waiting(eyebrow: "", time: "", title: "", detail: ""), eyebrow: "", maxText: nil, bars: [], tallyTitle: nil, tallyDetail: nil, soFar: nil, marks: [], showBusy: false, fallback: nil)
         }
         let resolved = ScheduleEngine.resolve(run.input, now: now)
         guard let day = resolved.day(number) else {
@@ -768,12 +766,8 @@ final class ProgramController {
 
     private static func openingScreen(for library: LibraryFile) -> Screen {
         guard let run = library.current else { return .promise }
-        if !library.unlocked && !library.isFirstRun && !run.ended { return .paywall }
+        if library.needsUnlock(at: CivilDateTime.local(Date())) { return .paywall }
         if run.ended { return .result }
-        let now = run.pausedAt ?? CivilDateTime.local(Date())
-        if let number = run.input.dayNumber(on: now.date), !library.allows(day: number), run.pausedAt == nil {
-            return .paywall
-        }
         return .today
     }
 

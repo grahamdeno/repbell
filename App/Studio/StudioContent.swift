@@ -1,4 +1,5 @@
 import Foundation
+import RepBellEngine
 
 struct StudioMovement: Decodable, Identifiable, Hashable {
     let id: String
@@ -94,7 +95,6 @@ final class StudioSettings {
     nonisolated static let allGear = ["bar", "band", "kettlebell", "gi-bag", "balance-board", "rice-bucket", "chair", "table", "block", "strap"]
     nonisolated static let zones = ["knees", "lowerBack", "shoulders"]
 
-    var mascot: String { didSet { save() } }
     var gear: Set<String> { didSet { save() } }
     var easyOn: Set<String> { didSet { save() } }
     /// Save finished sessions to Apple Health.
@@ -104,7 +104,6 @@ final class StudioSettings {
     private let defaults = UserDefaults.standard
 
     private init() {
-        mascot = defaults.string(forKey: "studio.mascot") ?? "him"
         gear = Set(defaults.stringArray(forKey: "studio.gear") ?? ["chair", "table"])
         easyOn = Set(defaults.stringArray(forKey: "studio.easyOn") ?? [])
         health = defaults.bool(forKey: "studio.health")
@@ -116,7 +115,6 @@ final class StudioSettings {
     }
 
     private func save() {
-        defaults.set(mascot, forKey: "studio.mascot")
         defaults.set(Array(gear), forKey: "studio.gear")
         defaults.set(Array(easyOn), forKey: "studio.easyOn")
         defaults.set(health, forKey: "studio.health")
@@ -195,17 +193,7 @@ extension StudioSettings {
     }
 }
 
-/// Studio ships dark in 1.0: visible in debug and TestFlight builds only.
-/// Turning it on for the App Store, or rolling it back, is this one switch plus a new build.
+/// Workouts is switched by the build setting in `Features`, never by receipt type.
 enum StudioFeature {
-    static let shipsInAppStore = false
-
-    static var enabled: Bool {
-        #if DEBUG
-        return true
-        #else
-        if shipsInAppStore { return true }
-        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
-        #endif
-    }
+    static var enabled: Bool { Features.workouts }
 }

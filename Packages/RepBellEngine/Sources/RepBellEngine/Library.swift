@@ -32,12 +32,28 @@ public struct LibraryFile: Equatable, Codable, Sendable {
 
     public var isFirstRun: Bool { runsStarted <= 1 }
 
-    /// Days 1 to 3 of the first run are free. Everything else needs the one-time unlock.
+    /// Whether a program day can be used. With payment off (1.0) every day of every run is open.
     public func allows(day: Int) -> Bool {
+        guard Features.payment else { return true }
         if unlocked { return true }
         if isFirstRun && (1...3).contains(day) { return true }
         return false
     }
+
+    /// Whether the app must ask for the unlock before showing the current run at this moment.
+    /// Always false while payment is off.
+    public func needsUnlock(at now: CivilDateTime) -> Bool {
+        guard Features.payment, let current, !current.ended else { return false }
+        if !unlocked && !isFirstRun { return true }
+        let moment = current.pausedAt ?? now
+        if current.pausedAt == nil, let number = current.input.dayNumber(on: moment.date), !allows(day: number) {
+            return true
+        }
+        return false
+    }
+
+    /// Whether starting another run needs the unlock. Always false while payment is off.
+    public var rerunNeedsUnlock: Bool { Features.payment && !unlocked }
 
     public func resolved(at now: CivilDateTime) -> ResolvedRun? {
         guard let current else { return nil }

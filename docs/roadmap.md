@@ -116,7 +116,7 @@ Newest first. Refined decisions only.
 
 Items in the playbook's item format. Numbers are stable.
 
-### 1. Epic: 1.0 is the program plus Workouts, without coach media (approved 2026-11-20)
+### 1. Epic: 1.0 is the program plus Workouts, without coach media (approved 2026-11-20; built in group 1)
 **Goal:** ship Workouts in 1.0 without waiting on the coach clip rights.
 
 **Context:** Workouts, coach clips and Apple Health were built before the playbook applied. The clips' usage rights
@@ -157,7 +157,7 @@ As someone about to be unavailable, I want one tap to quiet the next hour, so I'
 
 **Steps:** 1. Shape, Build D (Opus). 2. Build (Sonnet).
 
-### 4. Requirement: 1.0 is free and nothing is locked (approved 2026-11-20)
+### 4. Requirement: 1.0 is free and nothing is locked (approved 2026-11-20; built in group 1)
 In 1.0 no paywall can be reached on any day or rerun, and no copy mentions free days or a price.
 - Enforced by tests: Day 4 and later, and a rerun, open without a purchase; no route leads to the paywall.
 - Enforced by a copy test: no price or free-day wording in the `Copy` enum.

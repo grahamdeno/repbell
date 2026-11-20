@@ -35,10 +35,8 @@
 	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.healthcare-fitness</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>Rep Bell only saves your Studio sessions to Apple Health. It doesn't read your health data.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Rep Bell saves each finished Studio session to Apple Health as a workout.</string>
+	<string>Rep Bell saves your finished Workouts sessions and push-ups to Apple Health. It does not read your Health data.</string>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Days 1, 8 and 15 start with an alarm at your wake time, even on silent.</string>
 	<key>UIAppFonts</key>
