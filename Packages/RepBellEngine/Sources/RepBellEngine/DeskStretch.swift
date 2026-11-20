@@ -46,6 +46,6 @@ public enum DeskStretch {
 
     /// The line under the timer for a stretch done on both sides.
     public static func sideNote(_ stretch: Stretch) -> String? {
-        stretch.eachSide ? "Switch sides at \(seconds / 2) seconds." : nil
+        stretch.eachSide ? Copy.switchSides(at: seconds / 2) : nil
     }
 }

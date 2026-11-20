@@ -99,7 +99,10 @@ struct DeskStretchView: View {
             while remaining > 0 && !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(1))
                 remaining -= 1
-                if remaining == DeskStretch.seconds / 2 && stretch.eachSide { Haptics.play(.tap) }
+                if remaining == DeskStretch.seconds / 2 && stretch.eachSide {
+                    Haptics.play(.tap)
+                    UIAccessibility.post(notification: .announcement, argument: Copy.switchSidesNow)
+                }
             }
             if remaining == 0 { Haptics.play(.setDone) }
         }

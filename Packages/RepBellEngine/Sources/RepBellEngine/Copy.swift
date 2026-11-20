@@ -107,6 +107,12 @@ public enum Copy {
         "\(name), \(seconds) seconds. \(cue)"
     }
 
+    public static func switchSides(at seconds: Int) -> String {
+        "Switch sides at \(seconds) seconds."
+    }
+
+    public static let switchSidesNow = "Switch sides."
+
     public static func deskStretchTimer(seconds: Int) -> String {
         seconds == 1 ? "1 second left" : "\(seconds) seconds left"
     }
