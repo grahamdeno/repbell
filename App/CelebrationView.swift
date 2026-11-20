@@ -79,6 +79,10 @@ struct CelebrationView: View {
             }
         }
         .task {
+            #if DEBUG
+            // Screenshot mode holds the celebration on screen for the capture.
+            if ProgramController.screenshotState != nil { return }
+            #endif
             // With VoiceOver on it waits for a tap, so it can be read in full.
             guard let seconds = CelebrationTiming.autoDismiss(dayComplete: celebration.dayComplete, voiceOverRunning: UIAccessibility.isVoiceOverRunning) else { return }
             try? await Task.sleep(for: .seconds(seconds))

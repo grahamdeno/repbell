@@ -696,6 +696,10 @@ final class ProgramController {
     }
 
     private func performAlertRefresh() async {
+        #if DEBUG
+        // Screenshot mode never schedules or asks for alerts, so no system prompt covers the capture.
+        if Self.screenshotState != nil { return }
+        #endif
         let hold = studioHoldUntil.flatMap { $0 > Date() ? $0 : nil }
         let ringing = await SetAlarms.sync(library: library, holdUntil: hold)
         await Notifier.refill(library: library, holdUntil: hold, ringing: ringing, quiet: RingStore.state.quietActive)
