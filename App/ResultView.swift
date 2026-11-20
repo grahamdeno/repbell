@@ -10,7 +10,7 @@ struct ResultView: View {
         let numbers = controller.resultNumbers()
         ScreenChrome(top: 16) {
             VStack(alignment: .leading, spacing: 20) {
-                Text(numbers.end == nil ? Copy.endTitle : "Day 15 · Final test")
+                Text(numbers.end == nil ? Copy.runEnded(day: controller.endedDay() ?? 1) : "Day 15 · Final test")
                     .font(Chalk.display(22, weight: .bold))
                     .tracking(0.8)
                     .textCase(.uppercase)
@@ -19,6 +19,9 @@ struct ResultView: View {
                     Text(Copy.endDetail)
                         .font(.system(size: 16))
                         .foregroundStyle(Chalk.inkSoft)
+                }
+                if numbers.end != nil {
+                    TextLink(title: Copy.fixMyNumber) { controller.fixFinalNumber() }
                 }
                 Spacer(minLength: 12)
                 if let image = render(start: numbers.start, end: numbers.end, reps: numbers.reps, percent: numbers.percent) {

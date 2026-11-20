@@ -126,33 +126,35 @@ struct AlertsView: View {
         ScreenChrome {
             VStack(alignment: .leading, spacing: 24) {
                 StepBars(filled: 4)
-                Text(Copy.alertsHeadline)
+                Text(controller.alertsDenied ? Copy.alertsDeniedHeadline : Copy.alertsHeadline)
                     .font(Chalk.display(48))
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
                     .padding(.top, 8)
-                Text(Copy.alertsBody)
+                Text(controller.alertsDenied ? Copy.alertsDeniedBody : Copy.alertsBody)
                     .font(.system(size: 16))
                     .foregroundStyle(Chalk.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
                 VStack(spacing: 12) {
                     AlertRow(symbol: "bell", title: Copy.setAlertsTitle, detail: Copy.setAlertsDetail)
                     AlertRow(symbol: "alarm", title: Copy.testAlarmTitle, detail: Copy.testAlarmDetail)
                 }
+                Spacer(minLength: 16)
                 if controller.alertsDenied {
-                    Text(Copy.alertsBody)
-                        .font(.system(size: 15))
-                        .foregroundStyle(Chalk.inkMuted)
-                    Button("Open Settings") {
-                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                    PrimaryButton(title: Copy.openSettings) {
+                        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
                             openURL(url)
                         }
                     }
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Chalk.accent)
-                }
-                Spacer(minLength: 16)
-                PrimaryButton(title: Copy.allowAlerts) {
-                    Task { await controller.allowAlerts() }
+                    TextLink(title: Copy.startWithoutAlerts) {
+                        Task { await controller.startWithoutAlerts() }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .accessibilityHint(Copy.startWithoutAlertsDetail)
+                } else {
+                    PrimaryButton(title: Copy.allowAlerts) {
+                        Task { await controller.allowAlerts() }
+                    }
                 }
             }
         }

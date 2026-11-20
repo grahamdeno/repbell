@@ -21,6 +21,17 @@ enum TestAlarms {
         }
     }
 
+    /// For Settings: whether test-morning alarms are allowed. Never asks.
+    @MainActor
+    static func statusLabel() -> String {
+        switch AlarmManager.shared.authorizationState {
+        case .authorized: return "Allowed"
+        case .denied: return "Off"
+        case .notDetermined: return "Not asked yet"
+        @unknown default: return "Unknown"
+        }
+    }
+
     @MainActor
     static func sync(run: PersistedRun?, allows: (Int) -> Bool) async {
         let stored = load()

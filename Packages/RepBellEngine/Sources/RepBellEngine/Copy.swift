@@ -26,6 +26,16 @@ public enum Copy {
     public static let testAlarmDetail = "Days 1, 8 and 15 start with an alarm that rings even on silent."
     public static let allowAlerts = "Allow alerts"
     public static let timeSensitiveSettings = "Sets are due at a set time, so they come through Focus. You can change this in Settings."
+    public static let alertsDeniedHeadline = "Alerts\nare off."
+    public static let alertsDeniedBody = "Rep Bell can't ring for your sets. Turn on notifications for Rep Bell in Settings, then come back here."
+    public static let startWithoutAlerts = "Start without alerts"
+    public static let startWithoutAlertsDetail = "Today shows each set when it's due. You can turn alerts on later in Settings."
+    public static let notYet = "Not yet"
+    public static let notYetDetail = "Today keeps your test ready."
+    public static let fixMyNumber = "Fix my number"
+    public static let endConfirmTitle = "End this run?"
+    public static let endConfirmBody = "Your days so far are saved. Alerts stop, and the run can't be picked up again."
+    public static let endConfirmButton = "End the run"
 
     public static let withYourTest = "with your test."
     public static let nothingElse = "Nothing else to set. Sleep well."
@@ -68,6 +78,10 @@ public enum Copy {
     public static let startTest = "Start the test"
     public static let todaysSets = "Today's sets"
     public static let wordmark = "Rep Bell"
+
+    public static func runEnded(day: Int) -> String {
+        "Run ended · Day \(day)"
+    }
 
     public static func pauseDetail(day: Int) -> String {
         "No alerts until you resume. Day \(day) picks up where you left off."
