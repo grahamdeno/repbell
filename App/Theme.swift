@@ -40,6 +40,8 @@ struct Wordmark: View {
 
 /// The frame every iPhone screen sits in. When the content doesn't fit (large text, small phone), it scrolls.
 /// Screens that already scroll, or that use a vertical drag, pass `scrolls: false`.
+/// The content is built for both the fitting and the scrolling layout, so a child's `@State` resets if the
+/// screen switches between them (for example when text size changes). Keep screen state in the controller.
 struct ScreenChrome<Content: View>: View {
     var top: CGFloat = 8
     var scrolls: Bool = true
