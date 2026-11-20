@@ -287,6 +287,17 @@ public enum Copy {
         "Day \(day) of 14"
     }
 
+    /// The Today heading. Day 15 is the final test, never "Day 14 of 14" or "Day 15 of 14".
+    public static func todayHeading(_ day: Int) -> String {
+        day >= 15 ? "Day 15 · Final test" : dayProgress(max(1, day))
+    }
+
+    /// For large display text: a word joiner after each hyphen keeps "push-ups" on one line.
+    /// The joiner is invisible and VoiceOver skips it.
+    public static func keepHyphenatedWords(_ text: String) -> String {
+        text.replacingOccurrences(of: "-", with: "-\u{2060}")
+    }
+
     public static func maxLabel(_ max: Int) -> String {
         "Max \(max)"
     }

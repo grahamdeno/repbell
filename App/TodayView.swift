@@ -3,6 +3,7 @@ import SwiftUI
 
 struct TodayView: View {
     @Environment(ProgramController.self) private var controller
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 15)) { _ in
@@ -23,6 +24,9 @@ struct TodayView: View {
 
     @ViewBuilder
     private func content(_ model: TodaySnapshot) -> some View {
+        // The main action stays on screen on small phones: the footer is pinned and the rest scrolls.
+        // At accessibility text sizes it scrolls with the page instead, so it never covers half the screen.
+        let pinned = !typeSize.isAccessibilitySize
         ScreenChrome {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 12) {
@@ -89,8 +93,19 @@ struct TodayView: View {
                         }
                     }
                 }
-                Spacer(minLength: 12)
+                if !pinned {
+                    Spacer(minLength: 12)
+                    footer(model)
+                }
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if pinned {
                 footer(model)
+                    .padding(.horizontal, ChalkTokens.Space.s6)
+                    .padding(.top, ChalkTokens.Space.s3)
+                    .padding(.bottom, ChalkTokens.Space.s2)
+                    .background(Chalk.ground)
             }
         }
     }
@@ -135,14 +150,14 @@ struct TodayView: View {
                     .foregroundStyle(Chalk.accent)
                     .lineLimit(1)
                     .minimumScaleFactor(0.25)
-                Text(line)
+                Text(Copy.keepHyphenatedWords(line))
                     .font(Chalk.display(28, weight: .bold))
                     .tracking(0.6)
                     .textCase(.uppercase)
             }
         case .finished(let line):
             VStack(alignment: .leading, spacing: 20) {
-                Text(line)
+                Text(Copy.keepHyphenatedWords(line))
                     .font(Chalk.display(40))
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)

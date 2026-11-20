@@ -123,3 +123,46 @@ final class TestFlowTests: XCTestCase {
         XCTAssertTrue(Copy.rerunBody(max: 62).contains("62"))
     }
 }
+
+/// Today fixes found in the design-review screenshots (20 Nov 2026).
+final class TodayFixTests: XCTestCase {
+    private let start = CivilDate(year: 2026, month: 11, day: 16)
+
+    private func at(day: Int, _ hour: Int, _ minute: Int) -> CivilDateTime {
+        CivilDateTime(date: start.addingDays(day - 1), hour: hour, minute: minute)
+    }
+
+    private func input(events: [LogEvent] = []) -> RunInput {
+        RunInput(dayOneMax: 40, wake: ClockTime(hour: 7), bed: ClockTime(hour: 23), start: start, events: events)
+    }
+
+    // Day 15 heading reads as the final test, not "Day 14 of 14".
+    func testDay15HeadingIsFinalTest() {
+        XCTAssertEqual(Copy.todayHeading(15), "Day 15 · Final test")
+        XCTAssertEqual(Copy.todayHeading(14), "Day 14 of 14")
+        XCTAssertEqual(Copy.todayHeading(1), "Day 1 of 14")
+    }
+
+    // Day 8 before noon: the test is open. After the noon fallback: closed, sets run.
+    func testDay8TestClosesAfterNoonFallback() {
+        let events: [LogEvent] = [.test(day: 1, reps: 40, at: at(day: 1, 7, 5))]
+        let morning = ScheduleEngine.resolve(input(events: events), now: at(day: 8, 9, 0)).day(8)
+        XCTAssertEqual(morning?.testOpen, true)
+        let afternoon = ScheduleEngine.resolve(input(events: events), now: at(day: 8, 15, 0)).day(8)
+        XCTAssertEqual(afternoon?.testOpen, false)
+        XCTAssertFalse(afternoon?.sets.isEmpty ?? true)
+    }
+
+    // Day 15 test stays open all day until logged.
+    func testDay15TestStaysOpen() {
+        let day15 = ScheduleEngine.resolve(input(), now: at(day: 15, 18, 0)).day(15)
+        XCTAssertEqual(day15?.testOpen, true)
+    }
+
+    // "push-ups" can't split across lines in display text; the visible text is unchanged.
+    func testHyphenatedWordsKeptTogether() {
+        let kept = Copy.keepHyphenatedWords("100 push-ups today.")
+        XCTAssertTrue(kept.contains("-\u{2060}"))
+        XCTAssertEqual(kept.replacingOccurrences(of: "\u{2060}", with: ""), "100 push-ups today.")
+    }
+}
