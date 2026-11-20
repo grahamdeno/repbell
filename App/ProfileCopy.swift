@@ -71,27 +71,12 @@ extension Copy {
     static let alertsFixHint = "Something above is Off. Open Settings, tap Rep Bell, then Notifications, and turn on Allow Notifications, Banners, Sounds and Time Sensitive."
     static let openSettings = "Open Settings"
 
-    static func busyNothingSkipped(resume: String) -> String {
-        "No sets fall in the next hour, so nothing is skipped. Alerts resume at \(resume)."
-    }
 
-    static func busySkipIntro(count: Int) -> String {
-        count == 1 ? "This set will count as missed:" : "These \(count) sets will count as missed:"
-    }
 
-    static func busyResume(_ resume: String) -> String {
-        "Alerts resume at \(resume). Your max and the rest of the program don't change, and you can undo this."
-    }
 
-    static func busyActive(_ until: String) -> String {
-        "Alerts paused until \(until)"
-    }
 
     static func doneSet(_ reps: Int) -> String {
         "I did \(reps)"
     }
 
-    static func skippedRow(time: String, reps: Int) -> String {
-        "\(time) · \(reps) push-ups"
-    }
 }

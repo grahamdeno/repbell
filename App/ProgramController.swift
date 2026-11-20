@@ -269,17 +269,6 @@ final class ProgramController {
         return next
     }
 
-    /// Upcoming sets whose alerts fall in the next hour; these are the ones Busy would skip.
-    func setsInNextHour() -> [ScheduledSet] {
-        guard let run = library.current else { return [] }
-        let now = CivilDateTime.local(Date())
-        let end = now.adding(minutes: 60)
-        return ScheduleEngine.resolve(run.input, now: now).days.flatMap(\.sets).filter { set in
-            guard set.status == .upcoming, let alert = set.alert else { return false }
-            return alert >= now && alert < end
-        }.sorted { $0.grid < $1.grid }
-    }
-
     /// When the current Busy hour ends, if one is running.
     func activeBusyEnd() -> CivilDateTime? {
         activeBusy()?.until
@@ -467,39 +456,6 @@ final class ProgramController {
         return model
     }
 
-    func profileSnapshot() -> ProfileSnapshot {
-        let now = CivilDateTime.local(Date())
-        var runRows: [ProfileRow] = []
-        var schedule: [ProfileRow] = []
-        if let run = library.current {
-            let moment = run.pausedAt ?? now
-            let resolved = ScheduleEngine.resolve(run.input, now: moment)
-            if let number = run.input.dayNumber(on: moment.date) {
-                runRows.append(ProfileRow(label: "Day", value: run.ended ? "Ended" : "\(min(number, 15)) of 14"))
-            } else if moment.date < run.input.start {
-                runRows.append(ProfileRow(label: "Day", value: "Starts \(Self.dateLabel(run.input.start))"))
-            }
-            runRows.append(ProfileRow(label: "Started", value: Self.dateLabel(run.input.start)))
-            let max = resolved.day(15)?.testReps ?? resolved.day(8)?.testReps ?? resolved.day(1)?.testReps
-            runRows.append(ProfileRow(label: "Max", value: max.map(String.init) ?? "Test on Day 1"))
-            runRows.append(ProfileRow(label: "Push-ups", value: Copy.grouped(resolved.loggedSetReps)))
-            schedule.append(ProfileRow(label: "Wake", value: Copy.clock(run.input.wake)))
-            schedule.append(ProfileRow(label: "Bed", value: Copy.clock(run.input.bed)))
-            let last = ScheduleEngine.lastAllowedMinutes(bed: run.input.bed, wake: run.input.wake) % 1440
-            schedule.append(ProfileRow(label: "Last set", value: Copy.clock(ClockTime(hour: last / 60, minute: last % 60))))
-            schedule.append(ProfileRow(label: "Week 2 re-test", value: run.input.retestEnabled ? "On" : "Off"))
-        }
-        let record: [ProfileRow] = library.history.reversed().map { run in
-            let resolved = ScheduleEngine.resolve(run.input, now: now)
-            let start = resolved.day(1)?.testReps ?? run.input.dayOneMax
-            if let end = resolved.day(15)?.testReps {
-                return ProfileRow(label: Self.dateLabel(run.input.start), value: "\(start) → \(end)")
-            }
-            return ProfileRow(label: Self.dateLabel(run.input.start), value: "\(start), ended early")
-        }
-        return ProfileSnapshot(run: runRows, record: record, schedule: schedule, unlocked: library.unlocked)
-    }
-
     static func dateLabel(_ date: CivilDate) -> String {
         let calendar = Calendar.current
         guard let foundation = calendar.date(from: DateComponents(year: date.year, month: date.month, day: date.day)) else { return "" }
@@ -521,10 +477,6 @@ final class ProgramController {
         update { $0.input.events.append(.busy(at: now)) }
         Haptics.play(.tap)
         Task { await refreshAlerts() }
-    }
-
-    func busyUntil() -> CivilDateTime {
-        CivilDateTime.local(Date()).adding(minutes: 60)
     }
 
     func pause() {
@@ -888,13 +840,6 @@ struct InsightsModel {
     var allTime: [ProfileStat] = []
     var studio: [ProfileStat] = []
     var record: [ProfileRow] = []
-}
-
-struct ProfileSnapshot: Equatable {
-    var run: [ProfileRow]
-    var record: [ProfileRow]
-    var schedule: [ProfileRow]
-    var unlocked: Bool
 }
 
 extension CivilDate {

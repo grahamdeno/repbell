@@ -69,7 +69,8 @@ public enum WidgetState: Equatable, Sendable {
         }
         let resolved = ScheduleEngine.resolve(run.input, now: now)
         guard let day = resolved.day(number) else { return .finished }
-        if day.isTest && day.testReps == nil {
+        // A test day with no sets yet. If the Day 8 re-test is skipped, sets start at noon and show instead.
+        if day.isTest && day.testReps == nil && day.sets.isEmpty {
             return .testToday(day: number, wake: run.input.wake)
         }
         if number == 15 { return .finished }
