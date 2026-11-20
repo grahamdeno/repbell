@@ -102,10 +102,6 @@ public enum InsightsEngine {
         var lines: [String] = []
         let today = resolved.input.dayNumber(on: now.date)
 
-        if let gain = insights.gainPercent, gain > 0, let through = insights.gainThroughDay {
-            lines.append("Up \(gain)% since Day 1, measured on Day \(through).")
-        }
-
         let program = resolved.days.filter { $0.number <= 14 }
         if let best = program.filter({ $0.loggedReps > 0 }).max(by: { $0.loggedReps < $1.loggedReps }) {
             lines.append("Biggest day so far: Day \(best.number), \(Copy.grouped(best.loggedReps)) push-ups.")
@@ -114,13 +110,17 @@ public enum InsightsEngine {
         if let today, today <= 14 {
             let left = program.filter { $0.number >= today }.flatMap(\.sets).filter { $0.status == .upcoming }
             let reps = left.reduce(0) { $0 + $1.reps }
-            if !left.isEmpty {
+            // Week 2 numbers are only known once Day 8 has its max, so the count waits until then.
+            let weekTwoKnown = today > 8 || resolved.day(8)?.sets.isEmpty == false
+            if !left.isEmpty && weekTwoKnown {
                 let sets = left.count == 1 ? "1 set" : "\(left.count) sets"
                 lines.append("\(sets) left in this run, about \(Copy.grouped(reps)) push-ups, before the final test.")
             }
             if today < 14, let next = resolved.day(today + 1) {
                 if next.isTest {
-                    lines.append("Tomorrow, Day \(next.number): your re-test.")
+                    if next.number != 8 || resolved.input.retestEnabled {
+                        lines.append("Tomorrow, Day \(next.number): your re-test.")
+                    }
                 } else if !next.sets.isEmpty {
                     lines.append("Tomorrow, Day \(next.number): \(next.sets.count) sets of \(next.reps).")
                 }
@@ -139,7 +139,7 @@ public enum InsightsEngine {
         var notes: [RunInsights.Observation] = []
 
         if let gain = insights.gainPercent, gain > 0, let last = insights.maxes.last {
-            notes.append(.init(text: "Your max is up \(gain)% since Day 1, to \(last.reps).", link: nil))
+            notes.append(.init(text: "Your max is up \(gain)% from Day 1 to Day \(last.day), to \(last.reps).", link: nil))
         }
 
         // Where the misses cluster.

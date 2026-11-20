@@ -154,8 +154,7 @@ final class DailyLoopTests: XCTestCase {
         }
         let insights = InsightsEngine.run(input(events), now: at(day: 2, 12, 0))
         XCTAssertTrue(insights.ahead.contains { $0.hasPrefix("Biggest day so far: Day 2") })
-        XCTAssertTrue(insights.ahead.contains { $0.contains("left in this run") })
-        XCTAssertTrue(insights.ahead.contains { $0.hasPrefix("Tomorrow, Day 3:") })
+                XCTAssertTrue(insights.ahead.contains { $0.hasPrefix("Tomorrow, Day 3:") })
         XCTAssertTrue(insights.ahead.contains("13 days to the final test."))
         for line in insights.ahead {
             XCTAssertFalse(line.lowercased().contains("missed"), line)
@@ -169,5 +168,27 @@ final class DailyLoopTests: XCTestCase {
         XCTAssertTrue(day7.ahead.contains("Tomorrow, Day 8: your re-test."))
         let day14 = InsightsEngine.run(input([dayOneTest]), now: at(day: 14, 9, 0))
         XCTAssertTrue(day14.ahead.contains("Tomorrow: the final test."))
+    }
+
+    // UX-15: a skipped Day 8 re-test shows the noon sets, not "Test today" all afternoon.
+    func testUX15_day8FallbackShowsSets() {
+        let run = PersistedRun(input: input([dayOneTest]))
+        XCTAssertEqual(WidgetState.make(run: run, now: at(day: 8, 9, 0)), .testToday(day: 8, wake: ClockTime(hour: 7)))
+        if case .next(let day, _, _) = WidgetState.make(run: run, now: at(day: 8, 12, 30)) {
+            XCTAssertEqual(day, 8)
+        } else {
+            XCTFail("expected the noon sets after a skipped re-test")
+        }
+    }
+
+    // Item 5: no re-test line when the re-test is off; no week-2 total before Day 8 has its max.
+    func testItem5_aheadRespectsRetestAndUnknowns() {
+        var off = input([dayOneTest])
+        off.retestEnabled = false
+        let day7 = InsightsEngine.run(off, now: at(day: 7, 9, 0))
+        XCTAssertFalse(day7.ahead.contains { $0.contains("re-test") })
+        let early = InsightsEngine.run(input([dayOneTest]), now: at(day: 3, 9, 0))
+        XCTAssertFalse(early.ahead.contains { $0.contains("left in this run") })
+        XCTAssertFalse(early.ahead.contains { $0.hasPrefix("Up ") })
     }
 }

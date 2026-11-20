@@ -46,7 +46,8 @@ struct NextSetProvider: TimelineProvider {
         var refreshAt: Date?
         var day = ""
         if case .next(let number, let at, _) = state {
-            refreshAt = at.foundationDate().map { $0.addingTimeInterval(60) }
+            // Only a future set time; an overdue set waits for the regular refresh.
+            refreshAt = at.foundationDate().flatMap { $0 > now ? $0.addingTimeInterval(60) : nil }
             day = Copy.dayProgress(number)
         }
         return NextSetEntry(date: now, title: lines.title, reps: lines.big, detail: lines.detail, day: day, refreshAt: refreshAt)
