@@ -22,8 +22,10 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
   It includes the program, Progress, Settings, a paywall, and Workouts with coach clips and Apple Health.
 - **Reviews so far:** gap review (16 to 17 Nov), design evaluation by code read (36 findings), independent review of
   it (20 Nov). All findings are in `docs/audit/findings.md` as UX-1 to UX-41.
-- **Decided 20 Nov:** what 1.0 is (see Decision log). Scope for 1.0 is proposed below and not yet frozen.
-- **Next step:** Graham freezes the 1.0 scope (Stage 3). Then Build A and Build B go to Rep Bell Build (Sonnet).
+- **Decided 20 Nov:** what 1.0 is, and the 1.0 scope, frozen (see Decision log and Release scope).
+- **1.0 runs under an exception to the playbook:** Rep Bell Product (Opus) shapes, builds and merges the whole scope,
+  and stops only where Graham's input is required.
+- **Next step:** Product builds the scope in the order under Release scope.
 
 ## Product specifics
 
@@ -67,6 +69,10 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-20 | **1.0 scope frozen** as listed under Release scope: Builds A to F, the Progress insights story, all of UX-11, a CI guard for the on-device promise, navigation, Run it again, the Watch items, Apple Health for push-ups, and the day-start alarms epic. Payment and coach media stay out | Graham's decision |
+| 2026-11-20 | **Exception to the playbook for 1.0 only.** Rep Bell Product (Opus) takes every item in the 1.0 scope from shaping through build and merge without read-backs, shape approvals, mockup picks or per-PR go-aheads. Graham gave a standing merge go for the 1.0 scope (merge each PR once CI is green) and a standing test build go (one internal TestFlight upload when the scope is merged, plus one per fix round). No ship go is given. Each PR on the always-review list is reviewed by a separate agent that did not write it. Design and wording choices are recorded here as "decided by Product under the 1.0 exception" for Graham to review. Steps that can't be undone are unchanged | Graham's decision, to reach a test build without stops |
+| 2026-11-20 | **Apple Health permission text:** "Rep Bell saves your finished Workouts sessions and push-ups to Apple Health. It does not read your Health data." **App Privacy answer:** Data Not Collected. Grok sets it at release, from this text | Decided by Product under the 1.0 exception. Health data stays on the device and nothing is sent to a server |
+| 2026-11-20 | **UX-11 is fully in 1.0;** none of it is deferred | Graham's decision, with the scope freeze |
 | 2026-11-20 | **The repo stays public for now.** Revisit at launch. The coach clips stay in the public history while R-1 is open | Graham's decision. Replaces the gap review's lean toward private |
 | 2026-11-20 | **1.0 is free with no paywall. Nothing is locked.** The free and paid boundary and the price are decided in a later version. People who install 1.0 stay free when payment arrives. The unlock product stays in App Store Connect, unused. Findings UX-1, UX-13 and UX-37 are deferred to the version that adds payment | Graham's decision. **Replaces** the approved pricing of 3 free days and a $4.99 unlock |
 | 2026-11-20 | **Progress keeps all its current numbers** (Day, Push-ups, Sets done, Sets missed, On time, Typical response, Perfect days in a row, Snoozed), in factual wording. Finding UX-9 is accepted. **This amends the "no streak or guilt language" voice rule: factual counts are allowed on Progress, and only there** | Graham's decision: the program only delivers its benefit when every set is done, so these numbers support staying on it |
@@ -91,25 +97,36 @@ Newest first. Refined decisions only.
 
 ## Release scope
 
-- **1.0:** proposed 20 Nov 2026, **not yet frozen**. Builds in order, each a group of PRs:
+- **1.0:** proposed and **frozen 20 Nov 2026**, under the 1.0 exception. Built in this order, one PR per item or small
+  group:
 
-| Build | Theme | Contents | Review |
+| # | Group | Contents | Review |
 |---|---|---|---|
-| A. Scope | What 1.0 is | Items 1 and 4: coach media, Coach picker and credit out; Workouts on by a build setting (UX-39); Health write only; paywall off, nothing locked, price and free-day copy removed | Full |
-| B. No dead ends | Every screen has a way out | UX-2, UX-12, UX-18, UX-28, UX-29 | Full |
-| C. Access for everyone | Text grows; motion, contrast, targets | UX-3, UX-4, UX-16, UX-17, UX-19, UX-20, UX-21, UX-22, UX-23, UX-34, UX-35 | Opus diff |
-| D. Daily loop and glance | Fewer taps, right numbers, the celebration | Items 2 and 3; UX-14, UX-15, UX-25, UX-26, UX-27, UX-31, UX-38, UX-41 | Opus diff |
-| E. Workouts in its place | Workouts does not compete with the program | UX-7, UX-8, UX-11 (Workouts settings); Health permission wording and App Privacy answers | Opus diff; Graham approves the privacy answers |
-| F. Words and cleanup | Docs match the app | UX-24, UX-33, UX-36 | Graham's read-back |
+| 1 | A. Scope | Items 1 and 4: coach media, Coach picker and credit out; Workouts on by a build setting (UX-39); Health write only; paywall unreachable; no price or free-day copy | Separate agent |
+| 2 | B. No dead ends | UX-2, UX-12, UX-18, UX-28, UX-29 | Separate agent |
+| 3 | Guard | A CI guard for the on-device promise, with a self-test | Separate agent |
+| 4 | C. Access for everyone | UX-3, UX-4, UX-16, UX-17, UX-19, UX-20, UX-21, UX-22, UX-23, UX-34, UX-35 | Separate agent where it touches the always-review list |
+| 5 | Navigation and Settings | Item 9: UX-10 and all of UX-11 | Separate agent |
+| 6 | D. Daily loop and glance | Items 2 and 3; UX-14, UX-15, UX-25, UX-26, UX-27, UX-31, UX-38, UX-41 | Separate agent |
+| 7 | Progress | Item 5 | Separate agent where it touches the engine |
+| 8 | E. Workouts in its place | UX-7, UX-8 | Separate agent where it touches the always-review list |
+| 9 | Run it again | Item 10 (UX-30) | Separate agent |
+| 10 | Watch | Item 11 (UX-32) | Separate agent |
+| 11 | Health for push-ups | Item 12 | Separate agent |
+| 12 | Day start and ringing alarms | Item 13, all four stories | Separate agent |
+| 13 | F. Words and cleanup | UX-24, UX-33, UX-36; copy deck, README.md and docs/README.md | Separate agent |
 
-  Then Stage 5: the UX walk, including one Workouts journey per session type.
+  Then the test build, Graham's checks on his phone, the Stage 5 UX walk, and the Fable go-live assessment.
+- **Out of 1.0:** payment (item 7, with items 6 and UX-1, UX-13, UX-37) and coach media (item 8).
 - **Purchases approved:** none in 1.0. `com.grahamdeno.repbell.unlock` (non-consumable, $4.99, Family Sharing off)
   was approved on 17 Nov 2026 and is unused since the 20 Nov decision.
-- **Go-aheads:** merge: per PR, none given yet. Test build: none under the playbook. Ship: none.
+- **Go-aheads:** merge: standing, for the 1.0 scope, 20 Nov 2026 (under the exception). Test build: standing, one
+  internal upload when the scope is merged plus one per fix round, 20 Nov 2026. Ship: none.
 
 ## Dated checks
 
 - **At launch (before the 1.0 ship go):** revisit repo visibility (Graham).
+- **Before the 1.0 ship go:** Graham reviews every choice logged as "decided by Product under the 1.0 exception".
 - **Before any coach media returns:** R-1 is met (Opus checks, Graham approves).
 
 ## Backlog
@@ -259,8 +276,6 @@ entry (UX-11, the part outside Build E).
 
 ## Small follow-ups
 
-- A CI guard for the on-device promise (no network calls, no analytics or third-party SDKs), with a self-test.
-  Not yet approved as an item.
 - Missed Day 1 test: the test stays open and Day 1 moves (decided 17 Nov). Not yet checked against the code.
 - `docs/provenance.md` for the coach media, from the evidence kept in Graham's Claude project (item 8).
 - README.md and docs/README.md still describe the first build's rules; they are brought in line in Build F (UX-24).
