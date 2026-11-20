@@ -13,6 +13,7 @@ struct SettingsView: View {
     @State private var alertsOK = true
     @State private var testMessage: String?
     @State private var confirmStartOver = false
+    @State private var pushUpsToHealth = PushUpHealthStore.enabled
 
     var body: some View {
         ScreenChrome(top: 8, scrolls: false) {
@@ -136,6 +137,31 @@ struct SettingsView: View {
                         controller.resume()
                     }
                 }
+            }
+            if StudioHealth.available {
+                Toggle(Copy.pushUpsToHealth, isOn: Binding(
+                    get: { pushUpsToHealth },
+                    set: { on in
+                        if on {
+                            Task {
+                                let allowed = await StudioHealth.enable()
+                                if allowed { PushUpHealthStore.markExistingAsWritten(run: controller.library.current) }
+                                PushUpHealthStore.enabled = allowed
+                                pushUpsToHealth = allowed
+                            }
+                        } else {
+                            PushUpHealthStore.enabled = false
+                            pushUpsToHealth = false
+                        }
+                    }
+                ))
+                .tint(Chalk.accent)
+                .foregroundStyle(Chalk.inkSoft)
+                .frame(minHeight: ChalkTokens.minimumTarget)
+                Text(Copy.pushUpsToHealthDetail)
+                    .font(.footnote)
+                    .foregroundStyle(Chalk.inkMuted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Text(Copy.startOverBody)
                 .font(.subheadline)

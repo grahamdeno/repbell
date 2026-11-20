@@ -633,6 +633,7 @@ final class ProgramController {
         }
         PhoneSessionBridge.shared.push(library)
         Notifier.scheduleRefresh()
+        await PushUpHealthStore.sync(run: library.current)
     }
 
     func onActive() async {

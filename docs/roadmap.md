@@ -226,7 +226,7 @@ entry (UX-11, the part outside Build E).
 
 ### 11. Watch: complication, Busy on the wrist, the number's color rule (in 1.0, group 10; built except the complication, which needs Graham's approval of a new bundle ID; UX-32)
 
-### 12. Apple Health for push-ups (later; from the plan's v1 scope table)
+### 12. Apple Health for push-ups (in 1.0, group 11; built)
 
 ### 13. Epic: Day start and alarms that ring through silent
 

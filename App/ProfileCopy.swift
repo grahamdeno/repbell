@@ -45,6 +45,8 @@ extension Copy {
     static let changeSchedule = "Change your times"
     static let wakeLabel = "Wake"
     static let bedtimeLabel = "Bedtime"
+    static let pushUpsToHealth = "Save push-ups to Apple Health"
+    static let pushUpsToHealthDetail = "Each finished day is saved as one strength workout, from now on. Rep Bell never reads Health data."
     static let alertsOn = "On"
     static let alertsNeedAttention = "Needs attention"
     static let saveTimes = "Save times"
