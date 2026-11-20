@@ -8,20 +8,18 @@ struct CounterView: View {
     @State private var originY: CGFloat?
 
     var body: some View {
-        ScreenChrome {
+        ScreenChrome(scrolls: false) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Text(Copy.testEyebrow(day: day))
-                        .font(Chalk.display(22, weight: .bold))
-                        .tracking(0.8)
-                        .textCase(.uppercase)
+                        .eyebrow()
                     Spacer()
                     Text(Copy.goodForm)
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                 }
                 Text(Copy.counterPrompt)
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                 counter
                 HStack(spacing: 12) {
@@ -31,7 +29,6 @@ struct CounterView: View {
                         .accessibilityLabel("Add one")
                     PrimaryButton(title: Copy.done) { controller.showConfirm(day: day) }
                         .disabled(!TestFlow.canSubmit(count: controller.draftCount))
-                        .opacity(TestFlow.canSubmit(count: controller.draftCount) ? 1 : 0.4)
                 }
                 TextLink(title: Copy.notYet) { controller.deferTest() }
                     .frame(maxWidth: .infinity)
@@ -44,7 +41,7 @@ struct CounterView: View {
     private var counter: some View {
         VStack(spacing: 6) {
             Image(systemName: "chevron.up")
-                .font(.system(size: 18, weight: .semibold))
+                .font(.headline)
                 .foregroundStyle(Chalk.inkFaint)
             Text("\(controller.draftCount + 1)")
                 .font(Chalk.display(40, weight: .bold))
@@ -58,7 +55,7 @@ struct CounterView: View {
                 .font(Chalk.display(40, weight: .bold))
                 .foregroundStyle(Chalk.inkFaint)
             Image(systemName: "chevron.down")
-                .font(.system(size: 18, weight: .semibold))
+                .font(.headline)
                 .foregroundStyle(Chalk.inkFaint)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -80,7 +80,7 @@ struct NextSetView: View {
                 if family == .accessoryRectangular {
                     AccessoryWidgetBackground()
                 } else {
-                    Color(red: 0x12 / 255, green: 0x12 / 255, blue: 0x12 / 255)
+                    Chalk.ground
                 }
             }
     }
@@ -91,9 +91,9 @@ struct NextSetView: View {
         case .accessoryRectangular:
             VStack(alignment: .leading, spacing: 2) {
                 Text(entry.title)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.footnote.weight(.semibold))
                 Text(entry.detail)
-                    .font(.custom("BarlowCondensed-ExtraBold", size: 28))
+                    .font(Chalk.display(28, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
             }
@@ -101,16 +101,16 @@ struct NextSetView: View {
         default:
             VStack(alignment: .leading, spacing: 4) {
                 Text(entry.day.isEmpty ? entry.title : entry.day)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Color(red: 0xA3 / 255, green: 0xA0 / 255, blue: 0x9A / 255))
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(Chalk.inkMuted)
                 Text(entry.reps)
-                    .font(.custom("BarlowCondensed-ExtraBold", size: family == .systemMedium ? 72 : 56))
-                    .foregroundStyle(Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255))
+                    .font(Chalk.display(family == .systemMedium ? 72 : 56, weight: .extraBold))
+                    .foregroundStyle(Chalk.accent)
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                 Text(entry.title)
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color(red: 0xF2 / 255, green: 0xF0 / 255, blue: 0xEB / 255))
+                    .font(.footnote)
+                    .foregroundStyle(Chalk.ink)
                     .lineLimit(2)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -122,8 +122,11 @@ struct TestAlarmActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AlarmAttributes<RepBellAlarmMetadata>.self) { _ in
             Text(Copy.testAlarm)
-                .font(.system(size: 17, weight: .semibold))
+                .font(Chalk.display(24))
+                .textCase(.uppercase)
+                .foregroundStyle(Chalk.ink)
                 .padding()
+                .activityBackgroundTint(Chalk.ground)
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {

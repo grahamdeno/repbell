@@ -11,13 +11,11 @@ struct ResultView: View {
         ScreenChrome(top: 16) {
             VStack(alignment: .leading, spacing: 20) {
                 Text(numbers.end == nil ? Copy.runEnded(day: controller.endedDay() ?? 1) : "Day 15 · Final test")
-                    .font(Chalk.display(22, weight: .bold))
-                    .tracking(0.8)
-                    .textCase(.uppercase)
+                    .eyebrow()
                 ResultCard(start: numbers.start, end: numbers.end, reps: numbers.reps, percent: numbers.percent)
                 if numbers.end == nil {
                     Text(Copy.endDetail)
-                        .font(.system(size: 16))
+                        .font(.body)
                         .foregroundStyle(Chalk.inkSoft)
                 }
                 if numbers.end != nil, controller.library.current?.ended == false {
@@ -27,14 +25,8 @@ struct ResultView: View {
                 if let image = render(start: numbers.start, end: numbers.end, reps: numbers.reps, percent: numbers.percent) {
                     ShareLink(item: ShareImage(image: image), preview: SharePreview(Copy.wordmark, image: Image(uiImage: image))) {
                         Text(Copy.share)
-                            .font(.system(size: 18, weight: .semibold))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 60)
-                            .background(Chalk.accent)
-                            .foregroundStyle(Chalk.onAccent)
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(PrimaryButtonStyle())
                 }
                 HStack(spacing: 12) {
                     SecondaryButton(title: Copy.runAgain, height: 56) { controller.runAgain() }
@@ -63,19 +55,21 @@ struct ResultCard: View {
             HStack(alignment: .bottom, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Day 1")
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                     Text("\(start)")
                         .font(Chalk.display(72))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                         .foregroundStyle(Chalk.inkFaint)
                 }
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.title3.weight(.semibold))
                     .foregroundStyle(Chalk.ink)
                     .padding(.bottom, 12)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(end == nil ? "Saved" : "Day 15")
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                     Text(end.map(String.init) ?? "—")
                         .font(Chalk.display(96))
@@ -90,7 +84,7 @@ struct ResultCard: View {
                     Text(Copy.grouped(reps))
                         .font(Chalk.display(32, weight: .bold))
                     Text(end == nil ? "push-ups so far" : "push-ups in 14 days")
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                 }
                 Spacer()
@@ -99,7 +93,7 @@ struct ResultCard: View {
                         Text(Copy.signedPercent(percent))
                             .font(Chalk.display(32, weight: .bold))
                         Text("on your max")
-                            .font(.system(size: 14))
+                            .font(.subheadline)
                             .foregroundStyle(Chalk.inkMuted)
                     }
                 }
@@ -107,8 +101,8 @@ struct ResultCard: View {
         }
         .padding(24)
         .background(Chalk.surface)
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(Chalk.line, lineWidth: 1.5))
-        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .overlay(RoundedRectangle(cornerRadius: ChalkTokens.Radius.panel).stroke(Chalk.line, lineWidth: 1.5))
+        .clipShape(RoundedRectangle(cornerRadius: ChalkTokens.Radius.panel))
     }
 }
 

@@ -10,7 +10,7 @@ struct ConfirmView: View {
         ScreenChrome(top: 28) {
             VStack(alignment: .leading, spacing: 20) {
                 Text(Copy.yourMaxLine(reps))
-                    .font(.system(size: 15, weight: .medium))
+                    .font(.subheadline.weight(.medium))
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(reps)")
                     .font(Chalk.display(160))
@@ -25,11 +25,11 @@ struct ConfirmView: View {
                             .foregroundStyle(Chalk.ink)
                         if let first = preview.sets.first?.grid, let last = preview.sets.last?.grid, !preview.sets.isEmpty {
                             Text(Copy.confirmDetail(first: first, last: last, count: preview.sets.count))
-                                .font(.system(size: 16))
+                                .font(.body)
                                 .foregroundStyle(Chalk.inkSoft)
                         } else {
                             Text(Copy.noSetsLeft(reps: preview.reps, intervalMinutes: preview.intervalMinutes))
-                                .font(.system(size: 16))
+                                .font(.body)
                                 .foregroundStyle(Chalk.inkSoft)
                         }
                     }

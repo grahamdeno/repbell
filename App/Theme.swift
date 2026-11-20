@@ -1,35 +1,7 @@
 import RepBellEngine
 import SwiftUI
 
-enum Chalk {
-    static let ground = Color(red: 0x12 / 255, green: 0x12 / 255, blue: 0x12 / 255)
-    static let groundWatch = Color.black
-    static let surface = Color(red: 0x1A / 255, green: 0x1A / 255, blue: 0x19 / 255)
-    static let line = Color(red: 0x2E / 255, green: 0x2D / 255, blue: 0x2A / 255)
-    static let lineStrong = Color(red: 0x3A / 255, green: 0x39 / 255, blue: 0x36 / 255)
-    static let ink = Color(red: 0xF2 / 255, green: 0xF0 / 255, blue: 0xEB / 255)
-    static let inkSoft = Color(red: 0xC9 / 255, green: 0xC6 / 255, blue: 0xC0 / 255)
-    static let inkMuted = Color(red: 0xA3 / 255, green: 0xA0 / 255, blue: 0x9A / 255)
-    static let inkFaint = Color(red: 0x6E / 255, green: 0x6B / 255, blue: 0x66 / 255)
-    static let accent = Color(red: 1, green: 0x6A / 255, blue: 0x13 / 255)
-    static let accentPressed = Color(red: 1, green: 0x8A / 255, blue: 0x45 / 255)
-    static let onAccent = Color(red: 0x12 / 255, green: 0x12 / 255, blue: 0x12 / 255)
-    static let watchSecondary = Color(red: 0x26 / 255, green: 0x26 / 255, blue: 0x24 / 255)
-
-    enum Display: Sendable {
-        case bold, extraBold, black
-    }
-
-    static func display(_ size: CGFloat, weight: Display = .extraBold) -> Font {
-        let name: String
-        switch weight {
-        case .bold: name = "BarlowCondensed-Bold"
-        case .extraBold: name = "BarlowCondensed-ExtraBold"
-        case .black: name = "BarlowCondensed-Black"
-        }
-        return .custom(name, size: size)
-    }
-}
+// Colors, fonts and the type scale live in the engine (`Chalk`, `ChalkTokens`) so every target shares them.
 
 struct Chevron: Shape {
     func path(in rect: CGRect) -> Path {
@@ -66,17 +38,78 @@ struct Wordmark: View {
     }
 }
 
+/// The frame every iPhone screen sits in. When the content doesn't fit (large text, small phone), it scrolls.
+/// Screens that already scroll, or that use a vertical drag, pass `scrolls: false`.
+/// The content is built for both the fitting and the scrolling layout, so a child's `@State` resets if the
+/// screen switches between them (for example when text size changes). Keep screen state in the controller.
 struct ScreenChrome<Content: View>: View {
     var top: CGFloat = 8
+    var scrolls: Bool = true
     @ViewBuilder var content: () -> Content
 
     var body: some View {
+        Group {
+            if scrolls {
+                ViewThatFits(in: .vertical) {
+                    framed
+                    ScrollView {
+                        framed
+                    }
+                    .scrollIndicators(.hidden)
+                }
+            } else {
+                framed
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Chalk.ground.ignoresSafeArea())
+    }
+
+    private var framed: some View {
         content()
-            .padding(.horizontal, 24)
+            .padding(.horizontal, ChalkTokens.Space.s6)
             .padding(.top, top)
-            .padding(.bottom, 24)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(Chalk.ground.ignoresSafeArea())
+            .padding(.bottom, ChalkTokens.Space.s6)
+            .frame(maxWidth: .infinity, alignment: .top)
+    }
+}
+
+/// Primary action: accent fill, lighter when pressed, faded when disabled.
+struct PrimaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Chalk.TypeScale.button)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 60)
+            .padding(.horizontal, ChalkTokens.Space.s4)
+            .background(configuration.isPressed ? Chalk.accentPressed : Chalk.accent)
+            .foregroundStyle(Chalk.onAccent)
+            .clipShape(RoundedRectangle(cornerRadius: ChalkTokens.Radius.button))
+            .opacity(isEnabled ? 1 : 0.4)
+            .contentShape(Rectangle())
+    }
+}
+
+/// Secondary action: outlined, filled with surface when pressed.
+struct SecondaryButtonStyle: ButtonStyle {
+    enum Size { case regular, compact }
+    var size: Size = .regular
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(size == .regular ? Chalk.TypeScale.button : Font.body.weight(.semibold))
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: size == .regular ? 60 : 52)
+            .padding(.horizontal, ChalkTokens.Space.s4)
+            .foregroundStyle(Chalk.ink)
+            .background(configuration.isPressed ? Chalk.surface : Color.clear)
+            .overlay(RoundedRectangle(cornerRadius: ChalkTokens.Radius.button).stroke(Chalk.lineStrong, lineWidth: 1.5))
+            .clipShape(RoundedRectangle(cornerRadius: ChalkTokens.Radius.button))
+            .contentShape(Rectangle())
     }
 }
 
@@ -85,36 +118,52 @@ struct PrimaryButton: View {
     var action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.system(size: 18, weight: .semibold))
-                .frame(maxWidth: .infinity)
-                .frame(height: 60)
-                .background(Chalk.accent)
-                .foregroundStyle(Chalk.onAccent)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(title)
+        Button(title, action: action)
+            .buttonStyle(PrimaryButtonStyle())
     }
 }
 
 struct SecondaryButton: View {
     var title: String
-    var height: CGFloat = 60
+    var size: SecondaryButtonStyle.Size = .regular
     var action: () -> Void
 
+    init(title: String, size: SecondaryButtonStyle.Size = .regular, action: @escaping () -> Void) {
+        self.title = title
+        self.size = size
+        self.action = action
+    }
+
+    /// Older call sites pass a height; anything under 60 points is the compact size.
+    init(title: String, height: CGFloat, action: @escaping () -> Void) {
+        self.init(title: title, size: height < 60 ? .compact : .regular, action: action)
+    }
+
     var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.system(size: height < 60 ? 16 : 18, weight: .semibold))
-                .frame(maxWidth: .infinity)
-                .frame(height: height)
-                .foregroundStyle(Chalk.ink)
-                .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.lineStrong, lineWidth: 1.5))
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(title)
+        Button(title, action: action)
+            .buttonStyle(SecondaryButtonStyle(size: size))
+    }
+}
+
+/// Uppercase display label above a section or screen.
+struct Eyebrow: ViewModifier {
+    var color: Color = Chalk.ink
+    func body(content: Content) -> some View {
+        content
+            .font(Chalk.TypeScale.eyebrow)
+            .tracking(0.8)
+            .textCase(.uppercase)
+            .foregroundStyle(color)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
+
+extension View {
+    func eyebrow(_ color: Color = Chalk.ink) -> some View { modifier(Eyebrow(color: color)) }
+
+    /// The outlined card used for option rows and strips.
+    func outlinedCard(radius: Double = ChalkTokens.Radius.card, color: Color = Chalk.lineStrong) -> some View {
+        overlay(RoundedRectangle(cornerRadius: radius).stroke(color, lineWidth: 1.5))
     }
 }
 
@@ -125,33 +174,38 @@ struct StepBars: View {
             ForEach(0..<5, id: \.self) { index in
                 Capsule()
                     .fill(index < filled ? Chalk.accent : Chalk.line)
-                    .frame(height: 4)
+                    .frame(height: ChalkTokens.stepBarHeight)
             }
         }
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel("Step \(filled) of 5")
     }
 }
 
 struct DayBars: View {
     var marks: [DayBar]
+    @Environment(\.colorSchemeContrast) private var contrast
+
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(alignment: .center, spacing: ChalkTokens.Space.s1) {
             ForEach(Array(marks.enumerated()), id: \.offset) { _, mark in
                 Capsule()
-                    .fill(mark.color)
-                    .frame(height: 6)
+                    .fill(mark.color(contrast))
+                    // Today is taller, so it never relies on color alone.
+                    .frame(height: mark == .today ? 12 : 6)
             }
         }
+        .frame(height: 12)
     }
 }
 
-enum DayBar {
+enum DayBar: Equatable {
     case past, today, future
-    var color: Color {
+    func color(_ contrast: ColorSchemeContrast) -> Color {
         switch self {
         case .past: Chalk.ink
         case .today: Chalk.accent
-        case .future: Chalk.line
+        case .future: Chalk.markOutline(contrast)
         }
     }
 }
@@ -166,25 +220,34 @@ struct ChoiceCard: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(Chalk.display(30))
+                    .font(Chalk.TypeScale.title)
                     .textCase(.uppercase)
                     .foregroundStyle(recommended ? Chalk.onAccent : Chalk.ink)
                 Text(detail)
-                    .font(.system(size: 15, weight: .medium))
+                    .font(Chalk.TypeScale.label)
                     .foregroundStyle(recommended ? Chalk.onAccent.opacity(0.8) : Chalk.inkMuted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
-            .padding(.vertical, 16)
-            .frame(minHeight: 88)
+            .padding(.vertical, ChalkTokens.Space.s4)
+            .frame(minHeight: ChalkTokens.choiceCardMinHeight)
             .background(recommended ? Chalk.accent : Color.clear)
             .overlay(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: ChalkTokens.Radius.card)
                     .stroke(recommended ? Color.clear : Chalk.lineStrong, lineWidth: 1.5)
             )
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .clipShape(RoundedRectangle(cornerRadius: ChalkTokens.Radius.card))
+            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressFade())
+    }
+}
+
+/// A light pressed state for custom tappable rows.
+struct PressFade: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label.opacity(configuration.isPressed ? 0.7 : 1)
     }
 }
 
@@ -194,10 +257,12 @@ struct TextLink: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: 15, weight: .regular))
+                .font(.subheadline)
                 .foregroundStyle(Chalk.accent)
-                .padding(12)
+                .padding(.horizontal, ChalkTokens.Space.s3)
+                .frame(minWidth: ChalkTokens.minimumTarget, minHeight: ChalkTokens.minimumTarget)
+                .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressFade())
     }
 }

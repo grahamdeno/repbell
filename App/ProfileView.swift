@@ -7,7 +7,7 @@ struct ProfileView: View {
 
     var body: some View {
         let model = controller.insightsModel()
-        ScreenChrome(top: 28) {
+        ScreenChrome(top: 28, scrolls: false) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(Copy.profileTitle)
@@ -16,7 +16,7 @@ struct ProfileView: View {
                     Spacer()
                     Button { controller.screen = .settings } label: {
                         Image(systemName: "gearshape")
-                            .font(.system(size: 22))
+                            .font(.title3)
                             .foregroundStyle(Chalk.inkSoft)
                             .frame(width: 44, height: 44)
                     }
@@ -41,7 +41,7 @@ struct ProfileView: View {
                             }
                         } else {
                             Text(Copy.insightsEmpty)
-                                .font(.system(size: 16))
+                                .font(.body)
                                 .foregroundStyle(Chalk.inkSoft)
                         }
                         if !model.allTime.isEmpty {
@@ -69,20 +69,17 @@ struct ProfileView: View {
     private func maxHero(_ run: RunInsights) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(Copy.yourMax)
-                .font(Chalk.display(18, weight: .bold))
-                .tracking(0.8)
-                .textCase(.uppercase)
-                .foregroundStyle(Chalk.inkMuted)
+                .eyebrow(Chalk.inkMuted)
             if run.maxes.isEmpty {
                 Text(Copy.testOnDayOne)
-                    .font(.system(size: 17))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
             } else {
                 HStack(alignment: .lastTextBaseline, spacing: 10) {
                     ForEach(Array(run.maxes.enumerated()), id: \.offset) { index, max in
                         if index > 0 {
                             Image(systemName: "arrow.right")
-                                .font(.system(size: 18, weight: .semibold))
+                                .font(.headline)
                                 .foregroundStyle(Chalk.inkFaint)
                         }
                         VStack(alignment: .leading, spacing: 0) {
@@ -90,14 +87,14 @@ struct ProfileView: View {
                                 .font(Chalk.display(index == run.maxes.count - 1 ? 72 : 44))
                                 .foregroundStyle(index == run.maxes.count - 1 ? Chalk.accent : Chalk.ink)
                             Text("Day \(max.day)")
-                                .font(.system(size: 13))
+                                .font(.footnote)
                                 .foregroundStyle(Chalk.inkMuted)
                         }
                     }
                 }
                 if let gain = run.gainPercent {
                     Text(gain >= 0 ? "Up \(gain)%" : "Down \(-gain)%")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(gain >= 0 ? Chalk.accent : Chalk.inkSoft)
                 }
             }
@@ -125,7 +122,7 @@ struct StatGrid: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                     Text(stat.label)
-                        .font(.system(size: 13))
+                        .font(.footnote)
                         .foregroundStyle(Chalk.inkMuted)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -147,14 +144,12 @@ private struct ObservationRow: View {
             Capsule().fill(Chalk.accent).frame(width: 4)
             VStack(alignment: .leading, spacing: 6) {
                 Text(note.text)
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.ink)
                     .fixedSize(horizontal: false, vertical: true)
                 if note.link == .schedule {
-                    Button(Copy.changeSchedule, action: openSchedule)
-                        .font(.system(size: 15))
-                        .foregroundStyle(Chalk.accent)
-                        .buttonStyle(.plain)
+                    TextLink(title: Copy.changeSchedule, action: openSchedule)
+                        .padding(.leading, -ChalkTokens.Space.s3)
                 }
             }
         }
@@ -173,10 +168,7 @@ struct ProfileSection<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(Chalk.display(22, weight: .bold))
-                .tracking(0.8)
-                .textCase(.uppercase)
-                .foregroundStyle(Chalk.inkMuted)
+                .eyebrow(Chalk.inkMuted)
             content
         }
     }
@@ -198,11 +190,11 @@ struct ProfileRowView: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(item.label)
-                .font(.system(size: 16))
+                .font(.body)
                 .foregroundStyle(Chalk.inkSoft)
             Spacer(minLength: 12)
             Text(item.value)
-                .font(.system(size: 16, weight: .semibold))
+                .font(.body.weight(.semibold))
                 .foregroundStyle(Chalk.ink)
                 .multilineTextAlignment(.trailing)
         }
@@ -225,21 +217,21 @@ struct BusySheet: View {
                 .foregroundStyle(Chalk.ink)
             if skipped.isEmpty {
                 Text(Copy.busyNothingSkipped(resume: resume))
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
             } else {
                 Text(Copy.busySkipIntro(count: skipped.count))
-                    .font(.system(size: 16))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach(skipped) { set in
                         Text(Copy.skippedRow(time: set.alert.map { Copy.clock($0) } ?? "", reps: set.reps))
-                            .font(.system(size: 17, weight: .semibold))
+                            .font(.body.weight(.semibold))
                             .foregroundStyle(Chalk.ink)
                     }
                 }
                 Text(Copy.busyResume(resume))
-                    .font(.system(size: 15))
+                    .font(.subheadline)
                     .foregroundStyle(Chalk.inkMuted)
             }
             Spacer(minLength: 8)

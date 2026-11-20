@@ -14,12 +14,12 @@ struct HurtsView: View {
                     .textCase(.uppercase)
                     .foregroundStyle(Chalk.ink)
                 Text(Copy.hurtsBody)
-                    .font(.system(size: 17))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                     .lineSpacing(4)
                 Spacer(minLength: 16)
-                option(title: Copy.pauseTitle, detail: Copy.pauseDetail(day: day)) { controller.pause() }
-                option(title: Copy.endTitle, detail: Copy.endDetail) { confirmEnd = true }
+                ChoiceCard(title: Copy.pauseTitle, detail: Copy.pauseDetail(day: day), recommended: false) { controller.pause() }
+                ChoiceCard(title: Copy.endTitle, detail: Copy.endDetail, recommended: false) { confirmEnd = true }
                 TextLink(title: Copy.back) { controller.screen = .today }
                     .frame(maxWidth: .infinity)
             }
@@ -30,25 +30,6 @@ struct HurtsView: View {
         } message: {
             Text(Copy.endConfirmBody)
         }
-    }
-
-    private func option(title: String, detail: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Chalk.ink)
-                Text(detail)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Chalk.inkMuted)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 18)
-            .padding(.vertical, 14)
-            .frame(minHeight: 76)
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(Chalk.lineStrong, lineWidth: 1.5))
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -62,7 +43,7 @@ struct AboutView: View {
                     .font(Chalk.display(48))
                     .textCase(.uppercase)
                 Text(Copy.aboutBody)
-                    .font(.system(size: 17))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                     .lineSpacing(4)
                 Spacer()
@@ -84,12 +65,12 @@ struct PaywallView: View {
                     .font(Chalk.display(48))
                     .textCase(.uppercase)
                 Text(Copy.unlockBody)
-                    .font(.system(size: 17))
+                    .font(.body)
                     .foregroundStyle(Chalk.inkSoft)
                     .lineSpacing(4)
                 if let message = controller.unlockMessage {
                     Text(message)
-                        .font(.system(size: 15))
+                        .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                 }
                 Spacer()
