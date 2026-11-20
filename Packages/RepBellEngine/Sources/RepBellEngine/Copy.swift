@@ -23,7 +23,7 @@ public enum Copy {
     public static let setAlertsTitle = "Set alerts"
     public static let setAlertsDetail = "Sets are due at a set time, so they come through Focus. Done and In 10 min right on the alert."
     public static let testAlarmTitle = "Test-day alarm"
-    public static let testAlarmDetail = "Days 1, 8 and 15 start with an alarm that rings even on silent."
+    public static let testAlarmDetail = "Each program day starts with an alarm at your wake time, even on silent. On Ring days, sets ring too."
     public static let allowAlerts = "Allow alerts"
     public static let timeSensitiveSettings = "Sets are due at a set time, so they come through Focus. You can change this in Settings."
     public static let alertsDeniedHeadline = "Alerts\nare off."

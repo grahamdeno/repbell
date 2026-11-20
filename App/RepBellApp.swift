@@ -102,6 +102,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         FontRegistration.register(bundle: .main)
         UNUserNotificationCenter.current().delegate = self
         Notifier.install()
+        RingActions.install()
         PhoneSessionBridge.shared.start()
         if Features.payment {
             Unlocker.listen()

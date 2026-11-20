@@ -191,7 +191,11 @@ final class ProgramController {
         RingStore.update { $0.choose(mode, on: now.date) }
         Haptics.play(.tap)
         screen = .today
-        Task { await refreshAlerts() }
+        Task {
+            // Ringing needs alarm permission; ask here if it was never asked.
+            if mode == .ring { _ = await TestAlarms.authorizationGranted() }
+            await refreshAlerts()
+        }
     }
 
     /// For the day-start screen.
@@ -645,8 +649,8 @@ final class ProgramController {
 
     private func performAlertRefresh() async {
         let hold = studioHoldUntil.flatMap { $0 > Date() ? $0 : nil }
-        await Notifier.refill(library: library, holdUntil: hold, ringing: SetAlarms.ringingIDs(library: library), quiet: RingStore.state.quietActive)
-        await SetAlarms.sync(library: library, holdUntil: hold)
+        let ringing = await SetAlarms.sync(library: library, holdUntil: hold)
+        await Notifier.refill(library: library, holdUntil: hold, ringing: ringing, quiet: RingStore.state.quietActive)
         if let run = library.current {
             await TestAlarms.sync(run: run, allows: { self.library.allows(day: $0) })
         } else {
@@ -765,7 +769,10 @@ final class ProgramController {
         switch kind {
         case "done": logDone(day: day, index: index)
         case "snooze": logSnooze(day: day, index: index)
-        case "busy": confirmBusy()
+        case "busy":
+            confirmBusy()
+            // Always answer, so the Watch drops a Busy the phone didn't apply.
+            PhoneSessionBridge.shared.push(library)
         default: break
         }
     }

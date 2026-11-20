@@ -39,6 +39,11 @@ final class RingPlanTests: XCTestCase {
         XCTAssertFalse(RingPlan.showDayStart(run: run, state: RingState(), now: at(15, 9, 0)))
         XCTAssertFalse(RingPlan.showDayStart(run: PersistedRun(input: run.input, ended: true), state: RingState(), now: at(3, 9, 0)))
         XCTAssertFalse(RingPlan.showDayStart(run: PersistedRun(input: run.input, pausedAt: at(2, 9, 0)), state: RingState(), now: at(3, 9, 0)))
+        // Test mornings: the test comes first.
+        XCTAssertFalse(RingPlan.showDayStart(run: run, state: RingState(), now: at(1, 7, 30)))
+        var logged = run.input
+        logged.events = [.test(day: 1, reps: 40, at: at(1, 7, 5))]
+        XCTAssertTrue(RingPlan.showDayStart(run: PersistedRun(input: logged), state: RingState(), now: at(1, 7, 30)))
     }
 
     // Story 2: a Ring day rings its sets; a Quiet day rings none.

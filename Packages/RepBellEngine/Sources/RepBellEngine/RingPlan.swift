@@ -96,6 +96,11 @@ public enum RingPlan {
         guard let run, !run.ended, run.pausedAt == nil else { return false }
         guard let number = run.input.dayNumber(on: now.date), number <= 14 else { return false }
         guard state.choice(on: now.date) == nil else { return false }
+        // Test mornings go to the test first; the day-start screen comes once the test is logged.
+        if DayTemplate.day(number).isTest {
+            let resolved = ScheduleEngine.resolve(run.input, now: now)
+            if resolved.day(number)?.testReps == nil { return false }
+        }
         return now.minutes >= run.input.wake.minutesFromMidnight
     }
 }

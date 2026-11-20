@@ -106,6 +106,7 @@ enum TestAlarms {
         let configuration = AlarmManager.AlarmConfiguration.alarm(
             schedule: .fixed(date),
             attributes: attributes,
+            stopIntent: GotItIntent(),
             secondaryIntent: StartTheDayIntent(),
             sound: .default
         )

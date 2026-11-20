@@ -21,7 +21,7 @@ enum PushUpHealthStore {
 
     /// Writes any finished days not written yet. A failed write is tried again next time.
     static func sync(run: PersistedRun?) async {
-        guard enabled, StudioHealth.available else { return }
+        guard enabled, StudioHealth.canSave else { return }
         let days = PushUpHealth.pending(run: run, now: CivilDateTime.local(Date()), written: written)
         for day in days {
             if await save(day) {
