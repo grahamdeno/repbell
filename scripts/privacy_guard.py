@@ -73,9 +73,12 @@ def violations_in_entitlements(data):
 
 
 def violations_in_plist(data):
+    """Apple requires NSHealthShareUsageDescription in every HealthKit app, even one that never reads.
+    So the key may be present, but its text must say Rep Bell doesn't read Health data."""
     found = []
-    if "NSHealthShareUsageDescription" in data:
-        found.append(("Health read access", "Info.plist asks to read Health data"))
+    text = data.get("NSHealthShareUsageDescription")
+    if text is not None and "does not read" not in text:
+        found.append(("Health read access", "Info.plist's Health read text must say Rep Bell does not read Health data"))
     return found
 
 
@@ -183,8 +186,10 @@ def self_test():
     if violations_in_entitlements({"com.apple.developer.healthkit": True, "com.apple.developer.healthkit.access": [],
                                    "com.apple.security.application-groups": ["group.x"]}):
         failures.append("allowed entitlements flagged")
-    if not violations_in_plist({"NSHealthShareUsageDescription": "x"}):
+    if not violations_in_plist({"NSHealthShareUsageDescription": "Rep Bell reads your workouts."}):
         failures.append("Health read description missed")
+    if violations_in_plist({"NSHealthShareUsageDescription": "Rep Bell does not read your Health data."}):
+        failures.append("required no-read Health text flagged")
     if violations_in_plist({"NSHealthUpdateUsageDescription": "x"}):
         failures.append("Health write description flagged")
     if not violations_in_pbxproj("XCRemoteSwiftPackageReference \"x\""):
