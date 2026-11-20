@@ -6,7 +6,7 @@ Exported Nov 12, 2026 from the Claude doc of the same name. This file is the bui
 
 This is the single plan for an iPhone and Apple Watch app that runs the 14-day "Evil Russian" push-up program for you. It is kept current so any agent or new conversation can pick up the work without drifting.
 
-**To pick up the work:** read Start here, then the Decision log, then Next steps, in that order. Everything else is reference. Approved screens and the icon are in `docs/screens/`; the design system (tokens, components, brand book) is in `docs/design-system/`; the icon SVG is in `docs/icon/`.
+**To pick up the work:** read `docs/roadmap.md` first. It is the running plan since 20 Nov 2026 and wins where the two differ. This file is reference: the concept, program, journey, platform check, engine spec and copy deck. Everything else is reference. Approved screens and the icon are in `docs/screens/`; the design system (tokens, components, brand book) is in `docs/design-system/`; the icon SVG is in `docs/icon/`.
 
 **Status (Nov 12, 2026):** concept, journey, scope and defaults approved. Name: Rep Bell (store name Rep Bell: 14-Day Push-Ups). App Store Connect record created (Apple ID 6834201034), iOS 1.0 in Prepare for Submission. Chalk brand direction, all setup and core screens, app icon h1-B and the design system are approved. Platform check, engine spec and copy deck written. Repo created. Nothing is built.
 

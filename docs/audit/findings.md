@@ -1,0 +1,72 @@
+# Rep Bell UX audit findings
+
+Severity: 4 blocks a job, loses data or locks people out; 3 people will stumble; 2 slows or confuses; 1 cosmetic;
+0 not a problem on reflection. 4 and 3 are fixed before release unless Graham accepts a 3 in writing below.
+
+IDs are never reused. UX-1 to UX-36 are findings 1 to 36 of the design evaluation, in the same order. UX-37 to UX-41
+are findings F-1 to F-5 of the independent review.
+
+## Run 0: `4d32ad1` (17 to 20 Nov 2026), code read only
+
+**What this run is.** A design evaluation by code read (36 findings), then an independent review of it at the same
+commit (31 confirmed line by line, 5 partly checked, none false, 5 added). No pictures, no walk, no device. Under the
+playbook's ux-audit standard this is expert and code review input, not the Stage 5 audit. Findings about rendering
+(UX-3, UX-14, UX-17) are confirmed and closed only by the Stage 5 walk at the largest text size and on a small phone.
+
+**Severities** are the independent review's. It changed four: UX-12 from 3 to 4, UX-5 from 3 to 2, UX-6 from 3 to 2,
+UX-10 from 3 to 2.
+
+**Builds** refer to the 1.0 builds A to F in docs/roadmap.md. "Later" items are in the roadmap backlog.
+
+| # | Sev | Where | What a person sees | Fix | Status |
+|---|---|---|---|---|---|
+| UX-1 | 4 | Paywall: `HurtsView.swift:70-95`, `ProgramController.swift:771-776`, `StudioViews.swift:172` | The paywall has no Back and no Restore. On Day 4 or a rerun it is the opening screen | Back, Restore purchase, and a way to pause or end. Price from the store, not hard-coded | Deferred to the version that adds payment (Graham, 20 Nov 2026). Cannot be reached in 1.0: nothing is locked |
+| UX-2 | 4 | Counter: `CounterView.swift:11-36`, `ProgramController.swift:706-720` | The test counter has no Back. Opening the app within 90 minutes of wake on a test day forces it | A "Not yet" control back to Today, where the test hero stays | Open. Build B |
+| UX-3 | 4 | All views: `Theme.swift:23-31`, 116 fixed-size text calls in 13 files | Body text does not grow with text size. Flow screens and Today cannot scroll, so buttons can leave the screen | A type scale tied to text styles, scrolling flow screens with the main button pinned, minimum heights | Open. Build C. Confirm in the Stage 5 walk |
+| UX-4 | 3 | `CelebrationView.swift:61-64`, `StudioViews.swift:436, 489`, `CoachStage.swift:87-103` | Reduce Motion is not read anywhere. Springs, a ring pulse and looping coach video play regardless | Read Reduce Motion; crossfade instead of scale; no pulse | Open. Build C. The coach video part ends when coach media leaves the build (Build A) |
+| UX-5 | 2 | Celebration: `TodayView.swift:11-17`, `CelebrationView.swift:65-68`, `ProgramController.swift:176-179` | Each set logged in the app shows a full-screen moment for 2.5 to 3.5 seconds. VoiceOver may lose it before it finishes | The evaluation proposed an inline confirmation instead | Decided by Graham, 20 Nov 2026: the full-screen moment stays, shortened to 1.5 seconds, dismissed by a tap, with a Reduce Motion version and time for VoiceOver. Build D |
+| UX-6 | 2 | Busy: `TodayView.swift:176-192`, `ProfileView.swift:215-255` | Button, caption, sheet, confirm, then a strip with Undo. The label reads "Skip the next hour" | One tap and the strip with Undo. No sheet. Label "Busy for 1 hour" | Open. Build D (decided 20 Nov 2026) |
+| UX-7 | 3 | Workouts list: `StudioViews.swift:13-63`, `sessions.json` | During a run the list still offers upper-body sessions, which the program rules out | Hold them under an "After Day 15" heading with a one-line reason | Open. Build E |
+| UX-8 | 3 | Today footer: `TodayView.swift:194-215` | A full-width Workouts row sits on Today in every state but a finished day | Show it only on a finished day and in Progress | Open. Build E |
+| UX-9 | 3 | Progress: `ProgramController.swift:345-356`, `Insights.swift:76-87, 124-129` | "Perfect days in a row", "On time", "Typical response", "Snoozed" and related observations | The evaluation proposed dropping the streak and Snoozed | **Accepted by Graham, 20 Nov 2026.** All current numbers stay, in factual wording. Reason: the program only delivers its benefit when every set is done, so these numbers support staying on it |
+| UX-10 | 2 | Router: `ProgramController.swift:6-25`, `RepBellApp.swift:27-46` | One screen enum swapped in place, hand-wired Back, no swipe-back | Move browse screens to a navigation stack | Open. Later (navigation), after 1.0 |
+| UX-11 | 3 | Settings: `SettingsView.swift:26-59`, `StudioViews.swift:533-586`, `Notifications.swift:125-150` | One long scroll mixing program controls, raw alert diagnostics and about 14 Workouts toggles, reached only through Progress | Sections; Workouts settings move into Workouts; diagnostics behind one row; a direct Settings entry | Open. Workouts settings: Build E. Program settings and the direct entry: later (navigation). The later part is a severity 3 outside 1.0 and needs Graham's written acceptance or a place in 1.0 |
+| UX-12 | 4 | Setup A5: `SetupViews.swift:141-156`, `ProgramController.swift:109-113` | After alerts are denied, "Allow alerts" does nothing and setup cannot be finished. The alarm permission result is discarded | Denied-state copy with "Open Settings" as the main button; a way to finish setup; show alarm permission in Settings | Open. Build B |
+| UX-13 | 3 | Purchase: `ProgramController.swift:512-524`, `Notifications.swift:228-240` | Every purchase failure, including a cancel, shows "The unlock is not available yet" | No message on cancel; "Waiting for approval" when pending | Deferred to the version that adds payment (Graham, 20 Nov 2026). Cannot be reached in 1.0 |
+| UX-14 | 3 | Counter: `CounterView.swift:40-97` | One stroke covers about 30 reps; a max of 50 or more needs several strokes | Faster input: acceleration, plus and minus 5, or auto-repeat | Open. Build D. Confirm on a device |
+| UX-15 | 3 | Widget: `RepBellWidget.swift:46-58`, `Schedule.swift:346-365` | Before a test and on Day 15 the widget shows "0 of 0". No paused or test-day state | States for test today, paused and end of day | Open. Build D |
+| UX-16 | 3 | Workouts player: `StudioViews.swift:303-328` | Swipe right goes back a step, with no button or VoiceOver action for it | A Previous control and named VoiceOver actions | Open. Build C |
+| UX-17 | 3 | Tally and day bars: `TodayView.swift:226-257`, `Theme.swift:135-157` | Outlines at 1.62:1 and 1.36:1; done and current differ by color only (2.52:1); VoiceOver reads only "Today's sets" | A shape cue for the current mark, stronger outlines, a spoken tally value | Open. Build C. Confirm in the Stage 5 walk |
+| UX-18 | 3 | Off-ramp: `HurtsView.swift:20-21`, `SettingsView.swift:72-77` | "End it here" ends the run in one tap with no confirm or undo. The result then reads "End it here" | One confirm or an Undo; a factual result heading | Open. Build B |
+| UX-19 | 2 | `Theme.swift` | Color tokens only; no type, spacing or radius tokens; 18 display sizes in use | Type, space and radius tokens mapped from `tokens.json` | Open. Build C |
+| UX-20 | 2 | `WatchViews.swift`, `RepBellWidget.swift:83-113`, `TestAlarms.swift:58` | Watch, widget and alarm tint retype the color values | One shared home for the tokens | Open. Build C |
+| UX-21 | 2 | Duplicated styles in about 7 places | The same component looks slightly different across screens | Shared eyebrow, card and button styles | Open. Build C. Partly checked by the review |
+| UX-22 | 2 | Buttons: `Theme.swift:83-119` | No pressed state on any button | Button styles with a pressed state | Open. Build C |
+| UX-23 | 2 | Text links: `Theme.swift:191-203`, `SetupViews.swift:145-151`, `ProfileView.swift:154-157` | Links at or under 44 points | A 44 point minimum target | Open. Build C |
+| UX-24 | 2 | Copy and docs: `Copy.swift:42`, `ProfileCopy.swift:4, 45`, `StudioViews.swift:624`, `docs/plan.md` | Labels differ from the plan; the plan and copy deck do not cover Progress, Settings, Workouts or the celebration | Update the copy deck and docs; one name per thing | Open. Build F. Partly checked by the review |
+| UX-25 | 2 | Today test hero: `TodayView.swift:99-108, 169` | "Start the test" opens the logging counter | Copy and button that say the test is done first, then logged | Open. Build D |
+| UX-26 | 2 | Time pickers: `ProgramController.swift:80-89`, `SettingsView.swift:89-94` | Settings allows times setup forbids | The same choices and bounds in both | Open. Build D |
+| UX-27 | 2 | Today, set due: `TodayView.swift:172-175` | No "In 10 min" in the app when a set is due | Add it beside the main button | Open. Build D |
+| UX-28 | 2 | Counter Done: `CounterView.swift:32-33`, `ProgramController.swift:143` | At 0, Done looks faded but is enabled and does nothing | Disable it at 0 | Open. Build B |
+| UX-29 | 2 | Day 15: `ProgramController.swift:144-147` | Done on Day 15 goes straight to the result with no way to correct the number | "Fix my number" on the result | Open. Build B |
+| UX-30 | 2 | Run it again: `ProgramController.swift:487-510` | A rerun skips the time and start-day choices | One review screen | Open. Later, after 1.0 |
+| UX-31 | 2 | Percent gain: `Insights.swift:47`, `Copy.swift:211-214` | Progress rounds, the result card truncates: two numbers for one run | One function, whole-number math | Open. Build D |
+| UX-32 | 2 | Watch: `WatchViews.swift:78-129`, `RepBellWidget.swift:69` | The number's color differs from the written rule; no Busy and no complication on the Watch | Decide the color rule; add a complication and Busy | Open. Later, after 1.0. Partly checked by the review |
+| UX-33 | 1 | Unused code: `ProgramController.swift:391-422, 814-819` and unused copy lines | Leftovers from an earlier split | Remove them | Open. Build F |
+| UX-34 | 1 | `Theme.swift:110` | The secondary button changes text size by height | Named regular and compact variants | Open. Build C |
+| UX-35 | 1 | Small spec differences in bars, cards, radius and tally text | Polish | Match the tokens once UX-19 lands | Open. Build C. Partly checked by the review |
+| UX-36 | 1 | `Insights.swift:106`, `CoachStage.swift:13`, `RepBellWidget.swift:121-139` | "5 pm" against house style; a stale comment; an unstyled alarm Live Activity | Fix in the copy sweep | Open. Build F. The coach comment ends with Build A. Partly checked by the review |
+| UX-37 | 4 | `ProgramController.swift:612-613`, `568-574` | If the app is open or resumed when a locked day starts, Today is empty with no route to the paywall | Route to the paywall when a locked day begins | Deferred to the version that adds payment (Graham, 20 Nov 2026). Cannot be reached in 1.0 |
+| UX-38 | 1 | `ProgramController.swift:340` | Progress can show "Day 15 of 14" | Cap the day shown | Open. Build D |
+| UX-39 | 3 | `StudioContent.swift:203-210` | Workouts is switched on by a sandbox receipt | A plain build setting | Open. Build A |
+| UX-40 | Process | Repo | No CLAUDE.md, roadmap, Sonnet log or audit folder on `main` | Add them | Fixed by the PR that adds this file, once merged. The other two parts were decided on 20 Nov 2026: Workouts stays in 1.0, the repo stays public |
+| UX-41 | 2 | `Insights.swift:47` | Progress compares Day 1 with the latest test, the result compares Day 1 with Day 15 | One function, labelled | Open. Build D |
+
+**Not verified by the review:** the Day 10 set count quoted in UX-5 (the plan's table gives 61), the spec values in
+UX-35, the Watch details in UX-32, each duplicated style in UX-21, and the docs wording in UX-24.
+
+**Test-side, not the app:** none. No walk was run.
+
+**Known false alarms:** none recorded.
+
+**People:** no tester results in this run.
