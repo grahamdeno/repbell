@@ -15,6 +15,7 @@ public enum RingIntents {
 }
 
 /// "Quiet next" on a ringing set alarm.
+@available(iOS 17.0, *)
 public struct QuietNextIntent: LiveActivityIntent {
     public static let title: LocalizedStringResource = "Quiet next"
     public static let openAppWhenRun: Bool = false
@@ -26,6 +27,7 @@ public struct QuietNextIntent: LiveActivityIntent {
 }
 
 /// "Got it" on a ringing set alarm or the morning alarm.
+@available(iOS 17.0, *)
 public struct GotItIntent: LiveActivityIntent {
     public static let title: LocalizedStringResource = "Got it"
     public static let openAppWhenRun: Bool = false
@@ -37,6 +39,7 @@ public struct GotItIntent: LiveActivityIntent {
 }
 
 /// "Start the day" on the morning alarm: opens Rep Bell to the day-start screen.
+@available(iOS 17.0, *)
 public struct StartTheDayIntent: LiveActivityIntent {
     public static let title: LocalizedStringResource = "Start the day"
     public static let openAppWhenRun: Bool = true
