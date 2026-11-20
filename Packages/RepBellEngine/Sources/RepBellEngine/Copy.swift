@@ -98,6 +98,19 @@ public enum Copy {
         dayStart(day: day, sets: sets).replacingOccurrences(of: "\n", with: " ")
     }
 
+    public static let deskStretchTitle = "Desk stretch"
+    public static let deskStretchSkip = "Skip"
+    public static let deskStretchSetting = "Desk stretch"
+    public static let deskStretchDetail = "After a set, one 30-second stretch for sitting all day. At most once an hour."
+
+    public static func deskStretchNotice(name: String, cue: String, seconds: Int) -> String {
+        "\(name), \(seconds) seconds. \(cue)"
+    }
+
+    public static func deskStretchTimer(seconds: Int) -> String {
+        seconds == 1 ? "1 second left" : "\(seconds) seconds left"
+    }
+
     public static let rerunHeadline = "Run it\nagain"
 
     public static func rerunBody(max: Int) -> String {

@@ -87,6 +87,8 @@ final class ProgramController {
     private var endedOnDay: Int?
     var unlockMessage: String?
     var celebration: Celebration?
+    /// A desk stretch to show once the celebration is gone.
+    var deskStretch: DeskStretch.Stretch?
 
     private init() {
         let loaded = LibraryDisk.load()
@@ -272,6 +274,13 @@ final class ProgramController {
     func logDone(day: Int, index: Int, celebrate: Bool = false) {
         let now = CivilDateTime.local(Date())
         RingStore.update { $0.acknowledge(at: now) }
+        if let stretch = DeskStretchStore.takeDue(now: now) {
+            if UIApplication.shared.applicationState == .active {
+                deskStretch = stretch
+            } else {
+                DeskStretchStore.notify(stretch)
+            }
+        }
         update { $0.input.events.append(.done(day: day, index: index, at: now)) }
         if let run = library.current, let resolved = ScheduleEngine.resolve(run.input, now: now).day(day) {
             let finished = !resolved.sets.isEmpty && !resolved.sets.contains { $0.status == .upcoming }

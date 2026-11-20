@@ -12,9 +12,13 @@ struct TodayView: View {
             if let celebration = controller.celebration {
                 CelebrationView(celebration: celebration) { controller.celebration = nil }
                     .transition(.opacity)
+            } else if let stretch = controller.deskStretch {
+                DeskStretchView(stretch: stretch) { controller.deskStretch = nil }
+                    .transition(.opacity)
             }
         }
         .animation(.easeOut(duration: 0.2), value: controller.celebration)
+        .animation(.easeOut(duration: 0.2), value: controller.deskStretch)
     }
 
     @ViewBuilder
