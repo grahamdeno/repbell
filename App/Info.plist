@@ -36,9 +36,9 @@
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.healthcare-fitness</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Rep Bell saves your finished Workouts sessions to Apple Health. It does not read your Health data.</string>
+	<string>Rep Bell saves your finished Workouts sessions and push-ups to Apple Health. It does not read your Health data.</string>
 	<key>NSAlarmKitUsageDescription</key>
-	<string>Days 1, 8 and 15 start with an alarm at your wake time, even on silent.</string>
+	<string>Rep Bell rings at your wake time each program day and, on Ring days, for your sets, even on silent.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Fonts/BarlowCondensed-Bold.ttf</string>

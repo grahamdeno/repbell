@@ -45,12 +45,21 @@ enum TestAlarms {
         let now = CivilDateTime.local(Date())
         let resolved = ScheduleEngine.resolve(run.input, now: now)
         var next: [String: UUID] = [:]
-        for day in [1, 8, 15] {
-            guard allows(day), resolved.day(day)?.testReps == nil else { continue }
+        for day in 1...15 {
+            guard allows(day), let scheduled = resolved.day(day) else { continue }
             guard let date = wakeDate(run: run, day: day), date > Date().addingTimeInterval(30) else { continue }
             let id = stored["\(day)"] ?? UUID()
-            if await schedule(id: id, at: date, day: day) {
-                next["\(day)"] = id
+            if scheduled.isTest {
+                // Test mornings: the test alarm, until the test is logged.
+                guard scheduled.testReps == nil else { continue }
+                if await schedule(id: id, at: date, day: day) {
+                    next["\(day)"] = id
+                }
+            } else {
+                // Every other program day starts with the morning alarm, which opens the day-start screen.
+                if await scheduleMorning(id: id, at: date, day: day, sets: scheduled.sets.count) {
+                    next["\(day)"] = id
+                }
             }
         }
         save(next)
@@ -71,6 +80,34 @@ enum TestAlarms {
         let configuration = AlarmManager.AlarmConfiguration.alarm(
             schedule: .fixed(date),
             attributes: attributes,
+            sound: .default
+        )
+        do {
+            _ = try await AlarmManager.shared.schedule(id: id, configuration: configuration)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    @MainActor
+    private static func scheduleMorning(id: UUID, at date: Date, day: Int, sets: Int) async -> Bool {
+        let alert = AlarmPresentation.Alert(
+            title: LocalizedStringResource(stringLiteral: Copy.morningAlarm(day: day, sets: sets)),
+            stopButton: AlarmButton(text: LocalizedStringResource(stringLiteral: Copy.gotIt), textColor: .white, systemImageName: "checkmark"),
+            secondaryButton: AlarmButton(text: LocalizedStringResource(stringLiteral: Copy.startTheDayButton), textColor: .white, systemImageName: "sunrise"),
+            secondaryButtonBehavior: .custom
+        )
+        let attributes = AlarmAttributes<RepBellAlarmMetadata>(
+            presentation: AlarmPresentation(alert: alert),
+            metadata: RepBellAlarmMetadata(day: day),
+            tintColor: Chalk.accent
+        )
+        let configuration = AlarmManager.AlarmConfiguration.alarm(
+            schedule: .fixed(date),
+            attributes: attributes,
+            stopIntent: GotItIntent(),
+            secondaryIntent: StartTheDayIntent(),
             sound: .default
         )
         do {

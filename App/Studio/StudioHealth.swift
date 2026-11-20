@@ -12,10 +12,15 @@ enum StudioHealth {
         guard available else { return false }
         do {
             try await store.requestAuthorization(toShare: [HKObjectType.workoutType()], read: [])
-            return true
+            return canSave
         } catch {
             return false
         }
+    }
+
+    /// Whether the person allowed saving workouts. (iOS reports write permission; Rep Bell asks for no read.)
+    static var canSave: Bool {
+        available && store.authorizationStatus(for: HKObjectType.workoutType()) == .sharingAuthorized
     }
 
     static func save(session: StudioSession, seconds: Int) async {

@@ -35,9 +35,9 @@ enum Notifier {
     /// Builds the full set of requests the run needs, removes only stale ones, then adds or replaces the rest.
     /// Callers must not run two refills at once; ProgramController serializes them.
     @discardableResult
-    static func refill(library: LibraryFile, holdUntil: Date? = nil) async -> AlertReport {
+    static func refill(library: LibraryFile, holdUntil: Date? = nil, ringing: Set<String> = [], quiet: Bool = false) async -> AlertReport {
         let center = UNUserNotificationCenter.current()
-        let desired = desiredRequests(library: library, holdUntil: holdUntil)
+        let desired = desiredRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet)
         let wanted = Set(desired.map(\.identifier))
         let pending = await center.pendingNotificationRequests()
         let stale = pending.map(\.identifier).filter { ($0.hasPrefix("set.") || $0.hasPrefix("note.")) && !wanted.contains($0) }
@@ -59,7 +59,7 @@ enum Notifier {
         return report
     }
 
-    private static func desiredRequests(library: LibraryFile, holdUntil: Date?) -> [UNNotificationRequest] {
+    private static func desiredRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool) -> [UNNotificationRequest] {
         guard let run = library.current, run.pausedAt == nil, !run.ended else { return [] }
         let now = CivilDateTime.local(Date())
         let resolved = ScheduleEngine.resolve(run.input, now: now)
@@ -71,7 +71,8 @@ enum Notifier {
             let content = UNMutableNotificationContent()
             content.title = Copy.setAlertTitle(reps: alert.reps)
             content.body = Copy.setAlertBody(index: alert.index, total: alert.total, day: alert.day)
-            content.sound = .default
+            // A ringing set has its alarm; after Quiet next, sets are silent banners until one is acknowledged.
+            content.sound = (ringing.contains(alert.id) || quiet) ? nil : .default
             content.categoryIdentifier = categoryID
             content.interruptionLevel = .timeSensitive
             content.threadIdentifier = "day-\(alert.day)"

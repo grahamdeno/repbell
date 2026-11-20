@@ -16,6 +16,8 @@ enum Screen: Equatable {
     case hurts
     case result
     case paywall
+    case rerun
+    case dayStart
     case studioPlayer(String)
 }
 
@@ -183,6 +185,27 @@ final class ProgramController {
         screen = .counter(day)
     }
 
+    /// The day-start choice: Ring or Quiet for today. Tomorrow preselects it.
+    func chooseDay(_ mode: DayMode) {
+        let now = CivilDateTime.local(Date())
+        RingStore.update { $0.choose(mode, on: now.date) }
+        Haptics.play(.tap)
+        screen = .today
+        Task {
+            // Ringing needs alarm permission; ask here if it was never asked.
+            if mode == .ring { _ = await TestAlarms.authorizationGranted() }
+            await refreshAlerts()
+        }
+    }
+
+    /// For the day-start screen.
+    func dayStartModel() -> (day: Int, sets: Int, preselected: DayMode) {
+        let now = CivilDateTime.local(Date())
+        guard let run = library.current, let number = run.input.dayNumber(on: now.date) else { return (1, 0, .ring) }
+        let sets = ScheduleEngine.resolve(run.input, now: now).day(number)?.sets.count ?? 0
+        return (number, sets, RingStore.state.preselected(on: now.date))
+    }
+
     /// "Not yet" on the counter: back to Today, where the test stays ready.
     func deferTest() {
         if correctingDay != nil {
@@ -248,6 +271,7 @@ final class ProgramController {
 
     func logDone(day: Int, index: Int, celebrate: Bool = false) {
         let now = CivilDateTime.local(Date())
+        RingStore.update { $0.acknowledge(at: now) }
         update { $0.input.events.append(.done(day: day, index: index, at: now)) }
         if let run = library.current, let resolved = ScheduleEngine.resolve(run.input, now: now).day(day) {
             let finished = !resolved.sets.isEmpty && !resolved.sets.contains { $0.status == .upcoming }
@@ -358,6 +382,11 @@ final class ProgramController {
         guard studioHoldUntil != nil else { return }
         studioHoldUntil = nil
         Task { await refreshAlerts() }
+    }
+
+    /// Whether a Workouts session waits until after Day 15 (upper-body work during a run).
+    func workoutHeld(_ id: String) -> Bool {
+        WorkoutRules.isHeld(id, run: library.current, now: CivilDateTime.local(Date()))
     }
 
     /// One Studio session to suggest, by push-up day. Upper body work is never suggested on a push day.
@@ -525,30 +554,50 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
-    func runAgain() {
+    /// "Run it again" on the result: a review screen with the times and Tomorrow or Today.
+    func reviewRerun() {
+        if library.rerunNeedsUnlock {
+            screen = .paywall
+            return
+        }
+        if let window = currentWindow() {
+            draftWake = window.wake
+            draftBed = window.bed
+        }
+        screen = .rerun
+    }
+
+    /// The max the next run starts from.
+    func rerunMax() -> Int {
+        latestMax() ?? library.current?.input.dayOneMax ?? 0
+    }
+
+    func runAgain(startToday: Bool = false) {
         correctingDay = nil
         endedOnDay = nil
         if library.rerunNeedsUnlock {
             screen = .paywall
             return
         }
-        let maxReps = latestMax() ?? library.current?.input.dayOneMax ?? 0
-        let wake = library.current?.input.wake ?? draftWake
-        let bed = library.current?.input.bed ?? draftBed
+        let maxReps = rerunMax()
+        let wake = draftWake
+        let bed = draftBed
         if let current = library.current, !library.history.contains(where: { $0.input.start == current.input.start && $0.ended }) {
             var ended = current
             ended.ended = true
             library.history.append(ended)
         }
         library.current = nil
-        draftWake = wake
-        draftBed = bed
-        draftStartsToday = false
+        draftStartsToday = startToday
         library.runsStarted += 1
-        let input = RunInput(dayOneMax: maxReps, wake: wake, bed: bed, start: CivilDate.today().addingDays(1), retestEnabled: true)
+        let input = Rerun.input(maxReps: maxReps, wake: wake, bed: bed, startToday: startToday, today: CivilDate.today())
         library.current = PersistedRun(input: input)
         persist()
-        screen = .ready
+        if startToday && CivilDateTime.local(Date()).minutes >= wake.minutesFromMidnight {
+            openCounter(day: 1, preserve: false)
+        } else {
+            screen = .ready
+        }
         Task { await refreshAlerts() }
     }
 
@@ -599,7 +648,9 @@ final class ProgramController {
     }
 
     private func performAlertRefresh() async {
-        await Notifier.refill(library: library, holdUntil: studioHoldUntil.flatMap { $0 > Date() ? $0 : nil })
+        let hold = studioHoldUntil.flatMap { $0 > Date() ? $0 : nil }
+        let ringing = await SetAlarms.sync(library: library, holdUntil: hold)
+        await Notifier.refill(library: library, holdUntil: hold, ringing: ringing, quiet: RingStore.state.quietActive)
         if let run = library.current {
             await TestAlarms.sync(run: run, allows: { self.library.allows(day: $0) })
         } else {
@@ -607,16 +658,22 @@ final class ProgramController {
         }
         PhoneSessionBridge.shared.push(library)
         Notifier.scheduleRefresh()
+        await PushUpHealthStore.sync(run: library.current)
     }
 
     func onActive() async {
         await refreshEntitlements()
+        // Opening the app is an acknowledgment: a run of quiet sets ends, and the next set rings.
+        RingStore.update { $0.acknowledge(at: CivilDateTime.local(Date())) }
         if screen == .alerts {
             await recheckAlerts()
         }
         // Only from Today or Ready itself, never over Settings or Progress (unsaved changes stay put).
         if path.isEmpty, screen == .today || screen == .ready {
             if jumpToFreshTest() { return }
+            if RingPlan.showDayStart(run: library.current, state: RingStore.state, now: CivilDateTime.local(Date())) {
+                screen = .dayStart
+            }
         }
         await refreshAlerts()
     }
@@ -712,7 +769,10 @@ final class ProgramController {
         switch kind {
         case "done": logDone(day: day, index: index)
         case "snooze": logSnooze(day: day, index: index)
-        case "busy": confirmBusy()
+        case "busy":
+            confirmBusy()
+            // Always answer, so the Watch drops a Busy the phone didn't apply.
+            PhoneSessionBridge.shared.push(library)
         default: break
         }
     }

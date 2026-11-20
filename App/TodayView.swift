@@ -197,28 +197,6 @@ struct TodayView: View {
                     SecondaryButton(title: Copy.busy, height: 56) { controller.confirmBusy() }
                 }
             }
-            if StudioFeature.enabled, !model.hero.isFinished {
-                Button { controller.open(.workouts) } label: {
-                    HStack(spacing: 10) {
-                        Image(systemName: "dumbbell")
-                            .font(.body.weight(.semibold))
-                            .foregroundStyle(Chalk.accent)
-                        Text(StudioCopy.studio)
-                            .font(.body.weight(.semibold))
-                            .foregroundStyle(Chalk.ink)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Chalk.inkFaint)
-                    }
-                    .padding(.horizontal, 16)
-                    .frame(minHeight: 52)
-                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(Chalk.line, lineWidth: 1.5))
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 4)
-            }
             if case .paused = model.hero {
                 EmptyView()
             } else if controller.library.current?.ended != true {

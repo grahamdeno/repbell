@@ -80,6 +80,7 @@ private struct WatchAlert: View {
 }
 
 private struct WatchToday: View {
+    @Environment(WatchModel.self) private var model
     var resolved: ResolvedRun
     var now: CivilDateTime
 
@@ -87,6 +88,7 @@ private struct WatchToday: View {
         let number = resolved.input.dayNumber(on: now.date) ?? 1
         let day = resolved.day(number)
         let next = day?.sets.first { $0.status == .upcoming }
+        ScrollView {
         VStack(alignment: .leading, spacing: 2) {
             Text(Copy.dayProgress(min(number, 14)))
                 .font(Chalk.display(17, weight: .bold))
@@ -100,7 +102,7 @@ private struct WatchToday: View {
                     .font(Chalk.display(64, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(Chalk.ink)
+                    .foregroundStyle(Chalk.accent)
             }
             Spacer(minLength: 4)
             if let day {
@@ -109,7 +111,8 @@ private struct WatchToday: View {
                     ForEach(day.sets, id: \.id) { set in
                         Capsule()
                             .fill(fill(set, current: next?.index))
-                            .frame(height: 8)
+                            // The current set is taller, so it never relies on color alone.
+                            .frame(height: set.index == next?.index ? 12 : 8)
                             .overlay {
                                 if set.status == .missed {
                                     Capsule().stroke(Chalk.inkFaint, style: StrokeStyle(lineWidth: 1, dash: [2, 1]))
@@ -121,9 +124,25 @@ private struct WatchToday: View {
                     .font(.footnote)
                     .foregroundStyle(Chalk.inkMuted)
             }
+            if let busy = model.activeBusy() {
+                Text(Copy.busyStrip(until: busy.until, skipped: busy.skipped))
+                    .font(.footnote)
+                    .foregroundStyle(Chalk.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if next != nil, resolved.input.dayNumber(on: now.date) != nil {
+                Button(Copy.busy) { model.busy() }
+                    .font(.footnote.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 44)
+                    .background(Chalk.watchSecondary)
+                    .foregroundStyle(Chalk.ink)
+                    .clipShape(Capsule())
+                    .buttonStyle(.plain)
+            }
         }
         .padding(.horizontal, 4)
         .padding(.top, 6)
+        }
     }
 
     private func fill(_ set: ScheduledSet, current: Int?) -> Color {

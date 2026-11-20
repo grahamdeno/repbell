@@ -57,3 +57,17 @@ public enum TimeChoices {
         return ClockTime(hour: wrapped / 60, minute: wrapped % 60)
     }
 }
+
+/// Starting another run from the result (UX-30).
+public enum Rerun {
+    /// The new run: the latest max carries over; the person picks the times and Tomorrow or Today.
+    public static func input(maxReps: Int, wake: ClockTime, bed: ClockTime, startToday: Bool, today: CivilDate) -> RunInput {
+        RunInput(
+            dayOneMax: maxReps,
+            wake: wake,
+            bed: bed,
+            start: startToday ? today : today.addingDays(1),
+            retestEnabled: true
+        )
+    }
+}

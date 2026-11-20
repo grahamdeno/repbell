@@ -109,4 +109,17 @@ final class TestFlowTests: XCTestCase {
         XCTAssertEqual(TimeChoices.bed.last, ClockTime(hour: 2, minute: 0))
         XCTAssertEqual(TimeChoices.bed.count, 13)
     }
+
+    // UX-30: a rerun keeps the latest max, uses the chosen times, and starts today or tomorrow.
+    func testUX30_rerunInput() {
+        let today = CivilDate(year: 2026, month: 12, day: 1)
+        let tomorrow = Rerun.input(maxReps: 62, wake: ClockTime(hour: 6, minute: 30), bed: ClockTime(hour: 22), startToday: false, today: today)
+        XCTAssertEqual(tomorrow.start, today.addingDays(1))
+        XCTAssertEqual(tomorrow.dayOneMax, 62)
+        XCTAssertEqual(tomorrow.wake, ClockTime(hour: 6, minute: 30))
+        XCTAssertEqual(tomorrow.bed, ClockTime(hour: 22))
+        XCTAssertTrue(tomorrow.retestEnabled)
+        XCTAssertEqual(Rerun.input(maxReps: 62, wake: ClockTime(hour: 7), bed: ClockTime(hour: 23), startToday: true, today: today).start, today)
+        XCTAssertTrue(Copy.rerunBody(max: 62).contains("62"))
+    }
 }

@@ -23,7 +23,7 @@ public enum Copy {
     public static let setAlertsTitle = "Set alerts"
     public static let setAlertsDetail = "Sets are due at a set time, so they come through Focus. Done and In 10 min right on the alert."
     public static let testAlarmTitle = "Test-day alarm"
-    public static let testAlarmDetail = "Days 1, 8 and 15 start with an alarm that rings even on silent."
+    public static let testAlarmDetail = "Each program day starts with an alarm at your wake time, even on silent. On Ring days, sets ring too."
     public static let allowAlerts = "Allow alerts"
     public static let timeSensitiveSettings = "Sets are due at a set time, so they come through Focus. You can change this in Settings."
     public static let alertsDeniedHeadline = "Alerts\nare off."
@@ -79,6 +79,30 @@ public enum Copy {
     public static let testHeroBody = "Do as many as you can, good form. Then log the number."
     public static let todaysSets = "Today's sets"
     public static let wordmark = "Rep Bell"
+
+    public static let ringTitle = "Ring"
+    public static let ringDetail = "Set alarms ring, even on silent."
+    public static let quietTitle = "Quiet"
+    public static let quietDetail = "Sets arrive as silent banners, with a tap on your Watch."
+    public static let quietNext = "Quiet next"
+    public static let gotIt = "Got it"
+    public static let startTheDayButton = "Start the day"
+
+    /// The day-start headline and the morning alarm: the day and its set count, never missed sets.
+    public static func dayStart(day: Int, sets: Int) -> String {
+        let count = sets == 1 ? "1 set" : "\(sets) sets"
+        return "Day \(day).\n\(count) today."
+    }
+
+    public static func morningAlarm(day: Int, sets: Int) -> String {
+        dayStart(day: day, sets: sets).replacingOccurrences(of: "\n", with: " ")
+    }
+
+    public static let rerunHeadline = "Run it\nagain"
+
+    public static func rerunBody(max: Int) -> String {
+        max > 0 ? "Your new run starts from your max of \(max). Check your times, then pick a start." : "Check your times, then pick a start."
+    }
 
     public static func runEnded(day: Int) -> String {
         "Run ended · Day \(day)"

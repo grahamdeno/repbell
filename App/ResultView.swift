@@ -29,7 +29,7 @@ struct ResultView: View {
                     .buttonStyle(PrimaryButtonStyle())
                 }
                 HStack(spacing: 12) {
-                    SecondaryButton(title: Copy.runAgain, height: 56) { controller.runAgain() }
+                    SecondaryButton(title: Copy.runAgain, height: 56) { controller.reviewRerun() }
                     SecondaryButton(title: Copy.done, height: 56) { controller.screen = .today }
                 }
             }
@@ -111,6 +111,43 @@ struct ShareImage: Transferable {
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(exportedContentType: .png) { item in
             item.image.pngData() ?? Data()
+        }
+    }
+}
+
+/// Review before another run (UX-30): the times, then Tomorrow or Today. The latest max carries over.
+struct RerunView: View {
+    @Environment(ProgramController.self) private var controller
+
+    var body: some View {
+        ScreenChrome(top: 28) {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(Copy.rerunHeadline)
+                    .font(Chalk.display(48))
+                    .textCase(.uppercase)
+                    .foregroundStyle(Chalk.ink)
+                    .accessibilityAddTraits(.isHeader)
+                Text(Copy.rerunBody(max: controller.rerunMax()))
+                    .font(.body)
+                    .foregroundStyle(Chalk.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: 4) {
+                    TimeChoiceRow(label: Copy.wakeLabel, choices: controller.wakeChoices(), selection: Bindable(controller).draftWake)
+                    TimeChoiceRow(label: Copy.bedtimeLabel, choices: controller.bedChoices(), selection: Bindable(controller).draftBed)
+                    Text(controller.lastSetLabel())
+                        .font(.subheadline)
+                        .foregroundStyle(Chalk.inkMuted)
+                }
+                Spacer(minLength: 12)
+                ChoiceCard(title: Copy.tomorrowMorning, detail: controller.tomorrowDetail(), recommended: true) {
+                    controller.runAgain(startToday: false)
+                }
+                ChoiceCard(title: Copy.today, detail: controller.todayDetail(), recommended: false) {
+                    controller.runAgain(startToday: true)
+                }
+                TextLink(title: Copy.back) { controller.screen = .result }
+                    .frame(maxWidth: .infinity)
+            }
         }
     }
 }

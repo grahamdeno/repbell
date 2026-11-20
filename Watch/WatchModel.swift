@@ -24,6 +24,18 @@ final class WatchModel: NSObject, WCSessionDelegate {
         apply(kind: "snooze", day: day, index: index)
     }
 
+    /// "Busy for 1 hour" from the wrist. The phone applies it and refills alerts.
+    func busy() {
+        WKInterfaceDevice.current().play(.click)
+        apply(kind: "busy", day: 0, index: 0)
+    }
+
+    /// The Busy hour running now, from the last library the phone sent.
+    func activeBusy() -> (until: CivilDateTime, skipped: Int)? {
+        guard let run = library.current else { return nil }
+        return ScheduleEngine.activeBusy(run.input, now: CivilDateTime.local(Date()))
+    }
+
     func resolvedNow() -> ResolvedRun? {
         guard library.current != nil else { return nil }
         let now = library.current?.pausedAt ?? CivilDateTime.local(Date())
@@ -38,6 +50,8 @@ final class WatchModel: NSObject, WCSessionDelegate {
             run.input.events.append(.done(day: day, index: index, at: now))
         case "snooze":
             run.input.events.append(.snooze(day: day, index: index, at: now))
+        case "busy":
+            run.input.events.append(.busy(at: now))
         default:
             break
         }

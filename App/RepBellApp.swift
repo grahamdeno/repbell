@@ -77,6 +77,8 @@ struct RootView: View {
         case .hurts: HurtsView()
         case .result: ResultView()
         case .paywall: PaywallView()
+        case .rerun: RerunView()
+        case .dayStart: DayStartView()
         case .studioPlayer(let id): StudioPlayerView(sessionID: id)
         }
     }
@@ -100,6 +102,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         FontRegistration.register(bundle: .main)
         UNUserNotificationCenter.current().delegate = self
         Notifier.install()
+        RingActions.install()
         PhoneSessionBridge.shared.start()
         if Features.payment {
             Unlocker.listen()
