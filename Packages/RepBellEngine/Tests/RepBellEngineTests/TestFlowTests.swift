@@ -99,4 +99,14 @@ final class TestFlowTests: XCTestCase {
         XCTAssertFalse(Copy.startWithoutAlerts.isEmpty)
         XCTAssertNotEqual(Copy.alertsDeniedBody, Copy.alertsBody)
     }
+
+    // UX-26: setup and Settings offer the same bounded times.
+    func testUX26_timeChoices() {
+        XCTAssertEqual(TimeChoices.wake.first, ClockTime(hour: 4, minute: 0))
+        XCTAssertEqual(TimeChoices.wake.last, ClockTime(hour: 11, minute: 30))
+        XCTAssertEqual(TimeChoices.wake.count, 16)
+        XCTAssertEqual(TimeChoices.bed.first, ClockTime(hour: 20, minute: 0))
+        XCTAssertEqual(TimeChoices.bed.last, ClockTime(hour: 2, minute: 0))
+        XCTAssertEqual(TimeChoices.bed.count, 13)
+    }
 }

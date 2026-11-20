@@ -23,27 +23,16 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        Group {
-            switch controller.screen {
-            case .promise: PromiseView()
-            case .wake: WakeView()
-            case .bed: BedView()
-            case .startDay: StartDayView()
-            case .alerts: AlertsView()
-            case .ready: ReadyView()
-            case .counter(let day): CounterView(day: day)
-            case .confirm(let day, let reps): ConfirmView(day: day, reps: reps)
-            case .today: TodayView()
-            case .hurts: HurtsView()
-            case .result: ResultView()
-            case .about: AboutView()
-            case .paywall: PaywallView()
-            case .profile: ProfileView()
-            case .settings: SettingsView()
-            case .studio: StudioView()
-            case .studioSession(let id): StudioSessionView(sessionID: id)
-            case .studioPlayer(let id): StudioPlayerView(sessionID: id)
-            }
+        NavigationStack(path: Bindable(controller).path) {
+            flow
+                .toolbar(.hidden, for: .navigationBar)
+                .navigationDestination(for: Browse.self) { destination in
+                    browse(destination)
+                        .toolbarBackground(Chalk.ground, for: .navigationBar)
+                        .toolbarBackground(.visible, for: .navigationBar)
+                        .toolbarColorScheme(.dark, for: .navigationBar)
+                        .navigationBarTitleDisplayMode(.inline)
+                }
         }
         .task {
             FontRegistration.register(bundle: .main)
@@ -59,9 +48,9 @@ struct RootView: View {
             if url.host == "studio" {
                 let id = url.lastPathComponent
                 if !id.isEmpty, id != "/", StudioLibrary.shared.session(id) != nil {
-                    controller.screen = .studioSession(id)
+                    controller.openWorkouts(session: id)
                 } else {
-                    controller.screen = .studio
+                    controller.openWorkouts()
                 }
                 return
             }
@@ -70,6 +59,38 @@ struct RootView: View {
                 let day = run.input.dayNumber(on: now.date) ?? 1
                 controller.openCounter(day: day, preserve: false)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var flow: some View {
+        switch controller.screen {
+        case .promise: PromiseView()
+        case .wake: WakeView()
+        case .bed: BedView()
+        case .startDay: StartDayView()
+        case .alerts: AlertsView()
+        case .ready: ReadyView()
+        case .counter(let day): CounterView(day: day)
+        case .confirm(let day, let reps): ConfirmView(day: day, reps: reps)
+        case .today: TodayView()
+        case .hurts: HurtsView()
+        case .result: ResultView()
+        case .paywall: PaywallView()
+        case .studioPlayer(let id): StudioPlayerView(sessionID: id)
+        }
+    }
+
+    @ViewBuilder
+    private func browse(_ destination: Browse) -> some View {
+        switch destination {
+        case .progress: ProfileView()
+        case .settings: SettingsView()
+        case .alertsCheck: AlertsCheckView()
+        case .about: AboutView()
+        case .workouts: StudioView()
+        case .workoutSettings: WorkoutSettingsView()
+        case .workoutSession(let id): StudioSessionView(sessionID: id)
         }
     }
 }

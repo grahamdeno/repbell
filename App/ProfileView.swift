@@ -7,22 +7,12 @@ struct ProfileView: View {
 
     var body: some View {
         let model = controller.insightsModel()
-        ScreenChrome(top: 28, scrolls: false) {
+        ScreenChrome(top: 8, scrolls: false) {
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(Copy.profileTitle)
-                        .font(Chalk.display(48))
-                        .textCase(.uppercase)
-                    Spacer()
-                    Button { controller.screen = .settings } label: {
-                        Image(systemName: "gearshape")
-                            .font(.title3)
-                            .foregroundStyle(Chalk.inkSoft)
-                            .frame(width: 44, height: 44)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(Copy.settingsTitle)
-                }
+                Text(Copy.profileTitle)
+                    .font(Chalk.display(48))
+                    .textCase(.uppercase)
+                    .accessibilityAddTraits(.isHeader)
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
                         if let run = model.run {
@@ -50,7 +40,7 @@ struct ProfileView: View {
                                 ProfileSection(Copy.observations) {
                                     VStack(alignment: .leading, spacing: 14) {
                                         ForEach(Array(run.observations.enumerated()), id: \.offset) { _, note in
-                                            ObservationRow(note: note) { controller.screen = .settings }
+                                            ObservationRow(note: note) { controller.open(.settings) }
                                         }
                                     }
                                 }
@@ -73,10 +63,6 @@ struct ProfileView: View {
                     .padding(.vertical, 16)
                 }
                 .scrollIndicators(.hidden)
-                SecondaryButton(title: Copy.back) {
-                    controller.screen = controller.library.current == nil ? .promise : .today
-                }
-                .padding(.top, 12)
             }
         }
     }

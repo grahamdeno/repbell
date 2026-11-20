@@ -15,7 +15,18 @@ struct StudioView: View {
             .sorted { settings.missingGear($0).count < settings.missingGear($1).count }
         ScreenChrome(top: 16, scrolls: false) {
             VStack(alignment: .leading, spacing: 0) {
-                StudioTopBar(title: StudioCopy.studio) { controller.screen = controller.library.current == nil ? .promise : .today }
+                HStack(alignment: .center) {
+                    StudioTopBar(title: StudioCopy.studio)
+                    Button { controller.open(.workoutSettings) } label: {
+                        Image(systemName: "gearshape")
+                            .font(.title2)
+                            .foregroundStyle(Chalk.inkSoft)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(PressFade())
+                    .accessibilityLabel(StudioCopy.settingsTitle)
+                }
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         if let suggested {
@@ -72,7 +83,7 @@ struct StudioView: View {
 
     private func open(_ session: StudioSession) {
         Haptics.play(.tap)
-        controller.screen = .studioSession(session.id)
+        controller.open(.workoutSession(session.id))
     }
 }
 
@@ -121,7 +132,7 @@ struct StudioSessionView: View {
         if let session = StudioLibrary.shared.session(sessionID) {
             ScreenChrome(top: 16, scrolls: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    StudioTopBar(title: session.name) { controller.screen = .studio }
+                    StudioTopBar(title: session.name)
                     ScrollView {
                         VStack(alignment: .leading, spacing: 18) {
                             Text(StudioCopy.meta(session))
@@ -185,7 +196,7 @@ struct StudioSessionView: View {
                 }
             }
         } else {
-            ScreenChrome { SecondaryButton(title: Copy.back) { controller.screen = .studio } }
+            ScreenChrome { Text(StudioCopy.missing).font(.body).foregroundStyle(Chalk.inkSoft) }
         }
     }
 }
@@ -239,7 +250,7 @@ struct StudioPlayerView: View {
                     Button {
                         save(session)
                         controller.releaseAlerts()
-                        controller.screen = .studioSession(session.id)
+                        controller.openWorkouts(session: session.id)
                     } label: {
                         Image(systemName: "xmark")
                             .font(.headline)
@@ -473,7 +484,11 @@ struct StudioDoneView: View {
                     .foregroundStyle(Chalk.inkSoft)
                 Spacer()
                 PrimaryButton(title: StudioCopy.backToToday) {
-                    controller.screen = controller.library.current == nil ? .studio : .today
+                    if controller.library.current == nil {
+                        controller.openWorkouts()
+                    } else {
+                        controller.screen = .today
+                    }
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
@@ -487,28 +502,19 @@ struct StudioDoneView: View {
 
 // MARK: - Shared bits
 
+/// Title row for Workouts screens. Back comes from the navigation bar, with swipe-back.
 struct StudioTopBar: View {
     var title: String
-    var back: () -> Void
 
     var body: some View {
-        HStack(spacing: 8) {
-            Button(action: back) {
-                Image(systemName: "chevron.left")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Chalk.inkSoft)
-                    .frame(width: 44, height: 44, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Copy.back)
-            Text(title)
-                .font(Chalk.display(34))
-                .textCase(.uppercase)
-                .foregroundStyle(Chalk.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-            Spacer()
-        }
+        Text(title)
+            .font(Chalk.display(34))
+            .textCase(.uppercase)
+            .foregroundStyle(Chalk.ink)
+            .lineLimit(2)
+            .minimumScaleFactor(0.7)
+            .accessibilityAddTraits(.isHeader)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -521,14 +527,28 @@ struct StudioEyebrow: View {
     }
 }
 
-/// Studio settings shown inside Profile.
+/// Workouts settings, opened from the Workouts screen.
+struct WorkoutSettingsView: View {
+    var body: some View {
+        ScreenChrome(top: 8, scrolls: false) {
+            VStack(alignment: .leading, spacing: 12) {
+                StudioTopBar(title: StudioCopy.settingsTitle)
+                ScrollView {
+                    StudioProfileSection()
+                        .padding(.vertical, 12)
+                }
+                .scrollIndicators(.hidden)
+            }
+        }
+    }
+}
+
+/// The Workouts settings controls: gear, Go easy on, Apple Health.
 struct StudioProfileSection: View {
     @Bindable private var settings = StudioSettings.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text(StudioCopy.studio)
-                .eyebrow(Chalk.inkMuted)
             Text("\(StudioCopy.iHave) · \(settings.gear.count)").font(.body.weight(.semibold)).foregroundStyle(Chalk.ink)
             ForEach(StudioSettings.allGear, id: \.self) { item in
                 Toggle(StudioSettings.gearLabel(item), isOn: Binding(
@@ -572,6 +592,8 @@ struct StudioProfileSection: View {
 
 enum StudioCopy {
     static let studio = "Workouts"
+    static let settingsTitle = "Workouts settings"
+    static let missing = "This session isn't in this version of Rep Bell."
     static let saveToHealth = "Save sessions to Apple Health"
     static let suggested = "Suggested today"
     static let allSessions = "More sessions"

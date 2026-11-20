@@ -15,13 +15,20 @@ enum Screen: Equatable {
     case today
     case hurts
     case result
-    case about
     case paywall
-    case profile
-    case settings
-    case studio
-    case studioSession(String)
     case studioPlayer(String)
+}
+
+/// Screens you browse to and come back from. They push onto a navigation stack with Back and swipe-back.
+/// Flow screens (setup, the test, the result, the player) stay in `Screen`.
+enum Browse: Hashable {
+    case progress
+    case settings
+    case alertsCheck
+    case about
+    case workouts
+    case workoutSettings
+    case workoutSession(String)
 }
 
 enum SetMark: Equatable {
@@ -60,7 +67,11 @@ final class ProgramController {
     static let shared = ProgramController()
 
     var library: LibraryFile
-    var screen: Screen
+    /// Changing the flow screen closes any browse screens on top of it.
+    var screen: Screen {
+        didSet { if oldValue != screen { path.removeAll() } }
+    }
+    var path: [Browse] = []
     var draftWake = ClockTime(hour: 7, minute: 0)
     var draftBed = ClockTime(hour: 23, minute: 0)
     var draftStartsToday = false
@@ -82,19 +93,29 @@ final class ProgramController {
         screen = Self.openingScreen(for: loaded)
     }
 
-    func wakeChoices() -> [ClockTime] {
-        stride(from: 4 * 60, through: 11 * 60 + 30, by: 30).map { ClockTime(hour: $0 / 60, minute: $0 % 60) }
+    /// Opens a browse screen on top of the current flow screen.
+    func open(_ destination: Browse) {
+        path.append(destination)
     }
 
-    func bedChoices() -> [ClockTime] {
-        stride(from: 20 * 60, through: 26 * 60, by: 30).map { minutes in
-            let wrapped = minutes % 1440
-            return ClockTime(hour: wrapped / 60, minute: wrapped % 60)
-        }
+    /// Opens Workouts, optionally at one session, from anywhere (Today, a link, the end of a session).
+    func openWorkouts(session id: String? = nil) {
+        screen = library.current == nil ? .promise : .today
+        var stack: [Browse] = [.workouts]
+        if let id { stack.append(.workoutSession(id)) }
+        path = stack
     }
+
+    func wakeChoices() -> [ClockTime] { TimeChoices.wake }
+
+    func bedChoices() -> [ClockTime] { TimeChoices.bed }
 
     func lastSetLabel() -> String {
-        let last = ScheduleEngine.lastAllowedMinutes(bed: draftBed, wake: draftWake) % 1440
+        lastSetLabel(wake: draftWake, bed: draftBed)
+    }
+
+    func lastSetLabel(wake: ClockTime, bed: ClockTime) -> String {
+        let last = ScheduleEngine.lastAllowedMinutes(bed: bed, wake: wake) % 1440
         return Copy.lastSet(at: ClockTime(hour: last / 60, minute: last % 60))
     }
 
@@ -509,6 +530,7 @@ final class ProgramController {
     func pause() {
         update { $0.pausedAt = CivilDateTime.local(Date()) }
         screen = .today
+        path.removeAll()
         Task { await refreshAlerts() }
     }
 
