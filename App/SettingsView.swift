@@ -255,27 +255,41 @@ struct TimeChoiceRow: View {
     var label: String
     var choices: [ClockTime]
     @Binding var selection: ClockTime
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         // A time saved by an earlier build may sit off the grid; it's kept, in order from the first choice.
         let first = choices.first?.minutesFromMidnight ?? 0
         let order = { (time: ClockTime) in (time.minutesFromMidnight - first + 1440) % 1440 }
         let options = choices.contains(selection) ? choices : (choices + [selection]).sorted { order($0) < order($1) }
-        HStack {
-            Text(label)
-                .font(.body)
-                .foregroundStyle(Chalk.inkMuted)
-                .accessibilityHidden(true)
-            Spacer()
-            Picker(label, selection: $selection) {
-                ForEach(options, id: \.self) { time in
-                    Text(Copy.clock(time)).tag(time)
+        let picker = Picker(label, selection: $selection) {
+            ForEach(options, id: \.self) { time in
+                Text(Copy.clock(time)).tag(time)
+            }
+        }
+        .pickerStyle(.menu)
+        .tint(Chalk.volt)
+        .labelsHidden()
+        .frame(minHeight: ChalkTokens.minimumTarget)
+        let title = Text(label)
+            .font(.body)
+            .foregroundStyle(Chalk.inkMuted)
+            .accessibilityHidden(true)
+        // Stacked at accessibility sizes, so the label and the time never overlap.
+        Group {
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 0) {
+                    title
+                    picker
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack {
+                    title
+                    Spacer()
+                    picker
                 }
             }
-            .pickerStyle(.menu)
-            .tint(Chalk.volt)
-            .labelsHidden()
-            .frame(minHeight: ChalkTokens.minimumTarget)
         }
         .frame(minHeight: ChalkTokens.minimumTarget)
     }

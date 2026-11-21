@@ -5,30 +5,54 @@ struct CounterView: View {
     @Environment(ProgramController.self) private var controller
     var day: Int
     @State private var originCount: Int?
+    @Environment(\.dynamicTypeSize) private var typeSize
     @State private var originY: CGFloat?
 
     var body: some View {
-        ScreenChrome(scrolls: false) {
+        // At accessibility sizes the page scrolls (the -1 and +1 buttons still set the count) and rows stack.
+        let large = typeSize.isAccessibilitySize
+        ScreenChrome(scrolls: large) {
             VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                    Text(Copy.testEyebrow(day: day))
-                        .eyebrow()
-                    Spacer()
-                    Text(Copy.goodForm)
-                        .font(.subheadline)
-                        .foregroundStyle(Chalk.inkMuted)
+                if large {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(Copy.testEyebrow(day: day))
+                            .eyebrow()
+                        Text(Copy.goodForm)
+                            .font(.subheadline)
+                            .foregroundStyle(Chalk.inkMuted)
+                    }
+                } else {
+                    HStack {
+                        Text(Copy.testEyebrow(day: day))
+                            .eyebrow()
+                        Spacer()
+                        Text(Copy.goodForm)
+                            .font(.subheadline)
+                            .foregroundStyle(Chalk.inkMuted)
+                    }
                 }
                 Text(Copy.counterPrompt)
                     .font(.body)
                     .foregroundStyle(Chalk.inkMuted)
                 counter
-                HStack(spacing: 12) {
-                    SecondaryButton(title: "−1") { controller.adjustCount(by: -1) }
-                        .accessibilityLabel("Subtract one")
-                    SecondaryButton(title: "+1") { controller.adjustCount(by: 1) }
-                        .accessibilityLabel("Add one")
+                if large {
+                    HStack(spacing: 12) {
+                        SecondaryButton(title: "−1") { controller.adjustCount(by: -1) }
+                            .accessibilityLabel("Subtract one")
+                        SecondaryButton(title: "+1") { controller.adjustCount(by: 1) }
+                            .accessibilityLabel("Add one")
+                    }
                     PrimaryButton(title: Copy.done) { controller.showConfirm(day: day) }
                         .disabled(!TestFlow.canSubmit(count: controller.draftCount))
+                } else {
+                    HStack(spacing: 12) {
+                        SecondaryButton(title: "−1") { controller.adjustCount(by: -1) }
+                            .accessibilityLabel("Subtract one")
+                        SecondaryButton(title: "+1") { controller.adjustCount(by: 1) }
+                            .accessibilityLabel("Add one")
+                        PrimaryButton(title: Copy.done) { controller.showConfirm(day: day) }
+                            .disabled(!TestFlow.canSubmit(count: controller.draftCount))
+                    }
                 }
                 TextLink(title: Copy.notYet) { controller.deferTest() }
                     .frame(maxWidth: .infinity)

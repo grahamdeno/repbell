@@ -194,8 +194,27 @@ struct ReadyView: View {
 private struct TimeWheel: View {
     var choices: [ClockTime]
     @Binding var selection: ClockTime
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
+        // A wheel's rows have a fixed height, so large text can't fit; at accessibility sizes it's a menu.
+        if typeSize.isAccessibilitySize {
+            Picker("Time", selection: $selection) {
+                ForEach(choices, id: \.self) { time in
+                    Text(Copy.clock(time)).tag(time)
+                }
+            }
+            .pickerStyle(.menu)
+            .tint(Chalk.volt)
+            .labelsHidden()
+            .frame(minHeight: ChalkTokens.minimumTarget)
+            .accessibilityLabel("Time")
+        } else {
+            wheel
+        }
+    }
+
+    private var wheel: some View {
         Picker("Time", selection: $selection) {
             ForEach(choices, id: \.self) { time in
                 Text(Copy.clock(time))
