@@ -117,7 +117,7 @@ public enum ScreenshotSeeds {
             var input = withTests(run(day: 15, now: now, wakeOffset: -30), upTo: 15)
             input = fillPastDays(input, through: 14, now: now)
             return Seed(library: file(input), note: "Day 15, final test not logged")
-        case "result-final", "rerun":
+        case "result-final", "rerun", "celebration-final":
             var input = withTests(run(day: 15, now: now, wakeOffset: -60), upTo: 15)
             input = fillPastDays(input, through: 14, now: now)
             input.events.append(.test(day: 15, reps: 58, at: now.adding(minutes: -20)))

@@ -4,11 +4,21 @@ import SwiftUI
 struct TodayView: View {
     @Environment(ProgramController.self) private var controller
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 15)) { _ in
-            content(controller.todaySnapshot())
+            let model = controller.todaySnapshot()
+            // A set is due: the bell-ring flood takes the whole screen until Done, In 10 min or Busy.
+            if let due = controller.dueSet(), controller.celebration == nil, controller.deskStretch == nil, !model.marks.isEmpty {
+                BellFloodView(set: due, total: model.marks.count, showBusy: model.showBusy && controller.activeBusy() == nil)
+                    .transition(.opacity)
+            } else {
+                content(model)
+                    .transition(.opacity)
+            }
         }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.35), value: controller.dueSet().map { "\($0.day).\($0.index)" })
         .overlay {
             if let celebration = controller.celebration {
                 CelebrationView(celebration: celebration) { controller.celebration = nil }

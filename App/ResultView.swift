@@ -7,6 +7,18 @@ struct ResultView: View {
     @Environment(ProgramController.self) private var controller
 
     var body: some View {
+        page
+            .overlay {
+                if let celebration = controller.celebration, celebration.finalTest {
+                    CelebrationView(celebration: celebration) { controller.celebration = nil }
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeOut(duration: 0.2), value: controller.celebration)
+    }
+
+    @ViewBuilder
+    private var page: some View {
         let numbers = controller.resultNumbers()
         ScreenChrome(top: 16) {
             VStack(alignment: .leading, spacing: 20) {

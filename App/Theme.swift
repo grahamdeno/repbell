@@ -45,6 +45,7 @@ struct Wordmark: View {
 struct ScreenChrome<Content: View>: View {
     var top: CGFloat = 8
     var scrolls: Bool = true
+    var background: Color = Chalk.ground
     @ViewBuilder var content: () -> Content
 
     var body: some View {
@@ -62,7 +63,7 @@ struct ScreenChrome<Content: View>: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(Chalk.ground.ignoresSafeArea())
+        .background(background.ignoresSafeArea())
     }
 
     private var framed: some View {
@@ -189,13 +190,20 @@ struct DayBars: View {
     var body: some View {
         HStack(alignment: .center, spacing: ChalkTokens.Space.s1) {
             ForEach(Array(marks.enumerated()), id: \.offset) { _, mark in
-                Capsule()
-                    .fill(mark.color(contrast))
-                    // Today is taller, so it never relies on color alone.
-                    .frame(height: mark == .today ? 12 : 6)
+                let shape = RoundedRectangle(cornerRadius: ChalkTokens.Radius.bar)
+                Group {
+                    // Upcoming days are an outline, like upcoming sets; finished and today are filled.
+                    if mark == .future {
+                        shape.strokeBorder(mark.color(contrast), lineWidth: 1.5)
+                    } else {
+                        shape.fill(mark.color(contrast))
+                    }
+                }
+                // Today is taller, so it never relies on color alone.
+                .frame(height: mark == .today ? 20 : 12)
             }
         }
-        .frame(height: 12)
+        .frame(height: 20)
     }
 }
 

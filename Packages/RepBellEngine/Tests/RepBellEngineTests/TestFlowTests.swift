@@ -166,3 +166,26 @@ final class TodayFixTests: XCTestCase {
         XCTAssertEqual(kept.replacingOccurrences(of: "\u{2060}", with: ""), "100 push-ups today.")
     }
 }
+
+/// Bell-ring flood and the Day 15 flood copy (D7, 21 Nov 2026).
+final class FloodCopyTests: XCTestCase {
+    func testFloodEyebrow() {
+        XCTAssertEqual(Copy.floodEyebrow(set: 6, total: 21, day: 3), "Set 6 of 21 · Day 3")
+        XCTAssertEqual(Copy.pushUpsNow, "Push-ups now")
+    }
+
+    func testNextSetSaysWhenTheBellRings() {
+        let time = CivilDateTime(date: CivilDate(year: 2026, month: 11, day: 21), hour: 16, minute: 7)
+        XCTAssertTrue(Copy.nextSetTime(time).hasPrefix("Bell rings at "))
+    }
+
+    func testFinalTestLine() {
+        XCTAssertEqual(Copy.finalTestLine(start: 40, end: 58, percent: 45), "Day 1 40 → Day 15 58 · +45% on your max")
+    }
+
+    func testFloodCopyHasNoExclamationMarks() {
+        for text in [Copy.pushUpsNow, Copy.finalTestDone, Copy.floodEyebrow(set: 1, total: 2, day: 3)] {
+            XCTAssertFalse(text.contains("!"))
+        }
+    }
+}
