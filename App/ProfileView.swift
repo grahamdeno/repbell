@@ -193,17 +193,33 @@ struct ProfileRows: View {
 
 struct ProfileRowView: View {
     var item: ProfileRow
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(item.label)
-                .font(.body)
-                .foregroundStyle(Chalk.inkMuted)
-            Spacer(minLength: 12)
-            Text(item.value)
-                .font(.body.weight(.semibold))
-                .foregroundStyle(Chalk.ink)
-                .multilineTextAlignment(.trailing)
+        Group {
+            // Stacked at accessibility sizes, so neither the label nor the value breaks mid-word.
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(item.label)
+                        .font(.body)
+                        .foregroundStyle(Chalk.inkMuted)
+                    Text(item.value)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(Chalk.ink)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(item.label)
+                        .font(.body)
+                        .foregroundStyle(Chalk.inkMuted)
+                    Spacer(minLength: 12)
+                    Text(item.value)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(Chalk.ink)
+                        .multilineTextAlignment(.trailing)
+                }
+            }
         }
         .padding(.vertical, 12)
         .overlay(alignment: .bottom) { Rectangle().fill(Chalk.line).frame(height: 1) }

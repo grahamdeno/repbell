@@ -23,6 +23,27 @@ struct TodayView: View {
     }
 
     @ViewBuilder
+    private var headerButtons: some View {
+        if StudioFeature.enabled {
+            headerButton("dumbbell", label: StudioCopy.studio) { controller.open(.workouts) }
+        }
+        headerButton("chart.line.uptrend.xyaxis", label: Copy.profileLabel) { controller.open(.progress) }
+        headerButton("gearshape", label: Copy.settingsTitle) { controller.open(.settings) }
+    }
+
+    private func headerButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.title2)
+                .foregroundStyle(Chalk.inkMuted)
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(PressFade())
+        .accessibilityLabel(label)
+    }
+
+    @ViewBuilder
     private func content(_ model: TodaySnapshot) -> some View {
         // The main action stays on screen on small phones: the footer is pinned and the rest scrolls.
         // At accessibility text sizes it scrolls with the page instead, so it never covers half the screen.
@@ -30,39 +51,20 @@ struct TodayView: View {
         ScreenChrome {
             VStack(alignment: .leading, spacing: 28) {
                 VStack(alignment: .leading, spacing: 12) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(model.eyebrow)
-                            .eyebrow()
-                        Spacer()
-                        if StudioFeature.enabled {
-                            Button { controller.open(.workouts) } label: {
-                                Image(systemName: "dumbbell")
-                                    .font(.title2)
-                                    .foregroundStyle(Chalk.inkMuted)
-                                    .frame(width: 44, height: 44)
-                                    .contentShape(Rectangle())
-                            }
-                            .buttonStyle(PressFade())
-                            .accessibilityLabel(StudioCopy.studio)
+                    // At accessibility sizes the heading gets its own line, so the buttons never cover it.
+                    if typeSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(model.eyebrow)
+                                .eyebrow()
+                            HStack(spacing: 8) { headerButtons }
                         }
-                        Button { controller.open(.progress) } label: {
-                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.title2)
-                                .foregroundStyle(Chalk.inkMuted)
-                                .frame(width: 44, height: 44)
-                                .contentShape(Rectangle())
+                    } else {
+                        HStack(alignment: .firstTextBaseline) {
+                            Text(model.eyebrow)
+                                .eyebrow()
+                            Spacer()
+                            headerButtons
                         }
-                        .buttonStyle(PressFade())
-                        .accessibilityLabel(Copy.profileLabel)
-                        Button { controller.open(.settings) } label: {
-                            Image(systemName: "gearshape")
-                                .font(.title2)
-                                .foregroundStyle(Chalk.inkMuted)
-                                .frame(width: 44, height: 44)
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(PressFade())
-                        .accessibilityLabel(Copy.settingsTitle)
                     }
                     if !model.bars.isEmpty {
                         DayBars(marks: model.bars)
