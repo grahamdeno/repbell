@@ -14,7 +14,7 @@ struct ConfirmView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(reps)")
                     .font(Chalk.display(160))
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
                 if let preview = controller.confirmPreview(day: day, reps: reps) {
@@ -26,11 +26,11 @@ struct ConfirmView: View {
                         if let first = preview.sets.first?.grid, let last = preview.sets.last?.grid, !preview.sets.isEmpty {
                             Text(Copy.confirmDetail(first: first, last: last, count: preview.sets.count))
                                 .font(.body)
-                                .foregroundStyle(Chalk.inkSoft)
+                                .foregroundStyle(Chalk.inkMuted)
                         } else {
                             Text(Copy.noSetsLeft(reps: preview.reps, intervalMinutes: preview.intervalMinutes))
                                 .font(.body)
-                                .foregroundStyle(Chalk.inkSoft)
+                                .foregroundStyle(Chalk.inkMuted)
                         }
                     }
                     .padding(.top, 8)

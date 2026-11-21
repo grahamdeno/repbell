@@ -100,7 +100,7 @@ struct NextSetView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text(entry.reps)
                     .font(Chalk.display(family == .systemMedium ? 72 : 56, weight: .extraBold))
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                 Text(entry.day.isEmpty ? entry.detail : entry.title)

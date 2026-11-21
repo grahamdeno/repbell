@@ -48,7 +48,7 @@ struct ProfileView: View {
                         } else {
                             Text(Copy.insightsEmpty)
                                 .font(.body)
-                                .foregroundStyle(Chalk.inkSoft)
+                                .foregroundStyle(Chalk.inkMuted)
                         }
                         if !model.allTime.isEmpty {
                             ProfileSection(Copy.allTime) { StatGrid(stats: model.allTime) }
@@ -80,7 +80,7 @@ struct ProfileView: View {
             if run.maxes.isEmpty {
                 Text(Copy.testOnDayOne)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
             } else {
                 HStack(alignment: .lastTextBaseline, spacing: 10) {
                     ForEach(Array(run.maxes.enumerated()), id: \.offset) { index, max in
@@ -92,7 +92,7 @@ struct ProfileView: View {
                         VStack(alignment: .leading, spacing: 0) {
                             Text("\(max.reps)")
                                 .font(Chalk.display(index == run.maxes.count - 1 ? 72 : 44))
-                                .foregroundStyle(index == run.maxes.count - 1 ? Chalk.accent : Chalk.ink)
+                                .foregroundStyle(index == run.maxes.count - 1 ? Chalk.volt : Chalk.ink)
                             Text("Day \(max.day)")
                                 .font(.footnote)
                                 .foregroundStyle(Chalk.inkMuted)
@@ -102,7 +102,7 @@ struct ProfileView: View {
                 if let gain = run.gainPercent, let through = run.gainThroughDay {
                     Text(Copy.gainLine(gain, throughDay: through))
                         .font(.body.weight(.semibold))
-                        .foregroundStyle(gain >= 0 ? Chalk.accent : Chalk.inkSoft)
+                        .foregroundStyle(gain >= 0 ? Chalk.volt : Chalk.inkMuted)
                 }
             }
         }
@@ -148,7 +148,7 @@ private struct ObservationRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Capsule().fill(Chalk.accent).frame(width: 4)
+            Capsule().fill(Chalk.volt).frame(width: 4)
             VStack(alignment: .leading, spacing: 6) {
                 Text(note.text)
                     .font(.body)
@@ -198,7 +198,7 @@ struct ProfileRowView: View {
         HStack(alignment: .firstTextBaseline) {
             Text(item.label)
                 .font(.body)
-                .foregroundStyle(Chalk.inkSoft)
+                .foregroundStyle(Chalk.inkMuted)
             Spacer(minLength: 12)
             Text(item.value)
                 .font(.body.weight(.semibold))

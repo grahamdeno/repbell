@@ -28,9 +28,11 @@ final class ChalkTests: XCTestCase {
         let code: [String: ChalkTokens.RGB] = [
             "ground": ChalkTokens.ground, "ground-watch": ChalkTokens.groundWatch, "surface": ChalkTokens.surface,
             "line": ChalkTokens.line, "line-strong": ChalkTokens.lineStrong, "ink": ChalkTokens.ink,
-            "ink-soft": ChalkTokens.inkSoft, "ink-muted": ChalkTokens.inkMuted, "ink-faint": ChalkTokens.inkFaint,
-            "accent": ChalkTokens.accent, "accent-pressed": ChalkTokens.accentPressed, "on-accent": ChalkTokens.onAccent,
+            "ink-muted": ChalkTokens.inkMuted, "ink-faint": ChalkTokens.inkFaint,
+            "volt": ChalkTokens.volt, "on-volt": ChalkTokens.onVolt, "on-volt-soft": ChalkTokens.onVoltSoft,
+            "ultraviolet": ChalkTokens.ultraviolet, "alert": ChalkTokens.alert,
         ]
+        XCTAssertEqual(tokens.count, code.count, "tokens.json and code list the same tokens")
         for (name, rgb) in code {
             let entry = try XCTUnwrap(tokens.first { $0["name"] == name }, name)
             XCTAssertEqual(hex(entry["value"] ?? ""), rgb, name)
@@ -60,10 +62,14 @@ final class ChalkTests: XCTestCase {
     func testUX17_contrast() {
         let ground = ChalkTokens.ground
         XCTAssertGreaterThanOrEqual(ChalkTokens.ink.contrast(with: ground), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.inkSoft.contrast(with: ground), 4.5)
         XCTAssertGreaterThanOrEqual(ChalkTokens.inkMuted.contrast(with: ground), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.accent.contrast(with: ground), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.onAccent.contrast(with: ChalkTokens.accent), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.volt.contrast(with: ground), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.onVolt.contrast(with: ChalkTokens.volt), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.onVoltSoft.contrast(with: ChalkTokens.volt), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.onVolt.contrast(with: ChalkTokens.ultraviolet), 4.5)
+        // Ultraviolet is large text only: 3:1 on ground and surface.
+        XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: ground), 3.0)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: ChalkTokens.surface), 3.0)
         XCTAssertGreaterThanOrEqual(ChalkTokens.markOutline.contrast(with: ground), 3.0)
         XCTAssertGreaterThanOrEqual(ChalkTokens.markOutlineHigh.contrast(with: ground), 3.0)
         XCTAssertGreaterThan(ChalkTokens.markOutlineHigh.contrast(with: ground), ChalkTokens.markOutline.contrast(with: ground))

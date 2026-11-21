@@ -19,10 +19,10 @@ struct WatchRoot: View {
                 VStack(spacing: 6) {
                     Text("14")
                         .font(Chalk.display(48, weight: .extraBold))
-                        .foregroundStyle(Chalk.accent)
+                        .foregroundStyle(Chalk.volt)
                     Text("Open Rep Bell on iPhone.")
                         .font(.footnote)
-                        .foregroundStyle(Chalk.inkSoft)
+                        .foregroundStyle(Chalk.inkMuted)
                         .multilineTextAlignment(.center)
                 }
                 .padding(8)
@@ -49,7 +49,7 @@ private struct WatchAlert: View {
                     .font(Chalk.display(72, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                 Text("now")
                     .font(Chalk.display(24, weight: .bold))
                     .textCase(.uppercase)
@@ -59,8 +59,8 @@ private struct WatchAlert: View {
                 .font(.body.weight(.semibold))
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
-                .background(Chalk.accent)
-                .foregroundStyle(Chalk.onAccent)
+                .background(Chalk.volt)
+                .foregroundStyle(Chalk.onVolt)
                 .clipShape(Capsule())
                 .buttonStyle(.plain)
             Button(Copy.inTen) { model.snooze(day: day, index: set.index) }
@@ -93,7 +93,7 @@ private struct WatchToday: View {
             Text(Copy.dayProgress(min(number, 14)))
                 .font(Chalk.display(17, weight: .bold))
                 .textCase(.uppercase)
-                .foregroundStyle(Chalk.accent)
+                .foregroundStyle(Chalk.volt)
             if let next, let alert = next.alert {
                 Text("Next at \(Copy.clock(alert))")
                     .font(.footnote)
@@ -102,7 +102,7 @@ private struct WatchToday: View {
                     .font(Chalk.display(64, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
             }
             Spacer(minLength: 4)
             if let day {
@@ -127,7 +127,7 @@ private struct WatchToday: View {
             if let busy = model.activeBusy() {
                 Text(Copy.busyStrip(until: busy.until, skipped: busy.skipped))
                     .font(.footnote)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .fixedSize(horizontal: false, vertical: true)
             } else if next != nil, resolved.input.dayNumber(on: now.date) != nil {
                 Button(Copy.busy) { model.busy() }
@@ -147,7 +147,7 @@ private struct WatchToday: View {
 
     private func fill(_ set: ScheduledSet, current: Int?) -> Color {
         if set.status == .missed { return .clear }
-        if set.index == current { return Chalk.accent }
+        if set.index == current { return Chalk.volt }
         if set.status == .done { return Chalk.ink }
         return Chalk.line
     }
