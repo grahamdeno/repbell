@@ -1,13 +1,13 @@
 # Rep Bell
 
-Rep Bell runs the 14-day Evil Russian push-up program for you. Set your max once, and your phone and watch tell you when to drop and how many. One tap logs each set. This system is the Chalk direction: a dark ground, huge condensed numbers, and one orange.
+Rep Bell runs the 14-day Evil Russian push-up program for you. Set your max once, and your phone and watch tell you when to drop and how many. One tap logs each set. This system is the Volt direction: a dark ground, huge condensed numbers, lime for now and violet for earned.
 
 ## What the design is for
 
 People read Rep Bell from the floor, mid-set, at arm's length, or from a wrist. The number always leads. Everything else is quiet so the number can be loud.
 
-- **The number leads.** The next set's reps are the largest thing on any screen, in `accent`, set in `number-hero` (Barlow Condensed 800).
-- **One orange.** `accent` marks only what matters now: the next number, the primary button, the current set. Never decoration, never two primary buttons on a screen.
+- **The number leads.** The next set's reps are the largest thing on any screen, in `volt`, set in `number-hero` (Barlow Condensed 800).
+- **One color, one job.** `volt` means now: the next number, the primary button, the current set. `ultraviolet` means earned: finished days and the day total. White means done. Dashed gray means missed. Never use either color as decoration, and never put two primary buttons on a screen.
 - **One decision per screen.** A flow screen has one choice or one tap. Browse screens (Today) may hold more, but the primary action is still singular.
 - **Honest, never shaming.** A missed set is shown as a dashed outline in `ink-faint`, not red, not a broken streak.
 
@@ -22,13 +22,16 @@ Headlines and eyebrows are uppercase in the display face. Body copy is sentence 
 
 ## Color
 
-One theme, Chalk. The app is dark only.
-
-- Screens sit on `ground`; panels on `surface` with a `line` border.
-- Text: `ink` for numbers and headings, `ink-soft` for body, `ink-muted` for labels. `ink-faint` is decorative only and fails body contrast on purpose.
-- `accent` with `on-accent` text for the primary button. Secondary buttons are transparent with a `line-strong` border and `ink` text.
-- Set states: done = `ink` fill; current = `accent` fill; upcoming = `line-strong` outline; missed = dashed `ink-faint` outline.
-- Watch uses `ground-watch` (true black).
+- One theme, Volt. The app is dark only.
+- Screens sit on `ground`, and panels sit on `surface` with a `line` border.
+- Text uses `ink` for numbers and headings and `ink-muted` for labels. `ink-faint` is decorative only.
+- The primary button is a `volt` fill with `on-volt` text. Secondary buttons are transparent with a `line-strong` border and `ink` text.
+- Set states: done is an `ink` fill, current is a `volt` fill, upcoming is a `line-strong` outline, and missed is a dashed `ink-faint` outline.
+- Day bars: finished days are `ultraviolet`, today is `volt`, and upcoming days are `line`.
+- Bell-ring flood: when a set's bell rings, the whole iPhone screen and the Watch set screen turn `volt`. The number and bell icon are `on-volt`, the eyebrow and caption are `on-volt-soft`, and the primary button is an `on-volt` fill with `volt` text. With Reduce Motion on, the flood shows with no animation.
+- Day 15 is the only full `ultraviolet` flood.
+- `alert` is only for destructive actions.
+- The Watch uses `ground-watch` outside the flood.
 
 ## Type
 
@@ -43,7 +46,7 @@ iPhone screens are 390pt wide with `space-6` side margins and a `space-16` top i
 
 ## Iconography
 
-Inline stroke icons, 2 to 2.5pt strokes, round caps, in `accent` or `ink-faint`. No emoji. The app icon is an orange chevron sitting just above a white 14 on `ground` (see Logos).
+Inline stroke icons, 2 to 2.5pt strokes, round caps, in `volt`, `on-volt` or `ink-faint`. No emoji. The app icon is a black chevron sitting just above a black 14 on a volt square (art pending Graham's approval).
 
 ## Using this system
 

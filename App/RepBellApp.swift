@@ -13,7 +13,7 @@ struct RepBellApp: App {
             RootView()
                 .environment(ProgramController.shared)
                 .preferredColorScheme(.dark)
-                .tint(Chalk.accent)
+                .tint(Chalk.volt)
         }
     }
 }

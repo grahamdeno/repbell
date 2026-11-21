@@ -14,6 +14,9 @@ struct CelebrationView: View {
     /// With Reduce Motion, nothing scales, rotates or slides: the moment only fades in.
     private func scale(_ from: CGFloat) -> CGFloat { reduceMotion || shown ? 1 : from }
 
+    /// Volt means now (a set just done); ultraviolet means earned (the whole day done).
+    private var tone: Color { celebration.dayComplete ? Chalk.ultraviolet : Chalk.volt }
+
     var body: some View {
         ZStack {
             Chalk.ground.ignoresSafeArea()
@@ -21,17 +24,17 @@ struct CelebrationView: View {
                 Spacer()
                 ZStack {
                     Circle()
-                        .stroke(Chalk.accent.opacity(ring || reduceMotion ? 0 : 0.6), lineWidth: 6)
+                        .stroke(tone.opacity(ring || reduceMotion ? 0 : 0.6), lineWidth: 6)
                         .frame(width: celebration.dayComplete ? 280 : 220, height: celebration.dayComplete ? 280 : 220)
                         .scaleEffect(ring ? 1.6 : 0.8)
                     Circle()
-                        .fill(Chalk.accent)
+                        .fill(tone)
                         .frame(width: celebration.dayComplete ? 230 : 180, height: celebration.dayComplete ? 230 : 180)
                         .scaleEffect(scale(0.2))
                     Image(systemName: "checkmark")
                         .font(.system(size: 88, weight: .black))
                         .accessibilityHidden(true)
-                        .foregroundStyle(Chalk.onAccent)
+                        .foregroundStyle(Chalk.onVolt)
                         .scaleEffect(scale(0.1))
                         .rotationEffect(.degrees(reduceMotion || shown ? 0 : -30))
                 }
@@ -44,18 +47,19 @@ struct CelebrationView: View {
                     .foregroundStyle(Chalk.ink)
                     .opacity(shown ? 1 : 0)
                     .offset(y: reduceMotion || shown ? 0 : 24)
-                Text("\(celebration.reps)")
+                // A finished day leads with the day's total, the number earned.
+                Text("\(celebration.dayComplete ? celebration.repsToday : celebration.reps)")
                     .font(Chalk.display(120))
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(tone)
                     .opacity(shown ? 1 : 0)
                     .scaleEffect(scale(0.6))
                 Text(celebration.dayComplete
                      ? Copy.dayDoneLine(day: celebration.day, repsToday: celebration.repsToday)
                      : Copy.celebrationLine(done: celebration.done, total: celebration.total, repsToday: celebration.repsToday))
                     .font(.body.weight(.medium))
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .multilineTextAlignment(.center)
                     .opacity(shown ? 1 : 0)
                 Spacer()

@@ -16,7 +16,7 @@ struct ResultView: View {
                 if numbers.end == nil {
                     Text(Copy.endDetail)
                         .font(.body)
-                        .foregroundStyle(Chalk.inkSoft)
+                        .foregroundStyle(Chalk.inkMuted)
                 }
                 if numbers.end != nil, controller.library.current?.ended == false {
                     TextLink(title: Copy.fixMyNumber) { controller.fixFinalNumber() }
@@ -73,7 +73,7 @@ struct ResultCard: View {
                         .foregroundStyle(Chalk.inkMuted)
                     Text(end.map(String.init) ?? "—")
                         .font(Chalk.display(96))
-                        .foregroundStyle(Chalk.accent)
+                        .foregroundStyle(Chalk.volt)
                         .lineLimit(1)
                         .minimumScaleFactor(0.4)
                 }
@@ -129,7 +129,7 @@ struct RerunView: View {
                     .accessibilityAddTraits(.isHeader)
                 Text(Copy.rerunBody(max: controller.rerunMax()))
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .fixedSize(horizontal: false, vertical: true)
                 VStack(alignment: .leading, spacing: 4) {
                     TimeChoiceRow(label: Copy.wakeLabel, choices: controller.wakeChoices(), selection: Bindable(controller).draftWake)

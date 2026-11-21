@@ -4,4 +4,4 @@ The set notification: Time Sensitive, title "[reps] now", body "Set [n] of [tota
 
 - Done comes first so Apple Watch Double Tap logs the set.
 - The app icon appears at left; no other branding.
-- This card mocks iOS's own notification surface with `notice-ground` and `notice-ink`.
+- This card mocks iOS's own notification surface, so its light card colors are the system's, not design-system tokens.

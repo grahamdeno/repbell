@@ -12,7 +12,7 @@ struct PromiseView: View {
                     .padding(.bottom, 8)
                 Text(Copy.promiseHeadlineLead)
                     .font(Chalk.display(160))
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 Text(Copy.promiseHeadline)
@@ -22,7 +22,7 @@ struct PromiseView: View {
                     .lineSpacing(-2)
                 Text(Copy.promiseBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .lineSpacing(4)
                 Spacer(minLength: 16)
                 PrimaryButton(title: Copy.start) { controller.screen = .wake }
@@ -50,7 +50,7 @@ struct WakeView: View {
                     .padding(.top, 8)
                 Text(Copy.wakeBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .lineSpacing(4)
                 TimeWheel(choices: controller.wakeChoices(), selection: Bindable(controller).draftWake)
                     .padding(.top, 16)
@@ -75,7 +75,7 @@ struct BedView: View {
                     .padding(.top, 8)
                 Text(Copy.bedBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                 TimeWheel(choices: controller.bedChoices(), selection: Bindable(controller).draftBed)
                     .padding(.top, 16)
                 Text(controller.lastSetLabel())
@@ -103,7 +103,7 @@ struct StartDayView: View {
                     .padding(.top, 8)
                 Text(Copy.startBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                 Spacer(minLength: 16)
                 ChoiceCard(title: Copy.tomorrowMorning, detail: controller.tomorrowDetail(), recommended: true) {
                     controller.draftStartsToday = false
@@ -133,7 +133,7 @@ struct AlertsView: View {
                     .padding(.top, 8)
                 Text(controller.alertsDenied ? Copy.alertsDeniedBody : Copy.alertsBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .fixedSize(horizontal: false, vertical: true)
                 VStack(spacing: 12) {
                     AlertRow(symbol: "bell", title: Copy.setAlertsTitle, detail: Copy.setAlertsDetail)
@@ -174,7 +174,7 @@ struct ReadyView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text(Copy.hourMinute(controller.library.current?.input.wake ?? controller.draftWake))
                     .font(Chalk.display(150))
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                 Text(Copy.withYourTest)
@@ -183,7 +183,7 @@ struct ReadyView: View {
                     .foregroundStyle(Chalk.ink)
                 Text(Copy.nothingElse)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                 Spacer(minLength: 12)
                 SecondaryButton(title: Copy.done) { controller.finishReady() }
             }
@@ -219,7 +219,7 @@ private struct AlertRow: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: symbol)
                 .font(.title3)
-                .foregroundStyle(Chalk.accent)
+                .foregroundStyle(Chalk.volt)
                 .frame(width: 28, height: 28)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)

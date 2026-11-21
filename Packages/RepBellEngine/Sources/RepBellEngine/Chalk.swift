@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 #endif
 
-/// The Chalk design system, mapped one to one from docs/design-system/tokens.json.
+/// The Volt design system (decision D7, 21 Nov 2026; formerly Chalk), mapped one to one from docs/design-system/tokens.json.
 ///
 /// The values live here, in the engine, so the iPhone app, the Watch app, the widget and the alarm share one
 /// source. `ChalkTokens` holds plain numbers and is tested; `Chalk` turns them into SwiftUI colors and fonts.
@@ -34,19 +34,21 @@ public enum ChalkTokens {
         }
     }
 
-    public static let ground = RGB(0x121212)
+    public static let volt = RGB(0xC8FF00)
+    public static let onVolt = RGB(0x0D0D0D)
+    public static let onVoltSoft = RGB(0x2B3300)
+    public static let ultraviolet = RGB(0xA066FF)
+    public static let ground = RGB(0x0D0D0D)
     public static let groundWatch = RGB(0x000000)
-    public static let surface = RGB(0x1A1A19)
-    public static let line = RGB(0x2E2D2A)
-    public static let lineStrong = RGB(0x3A3936)
-    public static let ink = RGB(0xF2F0EB)
-    public static let inkSoft = RGB(0xC9C6C0)
-    public static let inkMuted = RGB(0xA3A09A)
+    public static let surface = RGB(0x1A1A1A)
+    public static let line = RGB(0x2A2A2A)
+    public static let lineStrong = RGB(0x3A3A3A)
+    public static let ink = RGB(0xF2F2F2)
+    public static let inkMuted = RGB(0xA0A0A0)
     public static let inkFaint = RGB(0x6E6B66)
-    public static let accent = RGB(0xFF6A13)
-    public static let accentPressed = RGB(0xFF8A45)
-    public static let onAccent = RGB(0x121212)
-    public static let watchSecondary = RGB(0x262624)
+    public static let alert = RGB(0xFF3B30)
+    /// Watch-only fill for secondary buttons. Not a design-system token.
+    public static let watchSecondary = RGB(0x262626)
 
     /// Outlines and bars that carry meaning (upcoming sets, future days). At least 3:1 on ground.
     public static let markOutline = inkFaint
@@ -97,18 +99,19 @@ public enum Chalk {
         Color(red: Double(rgb.red) / 255, green: Double(rgb.green) / 255, blue: Double(rgb.blue) / 255)
     }
 
+    public static var volt: Color { color(ChalkTokens.volt) }
+    public static var onVolt: Color { color(ChalkTokens.onVolt) }
+    public static var onVoltSoft: Color { color(ChalkTokens.onVoltSoft) }
+    public static var ultraviolet: Color { color(ChalkTokens.ultraviolet) }
     public static var ground: Color { color(ChalkTokens.ground) }
     public static var groundWatch: Color { color(ChalkTokens.groundWatch) }
     public static var surface: Color { color(ChalkTokens.surface) }
     public static var line: Color { color(ChalkTokens.line) }
     public static var lineStrong: Color { color(ChalkTokens.lineStrong) }
     public static var ink: Color { color(ChalkTokens.ink) }
-    public static var inkSoft: Color { color(ChalkTokens.inkSoft) }
     public static var inkMuted: Color { color(ChalkTokens.inkMuted) }
     public static var inkFaint: Color { color(ChalkTokens.inkFaint) }
-    public static var accent: Color { color(ChalkTokens.accent) }
-    public static var accentPressed: Color { color(ChalkTokens.accentPressed) }
-    public static var onAccent: Color { color(ChalkTokens.onAccent) }
+    public static var alert: Color { color(ChalkTokens.alert) }
     public static var watchSecondary: Color { color(ChalkTokens.watchSecondary) }
 
     /// Outline for marks that carry meaning, stronger when Increase Contrast is on.

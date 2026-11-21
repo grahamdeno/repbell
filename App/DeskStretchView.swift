@@ -66,7 +66,7 @@ struct DeskStretchView: View {
             ScreenChrome(top: 24) {
                 VStack(alignment: .leading, spacing: 18) {
                     Text(Copy.deskStretchTitle)
-                        .eyebrow(Chalk.accent)
+                        .eyebrow(Chalk.volt)
                     Text(stretch.name)
                         .font(Chalk.display(40))
                         .textCase(.uppercase)
@@ -77,7 +77,7 @@ struct DeskStretchView: View {
                         ForEach(stretch.cues, id: \.self) { cue in
                             Text(cue)
                                 .font(.body)
-                                .foregroundStyle(Chalk.inkSoft)
+                                .foregroundStyle(Chalk.inkMuted)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
@@ -102,12 +102,12 @@ struct DeskStretchView: View {
                 Text(label(phases[index].kind))
                     .font(Chalk.display(32, weight: .bold))
                     .textCase(.uppercase)
-                    .foregroundStyle(isHold(phases[index].kind) ? Chalk.accent : Chalk.inkSoft)
+                    .foregroundStyle(isHold(phases[index].kind) ? Chalk.volt : Chalk.inkMuted)
                     .accessibilityAddTraits(.updatesFrequently)
                 Text(StudioCopy.clock(remaining))
                     .font(Chalk.display(96))
                     .monospacedDigit()
-                    .foregroundStyle(isHold(phases[index].kind) ? Chalk.accent : Chalk.inkMuted)
+                    .foregroundStyle(isHold(phases[index].kind) ? Chalk.volt : Chalk.inkMuted)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .accessibilityLabel(Copy.deskStretchTimer(seconds: remaining))

@@ -20,7 +20,7 @@ struct CounterView: View {
                 }
                 Text(Copy.counterPrompt)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                 counter
                 HStack(spacing: 12) {
                     SecondaryButton(title: "−1") { controller.adjustCount(by: -1) }
@@ -48,7 +48,7 @@ struct CounterView: View {
                 .foregroundStyle(Chalk.inkFaint)
             Text("\(controller.draftCount)")
                 .font(Chalk.display(160))
-                .foregroundStyle(Chalk.accent)
+                .foregroundStyle(Chalk.volt)
                 .lineLimit(1)
                 .minimumScaleFactor(0.4)
             Text(controller.draftCount > 0 ? "\(controller.draftCount - 1)" : " ")
@@ -106,7 +106,7 @@ private struct TickRuler: View {
                 let major = (index + count) % 5 == 0
                 let mid = index == 7
                 Capsule()
-                    .fill(mid ? Chalk.accent : (major ? Chalk.inkFaint : Chalk.lineStrong))
+                    .fill(mid ? Chalk.volt : (major ? Chalk.inkFaint : Chalk.lineStrong))
                     .frame(width: mid ? 20 : (major ? 14 : 8), height: 2)
                 if index < 14 { Spacer(minLength: 0) }
             }

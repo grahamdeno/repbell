@@ -67,7 +67,7 @@ struct SettingsView: View {
             if let preview {
                 Text(Copy.windowPreview(before: preview.before, after: preview.after, last: preview.last))
                     .font(.subheadline)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .fixedSize(horizontal: false, vertical: true)
                 PrimaryButton(title: Copy.saveTimes) {
                     controller.changeWindow(wake: wake, bed: bed)
@@ -129,7 +129,7 @@ struct SettingsView: View {
                 if run.pausedAt == nil {
                     Text(Copy.pauseBody)
                         .font(.subheadline)
-                        .foregroundStyle(Chalk.inkSoft)
+                        .foregroundStyle(Chalk.inkMuted)
                     SecondaryButton(title: Copy.pauseTitle, size: .compact) {
                         controller.pause()
                     }
@@ -146,8 +146,8 @@ struct SettingsView: View {
                     deskStretchOn = on
                 }
             ))
-            .tint(Chalk.accent)
-            .foregroundStyle(Chalk.inkSoft)
+            .tint(Chalk.volt)
+            .foregroundStyle(Chalk.inkMuted)
             .frame(minHeight: ChalkTokens.minimumTarget)
             Text(Copy.deskStretchDetail)
                 .font(.footnote)
@@ -170,8 +170,8 @@ struct SettingsView: View {
                         }
                     }
                 ))
-                .tint(Chalk.accent)
-                .foregroundStyle(Chalk.inkSoft)
+                .tint(Chalk.volt)
+                .foregroundStyle(Chalk.inkMuted)
                 .frame(minHeight: ChalkTokens.minimumTarget)
                 Text(Copy.pushUpsToHealthDetail)
                     .font(.footnote)
@@ -180,7 +180,7 @@ struct SettingsView: View {
             }
             Text(Copy.startOverBody)
                 .font(.subheadline)
-                .foregroundStyle(Chalk.inkSoft)
+                .foregroundStyle(Chalk.inkMuted)
                 .padding(.top, 8)
             SecondaryButton(title: Copy.startOverTitle, size: .compact) { confirmStartOver = true }
         }
@@ -209,7 +209,7 @@ struct AlertsCheckView: View {
                 if rows.contains(where: Self.needsAttention) {
                     Text(Copy.alertsFixHint)
                         .font(.subheadline)
-                        .foregroundStyle(Chalk.inkSoft)
+                        .foregroundStyle(Chalk.inkMuted)
                         .fixedSize(horizontal: false, vertical: true)
                     PrimaryButton(title: Copy.openSettings) {
                         if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
@@ -264,7 +264,7 @@ struct TimeChoiceRow: View {
         HStack {
             Text(label)
                 .font(.body)
-                .foregroundStyle(Chalk.inkSoft)
+                .foregroundStyle(Chalk.inkMuted)
                 .accessibilityHidden(true)
             Spacer()
             Picker(label, selection: $selection) {
@@ -273,7 +273,7 @@ struct TimeChoiceRow: View {
                 }
             }
             .pickerStyle(.menu)
-            .tint(Chalk.accent)
+            .tint(Chalk.volt)
             .labelsHidden()
             .frame(minHeight: ChalkTokens.minimumTarget)
         }

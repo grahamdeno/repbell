@@ -15,7 +15,7 @@ struct HurtsView: View {
                     .foregroundStyle(Chalk.ink)
                 Text(Copy.hurtsBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .lineSpacing(4)
                 Spacer(minLength: 16)
                 ChoiceCard(title: Copy.pauseTitle, detail: Copy.pauseDetail(day: day), recommended: false) { controller.pause() }
@@ -42,7 +42,7 @@ struct AboutView: View {
                     .textCase(.uppercase)
                 Text(Copy.aboutBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .lineSpacing(4)
             }
         }
@@ -60,7 +60,7 @@ struct PaywallView: View {
                     .textCase(.uppercase)
                 Text(Copy.unlockBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
                     .lineSpacing(4)
                 if let message = controller.unlockMessage {
                     Text(message)

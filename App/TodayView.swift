@@ -38,7 +38,7 @@ struct TodayView: View {
                             Button { controller.open(.workouts) } label: {
                                 Image(systemName: "dumbbell")
                                     .font(.title2)
-                                    .foregroundStyle(Chalk.inkSoft)
+                                    .foregroundStyle(Chalk.inkMuted)
                                     .frame(width: 44, height: 44)
                                     .contentShape(Rectangle())
                             }
@@ -48,7 +48,7 @@ struct TodayView: View {
                         Button { controller.open(.progress) } label: {
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.title2)
-                                .foregroundStyle(Chalk.inkSoft)
+                                .foregroundStyle(Chalk.inkMuted)
                                 .frame(width: 44, height: 44)
                                 .contentShape(Rectangle())
                         }
@@ -57,7 +57,7 @@ struct TodayView: View {
                         Button { controller.open(.settings) } label: {
                             Image(systemName: "gearshape")
                                 .font(.title2)
-                                .foregroundStyle(Chalk.inkSoft)
+                                .foregroundStyle(Chalk.inkMuted)
                                 .frame(width: 44, height: 44)
                                 .contentShape(Rectangle())
                         }
@@ -73,7 +73,7 @@ struct TodayView: View {
                 if let fallback = model.fallback {
                     Text(fallback)
                         .font(.subheadline)
-                        .foregroundStyle(Chalk.inkSoft)
+                        .foregroundStyle(Chalk.inkMuted)
                 }
                 if let title = model.tallyTitle, let detail = model.tallyDetail {
                     VStack(alignment: .leading, spacing: 12) {
@@ -120,7 +120,7 @@ struct TodayView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text(time)
                     .font(Chalk.display(150))
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
                 Text(title)
@@ -128,7 +128,7 @@ struct TodayView: View {
                     .textCase(.uppercase)
                 Text(detail)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
             }
         case .test:
             VStack(alignment: .leading, spacing: 8) {
@@ -138,7 +138,7 @@ struct TodayView: View {
                     .foregroundStyle(Chalk.ink)
                 Text(Copy.testHeroBody)
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
             }
         case .next(let time, let reps, let line):
             VStack(alignment: .leading, spacing: 4) {
@@ -147,7 +147,7 @@ struct TodayView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(reps)")
                     .font(Chalk.display(160))
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.25)
                 Text(Copy.keepHyphenatedWords(line))
@@ -173,7 +173,7 @@ struct TodayView: View {
                                     .foregroundStyle(Chalk.ink)
                                 Spacer()
                                 Image(systemName: "arrow.right")
-                                    .foregroundStyle(Chalk.accent)
+                                    .foregroundStyle(Chalk.volt)
                             }
                         }
                         .padding(16)
@@ -187,10 +187,10 @@ struct TodayView: View {
                 Text(Copy.paused)
                     .font(Chalk.display(48))
                     .textCase(.uppercase)
-                    .foregroundStyle(Chalk.accent)
+                    .foregroundStyle(Chalk.volt)
                 Text(Copy.pauseDetail(day: day))
                     .font(.body)
-                    .foregroundStyle(Chalk.inkSoft)
+                    .foregroundStyle(Chalk.inkMuted)
             }
         }
     }
@@ -215,7 +215,7 @@ struct TodayView: View {
                     HStack {
                         Text(Copy.busyStrip(until: busy.until, skipped: busy.skipped))
                             .font(.subheadline.weight(.medium))
-                            .foregroundStyle(Chalk.inkSoft)
+                            .foregroundStyle(Chalk.inkMuted)
                             .fixedSize(horizontal: false, vertical: true)
                         Spacer(minLength: ChalkTokens.Space.s2)
                         TextLink(title: Copy.undo) { controller.undoBusy() }
@@ -263,7 +263,7 @@ private struct SetTally: View {
         case .current:
             // Taller, with a ring, so the current set never relies on color alone.
             RoundedRectangle(cornerRadius: radius)
-                .fill(Chalk.accent)
+                .fill(Chalk.volt)
                 .frame(height: 30)
                 .overlay(RoundedRectangle(cornerRadius: radius).stroke(Chalk.ink, lineWidth: 2))
         case .upcoming:
