@@ -71,3 +71,9 @@ public enum Rerun {
         )
     }
 }
+
+extension ScheduledDay {
+    /// Whether Today should still offer this day's test. After the Day 8 noon fallback the sets are running
+    /// on the Day 1 max, so the test is closed for the day.
+    public var testOpen: Bool { isTest && testReps == nil && !setsStartAtNoon }
+}

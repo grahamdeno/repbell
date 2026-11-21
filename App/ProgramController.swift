@@ -793,7 +793,7 @@ final class ProgramController {
                 fallback: nil
             )
         }
-        if day.isTest && day.testReps == nil {
+        if day.testOpen {
             return snapshot(resolved: resolved, run: run, now: now, hero: .test(number))
         }
         if let next = day.sets.first(where: { $0.status == .upcoming }), let alert = next.alert {
@@ -907,7 +907,7 @@ final class ProgramController {
         } else {
             marks = []
         }
-        let eyebrow = number.map { Copy.dayProgress(min($0, 14)) } ?? Copy.setupReady(when: "tomorrow")
+        let eyebrow = number.map { Copy.todayHeading($0) } ?? Copy.setupReady(when: "tomorrow")
         let fallback = (day?.number == 8 && day?.usedDayOneMax == true) ? Copy.dayEightFallback : nil
         return TodaySnapshot(
             hero: hero,

@@ -13,7 +13,7 @@ today-missed	Today	Some sets missed	Day 5, 3 of 7 sets missed
 today-busy	Today	Busy active, Undo strip	Day 3, Busy tapped 5 min ago
 today-finished	Today	Day finished	Day 4, every set done, window closed
 today-paused	Today	Paused	Day 6, paused an hour ago
-today-day8-test	Today	Day 8 test morning	Day 8, woke 30 min ago, re-test not logged
+today-day8-test	Today	Day 8, re-test not logged	Day 8, woke 30 min ago; the capture runs at 3 p.m., so the noon fallback applies
 today-day15	Today	Day 15	Day 15, final test not logged
 counter-zero	Counter	At 0	Day 1 test, count 0
 counter-mid	Counter	Mid-count	Day 1 test, count 23
