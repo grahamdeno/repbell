@@ -1,6 +1,6 @@
 # Rep Bell
 
-Rep Bell runs the 14-day Evil Russian push-up program for you. Set your max once, and your phone and watch tell you when to drop and how many. One tap logs each set. This system is the Volt direction: a dark ground, huge condensed numbers, lime for now and violet for earned.
+Rep Bell runs the 14-day Evil Russian push-up program for you. Set your max once, and your phone and watch tell you when to drop and how many. One tap logs each set. This system is a dark ground, huge condensed numbers, lime for now and violet for earned.
 
 ## What the design is for
 
