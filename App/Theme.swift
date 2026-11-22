@@ -190,17 +190,10 @@ struct DayBars: View {
     var body: some View {
         HStack(alignment: .center, spacing: ChalkTokens.Space.s1) {
             ForEach(Array(marks.enumerated()), id: \.offset) { _, mark in
-                let shape = RoundedRectangle(cornerRadius: ChalkTokens.Radius.bar)
-                Group {
-                    // Upcoming days are an outline, like upcoming sets; finished and today are filled.
-                    if mark == .future {
-                        shape.strokeBorder(mark.color(contrast), lineWidth: 1.5)
-                    } else {
-                        shape.fill(mark.color(contrast))
-                    }
-                }
-                // Today is taller, so it never relies on color alone.
-                .frame(height: mark == .today ? 20 : 12)
+                Capsule()
+                    .fill(mark.color(contrast))
+                    // Today is taller, so it never relies on color alone.
+                    .frame(height: mark == .today ? 12 : 6)
             }
         }
         .frame(height: 20)

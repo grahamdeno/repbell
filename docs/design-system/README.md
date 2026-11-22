@@ -27,7 +27,7 @@ Headlines and eyebrows are uppercase in the display face. Body copy is sentence 
 - Text uses `ink` for numbers and headings and `ink-muted` for labels. `ink-faint` is for outlines only, never text.
 - The primary button is a `volt` fill with `on-volt` text. Secondary buttons are transparent with a `line-strong` border and `ink` text.
 - Set states: done is an `ink` fill, current is a `volt` fill, upcoming is a `line-strong` outline, and missed is a dashed `ink-faint` outline.
-- Day bars: finished days are `ultraviolet` fills, today is a taller `volt` fill, and upcoming days are `ink-faint` outlines (3:1, like upcoming sets).
+- Day bars: finished days are `ultraviolet`, today is `volt`, and upcoming days are `line`.
 - Bell-ring flood: when a set's bell rings, the whole iPhone screen and the Watch set screen turn `volt`. The number and bell icon are `on-volt`, the eyebrow and caption are `on-volt-soft`, and the primary button is an `on-volt` fill with `volt` text. With Reduce Motion on, the flood shows with no animation.
 - Day 15 is the only full `ultraviolet` flood.
 - `alert` is only for destructive actions.
