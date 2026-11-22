@@ -39,6 +39,39 @@ struct CelebrationView: View {
     var body: some View {
         ZStack {
             ground.ignoresSafeArea()
+            // At large text sizes the moment scrolls instead of cutting its line short.
+            ViewThatFits(in: .vertical) {
+                moment
+                ScrollView { moment }
+            }
+        }
+        .preferredColorScheme(flood ? .light : nil)
+        .contentShape(Rectangle())
+        .onTapGesture { dismiss() }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+        .onAppear {
+            if reduceMotion {
+                withAnimation(.easeOut(duration: 0.2)) { shown = true }
+            } else {
+                withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) { shown = true }
+                // A finished day rings out more slowly.
+                withAnimation(.easeOut(duration: celebration.dayComplete ? 1.6 : 0.9)) { ring = true }
+            }
+        }
+        .task {
+            #if DEBUG
+            // Screenshot mode holds the celebration on screen for the capture.
+            if ProgramController.screenshotState != nil { return }
+            #endif
+            // With VoiceOver on it waits for a tap, so it can be read in full.
+            guard let seconds = CelebrationTiming.autoDismiss(dayComplete: celebration.dayComplete, voiceOverRunning: UIAccessibility.isVoiceOverRunning) else { return }
+            try? await Task.sleep(for: .seconds(seconds))
+            dismiss()
+        }
+    }
+
+    private var moment: some View {
             VStack(spacing: 20) {
                 Spacer()
                 ZStack {
@@ -78,6 +111,7 @@ struct CelebrationView: View {
                     .font(.body.weight(.medium))
                     .foregroundStyle(muted)
                     .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                     .opacity(shown ? 1 : 0)
                 Spacer()
                 Text(Copy.tapToContinue)
@@ -85,30 +119,6 @@ struct CelebrationView: View {
                     .foregroundStyle(muted)
             }
             .padding(24)
-        }
-        .preferredColorScheme(flood ? .light : nil)
-        .contentShape(Rectangle())
-        .onTapGesture { dismiss() }
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isButton)
-        .onAppear {
-            if reduceMotion {
-                withAnimation(.easeOut(duration: 0.2)) { shown = true }
-            } else {
-                withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) { shown = true }
-                // A finished day rings out more slowly.
-                withAnimation(.easeOut(duration: celebration.dayComplete ? 1.6 : 0.9)) { ring = true }
-            }
-        }
-        .task {
-            #if DEBUG
-            // Screenshot mode holds the celebration on screen for the capture.
-            if ProgramController.screenshotState != nil { return }
-            #endif
-            // With VoiceOver on it waits for a tap, so it can be read in full.
-            guard let seconds = CelebrationTiming.autoDismiss(dayComplete: celebration.dayComplete, voiceOverRunning: UIAccessibility.isVoiceOverRunning) else { return }
-            try? await Task.sleep(for: .seconds(seconds))
-            dismiss()
-        }
+            .frame(maxWidth: .infinity)
     }
 }
