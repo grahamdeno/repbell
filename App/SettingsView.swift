@@ -146,7 +146,7 @@ struct SettingsView: View {
                     deskStretchOn = on
                 }
             ))
-            .tint(Chalk.amber)
+            .tint(Chalk.volt)
             .foregroundStyle(Chalk.inkMuted)
             .frame(minHeight: ChalkTokens.minimumTarget)
             Text(Copy.deskStretchDetail)
@@ -170,7 +170,7 @@ struct SettingsView: View {
                         }
                     }
                 ))
-                .tint(Chalk.amber)
+                .tint(Chalk.volt)
                 .foregroundStyle(Chalk.inkMuted)
                 .frame(minHeight: ChalkTokens.minimumTarget)
                 Text(Copy.pushUpsToHealthDetail)
@@ -268,7 +268,7 @@ struct TimeChoiceRow: View {
             }
         }
         .pickerStyle(.menu)
-        .tint(Chalk.amber)
+        .tint(Chalk.volt)
         .labelsHidden()
         .frame(minHeight: ChalkTokens.minimumTarget)
         let title = Text(label)

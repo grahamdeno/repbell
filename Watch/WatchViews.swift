@@ -19,7 +19,7 @@ struct WatchRoot: View {
                 VStack(spacing: 6) {
                     Text("14")
                         .font(Chalk.display(48, weight: .extraBold))
-                        .foregroundStyle(Chalk.amber)
+                        .foregroundStyle(Chalk.volt)
                     Text("Open Rep Bell on iPhone.")
                         .font(.footnote)
                         .foregroundStyle(Chalk.inkMuted)
@@ -40,49 +40,49 @@ private struct WatchAlert: View {
     var set: ScheduledSet
 
     var body: some View {
-        // The bell-ring flood: the whole set screen turns deep amber, the number in amber (D8).
+        // The bell-ring flood: the whole set screen turns volt, everything on it on-volt.
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 4) {
                 Image(systemName: "bell.fill")
                     .font(.footnote)
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.onVolt)
                     .accessibilityHidden(true)
                 Text("Set \(set.index) of \(total)")
                     .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Chalk.floodSoft)
+                    .foregroundStyle(Chalk.onVoltSoft)
             }
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text("\(set.reps)")
                     .font(Chalk.display(72, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.onVolt)
                 Text("now")
                     .font(Chalk.display(24, weight: .bold))
                     .textCase(.uppercase)
-                    .foregroundStyle(Chalk.floodSoft)
+                    .foregroundStyle(Chalk.onVoltSoft)
             }
             Spacer(minLength: 4)
             Button(Copy.done) { model.done(day: day, index: set.index) }
                 .font(.body.weight(.semibold))
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
-                .background(Chalk.amber)
-                .foregroundStyle(Chalk.onAmber)
+                .background(Chalk.onVolt)
+                .foregroundStyle(Chalk.volt)
                 .clipShape(Capsule())
                 .buttonStyle(.plain)
             Button(Copy.inTen) { model.snooze(day: day, index: set.index) }
                 .font(.body.weight(.medium))
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
-                .foregroundStyle(Chalk.ink)
-                .overlay(Capsule().stroke(Chalk.floodSoft, lineWidth: 1.5))
+                .foregroundStyle(Chalk.onVolt)
+                .overlay(Capsule().stroke(Chalk.onVolt, lineWidth: 1.5))
                 .buttonStyle(.plain)
         }
         .padding(.horizontal, 6)
         .padding(.top, 8)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Chalk.flood.ignoresSafeArea())
+        .background(Chalk.volt.ignoresSafeArea())
         // Done and In 10 stay on screen at every text size.
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
@@ -102,7 +102,7 @@ private struct WatchToday: View {
             Text(Copy.dayProgress(min(number, 14)))
                 .font(Chalk.display(17, weight: .bold))
                 .textCase(.uppercase)
-                .foregroundStyle(Chalk.amber)
+                .foregroundStyle(Chalk.volt)
             if let next, let alert = next.alert {
                 Text("Next at \(Copy.clock(alert))")
                     .font(.footnote)
@@ -111,7 +111,7 @@ private struct WatchToday: View {
                     .font(Chalk.display(64, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.volt)
             }
             Spacer(minLength: 4)
             if let day {
@@ -156,7 +156,7 @@ private struct WatchToday: View {
 
     private func fill(_ set: ScheduledSet, current: Int?) -> Color {
         if set.status == .missed { return .clear }
-        if set.index == current { return Chalk.amber }
+        if set.index == current { return Chalk.volt }
         if set.status == .done { return Chalk.ink }
         return Chalk.line
     }

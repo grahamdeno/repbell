@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 #endif
 
-/// The Amber design system (decision D8, 22 Nov 2026; replaced Volt lime, which replaced Chalk), mapped one to one from docs/design-system/tokens.json.
+/// The Volt design system (decision D7, 21 Nov 2026; formerly Chalk), mapped one to one from docs/design-system/tokens.json.
 ///
 /// The values live here, in the engine, so the iPhone app, the Watch app, the widget and the alarm share one
 /// source. `ChalkTokens` holds plain numbers and is tested; `Chalk` turns them into SwiftUI colors and fonts.
@@ -34,10 +34,9 @@ public enum ChalkTokens {
         }
     }
 
-    public static let amber = RGB(0xFFB020)
-    public static let onAmber = RGB(0x0D0D0D)
-    public static let flood = RGB(0x3A2A08)
-    public static let floodSoft = RGB(0xD9B26A)
+    public static let volt = RGB(0xC8FF00)
+    public static let onVolt = RGB(0x0D0D0D)
+    public static let onVoltSoft = RGB(0x2B3300)
     public static let ultraviolet = RGB(0xA066FF)
     public static let ground = RGB(0x0D0D0D)
     public static let groundWatch = RGB(0x000000)
@@ -100,10 +99,9 @@ public enum Chalk {
         Color(red: Double(rgb.red) / 255, green: Double(rgb.green) / 255, blue: Double(rgb.blue) / 255)
     }
 
-    public static var amber: Color { color(ChalkTokens.amber) }
-    public static var onAmber: Color { color(ChalkTokens.onAmber) }
-    public static var flood: Color { color(ChalkTokens.flood) }
-    public static var floodSoft: Color { color(ChalkTokens.floodSoft) }
+    public static var volt: Color { color(ChalkTokens.volt) }
+    public static var onVolt: Color { color(ChalkTokens.onVolt) }
+    public static var onVoltSoft: Color { color(ChalkTokens.onVoltSoft) }
     public static var ultraviolet: Color { color(ChalkTokens.ultraviolet) }
     public static var ground: Color { color(ChalkTokens.ground) }
     public static var groundWatch: Color { color(ChalkTokens.groundWatch) }

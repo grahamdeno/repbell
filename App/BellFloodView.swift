@@ -1,9 +1,8 @@
 import RepBellEngine
 import SwiftUI
 
-/// The bell-ring flood (design system: SetAlert). When a set is due and Today is open, the whole screen turns the
-/// deep amber `flood`: the number leads in amber, and Done is the one primary action. A deep tint rather than a bright
-/// fill, so it reads from across the room without glare (D8). Reduce Motion shows it without animation.
+/// The bell-ring flood (design system: SetAlert). When a set is due and Today is open, the whole screen turns
+/// volt: the number leads in on-volt, and Done is the one primary action. Reduce Motion shows it without animation.
 struct BellFloodView: View {
     @Environment(ProgramController.self) private var controller
     var set: ScheduledSet
@@ -11,35 +10,35 @@ struct BellFloodView: View {
     var showBusy: Bool
 
     var body: some View {
-        ScreenChrome(background: Chalk.flood) {
+        ScreenChrome(background: Chalk.volt) {
             VStack(alignment: .leading, spacing: ChalkTokens.Space.s4) {
                 HStack(alignment: .firstTextBaseline, spacing: ChalkTokens.Space.s2) {
                     Image(systemName: "bell.fill")
                         .font(.title3)
-                        .foregroundStyle(Chalk.amber)
+                        .foregroundStyle(Chalk.onVolt)
                         .accessibilityHidden(true)
                     Text(Copy.floodEyebrow(set: set.index, total: total, day: set.day))
                         .eyebrow()
-                        .foregroundStyle(Chalk.floodSoft)
+                        .foregroundStyle(Chalk.onVoltSoft)
                 }
                 .padding(.top, ChalkTokens.Space.s6)
                 Text("\(set.reps)")
                     .font(Chalk.display(200))
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.onVolt)
                 Text(Copy.pushUpsNow)
                     .font(Chalk.display(28, weight: .bold))
                     .textCase(.uppercase)
-                    .foregroundStyle(Chalk.floodSoft)
+                    .foregroundStyle(Chalk.onVoltSoft)
                 Spacer(minLength: ChalkTokens.Space.s6)
                 Button { controller.logDone(day: set.day, index: set.index, celebrate: true) } label: {
                     Text(Copy.doneSet(set.reps))
                         .font(Chalk.TypeScale.button)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, minHeight: 60)
-                        .foregroundStyle(Chalk.onAmber)
-                        .background(Chalk.amber, in: RoundedRectangle(cornerRadius: ChalkTokens.Radius.button))
+                        .foregroundStyle(Chalk.volt)
+                        .background(Chalk.onVolt, in: RoundedRectangle(cornerRadius: ChalkTokens.Radius.button))
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(PressFade())
@@ -48,8 +47,8 @@ struct BellFloodView: View {
                         .font(Chalk.TypeScale.button)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, minHeight: 56)
-                        .foregroundStyle(Chalk.ink)
-                        .overlay(RoundedRectangle(cornerRadius: ChalkTokens.Radius.button).stroke(Chalk.floodSoft, lineWidth: 1.5))
+                        .foregroundStyle(Chalk.onVolt)
+                        .overlay(RoundedRectangle(cornerRadius: ChalkTokens.Radius.button).stroke(Chalk.onVolt, lineWidth: 1.5))
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(PressFade())
@@ -58,7 +57,7 @@ struct BellFloodView: View {
                         Text(Copy.busy)
                             .font(.subheadline.weight(.semibold))
                             .underline()
-                            .foregroundStyle(Chalk.floodSoft)
+                            .foregroundStyle(Chalk.onVolt)
                             .frame(maxWidth: .infinity, minHeight: ChalkTokens.minimumTarget)
                             .contentShape(Rectangle())
                     }
@@ -66,5 +65,7 @@ struct BellFloodView: View {
                 }
             }
         }
+        // Dark status bar text on the lime screen.
+        .preferredColorScheme(.light)
     }
 }
