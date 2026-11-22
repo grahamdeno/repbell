@@ -24,7 +24,7 @@ Headlines and eyebrows are uppercase in the display face. Body copy is sentence 
 
 - One theme, Amber. The app is dark only.
 - Screens sit on `ground`, and panels sit on `surface` with a `line` border.
-- Text uses `ink` for numbers and headings and `ink-muted` for labels. `ink-faint` is decorative only.
+- Text uses `ink` for numbers and headings and `ink-muted` for labels. `ink-faint` is for outlines only, never text.
 - The primary button is an `amber` fill with `on-amber` text. Secondary buttons are transparent with a `line-strong` border and `ink` text.
 - Set states: done is an `ink` fill, current is an `amber` fill, upcoming is a `line-strong` outline, and missed is a dashed `ink-faint` outline.
 - Day bars: finished days are `ultraviolet` fills, today is a taller `amber` fill, and upcoming days are `ink-faint` outlines (3:1, like upcoming sets).
