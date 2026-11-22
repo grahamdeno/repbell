@@ -29,6 +29,48 @@ public enum DeskStretch {
         Stretch(id: "seated-hamstring", name: "Seated hamstring stretch",
                 cues: ["Sit with one leg straight, the other foot against the inner thigh.", "Fold toward the straight leg with a long back."],
                 eachSide: true),
+        Stretch(id: "childs-pose", name: "Child's pose",
+                cues: ["Knees wide, big toes together, sit back on your heels.", "Reach your arms forward and let your forehead rest down."],
+                eachSide: false),
+        Stretch(id: "hamstring-fold", name: "Standing hamstring fold",
+                cues: ["Feet hip-width, knees soft.", "Fold from the hips and let your head hang. Don't bounce."],
+                eachSide: false),
+        Stretch(id: "seated-fold", name: "Seated forward fold",
+                cues: ["Sit with legs straight out, knees soft.", "Lengthen your spine first, then fold from the hips."],
+                eachSide: false),
+        Stretch(id: "figure-four", name: "Figure-four stretch",
+                cues: ["On your back, cross one ankle over the opposite knee.", "Pull the bottom leg toward you until you feel the outer hip."],
+                eachSide: true),
+        Stretch(id: "supine-twist", name: "Supine twist",
+                cues: ["On your back, hug one knee in, then let it fall across your body.", "Both shoulders stay on the floor."],
+                eachSide: true),
+        Stretch(id: "thread-needle", name: "Thread the needle",
+                cues: ["From hands and knees, slide one arm under your chest.", "Rest your shoulder and ear down; keep your hips over your knees."],
+                eachSide: true),
+        Stretch(id: "puppy", name: "Puppy pose",
+                cues: ["From hands and knees, walk your hands forward and lower your chest.", "Hips stay over your knees. Let your upper back melt down."],
+                eachSide: false),
+        Stretch(id: "cross-shoulder", name: "Cross-body shoulder stretch",
+                cues: ["Bring one arm across your chest.", "Hold it above the elbow with the other hand. Shoulder stays down."],
+                eachSide: true),
+        Stretch(id: "quad-stretch", name: "Standing quad stretch",
+                cues: ["Hold a wall, grab one ankle behind you.", "Knees side by side, hips pressed forward."],
+                eachSide: true),
+        Stretch(id: "calf-wall", name: "Calf stretch at a wall",
+                cues: ["Hands on a wall, one foot back, heel down.", "Lean in with the back leg straight."],
+                eachSide: true),
+        Stretch(id: "downward-dog", name: "Downward dog",
+                cues: ["From hands and knees, lift your hips up and back.", "Press the floor away. Bend your knees if your back rounds."],
+                eachSide: false),
+        Stretch(id: "low-lunge", name: "Low lunge",
+                cues: ["One foot forward between your hands, back knee down.", "Sink your hips forward and lift your chest."],
+                eachSide: true),
+        Stretch(id: "sphinx", name: "Sphinx",
+                cues: ["Lie face down, forearms under your shoulders.", "Draw your chest forward and keep your lower back relaxed."],
+                eachSide: false),
+        Stretch(id: "bridge-pose", name: "Bridge",
+                cues: ["On your back, feet flat, arms by your sides.", "Lift your hips and roll your shoulders under. Keep your knees in line with your feet."],
+                eachSide: false),
     ]
 
     /// Whether a stretch is due after a set logged now.
@@ -38,10 +80,17 @@ public enum DeskStretch {
         return lastShown.minutes(until: now) >= minimumGapMinutes
     }
 
-    /// The next stretch in the rotation.
-    public static func next(after index: Int?) -> (index: Int, stretch: Stretch) {
-        let i = ((index ?? -1) + 1) % all.count
-        return (i, all[i])
+    /// The next stretch: a shuffled bag of every stretch, so all of them come up before any repeats,
+    /// and never the same one twice in a row across bags. Returns the stretch and the bag left over.
+    public static func next<R: RandomNumberGenerator>(bag: [Int], last: Int?, using random: inout R) -> (index: Int, bag: [Int]) {
+        var bag = bag.filter { all.indices.contains($0) }
+        if bag.isEmpty {
+            bag = Array(all.indices).shuffled(using: &random)
+            // A new bag never starts with the one just shown.
+            if bag.count > 1, bag.first == last { bag.swapAt(0, bag.count - 1) }
+        }
+        let index = bag.removeFirst()
+        return (index, bag)
     }
 
     /// The steps of one stretch, after the person taps Start.
