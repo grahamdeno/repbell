@@ -17,16 +17,58 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: CivilDateTime(date: day.addingDays(-1), hour: 22, minute: 0), now: at(7, 0)))
     }
 
-    func testRotationCoversEveryStretchThenRepeats() {
-        var index: Int?
-        var seen: [String] = []
-        for _ in 0..<DeskStretch.all.count {
-            let next = DeskStretch.next(after: index)
-            seen.append(next.stretch.id)
-            index = next.index
+    private struct TestRandom: RandomNumberGenerator {
+        var state: UInt64
+        mutating func next() -> UInt64 {
+            state = state &* 6364136223846793005 &+ 1442695040888963407
+            return state
         }
-        XCTAssertEqual(Set(seen).count, DeskStretch.all.count)
-        XCTAssertEqual(DeskStretch.next(after: index).stretch.id, seen.first)
+    }
+
+    // A broad mix: every stretch comes up once before any repeats, and never the same one twice in a row.
+    func testShuffledBagCoversEveryStretchWithoutBackToBackRepeats() {
+        for seed in 1...20 {
+            var random = TestRandom(state: UInt64(seed))
+            var bag: [Int] = []
+            var last: Int?
+            var shown: [Int] = []
+            for _ in 0..<(DeskStretch.all.count * 3) {
+                let next = DeskStretch.next(bag: bag, last: last, using: &random)
+                XCTAssertNotEqual(next.index, last, "seed \(seed)")
+                shown.append(next.index)
+                bag = next.bag
+                last = next.index
+            }
+            for round in 0..<3 {
+                let slice = shown[(round * DeskStretch.all.count)..<((round + 1) * DeskStretch.all.count)]
+                XCTAssertEqual(Set(slice).count, DeskStretch.all.count, "seed \(seed) round \(round)")
+            }
+        }
+    }
+
+    // Two different starting points give different orders, so it isn't one fixed rotation.
+    func testOrderIsShuffled() {
+        var a = TestRandom(state: 1), b = TestRandom(state: 2)
+        let first = DeskStretch.next(bag: [], last: nil, using: &a).bag
+        let second = DeskStretch.next(bag: [], last: nil, using: &b).bag
+        XCTAssertNotEqual(first, second)
+    }
+
+    // The names and cues match the Workouts movements they come from.
+    func testStretchesMatchWorkoutsMovements() throws {
+        let url = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("App/Studio/movements.json")
+        let root = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
+        let movements = try XCTUnwrap(root["movements"] as? [[String: Any]])
+        let byID = Dictionary(uniqueKeysWithValues: movements.compactMap { m in (m["id"] as? String).map { ($0, m) } })
+        for stretch in DeskStretch.all {
+            let movement = try XCTUnwrap(byID[stretch.id], stretch.id)
+            XCTAssertEqual(movement["name"] as? String, stretch.name, stretch.id)
+            XCTAssertEqual(movement["cues"] as? [String], stretch.cues, stretch.id)
+            XCTAssertEqual((movement["sides"] as? String) == "each", stretch.eachSide, stretch.id)
+        }
     }
 
     func testThirtySecondsAndSideNotes() {
@@ -38,7 +80,8 @@ final class DeskStretchTests: XCTestCase {
     }
 
     func testStretchesTargetSittingAndCopyIsPlain() {
-        XCTAssertEqual(Set(DeskStretch.all.map(\.id)), ["hip-flexor", "doorway-chest", "neck-stretch", "wall-chest", "seated-hamstring"])
+        XCTAssertGreaterThanOrEqual(DeskStretch.all.count, 15)
+        XCTAssertEqual(Set(DeskStretch.all.map(\.id)).count, DeskStretch.all.count)
         for stretch in DeskStretch.all {
             XCTAssertEqual(stretch.cues.count, 2, stretch.id)
             for line in stretch.cues + [stretch.name] {

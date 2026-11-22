@@ -9,6 +9,7 @@ enum DeskStretchStore {
     private static let enabledKey = "deskStretch.enabled"
     private static let lastShownKey = "deskStretch.lastShown"
     private static let indexKey = "deskStretch.index"
+    private static let bagKey = "deskStretch.bag"
 
     static var enabled: Bool {
         get { UserDefaults.standard.bool(forKey: enabledKey) }
@@ -28,11 +29,14 @@ enum DeskStretchStore {
     /// The stretch due after a set logged now, if any. Marks it shown.
     static func takeDue(now: CivilDateTime) -> DeskStretch.Stretch? {
         guard DeskStretch.isDue(enabled: enabled, lastShown: lastShown, now: now) else { return nil }
-        let stored = UserDefaults.standard.object(forKey: indexKey) as? Int
-        let next = DeskStretch.next(after: stored)
+        let last = UserDefaults.standard.object(forKey: indexKey) as? Int
+        let bag = UserDefaults.standard.array(forKey: bagKey) as? [Int] ?? []
+        var random = SystemRandomNumberGenerator()
+        let next = DeskStretch.next(bag: bag, last: last, using: &random)
         UserDefaults.standard.set(next.index, forKey: indexKey)
+        UserDefaults.standard.set(next.bag, forKey: bagKey)
         lastShown = now
-        return next.stretch
+        return DeskStretch.all[next.index]
     }
 
     /// When the set was logged from an alert or the Watch, the stretch arrives as a quiet notification.
