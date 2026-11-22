@@ -89,7 +89,7 @@ struct ResultCard: View {
                         .minimumScaleFactor(0.5)
                     Text(end.map(String.init) ?? "—")
                         .font(Chalk.display(96))
-                        .foregroundStyle(Chalk.amber)
+                        .foregroundStyle(Chalk.volt)
                         .lineLimit(1)
                         .minimumScaleFactor(0.4)
                 }

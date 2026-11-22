@@ -44,7 +44,7 @@ struct StudioView: View {
                                 Spacer()
                                 Image(systemName: "timer")
                                     .font(.title2)
-                                    .foregroundStyle(Chalk.amber)
+                                    .foregroundStyle(Chalk.volt)
                             }
                             .padding(ChalkTokens.Space.s4)
                             .frame(minHeight: ChalkTokens.minimumTarget)
@@ -60,14 +60,14 @@ struct StudioView: View {
                                         Text(suggested.name)
                                             .font(Chalk.display(40))
                                             .textCase(.uppercase)
-                                            .foregroundStyle(Chalk.onAmber)
+                                            .foregroundStyle(Chalk.onVolt)
                                         Text(StudioCopy.meta(suggested))
                                             .font(.subheadline.weight(.medium))
-                                            .foregroundStyle(Chalk.onAmber.opacity(0.8))
+                                            .foregroundStyle(Chalk.onVolt.opacity(0.8))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(20)
-                                    .background(Chalk.amber)
+                                    .background(Chalk.volt)
                                     .clipShape(RoundedRectangle(cornerRadius: 16))
                                 }
                                 .buttonStyle(.plain)
@@ -139,7 +139,7 @@ private struct StudioRow: View {
                     if Features.payment && session.free {
                         Text(StudioCopy.free)
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(Chalk.amber)
+                            .foregroundStyle(Chalk.volt)
                     }
                 }
                 Text(held ? StudioCopy.heldShort : (missing.isEmpty ? StudioCopy.meta(session) : StudioCopy.standIns(session)))
@@ -197,7 +197,7 @@ private struct StudioSessionContent: View {
                                     HStack(alignment: .firstTextBaseline, spacing: 12) {
                                         Text("\(index + 1)")
                                             .font(.subheadline.weight(.semibold).monospacedDigit())
-                                            .foregroundStyle(Chalk.amber)
+                                            .foregroundStyle(Chalk.volt)
                                             .frame(width: 26, alignment: .leading)
                                         Text(move?.movement.name ?? item.id)
                                             .font(.body)
@@ -322,9 +322,9 @@ struct StudioPlayerView: View {
                     .accessibilityLabel(StudioCopy.end)
                 }
                 ProgressView(value: Double(index), total: Double(max(1, session.timeline.count)))
-                    .tint(Chalk.amber)
+                    .tint(Chalk.volt)
                 Text(StudioCopy.stepLabel(step))
-                    .eyebrow(step.isMove ? Chalk.amber : Chalk.inkMuted)
+                    .eyebrow(step.isMove ? Chalk.volt : Chalk.inkMuted)
                 MascotStage(movement: move?.movement, sessionID: session.id, resting: !step.isMove)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .frame(maxWidth: .infinity)
@@ -345,7 +345,7 @@ struct StudioPlayerView: View {
                         if let note = move.note {
                             Text(note)
                                 .font(.subheadline.weight(.medium))
-                                .foregroundStyle(Chalk.amber)
+                                .foregroundStyle(Chalk.volt)
                         }
                     }
                 }
@@ -495,7 +495,7 @@ struct MascotStage: View {
             RoundedRectangle(cornerRadius: 20).fill(Chalk.surface)
             Image(systemName: symbol)
                 .font(.system(size: 110, weight: .regular))
-                .foregroundStyle(resting ? Chalk.inkFaint : Chalk.amber)
+                .foregroundStyle(resting ? Chalk.inkFaint : Chalk.volt)
                 .symbolEffect(.pulse, isActive: !resting && !reduceMotion)
         }
         .accessibilityHidden(true)
@@ -529,10 +529,10 @@ struct StudioDoneView: View {
             VStack(spacing: 20) {
                 Spacer()
                 ZStack {
-                    Circle().fill(Chalk.amber).frame(width: 180, height: 180).scaleEffect(shown || reduceMotion ? 1 : 0.2)
+                    Circle().fill(Chalk.volt).frame(width: 180, height: 180).scaleEffect(shown || reduceMotion ? 1 : 0.2)
                     Image(systemName: "checkmark")
                         .font(.system(size: 88, weight: .black))
-                        .foregroundStyle(Chalk.onAmber)
+                        .foregroundStyle(Chalk.onVolt)
                         .scaleEffect(shown || reduceMotion ? 1 : 0.1)
                 }
                 .accessibilityHidden(true)
@@ -616,7 +616,7 @@ struct StudioProfileSection: View {
                     get: { settings.gear.contains(item) },
                     set: { on in if on { settings.gear.insert(item) } else { settings.gear.remove(item) } }
                 ))
-                .tint(Chalk.amber)
+                .tint(Chalk.volt)
                 .foregroundStyle(Chalk.inkMuted)
             }
             Text(StudioCopy.goEasyOn).font(.body.weight(.semibold)).foregroundStyle(Chalk.ink)
@@ -625,7 +625,7 @@ struct StudioProfileSection: View {
                     get: { settings.easyOn.contains(zone) },
                     set: { on in if on { settings.easyOn.insert(zone) } else { settings.easyOn.remove(zone) } }
                 ))
-                .tint(Chalk.amber)
+                .tint(Chalk.volt)
                 .foregroundStyle(Chalk.inkMuted)
             }
             if StudioHealth.available {
@@ -639,7 +639,7 @@ struct StudioProfileSection: View {
                         }
                     }
                 ))
-                .tint(Chalk.amber)
+                .tint(Chalk.volt)
                 .foregroundStyle(Chalk.inkMuted)
             }
             if !settings.log.isEmpty {
@@ -776,7 +776,7 @@ struct FitMyTimeView: View {
                             VStack(spacing: 0) {
                                 Text("\(minutes)")
                                     .font(Chalk.display(56))
-                                    .foregroundStyle(Chalk.amber)
+                                    .foregroundStyle(Chalk.volt)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.5)
                                 Text("min")

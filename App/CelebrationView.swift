@@ -14,15 +14,15 @@ struct CelebrationView: View {
     /// With Reduce Motion, nothing scales, rotates or slides: the moment only fades in.
     private func scale(_ from: CGFloat) -> CGFloat { reduceMotion || shown ? 1 : from }
 
-    /// Amber means now (a set just done); ultraviolet means earned (the whole day done).
-    private var tone: Color { celebration.dayComplete ? Chalk.ultraviolet : Chalk.amber }
-    /// Day 15 floods the whole screen ultraviolet; everything on it is on-amber near-black (5.4:1).
+    /// Volt means now (a set just done); ultraviolet means earned (the whole day done).
+    private var tone: Color { celebration.dayComplete ? Chalk.ultraviolet : Chalk.volt }
+    /// Day 15 floods the whole screen ultraviolet; everything on it is on-volt (5.4:1).
     private var flood: Bool { celebration.finalTest }
     private var ground: Color { flood ? Chalk.ultraviolet : Chalk.ground }
-    private var mark: Color { flood ? Chalk.onAmber : tone }
-    private var markInk: Color { flood ? Chalk.ultraviolet : Chalk.onAmber }
-    private var ink: Color { flood ? Chalk.onAmber : Chalk.ink }
-    private var muted: Color { flood ? Chalk.onAmber : Chalk.inkMuted }
+    private var mark: Color { flood ? Chalk.onVolt : tone }
+    private var markInk: Color { flood ? Chalk.ultraviolet : Chalk.onVolt }
+    private var ink: Color { flood ? Chalk.onVolt : Chalk.ink }
+    private var muted: Color { flood ? Chalk.onVolt : Chalk.inkMuted }
     private var title: String {
         flood ? Copy.finalTestDone : (celebration.dayComplete ? Copy.dayDone : Copy.didIt)
     }
@@ -104,7 +104,7 @@ struct CelebrationView: View {
                     .font(Chalk.display(120))
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
-                    .foregroundStyle(flood ? Chalk.onAmber : tone)
+                    .foregroundStyle(flood ? Chalk.onVolt : tone)
                     .opacity(shown ? 1 : 0)
                     .scaleEffect(scale(0.6))
                 Text(line)

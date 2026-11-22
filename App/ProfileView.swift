@@ -92,7 +92,7 @@ struct ProfileView: View {
                         VStack(alignment: .leading, spacing: 0) {
                             Text("\(max.reps)")
                                 .font(Chalk.display(index == run.maxes.count - 1 ? 72 : 44))
-                                .foregroundStyle(index == run.maxes.count - 1 ? Chalk.amber : Chalk.ink)
+                                .foregroundStyle(index == run.maxes.count - 1 ? Chalk.volt : Chalk.ink)
                             Text("Day \(max.day)")
                                 .font(.footnote)
                                 .foregroundStyle(Chalk.inkMuted)
@@ -102,7 +102,7 @@ struct ProfileView: View {
                 if let gain = run.gainPercent, let through = run.gainThroughDay {
                     Text(Copy.gainLine(gain, throughDay: through))
                         .font(.body.weight(.semibold))
-                        .foregroundStyle(gain >= 0 ? Chalk.amber : Chalk.inkMuted)
+                        .foregroundStyle(gain >= 0 ? Chalk.volt : Chalk.inkMuted)
                 }
             }
         }
@@ -148,7 +148,7 @@ private struct ObservationRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Capsule().fill(Chalk.amber).frame(width: 4)
+            Capsule().fill(Chalk.volt).frame(width: 4)
             VStack(alignment: .leading, spacing: 6) {
                 Text(note.text)
                     .font(.body)

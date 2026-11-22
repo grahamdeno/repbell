@@ -132,7 +132,7 @@ struct TodayView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text(time)
                     .font(Chalk.display(150))
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
                 Text(title)
@@ -159,7 +159,7 @@ struct TodayView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(reps)")
                     .font(Chalk.display(160))
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.volt)
                     .lineLimit(1)
                     .minimumScaleFactor(0.25)
                 Text(Copy.keepHyphenatedWords(line))
@@ -185,7 +185,7 @@ struct TodayView: View {
                                     .foregroundStyle(Chalk.ink)
                                 Spacer()
                                 Image(systemName: "arrow.right")
-                                    .foregroundStyle(Chalk.amber)
+                                    .foregroundStyle(Chalk.volt)
                             }
                         }
                         .padding(16)
@@ -199,7 +199,7 @@ struct TodayView: View {
                 Text(Copy.paused)
                     .font(Chalk.display(48))
                     .textCase(.uppercase)
-                    .foregroundStyle(Chalk.amber)
+                    .foregroundStyle(Chalk.volt)
                 Text(Copy.pauseDetail(day: day))
                     .font(.body)
                     .foregroundStyle(Chalk.inkMuted)
@@ -275,7 +275,7 @@ private struct SetTally: View {
         case .current:
             // Taller, with a ring, so the current set never relies on color alone.
             RoundedRectangle(cornerRadius: radius)
-                .fill(Chalk.amber)
+                .fill(Chalk.volt)
                 .frame(height: 30)
                 .overlay(RoundedRectangle(cornerRadius: radius).stroke(Chalk.ink, lineWidth: 2))
         case .upcoming:

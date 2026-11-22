@@ -20,7 +20,7 @@ struct Wordmark: View {
             ZStack {
                 Chalk.surface
                 Chevron()
-                    .stroke(Chalk.amber, style: StrokeStyle(lineWidth: mark * 0.16, lineCap: .round, lineJoin: .round))
+                    .stroke(Chalk.volt, style: StrokeStyle(lineWidth: mark * 0.16, lineCap: .round, lineJoin: .round))
                     .padding(mark * 0.08)
                 Text("14")
                     .font(Chalk.display(mark * 0.62, weight: .black))
@@ -75,7 +75,7 @@ struct ScreenChrome<Content: View>: View {
     }
 }
 
-/// Primary action: amber fill, dimmer when pressed, faded when disabled.
+/// Primary action: volt fill, dimmer when pressed, faded when disabled.
 struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
 
@@ -86,8 +86,8 @@ struct PrimaryButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity)
             .frame(minHeight: 60)
             .padding(.horizontal, ChalkTokens.Space.s4)
-            .background(Chalk.amber.opacity(configuration.isPressed ? 0.8 : 1))
-            .foregroundStyle(Chalk.onAmber)
+            .background(Chalk.volt.opacity(configuration.isPressed ? 0.8 : 1))
+            .foregroundStyle(Chalk.onVolt)
             .clipShape(RoundedRectangle(cornerRadius: ChalkTokens.Radius.button))
             .opacity(isEnabled ? 1 : 0.4)
             .contentShape(Rectangle())
@@ -174,7 +174,7 @@ struct StepBars: View {
         HStack(spacing: 6) {
             ForEach(0..<5, id: \.self) { index in
                 Capsule()
-                    .fill(index < filled ? Chalk.amber : Chalk.line)
+                    .fill(index < filled ? Chalk.volt : Chalk.line)
                     .frame(height: ChalkTokens.stepBarHeight)
             }
         }
@@ -212,7 +212,7 @@ enum DayBar: Equatable {
     func color(_ contrast: ColorSchemeContrast) -> Color {
         switch self {
         case .past: Chalk.ultraviolet
-        case .today: Chalk.amber
+        case .today: Chalk.volt
         case .future: Chalk.markOutline(contrast)
         }
     }
@@ -230,17 +230,17 @@ struct ChoiceCard: View {
                 Text(title)
                     .font(Chalk.TypeScale.title)
                     .textCase(.uppercase)
-                    .foregroundStyle(recommended ? Chalk.onAmber : Chalk.ink)
+                    .foregroundStyle(recommended ? Chalk.onVolt : Chalk.ink)
                 Text(detail)
                     .font(Chalk.TypeScale.label)
-                    .foregroundStyle(recommended ? Chalk.onAmber.opacity(0.8) : Chalk.inkMuted)
+                    .foregroundStyle(recommended ? Chalk.onVolt.opacity(0.8) : Chalk.inkMuted)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
             .padding(.vertical, ChalkTokens.Space.s4)
             .frame(minHeight: ChalkTokens.choiceCardMinHeight)
-            .background(recommended ? Chalk.amber : Color.clear)
+            .background(recommended ? Chalk.volt : Color.clear)
             .overlay(
                 RoundedRectangle(cornerRadius: ChalkTokens.Radius.card)
                     .stroke(recommended ? Color.clear : Chalk.lineStrong, lineWidth: 1.5)
@@ -266,7 +266,7 @@ struct TextLink: View {
         Button(action: action) {
             Text(title)
                 .font(.subheadline)
-                .foregroundStyle(Chalk.amber)
+                .foregroundStyle(Chalk.volt)
                 .padding(.horizontal, ChalkTokens.Space.s3)
                 .frame(minWidth: ChalkTokens.minimumTarget, minHeight: ChalkTokens.minimumTarget)
                 .contentShape(Rectangle())
