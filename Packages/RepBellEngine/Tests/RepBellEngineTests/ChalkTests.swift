@@ -29,7 +29,8 @@ final class ChalkTests: XCTestCase {
             "ground": ChalkTokens.ground, "ground-watch": ChalkTokens.groundWatch, "surface": ChalkTokens.surface,
             "line": ChalkTokens.line, "line-strong": ChalkTokens.lineStrong, "ink": ChalkTokens.ink,
             "ink-muted": ChalkTokens.inkMuted, "ink-faint": ChalkTokens.inkFaint,
-            "volt": ChalkTokens.volt, "on-volt": ChalkTokens.onVolt, "on-volt-soft": ChalkTokens.onVoltSoft,
+            "amber": ChalkTokens.amber, "on-amber": ChalkTokens.onAmber, "flood": ChalkTokens.flood,
+            "flood-soft": ChalkTokens.floodSoft,
             "ultraviolet": ChalkTokens.ultraviolet, "alert": ChalkTokens.alert,
         ]
         XCTAssertEqual(tokens.count, code.count, "tokens.json and code list the same tokens")
@@ -63,10 +64,15 @@ final class ChalkTests: XCTestCase {
         let ground = ChalkTokens.ground
         XCTAssertGreaterThanOrEqual(ChalkTokens.ink.contrast(with: ground), 4.5)
         XCTAssertGreaterThanOrEqual(ChalkTokens.inkMuted.contrast(with: ground), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.volt.contrast(with: ground), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.onVolt.contrast(with: ChalkTokens.volt), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.onVoltSoft.contrast(with: ChalkTokens.volt), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.onVolt.contrast(with: ChalkTokens.ultraviolet), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.amber.contrast(with: ground), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.onAmber.contrast(with: ChalkTokens.amber), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.onAmber.contrast(with: ChalkTokens.ultraviolet), 4.5)
+        // The bell-ring flood: amber number, ink and flood-soft text on the deep flood.
+        XCTAssertGreaterThanOrEqual(ChalkTokens.amber.contrast(with: ChalkTokens.flood), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.ink.contrast(with: ChalkTokens.flood), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.floodSoft.contrast(with: ChalkTokens.flood), 4.5)
+        // The flood is a deep tint, not a bright fill (D8): far darker than amber itself.
+        XCTAssertLessThan(ChalkTokens.flood.luminance, 0.05)
         // Ultraviolet is large text only: 3:1 on ground and surface.
         XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: ground), 3.0)
         XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: ChalkTokens.surface), 3.0)

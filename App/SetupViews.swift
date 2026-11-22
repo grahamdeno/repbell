@@ -12,7 +12,7 @@ struct PromiseView: View {
                     .padding(.bottom, 8)
                 Text(Copy.promiseHeadlineLead)
                     .font(Chalk.display(160))
-                    .foregroundStyle(Chalk.volt)
+                    .foregroundStyle(Chalk.amber)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 Text(Copy.promiseHeadline)
@@ -174,7 +174,7 @@ struct ReadyView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text(Copy.hourMinute(controller.library.current?.input.wake ?? controller.draftWake))
                     .font(Chalk.display(150))
-                    .foregroundStyle(Chalk.volt)
+                    .foregroundStyle(Chalk.amber)
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                 Text(Copy.withYourTest)
@@ -205,7 +205,7 @@ private struct TimeWheel: View {
                 }
             }
             .pickerStyle(.menu)
-            .tint(Chalk.volt)
+            .tint(Chalk.amber)
             .labelsHidden()
             .frame(minHeight: ChalkTokens.minimumTarget)
             .accessibilityLabel("Time")
@@ -238,7 +238,7 @@ private struct AlertRow: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: symbol)
                 .font(.title3)
-                .foregroundStyle(Chalk.volt)
+                .foregroundStyle(Chalk.amber)
                 .frame(width: 28, height: 28)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)

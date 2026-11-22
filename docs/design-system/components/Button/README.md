@@ -1,6 +1,6 @@
 # Button
 
-Two kinds. **Primary**: `volt` fill, `on-volt` text, at most one per screen, for the thing the screen is for. **Secondary**: transparent, `line-strong` border, `ink` text.
+Two kinds. **Primary**: `amber` fill, `on-amber` text, at most one per screen, for the thing the screen is for. **Secondary**: transparent, `line-strong` border, `ink` text.
 
 - 60pt tall at the bottom of flow screens; 56pt for secondary actions on Today.
 - Corner `radius-button`. Full width unless paired in a two-column row with `space-3` gap.

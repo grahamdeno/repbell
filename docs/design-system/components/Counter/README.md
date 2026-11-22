@@ -5,4 +5,4 @@ Slide-to-set count for max tests. The panel fills the free height; a vertical dr
 - Starts at 0 on Day 1 and at the previous max on Days 8 and 15.
 - About 14pt of drag per rep; tune by feel on device.
 - Accessible as an adjustable element: VoiceOver swipe up and down changes the value by one.
-- Panel: `surface`, `line` border, `radius-panel`; number in `number-hero` and `volt`.
+- Panel: `surface`, `line` border, `radius-panel`; number in `number-hero` and `amber`.
