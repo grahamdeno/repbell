@@ -14,7 +14,7 @@ struct ConfirmView: View {
                     .foregroundStyle(Chalk.inkMuted)
                 Text("\(reps)")
                     .font(Chalk.display(160))
-                    .foregroundStyle(Chalk.volt)
+                    .foregroundStyle(Chalk.amber)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
                 if let preview = controller.confirmPreview(day: day, reps: reps) {
