@@ -6,9 +6,9 @@ loads a seeded run in memory (nothing is saved) and opens one screen. The seeded
 current time by `ScreenshotSeeds` in the engine, so the real schedule engine produces every number shown. The app's
 time zone is set so local time is mid-afternoon. The status bar is overridden to 3:00.
 
-Names: `<device>_<textsize>_<screen-state>.png`. 215 files.
+Names: `<device>_<textsize>_<screen-state>.png`. 220 files.
 
-Time zone for the app: Etc/GMT+6
+Time zone for the app: Etc/GMT+9
 watch41mm uses Apple Watch Series 9 (41mm)
 watch45mm uses Apple Watch Series 9 (45mm)
 
@@ -17,6 +17,7 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphone16promax_ax5_about.png` | iPhone 16 Pro Max | AX5 (largest) | About | About | From Settings |
 | `iphone16promax_ax5_alerts-check.png` | iPhone 16 Pro Max | AX5 (largest) | Alerts check | Diagnostics | From Settings |
 | `iphone16promax_ax5_celebration-day.png` | iPhone 16 Pro Max | AX5 (largest) | Celebration | Finished day | Day 3 Today with the day celebration shown |
+| `iphone16promax_ax5_celebration-final.png` | iPhone 16 Pro Max | AX5 (largest) | Celebration | Day 15 final test | Final test logged, 40 to 58, the ultraviolet flood |
 | `iphone16promax_ax5_celebration-set.png` | iPhone 16 Pro Max | AX5 (largest) | Celebration | After an in-app set | Day 3 Today with the set celebration shown |
 | `iphone16promax_ax5_confirm.png` | iPhone 16 Pro Max | AX5 (largest) | Confirm | Test confirm (Recount is the link on this screen; it reopens the counter) | Day 1, 40 logged |
 | `iphone16promax_ax5_counter-day8-high.png` | iPhone 16 Pro Max | AX5 (largest) | Counter | High number | Day 8 re-test, count 64 |
@@ -45,17 +46,18 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphone16promax_ax5_today-busy.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Busy active, Undo strip | Day 3, Busy tapped 5 min ago |
 | `iphone16promax_ax5_today-day1-before-test.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Day 1 before the test | Run starts today, wake 2 hours ahead |
 | `iphone16promax_ax5_today-day15.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Day 15 | Day 15, final test not logged |
-| `iphone16promax_ax5_today-day8-test.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Day 8 test morning | Day 8, woke 30 min ago, re-test not logged |
+| `iphone16promax_ax5_today-day8-test.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Day 8, re-test not logged | Day 8, woke 30 min ago; the capture runs at 3 p.m., so the noon fallback applies |
 | `iphone16promax_ax5_today-finished.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Day finished | Day 4, every set done, window closed |
 | `iphone16promax_ax5_today-missed.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Some sets missed | Day 5, 3 of 7 sets missed |
 | `iphone16promax_ax5_today-paused.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Paused | Day 6, paused an hour ago |
-| `iphone16promax_ax5_today-set-due.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Set due now | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
+| `iphone16promax_ax5_today-set-due.png` | iPhone 16 Pro Max | AX5 (largest) | Today | Set due now (bell-ring flood) | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
 | `iphone16promax_ax5_workout-session.png` | iPhone 16 Pro Max | AX5 (largest) | Workouts session | Core | From Workouts |
 | `iphone16promax_ax5_workout-settings.png` | iPhone 16 Pro Max | AX5 (largest) | Workouts settings | Gear, Go easy on, Health (replaces Coach settings) | From Workouts |
 | `iphone16promax_ax5_workouts.png` | iPhone 16 Pro Max | AX5 (largest) | Workouts | List | Day 9 run (upper-body sessions under After Day 15) |
 | `iphone16promax_default_about.png` | iPhone 16 Pro Max | Large (default) | About | About | From Settings |
 | `iphone16promax_default_alerts-check.png` | iPhone 16 Pro Max | Large (default) | Alerts check | Diagnostics | From Settings |
 | `iphone16promax_default_celebration-day.png` | iPhone 16 Pro Max | Large (default) | Celebration | Finished day | Day 3 Today with the day celebration shown |
+| `iphone16promax_default_celebration-final.png` | iPhone 16 Pro Max | Large (default) | Celebration | Day 15 final test | Final test logged, 40 to 58, the ultraviolet flood |
 | `iphone16promax_default_celebration-set.png` | iPhone 16 Pro Max | Large (default) | Celebration | After an in-app set | Day 3 Today with the set celebration shown |
 | `iphone16promax_default_confirm.png` | iPhone 16 Pro Max | Large (default) | Confirm | Test confirm (Recount is the link on this screen; it reopens the counter) | Day 1, 40 logged |
 | `iphone16promax_default_counter-day8-high.png` | iPhone 16 Pro Max | Large (default) | Counter | High number | Day 8 re-test, count 64 |
@@ -84,17 +86,18 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphone16promax_default_today-busy.png` | iPhone 16 Pro Max | Large (default) | Today | Busy active, Undo strip | Day 3, Busy tapped 5 min ago |
 | `iphone16promax_default_today-day1-before-test.png` | iPhone 16 Pro Max | Large (default) | Today | Day 1 before the test | Run starts today, wake 2 hours ahead |
 | `iphone16promax_default_today-day15.png` | iPhone 16 Pro Max | Large (default) | Today | Day 15 | Day 15, final test not logged |
-| `iphone16promax_default_today-day8-test.png` | iPhone 16 Pro Max | Large (default) | Today | Day 8 test morning | Day 8, woke 30 min ago, re-test not logged |
+| `iphone16promax_default_today-day8-test.png` | iPhone 16 Pro Max | Large (default) | Today | Day 8, re-test not logged | Day 8, woke 30 min ago; the capture runs at 3 p.m., so the noon fallback applies |
 | `iphone16promax_default_today-finished.png` | iPhone 16 Pro Max | Large (default) | Today | Day finished | Day 4, every set done, window closed |
 | `iphone16promax_default_today-missed.png` | iPhone 16 Pro Max | Large (default) | Today | Some sets missed | Day 5, 3 of 7 sets missed |
 | `iphone16promax_default_today-paused.png` | iPhone 16 Pro Max | Large (default) | Today | Paused | Day 6, paused an hour ago |
-| `iphone16promax_default_today-set-due.png` | iPhone 16 Pro Max | Large (default) | Today | Set due now | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
+| `iphone16promax_default_today-set-due.png` | iPhone 16 Pro Max | Large (default) | Today | Set due now (bell-ring flood) | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
 | `iphone16promax_default_workout-session.png` | iPhone 16 Pro Max | Large (default) | Workouts session | Core | From Workouts |
 | `iphone16promax_default_workout-settings.png` | iPhone 16 Pro Max | Large (default) | Workouts settings | Gear, Go easy on, Health (replaces Coach settings) | From Workouts |
 | `iphone16promax_default_workouts.png` | iPhone 16 Pro Max | Large (default) | Workouts | List | Day 9 run (upper-body sessions under After Day 15) |
 | `iphonese3_ax3_about.png` | iPhone SE (3rd gen) | AX3 | About | About | From Settings |
 | `iphonese3_ax3_alerts-check.png` | iPhone SE (3rd gen) | AX3 | Alerts check | Diagnostics | From Settings |
 | `iphonese3_ax3_celebration-day.png` | iPhone SE (3rd gen) | AX3 | Celebration | Finished day | Day 3 Today with the day celebration shown |
+| `iphonese3_ax3_celebration-final.png` | iPhone SE (3rd gen) | AX3 | Celebration | Day 15 final test | Final test logged, 40 to 58, the ultraviolet flood |
 | `iphonese3_ax3_celebration-set.png` | iPhone SE (3rd gen) | AX3 | Celebration | After an in-app set | Day 3 Today with the set celebration shown |
 | `iphonese3_ax3_confirm.png` | iPhone SE (3rd gen) | AX3 | Confirm | Test confirm (Recount is the link on this screen; it reopens the counter) | Day 1, 40 logged |
 | `iphonese3_ax3_counter-day8-high.png` | iPhone SE (3rd gen) | AX3 | Counter | High number | Day 8 re-test, count 64 |
@@ -123,17 +126,18 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphonese3_ax3_today-busy.png` | iPhone SE (3rd gen) | AX3 | Today | Busy active, Undo strip | Day 3, Busy tapped 5 min ago |
 | `iphonese3_ax3_today-day1-before-test.png` | iPhone SE (3rd gen) | AX3 | Today | Day 1 before the test | Run starts today, wake 2 hours ahead |
 | `iphonese3_ax3_today-day15.png` | iPhone SE (3rd gen) | AX3 | Today | Day 15 | Day 15, final test not logged |
-| `iphonese3_ax3_today-day8-test.png` | iPhone SE (3rd gen) | AX3 | Today | Day 8 test morning | Day 8, woke 30 min ago, re-test not logged |
+| `iphonese3_ax3_today-day8-test.png` | iPhone SE (3rd gen) | AX3 | Today | Day 8, re-test not logged | Day 8, woke 30 min ago; the capture runs at 3 p.m., so the noon fallback applies |
 | `iphonese3_ax3_today-finished.png` | iPhone SE (3rd gen) | AX3 | Today | Day finished | Day 4, every set done, window closed |
 | `iphonese3_ax3_today-missed.png` | iPhone SE (3rd gen) | AX3 | Today | Some sets missed | Day 5, 3 of 7 sets missed |
 | `iphonese3_ax3_today-paused.png` | iPhone SE (3rd gen) | AX3 | Today | Paused | Day 6, paused an hour ago |
-| `iphonese3_ax3_today-set-due.png` | iPhone SE (3rd gen) | AX3 | Today | Set due now | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
+| `iphonese3_ax3_today-set-due.png` | iPhone SE (3rd gen) | AX3 | Today | Set due now (bell-ring flood) | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
 | `iphonese3_ax3_workout-session.png` | iPhone SE (3rd gen) | AX3 | Workouts session | Core | From Workouts |
 | `iphonese3_ax3_workout-settings.png` | iPhone SE (3rd gen) | AX3 | Workouts settings | Gear, Go easy on, Health (replaces Coach settings) | From Workouts |
 | `iphonese3_ax3_workouts.png` | iPhone SE (3rd gen) | AX3 | Workouts | List | Day 9 run (upper-body sessions under After Day 15) |
 | `iphonese3_ax5_about.png` | iPhone SE (3rd gen) | AX5 (largest) | About | About | From Settings |
 | `iphonese3_ax5_alerts-check.png` | iPhone SE (3rd gen) | AX5 (largest) | Alerts check | Diagnostics | From Settings |
 | `iphonese3_ax5_celebration-day.png` | iPhone SE (3rd gen) | AX5 (largest) | Celebration | Finished day | Day 3 Today with the day celebration shown |
+| `iphonese3_ax5_celebration-final.png` | iPhone SE (3rd gen) | AX5 (largest) | Celebration | Day 15 final test | Final test logged, 40 to 58, the ultraviolet flood |
 | `iphonese3_ax5_celebration-set.png` | iPhone SE (3rd gen) | AX5 (largest) | Celebration | After an in-app set | Day 3 Today with the set celebration shown |
 | `iphonese3_ax5_confirm.png` | iPhone SE (3rd gen) | AX5 (largest) | Confirm | Test confirm (Recount is the link on this screen; it reopens the counter) | Day 1, 40 logged |
 | `iphonese3_ax5_counter-day8-high.png` | iPhone SE (3rd gen) | AX5 (largest) | Counter | High number | Day 8 re-test, count 64 |
@@ -162,17 +166,18 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphonese3_ax5_today-busy.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Busy active, Undo strip | Day 3, Busy tapped 5 min ago |
 | `iphonese3_ax5_today-day1-before-test.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Day 1 before the test | Run starts today, wake 2 hours ahead |
 | `iphonese3_ax5_today-day15.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Day 15 | Day 15, final test not logged |
-| `iphonese3_ax5_today-day8-test.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Day 8 test morning | Day 8, woke 30 min ago, re-test not logged |
+| `iphonese3_ax5_today-day8-test.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Day 8, re-test not logged | Day 8, woke 30 min ago; the capture runs at 3 p.m., so the noon fallback applies |
 | `iphonese3_ax5_today-finished.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Day finished | Day 4, every set done, window closed |
 | `iphonese3_ax5_today-missed.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Some sets missed | Day 5, 3 of 7 sets missed |
 | `iphonese3_ax5_today-paused.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Paused | Day 6, paused an hour ago |
-| `iphonese3_ax5_today-set-due.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Set due now | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
+| `iphonese3_ax5_today-set-due.png` | iPhone SE (3rd gen) | AX5 (largest) | Today | Set due now (bell-ring flood) | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
 | `iphonese3_ax5_workout-session.png` | iPhone SE (3rd gen) | AX5 (largest) | Workouts session | Core | From Workouts |
 | `iphonese3_ax5_workout-settings.png` | iPhone SE (3rd gen) | AX5 (largest) | Workouts settings | Gear, Go easy on, Health (replaces Coach settings) | From Workouts |
 | `iphonese3_ax5_workouts.png` | iPhone SE (3rd gen) | AX5 (largest) | Workouts | List | Day 9 run (upper-body sessions under After Day 15) |
 | `iphonese3_default_about.png` | iPhone SE (3rd gen) | Large (default) | About | About | From Settings |
 | `iphonese3_default_alerts-check.png` | iPhone SE (3rd gen) | Large (default) | Alerts check | Diagnostics | From Settings |
 | `iphonese3_default_celebration-day.png` | iPhone SE (3rd gen) | Large (default) | Celebration | Finished day | Day 3 Today with the day celebration shown |
+| `iphonese3_default_celebration-final.png` | iPhone SE (3rd gen) | Large (default) | Celebration | Day 15 final test | Final test logged, 40 to 58, the ultraviolet flood |
 | `iphonese3_default_celebration-set.png` | iPhone SE (3rd gen) | Large (default) | Celebration | After an in-app set | Day 3 Today with the set celebration shown |
 | `iphonese3_default_confirm.png` | iPhone SE (3rd gen) | Large (default) | Confirm | Test confirm (Recount is the link on this screen; it reopens the counter) | Day 1, 40 logged |
 | `iphonese3_default_counter-day8-high.png` | iPhone SE (3rd gen) | Large (default) | Counter | High number | Day 8 re-test, count 64 |
@@ -201,11 +206,11 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphonese3_default_today-busy.png` | iPhone SE (3rd gen) | Large (default) | Today | Busy active, Undo strip | Day 3, Busy tapped 5 min ago |
 | `iphonese3_default_today-day1-before-test.png` | iPhone SE (3rd gen) | Large (default) | Today | Day 1 before the test | Run starts today, wake 2 hours ahead |
 | `iphonese3_default_today-day15.png` | iPhone SE (3rd gen) | Large (default) | Today | Day 15 | Day 15, final test not logged |
-| `iphonese3_default_today-day8-test.png` | iPhone SE (3rd gen) | Large (default) | Today | Day 8 test morning | Day 8, woke 30 min ago, re-test not logged |
+| `iphonese3_default_today-day8-test.png` | iPhone SE (3rd gen) | Large (default) | Today | Day 8, re-test not logged | Day 8, woke 30 min ago; the capture runs at 3 p.m., so the noon fallback applies |
 | `iphonese3_default_today-finished.png` | iPhone SE (3rd gen) | Large (default) | Today | Day finished | Day 4, every set done, window closed |
 | `iphonese3_default_today-missed.png` | iPhone SE (3rd gen) | Large (default) | Today | Some sets missed | Day 5, 3 of 7 sets missed |
 | `iphonese3_default_today-paused.png` | iPhone SE (3rd gen) | Large (default) | Today | Paused | Day 6, paused an hour ago |
-| `iphonese3_default_today-set-due.png` | iPhone SE (3rd gen) | Large (default) | Today | Set due now | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
+| `iphonese3_default_today-set-due.png` | iPhone SE (3rd gen) | Large (default) | Today | Set due now (bell-ring flood) | Day 3, wake 138 min ago, 3 sets done, the 4th due 3 min ago |
 | `iphonese3_default_workout-session.png` | iPhone SE (3rd gen) | Large (default) | Workouts session | Core | From Workouts |
 | `iphonese3_default_workout-settings.png` | iPhone SE (3rd gen) | Large (default) | Workouts settings | Gear, Go easy on, Health (replaces Coach settings) | From Workouts |
 | `iphonese3_default_workouts.png` | iPhone SE (3rd gen) | Large (default) | Workouts | List | Day 9 run (upper-body sessions under After Day 15) |
