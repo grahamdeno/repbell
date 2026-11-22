@@ -179,7 +179,19 @@ public enum Copy {
     }
 
     public static func nextSetTime(_ time: CivilDateTime) -> String {
-        "Next set at \(clock(time))"
+        "Bell rings at \(clock(time))"
+    }
+
+    /// The bell-ring flood.
+    public static let pushUpsNow = "Push-ups now"
+    public static func floodEyebrow(set: Int, total: Int, day: Int) -> String {
+        "Set \(set) of \(total) · Day \(day)"
+    }
+
+    /// The Day 15 celebration, the only ultraviolet flood.
+    public static let finalTestDone = "Final test"
+    public static func finalTestLine(start: Int, end: Int, percent: Int) -> String {
+        "Day 1 \(start) → Day 15 \(end) · \(signedPercent(percent)) on your max"
     }
 
     public static func pushUpsIn(minutes: Int) -> String {

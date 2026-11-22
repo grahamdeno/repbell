@@ -16,59 +16,77 @@ struct CelebrationView: View {
 
     /// Volt means now (a set just done); ultraviolet means earned (the whole day done).
     private var tone: Color { celebration.dayComplete ? Chalk.ultraviolet : Chalk.volt }
+    /// Day 15 floods the whole screen ultraviolet; everything on it is on-volt (5.4:1).
+    private var flood: Bool { celebration.finalTest }
+    private var ground: Color { flood ? Chalk.ultraviolet : Chalk.ground }
+    private var mark: Color { flood ? Chalk.onVolt : tone }
+    private var markInk: Color { flood ? Chalk.ultraviolet : Chalk.onVolt }
+    private var ink: Color { flood ? Chalk.onVolt : Chalk.ink }
+    private var muted: Color { flood ? Chalk.onVolt : Chalk.inkMuted }
+    private var title: String {
+        flood ? Copy.finalTestDone : (celebration.dayComplete ? Copy.dayDone : Copy.didIt)
+    }
+    private var number: Int {
+        flood ? celebration.reps : (celebration.dayComplete ? celebration.repsToday : celebration.reps)
+    }
+    private var line: String {
+        if flood { return Copy.finalTestLine(start: celebration.startMax, end: celebration.reps, percent: celebration.percent) }
+        return celebration.dayComplete
+            ? Copy.dayDoneLine(day: celebration.day, repsToday: celebration.repsToday)
+            : Copy.celebrationLine(done: celebration.done, total: celebration.total, repsToday: celebration.repsToday)
+    }
 
     var body: some View {
         ZStack {
-            Chalk.ground.ignoresSafeArea()
+            ground.ignoresSafeArea()
             VStack(spacing: 20) {
                 Spacer()
                 ZStack {
                     Circle()
-                        .stroke(tone.opacity(ring || reduceMotion ? 0 : 0.6), lineWidth: 6)
+                        .stroke(mark.opacity(ring || reduceMotion ? 0 : 0.6), lineWidth: 6)
                         .frame(width: celebration.dayComplete ? 280 : 220, height: celebration.dayComplete ? 280 : 220)
                         .scaleEffect(ring ? 1.6 : 0.8)
                     Circle()
-                        .fill(tone)
+                        .fill(mark)
                         .frame(width: celebration.dayComplete ? 230 : 180, height: celebration.dayComplete ? 230 : 180)
                         .scaleEffect(scale(0.2))
                     Image(systemName: "checkmark")
                         .font(.system(size: 88, weight: .black))
                         .accessibilityHidden(true)
-                        .foregroundStyle(Chalk.onVolt)
+                        .foregroundStyle(markInk)
                         .scaleEffect(scale(0.1))
                         .rotationEffect(.degrees(reduceMotion || shown ? 0 : -30))
                 }
-                Text(celebration.dayComplete ? Copy.dayDone : Copy.didIt)
+                Text(title)
                     .font(Chalk.display(64))
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                     .multilineTextAlignment(.center)
                     .textCase(.uppercase)
-                    .foregroundStyle(Chalk.ink)
+                    .foregroundStyle(ink)
                     .opacity(shown ? 1 : 0)
                     .offset(y: reduceMotion || shown ? 0 : 24)
-                // A finished day leads with the day's total, the number earned.
-                Text("\(celebration.dayComplete ? celebration.repsToday : celebration.reps)")
+                // A finished day leads with the day's total; Day 15 with the new max.
+                Text("\(number)")
                     .font(Chalk.display(120))
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
-                    .foregroundStyle(tone)
+                    .foregroundStyle(flood ? Chalk.onVolt : tone)
                     .opacity(shown ? 1 : 0)
                     .scaleEffect(scale(0.6))
-                Text(celebration.dayComplete
-                     ? Copy.dayDoneLine(day: celebration.day, repsToday: celebration.repsToday)
-                     : Copy.celebrationLine(done: celebration.done, total: celebration.total, repsToday: celebration.repsToday))
+                Text(line)
                     .font(.body.weight(.medium))
-                    .foregroundStyle(Chalk.inkMuted)
+                    .foregroundStyle(muted)
                     .multilineTextAlignment(.center)
                     .opacity(shown ? 1 : 0)
                 Spacer()
                 Text(Copy.tapToContinue)
                     .font(.subheadline)
-                    .foregroundStyle(Chalk.inkMuted)
+                    .foregroundStyle(muted)
             }
             .padding(24)
         }
+        .preferredColorScheme(flood ? .light : nil)
         .contentShape(Rectangle())
         .onTapGesture { dismiss() }
         .accessibilityElement(children: .combine)

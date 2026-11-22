@@ -34,6 +34,10 @@ extension ProgramController {
         case "celebration-day":
             screen = .today
             celebration = Celebration(day: 3, reps: 24, done: 16, total: 16, repsToday: 384, dayComplete: true)
+        case "celebration-final":
+            screen = .result
+            celebration = Celebration(day: 15, reps: 58, done: 0, total: 0, repsToday: 4312, dayComplete: true,
+                                      finalTest: true, startMax: 40, percent: 45)
         case "desk-stretch":
             screen = .today
             deskStretch = DeskStretch.all[0]

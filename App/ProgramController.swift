@@ -275,6 +275,11 @@ final class ProgramController {
             if day == 1 { run.input.dayOneMax = reps }
         }
         screen = day == 15 ? .result : .today
+        if day == 15 {
+            let numbers = resultNumbers()
+            celebration = Celebration(day: 15, reps: reps, done: 0, total: 0, repsToday: numbers.reps, dayComplete: true,
+                                      finalTest: true, startMax: numbers.start, percent: numbers.percent ?? 0)
+        }
         Haptics.play(day == 15 ? .dayComplete : .testLogged)
         Task { await refreshAlerts() }
     }
@@ -947,6 +952,10 @@ struct Celebration: Equatable, Identifiable {
     var total: Int
     var repsToday: Int
     var dayComplete: Bool
+    /// Day 15: the only ultraviolet flood.
+    var finalTest = false
+    var startMax = 0
+    var percent = 0
 }
 
 struct ProfileRow: Identifiable, Equatable {

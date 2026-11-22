@@ -40,40 +40,49 @@ private struct WatchAlert: View {
     var set: ScheduledSet
 
     var body: some View {
+        // The bell-ring flood: the whole set screen turns volt, everything on it on-volt.
         VStack(alignment: .leading, spacing: 6) {
-            Text("Set \(set.index) of \(total)")
-                .font(.footnote)
-                .foregroundStyle(Chalk.inkMuted)
+            HStack(spacing: 4) {
+                Image(systemName: "bell.fill")
+                    .font(.footnote)
+                    .foregroundStyle(Chalk.onVolt)
+                    .accessibilityHidden(true)
+                Text("Set \(set.index) of \(total)")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Chalk.onVoltSoft)
+            }
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text("\(set.reps)")
                     .font(Chalk.display(72, weight: .extraBold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(Chalk.volt)
+                    .foregroundStyle(Chalk.onVolt)
                 Text("now")
                     .font(Chalk.display(24, weight: .bold))
                     .textCase(.uppercase)
+                    .foregroundStyle(Chalk.onVoltSoft)
             }
             Spacer(minLength: 4)
             Button(Copy.done) { model.done(day: day, index: set.index) }
                 .font(.body.weight(.semibold))
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
-                .background(Chalk.volt)
-                .foregroundStyle(Chalk.onVolt)
+                .background(Chalk.onVolt)
+                .foregroundStyle(Chalk.volt)
                 .clipShape(Capsule())
                 .buttonStyle(.plain)
             Button(Copy.inTen) { model.snooze(day: day, index: set.index) }
                 .font(.body.weight(.medium))
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
-                .background(Chalk.watchSecondary)
-                .foregroundStyle(Chalk.ink)
-                .clipShape(Capsule())
+                .foregroundStyle(Chalk.onVolt)
+                .overlay(Capsule().stroke(Chalk.onVolt, lineWidth: 1.5))
                 .buttonStyle(.plain)
         }
         .padding(.horizontal, 6)
         .padding(.top, 8)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Chalk.volt.ignoresSafeArea())
         // Done and In 10 stay on screen at every text size.
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
