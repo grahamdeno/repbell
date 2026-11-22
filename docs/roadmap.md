@@ -14,17 +14,20 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 - **Claude project:** "App | RepBell".
 - **Standing chats:** Rep Bell Product (Opus), Rep Bell Build (Sonnet), Rep Bell Review (Fable), Rep Bell Grok.
 
-## Where things stand (20 Nov 2026)
+## Where things stand (22 Nov 2026)
 
 - **Store:** nothing released. App Store Connect record "Rep Bell: 14-Day Push-Ups", Apple ID 6834201034, iOS 1.0 in
   Prepare for Submission. Internal TestFlight only.
-- **1.0 scope:** frozen 20 Nov 2026 and built under the 1.0 exception (PRs #22 to #29). Groups 5 (navigation) and 6
-  (Build D) were built in the other order, D first. Groups 8 to 13 merged as one PR because they were stacked.
-- **Not built:** the Watch face complication (needs a new bundle ID, which needs Graham's approval).
-- **Next:** one internal TestFlight build from `main` (standing test build go), Graham's checks on his phone, the
-  Stage 5 UX walk, then the Fable go-live assessment. Graham reviews every "decided by Product under the 1.0
-  exception" line in the Decision log before any ship go.
-- **App Privacy answer to set at release (Grok, from approved text):** Data Not Collected.
+- **1.0 scope:** open (decision of 20 Nov 2026); items join as Graham approves them. Built under the 1.0 exception.
+- **Test builds:** 15 rejected at upload (missing NSHealthShareUsageDescription, fixed in #30); 16 and 17 uploaded;
+  18 started 22 Nov 2026 from `648b21c` (Volt palette, bell-ring flood, Day 15 flood, Today and large-text fixes,
+  19-stretch Desk stretch mix).
+- **Screenshots:** `docs/screenshots/` holds run 3 of the current build (Debug seeding, manual workflow).
+- **Not built:** the Watch face complication (needs a new bundle ID, which needs Graham's approval); the new app
+  icon (art pending Graham's approval); "Start set now" (early sets, not yet shaped).
+- **Next:** Graham lives on build 18; fix rounds as he finds things; the Stage 5 UX walk; the Fable go-live
+  assessment. Graham reviews every "decided by Product under the 1.0 exception" line in the Decision log before any
+  ship go.
 
 ## Product specifics
 
