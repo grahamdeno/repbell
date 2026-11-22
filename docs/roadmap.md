@@ -71,6 +71,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-22 | D7 amended: lime `volt` stays. The bell-ring flood becomes a dark olive tint (`flood` #202B06) with the number and bell in volt and soft text in `flood-soft` #A8C25A, instead of a full lime screen. The taller day bars with outlined upcoming days (from #39) stay | Graham, after trying amber: keep the lime, tone the flood down to a dark screen |
 | 2026-11-22 | D8 reversed: the amber palette and deep amber flood are withdrawn, so D7 (Volt lime, full volt bell-ring flood) stands. The one wording change kept: `ink-faint` is for outlines only, never text | Graham's decision, relayed from the design system chat |
 | 2026-11-22 | D8 (reversed the same day, see above): the "now" color changed from lime to amber (#FFB020) and the bell-ring flood became a deep amber tint (#3A2A08). Shipped in test build 21 only | Graham found the lime hard on his eyes in build 20 |
 | 2026-11-21 | D7: palette changes from Chalk (one orange) to Volt and Ultraviolet: lime `volt` for now, violet `ultraviolet` for earned, a volt flood when a set's bell rings, Day 15 the only ultraviolet flood. Tokens in docs/design-system/tokens.json | Approved by Graham from the palette canvas |

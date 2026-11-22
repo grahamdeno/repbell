@@ -29,7 +29,7 @@ final class ChalkTests: XCTestCase {
             "ground": ChalkTokens.ground, "ground-watch": ChalkTokens.groundWatch, "surface": ChalkTokens.surface,
             "line": ChalkTokens.line, "line-strong": ChalkTokens.lineStrong, "ink": ChalkTokens.ink,
             "ink-muted": ChalkTokens.inkMuted, "ink-faint": ChalkTokens.inkFaint,
-            "volt": ChalkTokens.volt, "on-volt": ChalkTokens.onVolt, "on-volt-soft": ChalkTokens.onVoltSoft,
+            "volt": ChalkTokens.volt, "on-volt": ChalkTokens.onVolt, "flood": ChalkTokens.flood, "flood-soft": ChalkTokens.floodSoft,
             "ultraviolet": ChalkTokens.ultraviolet, "alert": ChalkTokens.alert,
         ]
         XCTAssertEqual(tokens.count, code.count, "tokens.json and code list the same tokens")
@@ -65,7 +65,11 @@ final class ChalkTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(ChalkTokens.inkMuted.contrast(with: ground), 4.5)
         XCTAssertGreaterThanOrEqual(ChalkTokens.volt.contrast(with: ground), 4.5)
         XCTAssertGreaterThanOrEqual(ChalkTokens.onVolt.contrast(with: ChalkTokens.volt), 4.5)
-        XCTAssertGreaterThanOrEqual(ChalkTokens.onVoltSoft.contrast(with: ChalkTokens.volt), 4.5)
+        // The bell-ring flood: volt number, ink and flood-soft text on the dark flood, which stays a dark tint.
+        XCTAssertGreaterThanOrEqual(ChalkTokens.volt.contrast(with: ChalkTokens.flood), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.ink.contrast(with: ChalkTokens.flood), 4.5)
+        XCTAssertGreaterThanOrEqual(ChalkTokens.floodSoft.contrast(with: ChalkTokens.flood), 4.5)
+        XCTAssertLessThan(ChalkTokens.flood.luminance, 0.05)
         XCTAssertGreaterThanOrEqual(ChalkTokens.onVolt.contrast(with: ChalkTokens.ultraviolet), 4.5)
         // Ultraviolet is large text only: 3:1 on ground and surface.
         XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: ground), 3.0)
