@@ -36,7 +36,8 @@ public enum ChalkTokens {
 
     public static let volt = RGB(0xC8FF00)
     public static let onVolt = RGB(0x0D0D0D)
-    public static let onVoltSoft = RGB(0x2B3300)
+    public static let flood = RGB(0x202B06)
+    public static let floodSoft = RGB(0xA8C25A)
     public static let ultraviolet = RGB(0xA066FF)
     public static let ground = RGB(0x0D0D0D)
     public static let groundWatch = RGB(0x000000)
@@ -101,7 +102,8 @@ public enum Chalk {
 
     public static var volt: Color { color(ChalkTokens.volt) }
     public static var onVolt: Color { color(ChalkTokens.onVolt) }
-    public static var onVoltSoft: Color { color(ChalkTokens.onVoltSoft) }
+    public static var flood: Color { color(ChalkTokens.flood) }
+    public static var floodSoft: Color { color(ChalkTokens.floodSoft) }
     public static var ultraviolet: Color { color(ChalkTokens.ultraviolet) }
     public static var ground: Color { color(ChalkTokens.ground) }
     public static var groundWatch: Color { color(ChalkTokens.groundWatch) }
