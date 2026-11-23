@@ -64,6 +64,11 @@ struct DeskStretchView: View {
 
     private var phases: [DeskStretch.Phase] { DeskStretch.phases(stretch) }
 
+    private var isRunning: Bool {
+        if case .running = stage { return true }
+        return false
+    }
+
     var body: some View {
         ZStack {
             Chalk.ground.ignoresSafeArea()
@@ -84,6 +89,13 @@ struct DeskStretchView: View {
                                 .foregroundStyle(Chalk.inkMuted)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
+                    }
+                    if let clip = Figures.clip(stretch.id) {
+                        // Moves through the stretch while it runs; shows the position, still, before and after.
+                        FigureStage(clip: clip, still: !isRunning)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 180)
+                            .background(Chalk.surface, in: RoundedRectangle(cornerRadius: 20))
                     }
                     stageView
                     Spacer(minLength: 12)
