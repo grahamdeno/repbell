@@ -67,6 +67,8 @@ public enum Copy {
 
     public static let aboutTitle = "About"
     public static let aboutBody = "Rep Bell runs the 14-day program popularized as Hit the Deck by The Modern Rogue. The same schedule belongs to a longer tradition, sometimes called the Evil Russian program. Rep Bell is not endorsed by The Modern Rogue or anyone else."
+    /// Attribution xAI asks for on Grok output. Shown only while coach clips are in the build.
+    public static let coachCredit = "Coach animations created with Grok."
 
     public static let unlockTitle = "Unlock the full program"
     public static let unlockBody = "One purchase opens the full program and every rerun."

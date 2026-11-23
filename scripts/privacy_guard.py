@@ -2,8 +2,9 @@
 """Rep Bell privacy guard. Enforces the on-device promise in CI.
 
 Rep Bell has no account, no server, no analytics and no third-party SDKs. The only data that leaves the app is a
-finished session written to Apple Health, write only, when the person allows it. Generated coach media stays out of
-the build until requirement R-1 is met.
+finished session written to Apple Health, write only, when the person allows it. Generated coach media is allowed
+only while `Features.coachMedia` is true (TestFlight testing while requirement R-1 is open, decision of 23 Nov 2026),
+and only as .mp4 and .png files in App/Studio/Coach. Video anywhere else in the build always fails.
 
 Usage:
     python3 scripts/privacy_guard.py              check the repo; exit 1 on any violation
@@ -97,13 +98,25 @@ def violations_in_package(text):
 MEDIA = {".mp4", ".mov", ".m4v", ".gif", ".webm"}
 
 
-def violations_in_paths(paths):
+COACH_DIR = ("App", "Studio", "Coach")
+COACH_ALLOWED = {".mp4", ".png"}
+
+
+def coach_media_on(features_text):
+    """True only when Features.swift sets `coachMedia = true`."""
+    return re.search(r"static\s+let\s+coachMedia\s*=\s*true\b", features_text) is not None
+
+
+def violations_in_paths(paths, coach_media=False):
     found = []
     for path in paths:
         parts = path.parts
+        in_coach = parts[:3] == COACH_DIR
+        if in_coach and coach_media and path.suffix.lower() in COACH_ALLOWED:
+            continue
         if path.suffix.lower() in MEDIA and parts and parts[0] in ("App", "Watch", "Widget"):
             found.append(("coach media", f"video file in the build: {path}"))
-        if "Coach" in parts and parts[0] == "App":
+        elif "Coach" in parts and parts[0] == "App":
             found.append(("coach media", f"coach folder in the build: {path}"))
     return found
 
@@ -131,7 +144,8 @@ def check_repo():
     for name, why in violations_in_package((ROOT / "Packages/RepBellEngine/Package.swift").read_text(encoding="utf-8")):
         problems.append(f"Packages/RepBellEngine/Package.swift: {name} ({why})")
     files = [p.relative_to(ROOT) for folder in ("App", "Watch", "Widget") for p in (ROOT / folder).rglob("*") if p.is_file()]
-    for name, why in violations_in_paths(files):
+    features = (ROOT / "Packages/RepBellEngine/Sources/RepBellEngine/Features.swift").read_text(encoding="utf-8")
+    for name, why in violations_in_paths(files, coach_media=coach_media_on(features)):
         problems.append(f"{name}: {why}")
     return problems
 
@@ -197,7 +211,19 @@ def self_test():
     if not violations_in_package('.package(url: "https://github.com/x/y", from: "1.0.0")'):
         failures.append("remote package in Package.swift missed")
     if not violations_in_paths([pathlib.PurePosixPath("App/Studio/Coach/her-boat.mp4")]):
-        failures.append("coach video missed")
+        failures.append("coach video missed with coach media off")
+    if violations_in_paths([pathlib.PurePosixPath("App/Studio/Coach/her-boat.mp4")], coach_media=True):
+        failures.append("coach clip flagged with coach media on")
+    if not violations_in_paths([pathlib.PurePosixPath("App/Studio/her-boat.mp4")], coach_media=True):
+        failures.append("video outside the coach folder missed with coach media on")
+    if not violations_in_paths([pathlib.PurePosixPath("Watch/Coach/her-boat.mp4")], coach_media=True):
+        failures.append("video in the Watch app missed with coach media on")
+    if not violations_in_paths([pathlib.PurePosixPath("App/Studio/Coach/her-boat.mov")], coach_media=True):
+        failures.append("other video type in the coach folder missed")
+    if not coach_media_on("public static let coachMedia = true"):
+        failures.append("coachMedia = true not read")
+    if coach_media_on("public static let coachMedia = false"):
+        failures.append("coachMedia = false read as on")
     if violations_in_paths([pathlib.PurePosixPath("docs/screens/A1.html")]):
         failures.append("docs file flagged")
     return failures

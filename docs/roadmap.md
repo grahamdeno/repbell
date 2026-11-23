@@ -71,6 +71,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-23 | **Coach clips return for TestFlight testing.** Both coaches' clips (68 movements, 16 of the 19 desk stretches) and the Coach picker are back in the build, switched by `Features.coachMedia`. A move with no clip yet shows its line figure. The About screen credits "Coach animations created with Grok." R-1 stays open: written permission was asked of xAI on 23 Nov 2026. Before any ship go, R-1 is met or `coachMedia` goes back to false and the clips leave the build | Graham's decision. **Replaces** the 20 Nov rule that coach media stays out of every build |
 | 2026-11-22 | Animated figures: every Workouts movement and desk stretch shows an animated line figure (side, front or hand close-up view, turn arrows for rotations, several key positions for flows), drawn by the app from numbers in figures.json. No art files, no outside media, no network | Approved by Graham after the thread-the-needle and rice-bucket-twist samples |
 | 2026-11-22 | D7 amended: lime `volt` stays. The bell-ring flood becomes a dark olive tint (`flood` #202B06) with the number and bell in volt and soft text in `flood-soft` #A8C25A, instead of a full lime screen. The taller day bars with outlined upcoming days (from #39) stay | Graham, after trying amber: keep the lime, tone the flood down to a dark screen |
 | 2026-11-22 | D8 reversed: the amber palette and deep amber flood are withdrawn, so D7 (Volt lime, full volt bell-ring flood) stands. The one wording change kept: `ink-faint` is for outlines only, never text | Graham's decision, relayed from the design system chat |
@@ -141,7 +142,7 @@ Newest first. Refined decisions only.
 
 - **At launch (before the 1.0 ship go):** revisit repo visibility (Graham).
 - **Before the 1.0 ship go:** Graham reviews every choice logged as "decided by Product under the 1.0 exception".
-- **Before any coach media returns:** R-1 is met (Opus checks, Graham approves).
+- **Before any ship go:** R-1 is met for every coach clip in the build, or the clips leave the build (Opus checks, Graham approves).
 
 ## Backlog
 

@@ -186,6 +186,9 @@ private struct StudioSessionContent: View {
                             Text(StudioCopy.meta(session))
                                 .font(.subheadline)
                                 .foregroundStyle(Chalk.inkMuted)
+                            if Features.coachMedia {
+                                MascotPicker()
+                            }
                             if !settings.easyOn.isEmpty {
                                 Text(StudioCopy.easyNote(settings.easyOn))
                                     .font(.subheadline)
@@ -262,6 +265,19 @@ private struct StudioSessionContent: View {
     }
 }
 
+struct MascotPicker: View {
+    @Bindable private var settings = StudioSettings.shared
+
+    var body: some View {
+        Picker(StudioCopy.mascot, selection: $settings.mascot) {
+            Text(StudioCopy.him).tag("him")
+            Text(StudioCopy.her).tag("her")
+        }
+        .pickerStyle(.segmented)
+        .frame(maxWidth: 220)
+    }
+}
+
 // MARK: - Player
 
 struct StudioPlayerView: View {
@@ -325,8 +341,13 @@ struct StudioPlayerView: View {
                     .tint(Chalk.volt)
                 Text(StudioCopy.stepLabel(step))
                     .eyebrow(step.isMove ? Chalk.volt : Chalk.inkMuted)
-                MascotStage(movement: move?.movement, sessionID: session.id, resting: !step.isMove)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                CoachStage(
+                    movement: move?.movement,
+                    side: step.isMove ? step.side : session.timeline.dropFirst(index + 1).first(where: \.isMove)?.side,
+                    resting: !step.isMove,
+                    sessionID: session.id,
+                    paused: paused
+                )
                     .frame(maxWidth: .infinity)
                     .frame(height: 220)
                 Text(move?.movement.name ?? "")
@@ -483,9 +504,8 @@ struct StudioPlayerView: View {
     }
 }
 
-/// The Workouts figure: the movement's animated line figure (figures.json). During a rest it shows the next
-/// move's key position, still and dim. Falls back to a system figure if a clip is missing.
-/// Coach media stays out until R-1 is met; the line figures are numbers, not media.
+/// The fallback stage for a move with no coach clip yet: the movement's line figure (figures.json).
+/// During a rest it shows the next move's key position, still and dim.
 struct MascotStage: View {
     var movement: StudioMovement?
     var sessionID: String
@@ -617,6 +637,13 @@ struct StudioProfileSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
+            if Features.coachMedia {
+                HStack {
+                    Text(StudioCopy.mascot).font(.system(size: 16)).foregroundStyle(Chalk.inkSoft)
+                    Spacer()
+                    MascotPicker()
+                }
+            }
             Text("\(StudioCopy.iHave) · \(settings.gear.count)").font(.body.weight(.semibold)).foregroundStyle(Chalk.ink)
             ForEach(StudioSettings.allGear, id: \.self) { item in
                 Toggle(StudioSettings.gearLabel(item), isOn: Binding(
@@ -694,6 +721,9 @@ enum StudioCopy {
     ]
     static let free = "Free"
     static let start = "Start"
+    static let mascot = "Coach"
+    static let him = "Him"
+    static let her = "Her"
     static let pause = "Pause"
     static let resume = "Resume"
     static let skip = "Skip"

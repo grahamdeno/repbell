@@ -10,6 +10,8 @@ public enum Features {
     /// The unlock product and the purchase code stay for the version that adds payment.
     public static let payment = false
 
-    /// Generated coach clips and stills stay out of every build until requirement R-1 is met.
-    public static let coachMedia = false
+    /// Coach clips are in TestFlight builds for testing while requirement R-1 is open (decision of 23 Nov 2026).
+    /// Before any ship go, R-1 is met or this goes back to false and the clips leave the build.
+    /// `scripts/privacy_guard.py` reads this value: video files fail CI whenever it is false.
+    public static let coachMedia = true
 }

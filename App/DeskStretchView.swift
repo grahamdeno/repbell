@@ -64,6 +64,12 @@ struct DeskStretchView: View {
 
     private var phases: [DeskStretch.Phase] { DeskStretch.phases(stretch) }
 
+    private var holdSide: String? {
+        guard case .running(let index) = stage, phases.indices.contains(index),
+              case .hold(let side) = phases[index].kind else { return nil }
+        return side
+    }
+
     private var isRunning: Bool {
         if case .running = stage { return true }
         return false
@@ -90,7 +96,12 @@ struct DeskStretchView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
-                    if let clip = Figures.clip(stretch.id) {
+                    if CoachClips.has(stretch.id) {
+                        // The coach clip plays while the stretch runs; the finished pose shows before and after.
+                        CoachClipView(movementID: stretch.id, playing: isRunning, mirrored: holdSide == "right")
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 220)
+                    } else if let clip = Figures.clip(stretch.id) {
                         // Moves through the stretch while it runs; shows the position, still, before and after.
                         FigureStage(clip: clip, still: !isRunning)
                             .frame(maxWidth: .infinity)
