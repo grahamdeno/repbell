@@ -52,7 +52,9 @@ enum FigureDrawing {
         let (s, dx, dy) = fit(size)
         func p(_ x: Double, _ y: Double) -> CGPoint { CGPoint(x: dx + x * s, y: dy + y * s) }
         func j(_ name: String) -> CGPoint? { pose[name].map { p($0.x, $0.y) } }
-        let stroke = StrokeStyle(lineWidth: 6.5 * s, lineCap: .round, lineJoin: .round)
+        // A body, not a wire: thick torso, solid limbs, rounded joints, a full head.
+        let torsoStroke = StrokeStyle(lineWidth: 15 * s, lineCap: .round, lineJoin: .round)
+        let limbStroke = StrokeStyle(lineWidth: 10.5 * s, lineCap: .round, lineJoin: .round)
 
         if clip.floor {
             var floor = Path()
@@ -119,32 +121,34 @@ enum FigureDrawing {
             gc.stroke(head, with: .color(Chalk.inkMuted), style: StrokeStyle(lineWidth: 2 * s, lineCap: .round))
         }
 
-        func segments(_ pairs: [(String, String)], _ color: Color) {
+        func segments(_ pairs: [(String, String)], _ color: Color, _ style: StrokeStyle) {
             var path = Path()
             for (a, b) in pairs {
                 guard let pa = j(a), let pb = j(b) else { continue }
                 path.move(to: pa); path.addLine(to: pb)
             }
-            gc.stroke(path, with: .color(color), style: stroke)
+            gc.stroke(path, with: .color(color), style: style)
         }
 
         if clip.view == "side" {
             // Far-side limbs first and dimmer, so depth reads.
-            segments([("sh", "el2"), ("el2", "ha2"), ("hp", "kn2"), ("kn2", "ft2")], tint.opacity(0.45))
-            segments([("nk", "hp"), ("sh", "el"), ("el", "ha"), ("hp", "kn"), ("kn", "ft")], tint)
+            segments([("sh", "el2"), ("el2", "ha2"), ("hp", "kn2"), ("kn2", "ft2")], tint.opacity(0.45), limbStroke)
+            segments([("nk", "hp")], tint, torsoStroke)
+            segments([("sh", "el"), ("el", "ha"), ("hp", "kn"), ("kn", "ft")], tint, limbStroke)
         } else {
             if let h1 = pose["hp"], let h2 = pose["hp2"], let nk = j("nk") {
                 var torso = Path()
                 torso.move(to: nk)
                 torso.addLine(to: p((h1.x + h2.x) / 2, (h1.y + h2.y) / 2))
-                gc.stroke(torso, with: .color(tint), style: stroke)
+                gc.stroke(torso, with: .color(tint), style: torsoStroke)
             }
             // The screen-right arm is drawn first, so an arm that threads under reads as behind.
-            segments([("sh2", "el2"), ("el2", "ha2")], tint.opacity(0.8))
-            segments([("sh", "sh2"), ("hp", "hp2"), ("hp", "kn"), ("kn", "ft"), ("hp2", "kn2"), ("kn2", "ft2"), ("sh", "el"), ("el", "ha")], tint)
+            segments([("sh2", "el2"), ("el2", "ha2")], tint.opacity(0.8), limbStroke)
+            segments([("sh", "sh2"), ("hp", "hp2")], tint, torsoStroke)
+            segments([("hp", "kn"), ("kn", "ft"), ("hp2", "kn2"), ("kn2", "ft2"), ("sh", "el"), ("el", "ha")], tint, limbStroke)
         }
         if let head = j("hd") {
-            let r = 10 * s
+            let r = 12.5 * s
             gc.fill(Path(ellipseIn: CGRect(x: head.x - r, y: head.y - r, width: 2 * r, height: 2 * r)), with: .color(tint))
         }
     }
