@@ -60,9 +60,9 @@ struct CoachStage: View {
                     .scaledToFit()
                     .opacity(0.45)
                     .scaleEffect(x: mirrored ? -1 : 1, y: 1)
-            } else if let id = movementID, let url = CoachClips.url(for: id, coach: coach) {
+            } else if !resting, let id = movementID, let url = CoachClips.url(for: id, coach: coach) {
                 CoachVideo(url: url, loops: CoachClips.loops.contains(id), paused: paused)
-                    .id("\(id)-\(side ?? "")")
+                    .id("\(url.lastPathComponent)-\(side ?? "")")
                     .scaleEffect(x: mirrored ? -1 : 1, y: 1)
             } else {
                 MascotStage(movement: movement, sessionID: sessionID, resting: resting)
@@ -86,8 +86,8 @@ struct CoachClipView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 20).fill(Chalk.ground)
             if playing, let url = CoachClips.url(for: movementID, coach: coach) {
-                CoachVideo(url: url, loops: true, paused: false)
-                    .id("\(movementID)-\(mirrored)")
+                CoachVideo(url: url, loops: CoachClips.loops.contains(movementID), paused: false)
+                    .id("\(url.lastPathComponent)-\(mirrored)")
             } else if let poster = CoachClips.poster(for: movementID, coach: coach) {
                 Image(uiImage: poster).resizable().scaledToFit()
             }

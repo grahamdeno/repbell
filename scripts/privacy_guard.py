@@ -95,7 +95,7 @@ def violations_in_package(text):
     return []
 
 
-MEDIA = {".mp4", ".mov", ".m4v", ".gif", ".webm"}
+MEDIA = {".mp4", ".mov", ".m4v", ".gif", ".webm", ".mkv", ".avi", ".mpg", ".mpeg", ".3gp", ".m2ts", ".hevc"}
 
 
 COACH_DIR = ("App", "Studio", "Coach")
@@ -103,8 +103,13 @@ COACH_ALLOWED = {".mp4", ".png"}
 
 
 def coach_media_on(features_text):
-    """True only when Features.swift sets `coachMedia = true`."""
-    return re.search(r"static\s+let\s+coachMedia\s*=\s*true\b", features_text) is not None
+    """True only when Features.swift sets `coachMedia = true` exactly once, outside comments and #if blocks."""
+    code = re.sub(r"/\*.*?\*/", "", features_text, flags=re.S)
+    code = re.sub(r"//[^\n]*", "", code)
+    if re.search(r"^\s*#if\b", code, flags=re.M):
+        return False
+    found = re.findall(r"^\s*public\s+static\s+let\s+coachMedia\s*=\s*(true|false)\b", code, flags=re.M)
+    return found == ["true"]
 
 
 def violations_in_paths(paths, coach_media=False):
@@ -224,6 +229,14 @@ def self_test():
         failures.append("coachMedia = true not read")
     if coach_media_on("public static let coachMedia = false"):
         failures.append("coachMedia = false read as on")
+    if coach_media_on("// public static let coachMedia = true\npublic static let coachMedia = false"):
+        failures.append("commented-out coachMedia = true read as on")
+    if coach_media_on("#if DEBUG\npublic static let coachMedia = true\n#else\npublic static let coachMedia = false\n#endif"):
+        failures.append("coachMedia inside #if read as on")
+    if coach_media_on("/* public static let coachMedia = true */"):
+        failures.append("block-commented coachMedia read as on")
+    if not violations_in_paths([pathlib.PurePosixPath("App/x.mkv")]):
+        failures.append("mkv video missed")
     if violations_in_paths([pathlib.PurePosixPath("docs/screens/A1.html")]):
         failures.append("docs file flagged")
     return failures
