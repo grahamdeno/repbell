@@ -483,7 +483,9 @@ struct StudioPlayerView: View {
     }
 }
 
-/// The Workouts figure: a large system figure chosen by session. Coach media stays out until R-1 is met.
+/// The Workouts figure: the movement's animated line figure (figures.json). During a rest it shows the next
+/// move's key position, still and dim. Falls back to a system figure if a clip is missing.
+/// Coach media stays out until R-1 is met; the line figures are numbers, not media.
 struct MascotStage: View {
     var movement: StudioMovement?
     var sessionID: String
@@ -493,10 +495,15 @@ struct MascotStage: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20).fill(Chalk.surface)
-            Image(systemName: symbol)
-                .font(.system(size: 110, weight: .regular))
-                .foregroundStyle(resting ? Chalk.inkFaint : Chalk.volt)
-                .symbolEffect(.pulse, isActive: !resting && !reduceMotion)
+            if let clip = Figures.clip(movement?.id) {
+                FigureStage(clip: clip, tint: resting ? Chalk.inkFaint : Chalk.volt, still: resting)
+                    .padding(10)
+            } else {
+                Image(systemName: symbol)
+                    .font(.system(size: 110, weight: .regular))
+                    .foregroundStyle(resting ? Chalk.inkFaint : Chalk.volt)
+                    .symbolEffect(.pulse, isActive: !resting && !reduceMotion)
+            }
         }
         .accessibilityHidden(true)
     }

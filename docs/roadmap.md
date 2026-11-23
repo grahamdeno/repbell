@@ -71,6 +71,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-22 | Animated figures: every Workouts movement and desk stretch shows an animated line figure (side, front or hand close-up view, turn arrows for rotations, several key positions for flows), drawn by the app from numbers in figures.json. No art files, no outside media, no network | Approved by Graham after the thread-the-needle and rice-bucket-twist samples |
 | 2026-11-22 | D7 amended: lime `volt` stays. The bell-ring flood becomes a dark olive tint (`flood` #202B06) with the number and bell in volt and soft text in `flood-soft` #A8C25A, instead of a full lime screen. The taller day bars with outlined upcoming days (from #39) stay | Graham, after trying amber: keep the lime, tone the flood down to a dark screen |
 | 2026-11-22 | D8 reversed: the amber palette and deep amber flood are withdrawn, so D7 (Volt lime, full volt bell-ring flood) stands. The one wording change kept: `ink-faint` is for outlines only, never text | Graham's decision, relayed from the design system chat |
 | 2026-11-22 | D8 (reversed the same day, see above): the "now" color changed from lime to amber (#FFB020) and the bell-ring flood became a deep amber tint (#3A2A08). Shipped in test build 21 only | Graham found the lime hard on his eyes in build 20 |
@@ -313,6 +314,22 @@ the time without choosing moves myself.
 - It plays, holds set alerts and saves to Health like any session. "Another one" gives a different mix.
 
 **Out of scope:** choosing the focus; saving a built session.
+
+### 16. Story: animated figures for every move (approved 2026-11-22; in 1.0; built)
+As someone doing a move I don't know, I want to see it move, not only read the steps, so I do it right.
+- Given any Workouts movement or desk stretch, the picture shows a line figure easing between the move's key
+  positions in a loop, in volt on the surface panel.
+- Each move uses the view that explains it: side for most, front for sideways and "arm under" moves, a close-up of
+  the hand in a cut-away bucket for the grip moves. Far-side limbs are dimmer so depth reads.
+- Pure rotations (Russian twist, supine twist, halo, hip and arm circles) add a turn arrow. Flows step through their
+  key positions in order.
+- During a rest the picture shows the next move's key position, still and dim.
+- With Reduce Motion on, the key position shows without moving. The picture is decorative; the cues stay the
+  instructions for VoiceOver.
+- Positions are numbers in `App/Studio/figures.json`, built by `tools/build_figures.py`; CI checks every movement and
+  desk stretch has one. No art files, outside media or network, so R-1 does not apply.
+
+**Out of scope:** realistic people, hand grip detail beyond the close-ups, choosing a camera angle.
 
 ## Small follow-ups
 

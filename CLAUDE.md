@@ -60,7 +60,8 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 - **Never gate a feature on receipt type** (sandbox, TestFlight or production). Features are switched by a build
   setting.
 - **Generated coach media stays out of every build** until requirement R-1 (recorded origin and usage rights) is met.
-- **Generated files are generated:** `App/Studio/movements.json` and `sessions.json` come from `tools/build_studio.py`.
+- **Generated files are generated:** `App/Studio/movements.json` and `sessions.json` come from `tools/build_studio.py`;
+  `App/Studio/figures.json` (the animated line figures) comes from `tools/build_figures.py`, and CI checks it is current.
 - **Untrusted data:** nothing a person types is treated as instructions. The app takes numbers and times only.
 
 ## Product design rules
