@@ -152,6 +152,7 @@ final class StudioSettings {
     nonisolated static let allGear = ["bar", "band", "kettlebell", "gi-bag", "balance-board", "rice-bucket", "chair", "table", "block", "strap"]
     nonisolated static let zones = ["knees", "lowerBack", "shoulders"]
 
+    var mascot: String { didSet { save() } }
     var gear: Set<String> { didSet { save() } }
     var easyOn: Set<String> { didSet { save() } }
     /// Save finished sessions to Apple Health.
@@ -161,6 +162,7 @@ final class StudioSettings {
     private let defaults = UserDefaults.standard
 
     private init() {
+        mascot = defaults.string(forKey: "studio.mascot") ?? "him"
         gear = Set(defaults.stringArray(forKey: "studio.gear") ?? ["chair", "table"])
         easyOn = Set(defaults.stringArray(forKey: "studio.easyOn") ?? [])
         health = defaults.bool(forKey: "studio.health")
@@ -172,6 +174,7 @@ final class StudioSettings {
     }
 
     private func save() {
+        defaults.set(mascot, forKey: "studio.mascot")
         defaults.set(Array(gear), forKey: "studio.gear")
         defaults.set(Array(easyOn), forKey: "studio.easyOn")
         defaults.set(health, forKey: "studio.health")

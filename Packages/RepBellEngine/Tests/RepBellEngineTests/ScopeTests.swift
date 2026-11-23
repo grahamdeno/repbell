@@ -1,7 +1,7 @@
 import XCTest
 @testable import RepBellEngine
 
-/// Roadmap items 1 and 4: what 1.0 is. Workouts in, coach media out, payment off, nothing locked.
+/// Roadmap items 1 and 4: what 1.0 is. Workouts in, coach clips in for testing, payment off, nothing locked.
 final class ScopeTests: XCTestCase {
     private let start = CivilDate(year: 2026, month: 11, day: 16)
 
@@ -13,10 +13,17 @@ final class ScopeTests: XCTestCase {
         )
     }
 
-    // Item 1: Workouts is switched on by a build setting; coach media is off.
-    func testItem1_workoutsOnByBuildSettingAndCoachMediaOff() {
+    // Item 1: Workouts is switched on by a build setting. Coach clips are in for TestFlight testing
+    // (decision of 23 Nov 2026); R-1 is met or this flips back before any ship go.
+    func testItem1_workoutsOnByBuildSettingAndCoachClipsInForTesting() {
         XCTAssertTrue(Features.workouts)
-        XCTAssertFalse(Features.coachMedia)
+        XCTAssertTrue(Features.coachMedia)
+    }
+
+    // xAI asks that Grok output be attributed; the credit names Grok in its accepted wording.
+    func testCoachCreditNamesGrok() {
+        XCTAssertTrue(Copy.coachCredit.lowercased().contains("created with grok"))
+        XCTAssertFalse(Copy.coachCredit.contains("!"))
     }
 
     // Item 4: payment is off in 1.0.

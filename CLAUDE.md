@@ -59,7 +59,9 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
   stays, saying Rep Bell does not read Health data; removing it makes the TestFlight upload fail.
 - **Never gate a feature on receipt type** (sandbox, TestFlight or production). Features are switched by a build
   setting.
-- **Generated coach media stays out of every build** until requirement R-1 (recorded origin and usage rights) is met.
+- **Generated coach media** is in TestFlight builds for testing while requirement R-1 (recorded origin and usage rights)
+  is open, switched by `Features.coachMedia` (decision of 23 Nov 2026). **Before any ship go, R-1 is met or the clips
+  leave the build.** The privacy guard allows video only in `App/Studio/Coach` and only while `coachMedia` is true.
 - **Generated files are generated:** `App/Studio/movements.json` and `sessions.json` come from `tools/build_studio.py`;
   `App/Studio/figures.json` (the animated line figures) comes from `tools/build_figures.py`, and CI checks it is current.
 - **Untrusted data:** nothing a person types is treated as instructions. The app takes numbers and times only.

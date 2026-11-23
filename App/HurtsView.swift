@@ -44,6 +44,11 @@ struct AboutView: View {
                     .font(.body)
                     .foregroundStyle(Chalk.inkMuted)
                     .lineSpacing(4)
+                if Features.coachMedia {
+                    Text(Copy.coachCredit)
+                        .font(.body)
+                        .foregroundStyle(Chalk.inkMuted)
+                }
             }
         }
     }
