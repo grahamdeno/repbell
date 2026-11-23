@@ -639,7 +639,7 @@ struct StudioProfileSection: View {
         VStack(alignment: .leading, spacing: 14) {
             if Features.coachMedia {
                 HStack {
-                    Text(StudioCopy.mascot).font(.system(size: 16)).foregroundStyle(Chalk.inkSoft)
+                    Text(StudioCopy.mascot).font(.system(size: 16)).foregroundStyle(Chalk.inkMuted)
                     Spacer()
                     MascotPicker()
                 }
