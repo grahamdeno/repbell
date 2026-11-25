@@ -166,31 +166,31 @@ public enum CoachVoice {
             return lines
         case (.push, .afterSet):
             if f.setsMissed > 0 {
-                let gone = f.setsMissed == 1 ? "That set is gone." : "Those sets are gone."
-                return ["\(count(f.setsMissed, "set", "sets")) missed today. \(gone) Don't let the next one go with them.",
-                        "You said every set. \(f.setsMissed) got away today. Not the next one."]
+                let them = f.setsMissed == 1 ? "it" : "them"
+                return ["\(count(f.setsMissed, "set", "sets")) missed today. You said every set. Right now that isn't true.",
+                        "That's \(f.setsMissed) you let go. You don't get \(them) back. The next one isn't optional."]
             }
             if f.snoozesToday > 0 {
-                return ["You pushed back \(count(f.snoozesToday, "set", "sets")) today. When the bell rings next, be there."]
+                return ["You put off \(count(f.snoozesToday, "set", "sets")) today. Waiting is how days slip. When it rings, you drop."]
             }
             if f.setsLeft == 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). Every set done. That's what you said you'd do."]
+                return ["\(f.setsDone) of \(f.setsTotal). You kept your word today. Tomorrow it starts over."]
             }
             return [
-                "\(f.setsDone) of \(f.setsTotal). That's not done. Next set, same standard.",
-                "\(setsLeft) left. Nobody's doing them for you. Get the next one.",
-                "\(f.repsToday) is a start. The day asks for \(f.repsPlannedToday). Go get the rest.",
+                "\(f.setsDone) of \(f.setsTotal). The ones you've done are done. Get the next one.",
+                "\(setsLeft) left. That's the job. Don't negotiate with it.",
+                "\(f.repsToday) of \(f.repsPlannedToday). Not done is not done. Finish it.",
             ]
         case (.push, .dayDone):
             if f.setsMissed > 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). You left \(f.setsMissed) on the table. Next time, every set."]
+                return ["\(f.setsDone) of \(f.setsTotal). \(f.setsMissed) times today you chose something else. Next time, choose the set."]
             }
             if f.testTomorrow {
-                return ["Every set done. Tomorrow is \(test). Show up and find out what it bought you."]
+                return ["Every set done. Tomorrow is \(test). No excuses walk in with you."]
             }
             return [
-                "\(f.setsTotal) of \(f.setsTotal). You did what you said you'd do. Do the same next time.",
-                "Every set, on the day. That's how you keep your word.",
+                "\(f.setsTotal) of \(f.setsTotal). Good. That was the deal. Same deal next time.",
+                "Every set, on time. That's not special. That's the standard.",
             ]
         }
     }
@@ -211,7 +211,7 @@ public enum CoachVoice {
         case .coaching:
             return common + " Tone: calm and encouraging. Recognize a real win from the numbers, or look ahead to what is left. No guilt and no blame; never mention missed or snoozed sets."
         case .push:
-            return common + " Tone: blunt and demanding, a hard coach who holds people to their word. You may call a missed or snoozed set a broken commitment. Short, hard sentences. Challenge them; never insult them."
+            return common + " Tone: hard. A coach who expects more and says so, not a cheerleader. Do not praise unless every set is done, and even then keep it to a few words. Call out excuses, snoozes and missed sets directly as broken commitments. Short, hard sentences. Challenge them; never insult them or mention their body."
         }
     }
 

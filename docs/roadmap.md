@@ -352,6 +352,8 @@ going.
 - Apple's on-device model writes the line; nothing leaves the phone. Where the model is unavailable, refuses, or
   returns a line that breaks the rules, a written line for that mode and moment is shown.
 - The line has no exclamation marks, grows with text size and is read by VoiceOver.
+- With a coach line showing, the celebration stays until the person taps to clear it; a desk stretch comes up only after that.
+- Push is hard: no praise unless every set is done, and then only briefly; excuses, snoozes and missed sets are called out as broken commitments.
 - The Watch coach line moved to the next version (Graham's decision, 24 Nov 2026); the Watch has no celebration screen in 1.0.
 - Needs the unlock (item 18). Without it, the Settings choice shows the unlock.
 
