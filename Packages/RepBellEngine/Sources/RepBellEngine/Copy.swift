@@ -119,7 +119,7 @@ public enum Copy {
     public static let deskStretchTitle = "Desk stretch"
     public static let deskStretchSkip = "Skip"
     public static let deskStretchSetting = "Desk stretch"
-    public static let deskStretchDetail = "On weekdays, one 30-second stretch about every hour. With a program running, it comes right after a set you log; otherwise, as a quiet reminder on the hour."
+    public static let deskStretchDetail = "A 30-second stretch right after a set you log, at most every 40 minutes. On weekdays, a quiet reminder about every hour when no set is close, or soon after a set you haven't logged."
     public static let deskStretchFrom = "First reminder"
     public static let deskStretchUntil = "Last reminder"
 

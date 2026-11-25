@@ -74,8 +74,8 @@ enum Notifier {
     private static func desiredRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool,
                                         desk: DeskStretchStore.Plan, now: CivilDateTime) -> Built {
         let program = programRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet, now: now)
-        // Item 20: the hourly desk stretch runs with or without a program. Every upcoming bell counts for the
-        // 15-minute rule, even ones not scheduled yet.
+        // Item 20: the hourly desk stretch runs with or without a program. Every upcoming bell counts, even ones
+        // not scheduled yet, so each hour's reminder can follow its nearest set.
         var bells: [CivilDateTime] = []
         if let run = library.current, run.pausedAt == nil, !run.ended {
             bells = ScheduleEngine.resolve(run.input, now: now).alertQueue(at: now, capacity: Int.max).pending
@@ -102,7 +102,7 @@ enum Notifier {
             content.body = Copy.deskStretchNotice(name: stretch.name, cue: stretch.cues.first ?? "", seconds: DeskStretch.seconds)
             content.sound = nil
             content.threadIdentifier = "desk-stretch"
-            let id = "desk.\(stretch.id).\(slot.date.dayNumber).\(slot.minutes / 60)"
+            let id = "desk.\(stretch.id).\(slot.absoluteMinutes)"
             return UNNotificationRequest(identifier: id, content: content, trigger: trigger(for: date))
         }
         let sets = program.sets.prefix(shared.sets).map { $0.request }

@@ -12,8 +12,9 @@ final class DeskStretchTests: XCTestCase {
 
     func testAtMostOnceAnHour() {
         XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: nil, now: at(9, 0)))
-        XCTAssertFalse(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 45)))
-        XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(10, 0)))
+        XCTAssertFalse(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 39)))
+        // Sets 45 minutes apart still bring a stretch about every hour.
+        XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 45)))
         XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: CivilDateTime(date: day.addingDays(-1), hour: 22, minute: 0), now: at(7, 0)))
     }
 
@@ -127,22 +128,36 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertTrue(slots.allSatisfy { DeskStretch.isWeekday($0.date) })
     }
 
-    func testAnHourWithASetNearItLeavesTheStretchToThatSet() {
-        let now = at(2026, 11, 25, 8, 30)
-        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 30), at(2026, 11, 25, 15, 31)]
-        let hours = DeskStretch.hourlySlots(after: now, start: 9, end: 16, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
-            .map { $0.minutes / 60 }
-        // 10:00, 12:00, 13:00 and 14:00 each have a bell within 30 minutes; 16:00 is 29 minutes from 15:31.
-        // 9, 11 and 15 have none (15:00 is 31 minutes before 15:31), so they keep their reminder on the hour.
-        XCTAssertEqual(hours, [9, 11, 15])
+    private func clock(_ slots: [CivilDateTime]) -> [String] {
+        slots.map { String(format: "%d:%02d", $0.minutes / 60, $0.minutes % 60) }
     }
 
-    func testAProgramWithSetsAllDayLeavesEveryStretchToTheSets() {
-        // Sets every 45 minutes from 7 a.m.: every hour mark has a bell within 30 minutes.
+    func testAnHourWithASetNearItFollowsThatSet() {
+        let now = at(2026, 11, 25, 8, 30)
+        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 30), at(2026, 11, 25, 15, 31)]
+        let slots = DeskStretch.hourlySlots(after: now, start: 9, end: 16, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
+        // 9 and 15 have no bell within 30 minutes: on the hour. 10, 12, 13 and 16 follow their nearest set by
+        // 10 minutes (12:00 is 10 minutes after 11:50). 11:00 is too close to 10:25; 14:00's nearest set is 13:30's.
+        XCTAssertEqual(clock(slots), ["9:00", "10:25", "12:00", "13:40", "15:00", "15:41"])
+    }
+
+    func testLoggingTheSetDropsItsReminder() {
+        // The 10:15 set was logged at 10:17 and brought its stretch; its 10:25 reminder goes.
+        let bells = [at(2026, 11, 25, 10, 15)]
+        let slots = DeskStretch.hourlySlots(after: at(2026, 11, 25, 10, 17), start: 9, end: 12, setAlerts: bells,
+                                            lastDone: at(2026, 11, 25, 10, 17), limit: 20, daysAhead: 0)
+        // 11:00 is within the hour after the stretch, so the next reminder is 12:00.
+        XCTAssertEqual(clock(slots), ["12:00"])
+    }
+
+    func testRemindersAreNeverCloserThanFortyMinutes() {
+        // Sets every 45 minutes from 7 a.m.: each hour's reminder follows a set, and none come closer than 40 minutes.
         let bells = (0..<20).map { CivilDateTime(date: CivilDate(year: 2026, month: 11, day: 25), minutes: 420 + $0 * 45) }
         let slots = DeskStretch.hourlySlots(after: at(2026, 11, 25, 6), start: 9, end: 17, setAlerts: bells, lastDone: nil,
                                             limit: 20, daysAhead: 0)
-        XCTAssertEqual(slots, [])
+        XCTAssertEqual(clock(slots), ["9:25", "10:10", "10:55", "12:25", "13:10", "13:55", "15:25", "16:10", "16:55"])
+        XCTAssertTrue(zip(slots, slots.dropFirst()).allSatisfy { $0.minutes(until: $1) >= DeskStretch.afterSetGapMinutes })
+        XCTAssertTrue(slots.allSatisfy { slot in bells.contains { $0.minutes(until: slot) == DeskStretch.unloggedSetDelayMinutes } })
     }
 
     func testSkipsTheHourAfterAStretch() {
