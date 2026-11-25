@@ -3,6 +3,11 @@ import Foundation
 /// Coach voice (roadmap item 17): one short line after a set or a finished day, from the person's own numbers.
 public enum CoachMode: String, CaseIterable, Codable, Sendable {
     case off, coaching, push
+
+    /// The voice in use: the stored choice while Workouts and Coach voice are unlocked, otherwise Off (item 18).
+    public static func effective(stored: CoachMode, paidFeaturesOpen: Bool) -> CoachMode {
+        paidFeaturesOpen ? stored : .off
+    }
 }
 
 /// The numbers a coach line may use. Numbers only: nothing a person typed ever reaches the model.
@@ -43,6 +48,8 @@ public struct CoachFacts: Equatable, Sendable {
 
     public var setsLeft: Int { max(setsTotal - setsDone - setsMissed, 0) }
     public var daysToGo: Int { max(15 - day, 0) }
+    /// Day 8 is the re-test and Day 15 the final test, so the day after Day 7 or Day 14 has no sets.
+    public var testTomorrow: Bool { day == 7 || day == 14 }
 
     /// Builds the facts for a day from the resolved run. Earlier days give the best day and full days.
     public static func make(run: ResolvedRun, day: Int, repsThisSet: Int, dayOneMax: Int, moment: Moment) -> CoachFacts? {
@@ -74,17 +81,24 @@ public struct CoachFacts: Equatable, Sendable {
 public enum CoachVoice {
     // MARK: Rules every line must pass, written or generated
 
-    static let profanity: Set<String> = ["fuck", "fucking", "shit", "damn", "hell", "ass", "bitch", "crap", "piss",
-                                         "bastard"]
-    /// Push limits: nothing about the body, looks or worth, and nothing that urges past pain or injury.
+    /// Matched as the start of a word ("dammit", "shitty"); "ass" and "hell" only as whole words.
+    static let profanityStems = ["fuck", "shit", "damn", "dammit", "bitch", "crap", "piss", "bastard", "asshole"]
+    static let profanityWords: Set<String> = ["ass", "hell"]
+    /// Push limits: nothing about the body, looks or worth, nothing that urges past pain or injury, no military words.
     /// Matched as the start of a word, so "nobody" and "toward" pass.
     static let neverSaidStems = ["fat", "weight", "body", "belly", "ugly", "looks", "worthless", "pathetic", "loser",
                                  "useless", "stupid", "pain", "injur", "hurt", "bleed", "puke", "soldier", "drill",
-                                 "mission", "battle", "war"]
-    /// Coaching carries no guilt.
-    static let guiltWords: Set<String> = ["missed", "miss", "excuse", "excuses", "quit", "quitting", "soft", "lazy",
-                                          "promise", "promised", "owe", "gone", "table", "nobody"]
-    static let guiltPhrases = ["should have", "pushed back", "got away", "broke your", "broken"]
+                                 "mission", "battle", "war", "fight", "combat", "troop", "march", "enemy"]
+    /// Coaching carries no guilt. Matched as the start of a word ("missing", "snoozed", "skipped").
+    static let guiltStems = ["miss", "snooz", "skip", "fail", "excuse", "quit", "soft", "lazy", "promise", "owe",
+                             "gone", "table", "nobody", "behind", "broke"]
+    static let guiltPhrases = ["should have", "pushed back", "got away"]
+    /// Numbers must be digits so the made-up-number check can see them.
+    /// "one" is left out: "the next one" is ordinary wording.
+    static let numberWords: Set<String> = ["two", "three", "four", "five", "six", "seven", "eight", "nine",
+                                           "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+                                           "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty",
+                                           "sixty", "seventy", "eighty", "ninety", "hundred", "thousand", "dozen"]
 
     /// Whether a line may be shown for this mode and these facts.
     public static func accepts(_ line: String, mode: CoachMode, facts: CoachFacts) -> Bool {
@@ -92,11 +106,15 @@ public enum CoachVoice {
         guard !text.isEmpty, text.count <= 140, !text.contains("!"), !text.contains("\n") else { return false }
         let lower = text.lowercased()
         let words = lower.split { !$0.isLetter }.map(String.init)
-        if words.contains(where: profanity.contains) { return false }
-        if words.contains(where: { word in neverSaidStems.contains(where: word.hasPrefix) }) { return false }
+        func starts(_ stems: [String]) -> Bool {
+            words.contains { word in stems.contains { word.hasPrefix($0) } }
+        }
+        if words.contains(where: { profanityWords.contains($0) }) || starts(profanityStems) { return false }
+        if starts(neverSaidStems) { return false }
+        if words.contains(where: { numberWords.contains($0) }) { return false }
         if mode == .coaching {
-            if words.contains(where: guiltWords.contains) { return false }
-            if guiltPhrases.contains(where: lower.contains) { return false }
+            if starts(guiltStems) { return false }
+            if guiltPhrases.contains(where: { lower.contains($0) }) { return false }
         }
         // No made-up numbers: every number in the line is one of the person's own.
         let numbers = text.split { !$0.isNumber && $0 != "," }
@@ -106,65 +124,73 @@ public enum CoachVoice {
 
     // MARK: Written lines (used when the on-device model is unavailable, slow, or breaks a rule)
 
-    public static func writtenLine(mode: CoachMode, facts f: CoachFacts) -> String? {
-        let options = writtenOptions(mode: mode, facts: f)
+    public static func writtenLine(mode: CoachMode, facts: CoachFacts) -> String? {
+        let options = writtenOptions(mode: mode, facts: facts)
         guard !options.isEmpty else { return nil }
-        let seed = f.day * 31 + f.setsDone * 7 + f.setsMissed
+        let seed = facts.day * 31 + facts.setsDone * 7 + facts.setsMissed
         return options[seed % options.count]
     }
 
+    static func count(_ n: Int, _ one: String, _ many: String) -> String {
+        "\(n) \(n == 1 ? one : many)"
+    }
+
     static func writtenOptions(mode: CoachMode, facts f: CoachFacts) -> [String] {
-        let days = f.daysToGo == 1 ? "1 day" : "\(f.daysToGo) days"
+        let setsLeft = count(f.setsLeft, "set", "sets")
+        let days = count(f.daysToGo, "day", "days")
+        let test = f.day == 7 ? "the re-test" : "the final test"
         switch (mode, f.moment) {
         case (.off, _):
             return []
         case (.coaching, .afterSet):
+            if f.setsLeft == 0 { return ["That's the day's work. Rest easy."] }
             var lines = [
-                "\(f.repsToday) so far today. \(f.setsLeft) sets left, and each one moves you toward Day 15.",
-                "Set \(f.setsDone) of \(f.setsTotal) is in. Keep the next one just as clean.",
-                "That's \(f.setsDone) sets done today. Same form on the next one.",
+                "\(f.repsToday) so far today. \(setsLeft) left, and each one moves you toward Day 15.",
+                "Keep the next one just as clean. \(setsLeft) to go.",
             ]
-            if f.setsLeft == 0 { lines = ["Set \(f.setsDone) of \(f.setsTotal) is in. That's the day's work."] }
             if f.bestEarlierDay > 0 && f.repsToday > f.bestEarlierDay {
                 lines.append("\(f.repsToday) today already beats your best day of \(f.bestEarlierDay).")
             }
-            if f.fullDaysBefore > 0 {
-                lines.append("\(f.fullDaysBefore) full days behind you. Today is adding to that.")
-            }
             return lines
         case (.coaching, .dayDone):
+            if f.testTomorrow {
+                return ["Tomorrow is \(test). Today's work is what you bring to it."]
+            }
             var lines = [
-                "Day \(f.day) done: \(f.repsToday) push-ups. \(days) to Day 15.",
+                "\(days) to Day 15. Each finished day gets you there.",
                 "You started at a max of \(f.dayOneMax). Days like this one build past it.",
             ]
-            if f.daysToGo == 0 { lines[0] = "Day \(f.day) done: \(f.repsToday) push-ups. Test day is next." }
             if f.bestEarlierDay > 0 && f.repsToday > f.bestEarlierDay {
                 lines.append("\(f.repsToday) is your best day yet, up from \(f.bestEarlierDay).")
             }
             return lines
         case (.push, .afterSet):
             if f.setsMissed > 0 {
-                return ["\(f.setsMissed) missed today. That set is gone. Don't let the next one go with it.",
+                let gone = f.setsMissed == 1 ? "That set is gone." : "Those sets are gone."
+                return ["\(count(f.setsMissed, "set", "sets")) missed today. \(gone) Don't let the next one go with them.",
                         "You said every set. \(f.setsMissed) got away today. Not the next one."]
             }
             if f.snoozesToday > 0 {
-                return ["You pushed back \(f.snoozesToday) today. When the bell rings next, be there."]
+                return ["You pushed back \(count(f.snoozesToday, "set", "sets")) today. When the bell rings next, be there."]
             }
             if f.setsLeft == 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). Every set done. That's the standard now."]
+                return ["\(f.setsDone) of \(f.setsTotal). Every set done. That's what you said you'd do."]
             }
             return [
                 "\(f.setsDone) of \(f.setsTotal). That's not done. Next set, same standard.",
-                "\(f.setsLeft) sets left. Nobody's doing them for you. Get the next one.",
+                "\(setsLeft) left. Nobody's doing them for you. Get the next one.",
                 "\(f.repsToday) is a start. The day asks for \(f.repsPlannedToday). Go get the rest.",
             ]
         case (.push, .dayDone):
             if f.setsMissed > 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). You left \(f.setsMissed) on the table. Tomorrow you take every one."]
+                return ["\(f.setsDone) of \(f.setsTotal). You left \(f.setsMissed) on the table. Next time, every set."]
+            }
+            if f.testTomorrow {
+                return ["Every set done. Tomorrow is \(test). Show up and find out what it bought you."]
             }
             return [
-                "\(f.setsTotal) of \(f.setsTotal). You did what you said you'd do. Do it again tomorrow.",
-                "\(f.repsToday) today. That's the standard now. Don't come back with less.",
+                "\(f.setsTotal) of \(f.setsTotal). You did what you said you'd do. Do the same next time.",
+                "Every set, on the day. That's how you keep your word.",
             ]
         }
     }
@@ -177,7 +203,7 @@ public enum CoachVoice {
         Use only the numbers given and never invent a number. One or two short sentences, under 20 words. \
         No exclamation marks. No profanity. Never mention the person's body, weight, looks or worth. \
         Never tell them to push through pain or injury. Plain words, no military words. \
-        End pointed at the next set or the next day. Reply with the line only.
+        Write every number as digits. End pointed at the next set or the next day. Reply with the line only.
         """
         switch mode {
         case .off:
@@ -189,20 +215,25 @@ public enum CoachVoice {
         }
     }
 
-    public static func prompt(facts f: CoachFacts) -> String {
+    public static func prompt(facts f: CoachFacts, mode: CoachMode) -> String {
         var lines = [
             f.moment == .afterSet ? "Moment: just finished a set." : "Moment: just finished the whole day.",
             "Day \(f.day) of 14, then a final test on Day 15.",
             "Sets done today: \(f.setsDone) of \(f.setsTotal).",
-            "Sets missed today: \(f.setsMissed).",
             "Sets left today: \(f.setsLeft).",
             "Push-ups this set: \(f.repsThisSet).",
             "Push-ups today: \(f.repsToday) of \(f.repsPlannedToday) planned.",
-            "Times they pushed a set back today: \(f.snoozesToday).",
             "Starting max on Day 1: \(f.dayOneMax).",
         ]
+        // Coaching never mentions missed or snoozed sets, so it is never told about them.
+        if mode == .push {
+            lines.insert("Sets missed today: \(f.setsMissed).", at: 3)
+            lines.append("Times they pushed a set back today: \(f.snoozesToday).")
+        }
         if f.bestEarlierDay > 0 { lines.append("Best earlier day: \(f.bestEarlierDay) push-ups.") }
-        if f.fullDaysBefore > 0 { lines.append("Earlier days with every set done: \(f.fullDaysBefore).") }
+        if f.testTomorrow {
+            lines.append(f.day == 7 ? "Tomorrow is the re-test, with no sets." : "Tomorrow is the final test, with no sets.")
+        }
         return lines.joined(separator: "\n")
     }
 }

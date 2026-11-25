@@ -29,6 +29,7 @@ struct TodayView: View {
             }
         }
         .animation(.easeOut(duration: 0.2), value: controller.celebration)
+        .task { CoachWriter.prewarm(mode: controller.activeCoachMode) }
         .animation(.easeOut(duration: 0.2), value: controller.deskStretch)
     }
 

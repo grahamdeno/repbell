@@ -18,6 +18,7 @@ struct SettingsView: View {
     @State private var showPaywall = false
     @State private var restoring = false
     @State private var coachMode = CoachVoiceStore.mode
+    @State private var coachWanted: CoachMode?
     @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
@@ -140,10 +141,12 @@ struct SettingsView: View {
             get: { controller.library.paidFeaturesOpen ? coachMode : .off },
             set: { choice in
                 if choice != .off && !controller.library.paidFeaturesOpen {
+                    coachWanted = choice
                     showPaywall = true
                 } else {
                     CoachVoiceStore.mode = choice
                     coachMode = choice
+                    CoachWriter.prewarm(mode: choice)
                     Haptics.play(.tap)
                 }
             }
@@ -172,7 +175,13 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .onChange(of: controller.library.unlocked) { _, open in
-            if open { coachMode = CoachVoiceStore.mode }
+            // Someone who bought from the picker gets the voice they picked.
+            if open, let wanted = coachWanted {
+                CoachVoiceStore.mode = wanted
+                CoachWriter.prewarm(mode: wanted)
+            }
+            coachWanted = nil
+            coachMode = CoachVoiceStore.mode
         }
     }
 

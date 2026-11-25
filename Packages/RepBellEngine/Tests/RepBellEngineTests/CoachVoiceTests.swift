@@ -53,7 +53,10 @@ final class CoachVoiceTests: XCTestCase {
         for line in CoachVoice.writtenOptions(mode: .coaching, facts: f) {
             XCTAssertFalse(line.lowercased().contains("miss"), line)
         }
-        XCTAssertFalse(CoachVoice.accepts("You missed 3 today. No excuses.", mode: .coaching, facts: f))
+        for line in ["You missed 3 today. No excuses.", "Missing sets happens.", "You snoozed 2.", "Skipped one.",
+                     "You fell behind."] {
+            XCTAssertFalse(CoachVoice.accepts(line, mode: .coaching, facts: f), line)
+        }
     }
 
     // Push may name a missed set as a broken commitment.
@@ -67,7 +70,8 @@ final class CoachVoiceTests: XCTestCase {
     func testPushLimits() {
         let f = facts()
         for line in ["Get the damn next set.", "Burn that fat off.", "You look pathetic.",
-                     "Push through the pain.", "Ignore the injury.", "Back in the drill, soldier."] {
+                     "Push through the pain.", "Ignore the injury.", "Back in the drill, soldier.",
+                     "Dammit, move.", "Fight for it."] {
             XCTAssertFalse(CoachVoice.accepts(line, mode: .push, facts: f), line)
         }
         XCTAssertTrue(CoachVoice.accepts("Nobody's doing them for you. Get the next one.", mode: .push, facts: f))
@@ -79,14 +83,20 @@ final class CoachVoiceTests: XCTestCase {
         XCTAssertFalse(CoachVoice.accepts("Great set!", mode: .coaching, facts: f))
         XCTAssertFalse(CoachVoice.accepts("You did 500 today.", mode: .coaching, facts: f))
         XCTAssertTrue(CoachVoice.accepts("You did 96 today.", mode: .coaching, facts: f))
+        XCTAssertFalse(CoachVoice.accepts("You did twenty more.", mode: .coaching, facts: f))
         XCTAssertFalse(CoachVoice.accepts(String(repeating: "Keep going. ", count: 20), mode: .coaching, facts: f))
     }
 
     // The prompt carries numbers only, and each mode's instructions name its tone and limits.
     func testPromptIsNumbersOnly() {
-        let prompt = CoachVoice.prompt(facts: facts(best: 100, full: 2))
-        XCTAssertTrue(prompt.contains("Push-ups today: 96 of 384 planned."))
-        XCTAssertTrue(prompt.contains("Best earlier day: 100"))
+        let push = CoachVoice.prompt(facts: facts(missed: 2, snoozes: 1, best: 100, full: 2), mode: .push)
+        XCTAssertTrue(push.contains("Push-ups today: 96 of 384 planned."))
+        XCTAssertTrue(push.contains("Best earlier day: 100"))
+        XCTAssertTrue(push.contains("Sets missed today: 2."))
+        let coaching = CoachVoice.prompt(facts: facts(missed: 2, snoozes: 1), mode: .coaching)
+        XCTAssertFalse(coaching.contains("missed"))
+        XCTAssertFalse(coaching.contains("pushed a set back"))
+        XCTAssertTrue(CoachVoice.instructions(mode: .coaching).contains("digits"))
         XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("never insult"))
         XCTAssertTrue(CoachVoice.instructions(mode: .coaching).contains("No guilt"))
         XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("pain or injury"))
@@ -102,6 +112,19 @@ final class CoachVoiceTests: XCTestCase {
         XCTAssertEqual(f?.setsTotal, day3.sets.count)
         XCTAssertEqual(f?.dayOneMax, 40)
         XCTAssertEqual(f?.daysToGo, 12)
+    }
+
+    // Plurals read right with one set left, one missed, one snooze.
+    func testPluralsAndTestDays() {
+        let one = facts(done: 14, total: 16, missed: 1, snoozes: 1)
+        for line in CoachVoice.writtenOptions(mode: .push, facts: one) + CoachVoice.writtenOptions(mode: .coaching, facts: one) {
+            XCTAssertFalse(line.contains("1 sets"), line)
+            XCTAssertFalse(line.contains("Those sets"), line)
+        }
+        let dayBeforeRetest = facts(.dayDone, day: 7, done: 16)
+        XCTAssertTrue(CoachVoice.writtenOptions(mode: .push, facts: dayBeforeRetest).allSatisfy { $0.contains("re-test") })
+        XCTAssertTrue(CoachVoice.writtenOptions(mode: .coaching, facts: facts(.dayDone, day: 14, done: 16))
+            .allSatisfy { $0.contains("final test") })
     }
 
     // A coach line keeps the celebration up long enough to read it.

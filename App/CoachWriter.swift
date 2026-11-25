@@ -18,7 +18,17 @@ enum CoachVoiceStore {
 enum CoachWriter {
     /// A generated line, or nil when the model is unavailable, takes too long, or breaks a rule.
     /// The caller shows the written line in that case.
-    static func generated(mode: CoachMode, facts: CoachFacts, timeout: Double = 3) async -> String? {
+    /// Loads the model ahead of the first set, so the first line isn't the slow one.
+    static func prewarm(mode: CoachMode) {
+        guard mode != .off else { return }
+        #if canImport(FoundationModels)
+        guard case .available = SystemLanguageModel.default.availability else { return }
+        LanguageModelSession(instructions: CoachVoice.instructions(mode: mode)).prewarm()
+        #endif
+    }
+
+    /// Short on purpose: a line that arrives late would swap text while the person is reading.
+    static func generated(mode: CoachMode, facts: CoachFacts, timeout: Double = 1.2) async -> String? {
         guard mode != .off else { return nil }
         #if canImport(FoundationModels)
         guard case .available = SystemLanguageModel.default.availability else { return nil }
@@ -26,7 +36,7 @@ enum CoachWriter {
             group.addTask {
                 let session = LanguageModelSession(instructions: CoachVoice.instructions(mode: mode))
                 let options = GenerationOptions(temperature: 0.8, maximumResponseTokens: 60)
-                guard let response = try? await session.respond(to: CoachVoice.prompt(facts: facts), options: options) else {
+                guard let response = try? await session.respond(to: CoachVoice.prompt(facts: facts, mode: mode), options: options) else {
                     return nil
                 }
                 let line = response.content

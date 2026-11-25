@@ -313,7 +313,7 @@ final class ProgramController {
 
     /// The Coach voice in use: the person's choice, while the unlock is open.
     var activeCoachMode: CoachMode {
-        library.paidFeaturesOpen ? CoachVoiceStore.mode : .off
+        CoachMode.effective(stored: CoachVoiceStore.mode, paidFeaturesOpen: library.paidFeaturesOpen)
     }
 
     private func addCoachLine(run: PersistedRun, day: Int, reps: Int, finished: Bool, now: CivilDateTime) {
@@ -323,6 +323,8 @@ final class ProgramController {
                                           dayOneMax: run.input.dayOneMax, moment: finished ? .dayDone : .afterSet)
         else { return }
         celebration?.coachLine = CoachVoice.writtenLine(mode: mode, facts: facts)
+        // With VoiceOver on, the written line stays, so what VoiceOver read is what stays on screen.
+        guard !UIAccessibility.isVoiceOverRunning else { return }
         let id = celebration?.id
         Task { @MainActor in
             guard let line = await CoachWriter.generated(mode: mode, facts: facts), celebration?.id == id else { return }
