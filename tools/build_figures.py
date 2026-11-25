@@ -472,7 +472,7 @@ C["calf-wall"] = hold_clip("side", S(arm=A(80)), S(hip=(-4, -70), t=22, arm=(44,
 
 
 # ---- Hand close-ups (no body): the hand is the whole move
-for mid, motion, bucket in (("rice-twist", "twist", True), ("rice-grab", "grab", True), ("rice-spread", "spread", True), ("grip-squeeze", "squeeze", False)):
+for mid, motion, bucket in (("grip-squeeze", "squeeze", False),):
     C[mid] = {"view": "hand", "hand": motion, "bucket": bucket, "frames": [{}, {}], "seconds": 0.55 if motion == "twist" else 0.35,
               "hold": 0.1 if motion == "twist" else 0.25, "floor": False, "still": 1}
 

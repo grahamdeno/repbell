@@ -3126,8 +3126,7 @@
       "name": "Grip and pull",
       "gear": [
         "gi-bag",
-        "kettlebell",
-        "rice-bucket"
+        "kettlebell"
       ],
       "free": false,
       "warmup": true,
@@ -3143,15 +3142,13 @@
             "gi-row",
             "kettlebell-swing",
             "gi-drag",
-            "rice-grab",
+            "grip-squeeze",
             "gi-hold",
-            "farmer-carry",
-            "rice-twist",
-            "rice-spread"
+            "farmer-carry"
           ]
         }
       ],
-      "minutes": 45,
+      "minutes": 37,
       "timeline": [
         {
           "type": "getReady",
@@ -3235,25 +3232,13 @@
         },
         {
           "type": "rest",
-          "seconds": 30,
-          "next": "rice-grab"
+          "seconds": 20,
+          "next": "grip-squeeze"
         },
         {
           "type": "move",
-          "id": "rice-grab",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-grab"
-        },
-        {
-          "type": "move",
-          "id": "rice-grab",
-          "side": "right",
-          "seconds": 17
+          "id": "grip-squeeze",
+          "seconds": 40
         },
         {
           "type": "rest",
@@ -3274,50 +3259,6 @@
           "type": "move",
           "id": "farmer-carry",
           "seconds": 40
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "right",
-          "seconds": 17
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "right",
-          "seconds": 17
         },
         {
           "type": "roundRest",
@@ -3352,24 +3293,12 @@
         {
           "type": "rest",
           "seconds": 20,
-          "next": "rice-grab"
+          "next": "grip-squeeze"
         },
         {
           "type": "move",
-          "id": "rice-grab",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-grab"
-        },
-        {
-          "type": "move",
-          "id": "rice-grab",
-          "side": "right",
-          "seconds": 17
+          "id": "grip-squeeze",
+          "seconds": 40
         },
         {
           "type": "rest",
@@ -3390,50 +3319,6 @@
           "type": "move",
           "id": "farmer-carry",
           "seconds": 40
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "right",
-          "seconds": 17
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "right",
-          "seconds": 17
         },
         {
           "type": "roundRest",
@@ -3468,24 +3353,12 @@
         {
           "type": "rest",
           "seconds": 20,
-          "next": "rice-grab"
+          "next": "grip-squeeze"
         },
         {
           "type": "move",
-          "id": "rice-grab",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-grab"
-        },
-        {
-          "type": "move",
-          "id": "rice-grab",
-          "side": "right",
-          "seconds": 17
+          "id": "grip-squeeze",
+          "seconds": 40
         },
         {
           "type": "rest",
@@ -3506,50 +3379,6 @@
           "type": "move",
           "id": "farmer-carry",
           "seconds": 40
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "right",
-          "seconds": 17
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "right",
-          "seconds": 17
         },
         {
           "type": "roundRest",
@@ -3584,24 +3413,12 @@
         {
           "type": "rest",
           "seconds": 20,
-          "next": "rice-grab"
+          "next": "grip-squeeze"
         },
         {
           "type": "move",
-          "id": "rice-grab",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-grab"
-        },
-        {
-          "type": "move",
-          "id": "rice-grab",
-          "side": "right",
-          "seconds": 17
+          "id": "grip-squeeze",
+          "seconds": 40
         },
         {
           "type": "rest",
@@ -3622,50 +3439,6 @@
           "type": "move",
           "id": "farmer-carry",
           "seconds": 40
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-twist"
-        },
-        {
-          "type": "move",
-          "id": "rice-twist",
-          "side": "right",
-          "seconds": 17
-        },
-        {
-          "type": "rest",
-          "seconds": 20,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "left",
-          "seconds": 17
-        },
-        {
-          "type": "switch",
-          "seconds": 5,
-          "next": "rice-spread"
-        },
-        {
-          "type": "move",
-          "id": "rice-spread",
-          "side": "right",
-          "seconds": 17
         },
         {
           "type": "transition",

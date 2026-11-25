@@ -126,14 +126,11 @@ M = [
     ("suitcase-carry", "Suitcase carry", "Hold one bell at your side like a suitcase.", "Walk tall without leaning toward the bell. Switch hands halfway.", "each", ["kettlebell"], "march", None, None, "front", ["step left", "step right"]),
     ("farmer-carry", "Farmer carry", "A heavy bell or the bag in each hand, or the bag hugged at your chest.", "Walk slowly and tall, shoulders down, grip hard the whole time.", "none", ["kettlebell"], "march", None, None, "front", ["step left", "step right"]),
 
-    # Gi bag and grip
-    ("gi-row", "Gi bag row", "Grip the gi sleeves or lapels tied to the bag. Hinge forward with a flat back.", "Row the bag to your belly and squeeze your shoulder blades. Let your grip do the work, not your wrists.", "none", ["gi-bag"], "table-row", None, None, "side", ["arms long", "pulled"]),
-    ("gi-drag", "Gi bag drag", "Grip the gi with both hands, sit low, arms long.", "Walk backward in short steps, dragging the bag. Stay low, like breaking a posture on the mat.", "none", ["gi-bag"], "towel-row", None, None, "side", ["step", "pull"]),
-    ("gi-hold", "Gi grip hold", "Lift the bag off the floor by the gi and stand tall.", "Hold as long as the timer runs. Switch grips (sleeve, lapel, pistol) between rounds.", "none", ["gi-bag"], "towel-row", None, None, "front", ["holding"]),
-    ("grip-squeeze", "Fist squeeze", "Arms forward, hands open wide.", "Squeeze into the hardest fist you can, hold a second, then spread your fingers wide. Repeat.", "none", [], None, None, "rice-grab", "front", ["open", "fist"]),
-    ("rice-grab", "Rice bucket grab", "Push one hand deep into the rice.", "Clench a fist as hard as you can, then open it fully. Fast and hard.", "each", ["rice-bucket"], "grip-squeeze", "grip-squeeze", None, "front", ["open", "fist"]),
-    ("rice-twist", "Rice bucket twist", "Hand deep in the rice, fist closed.", "Turn your wrist side to side as far as it goes, against the rice.", "each", ["rice-bucket"], "grip-squeeze", None, None, "front", ["turned in", "turned out"]),
-    ("rice-spread", "Rice bucket spread", "Hand deep in the rice, fingers together.", "Spread your fingers as wide as you can against the rice, then bring them back.", "each", ["rice-bucket"], "grip-squeeze", None, None, "front", ["closed", "spread"]),
+    # Sandbag and grip
+    ("gi-row", "Sandbag row", "Grip the bag by its handles or ends. Hinge forward with a flat back.", "Row the bag to your belly and squeeze your shoulder blades. Let your grip do the work, not your wrists.", "none", ["gi-bag"], "table-row", None, None, "side", ["arms long", "pulled"]),
+    ("gi-drag", "Sandbag drag", "Grip the bag with both hands, sit low, arms long.", "Walk backward in short steps, dragging the bag. Stay low and keep your back flat.", "none", ["gi-bag"], "towel-row", None, None, "side", ["step", "pull"]),
+    ("gi-hold", "Sandbag grip hold", "Lift the bag off the floor by its handles or ends and stand tall.", "Hold as long as the timer runs. Change your grip between rounds.", "none", ["gi-bag"], "towel-row", None, None, "front", ["holding"]),
+    ("grip-squeeze", "Fist squeeze", "Arms forward, hands open wide.", "Squeeze into the hardest fist you can, hold a second, then spread your fingers wide. Repeat.", "none", [], None, None, None, "front", ["open", "fist"]),
 
     # Balance
     ("single-leg-balance", "Single-leg balance", "Stand on one foot, the other knee lifted to hip height.", "Soft standing knee, hips level. Look at one spot ahead.", "each", [], None, None, "board-stand", "front", ["balancing"]),
@@ -263,8 +260,8 @@ S = [
                            ("sphinx", 60), ("locust", 45), ("locust", 45), ("bridge-pose", 60), ("bridge-pose", 60),
                            ("happy-baby", 60), ("lizard", 75), ("pigeon", 120), ("reclined-toe", 90),
                            ("seated-fold", 120), ("supine-twist", 60), ("final-rest", 480)], rest=10)]),
-    dict(id="grip-pull", name="Grip and pull", gear=["gi-bag", "kettlebell", "rice-bucket"], free=False, warmup=True, cooldown=True,
-         blocks=[circuit(4, 40, 20, 90, ["gi-row", "kettlebell-swing", "gi-drag", "rice-grab", "gi-hold", "farmer-carry", "rice-twist", "rice-spread"])]),
+    dict(id="grip-pull", name="Grip and pull", gear=["gi-bag", "kettlebell"], free=False, warmup=True, cooldown=True,
+         blocks=[circuit(4, 40, 20, 90, ["gi-row", "kettlebell-swing", "gi-drag", "grip-squeeze", "gi-hold", "farmer-carry"])]),
     dict(id="kettlebell", name="Kettlebell", gear=["kettlebell"], free=False, warmup=True, cooldown=True,
          blocks=[circuit(4, 40, 20, 90, ["kettlebell-swing", "goblet-squat", "kb-press", "kb-row", "kb-deadlift", "halo", "half-get-up", "suitcase-carry"])]),
     dict(id="balance", name="Balance", gear=["balance-board"], free=False, warmup=True, cooldown=True,
