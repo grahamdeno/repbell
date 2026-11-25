@@ -121,16 +121,31 @@ final class CoachVoiceTests: XCTestCase {
             XCTAssertFalse(line.contains("1 sets"), line)
             XCTAssertFalse(line.contains("Those sets"), line)
         }
+        for line in CoachVoice.writtenOptions(mode: .push, facts: facts(.dayDone, done: 15, missed: 1)) {
+            XCTAssertFalse(line.contains("1 times"), line)
+        }
         let dayBeforeRetest = facts(.dayDone, day: 7, done: 16)
         XCTAssertTrue(CoachVoice.writtenOptions(mode: .push, facts: dayBeforeRetest).allSatisfy { $0.contains("re-test") })
         XCTAssertTrue(CoachVoice.writtenOptions(mode: .coaching, facts: facts(.dayDone, day: 14, done: 16))
             .allSatisfy { $0.contains("final test") })
     }
 
-    // A coach line keeps the celebration up long enough to read it.
-    func testCelebrationStaysLongerWithACoachLine() {
-        XCTAssertEqual(CelebrationTiming.autoDismiss(dayComplete: false, voiceOverRunning: false, coachLine: true),
-                       CelebrationTiming.perSet + CelebrationTiming.coachExtra)
-        XCTAssertNil(CelebrationTiming.autoDismiss(dayComplete: true, voiceOverRunning: true, coachLine: true))
+    // With a coach line the person clears the celebration; only then can a desk stretch come up.
+    func testCelebrationWaitsForATapWithACoachLine() {
+        XCTAssertNil(CelebrationTiming.autoDismiss(dayComplete: false, voiceOverRunning: false, coachLine: true))
+        XCTAssertNil(CelebrationTiming.autoDismiss(dayComplete: true, voiceOverRunning: false, coachLine: true))
+        XCTAssertEqual(CelebrationTiming.autoDismiss(dayComplete: false, voiceOverRunning: false, coachLine: false),
+                       CelebrationTiming.perSet)
+    }
+
+    // Push never praises a day with misses.
+    func testPushDoesNotPraiseMisses() {
+        for line in CoachVoice.writtenOptions(mode: .push, facts: facts(.dayDone, done: 14, missed: 2)) {
+            let lower = line.lowercased()
+            for praise in ["good", "great", "nice", "well done", "proud"] {
+                XCTAssertFalse(lower.contains(praise), line)
+            }
+        }
+        XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("Do not praise"))
     }
 }
