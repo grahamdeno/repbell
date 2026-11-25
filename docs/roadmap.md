@@ -52,7 +52,9 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 - **Guard:** `scripts/privacy_guard.py` enforces the on-device promise in CI, with a self-test.
 - **Device checks:** alerts and Time Sensitive delivery, the test alarm through Silent and Focus, Watch actions and
   Double Tap, the widget, haptics, VoiceOver, Reduce Motion, Larger Text, Health permission.
-- **Websites:** none yet for Rep Bell. tangomike.app (grahamdeno/tangomike) lists Graham's apps.
+- **Websites:** repbell.tangomike.app (landing, /privacy, /support) from `site/`, published by `.github/workflows/site.yml`
+  to the Cloudflare Pages project `tangomike-repbell`. The site describes items 19 and 20; if either leaves 1.0, its
+  lines come off the site before the next publish. tangomike.app (grahamdeno/tangomike) lists Graham's apps.
 - **Compiled-in dates or values:** the program table (percent and interval per day) in the schedule engine.
 
 ## Steps that can't be undone (this product)
@@ -74,6 +76,7 @@ Newest first. Refined decisions only.
 | 2026-11-25 | **Product's 1.0 calls reviewed:** Graham agreed the Desk stretch flow, Fit my time details, Desk stretch joining 1.0, the Health read permission text, the Health permission text with "Data Not Collected", and this week's calls (glow at 30% and 22%, Fit my time needs the unlock, no free sample sessions) | Graham's review |
 | 2026-11-25 | **Watch coach line joins 1.0** (item 19), moved back from the next version; **light mode is dropped** | Graham's decisions |
 | 2026-11-25 | **Hourly desk stretch on weekdays joins 1.0** (item 20) | Graham's decision |
+| 2026-11-25 | **Rep Bell website:** repbell.tangomike.app with /privacy and /support, matching the other apps; built in `site/` and published to Cloudflare Pages by `.github/workflows/site.yml`; support@tangomike.app with "Rep Bell" in the subject; not a trader in the EU | Graham's decisions and publish go |
 | 2026-11-25 | **Background glow:** every iPhone screen has a violet glow behind the top and a volt glow from the bottom right over `ground`; flood screens keep their colour and the Watch stays black. Set to 30% and 22% so muted text stays at 4.5:1 everywhere and faint outlines at 3:1 | Graham's decision ("build the glow", from the violet and volt mockups) |
 | 2026-11-25 | **Test builds reuse one saved signing certificate.** "Apple Development: Graham DeNoyer" (expires 25 Nov 2027) is loaded from build secrets into a temporary keychain each run, so runs stop creating development certificates while it is valid. The archive step checks the app was signed with it. Renew it before 25 Nov 2027 | Graham's go 25 Nov 2026 (Product's recommendation). Builds 18, 19 and 28 had failed on the Apple Development certificate limit |
 | 2026-11-24 | **Coach voice in 1.0:** a Settings choice of Off, Coaching or Push. Coaching reads the person's stats, recognizes past wins and looks ahead, with no guilt. Push says the same stats bluntly and may name a missed set, snooze or skipped day as a broken commitment, within limits (item 17) | Graham's decision |
