@@ -151,12 +151,23 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertEqual(DeskStretch.window(start: 2, end: 30).end, DeskStretch.windowHours.upperBound)
     }
 
-    func testRemindersFitBesideTheSetAlerts() {
-        XCTAssertEqual(DeskStretch.hourlyBudget(setAlerts: 0, notes: 4), DeskStretch.hourlyLimit)
-        XCTAssertEqual(DeskStretch.hourlyBudget(setAlerts: 55, notes: 4), 4)
-        XCTAssertEqual(DeskStretch.hourlyBudget(setAlerts: 60, notes: 4), 0)
-        for sets in 0...60 {
-            XCTAssertLessThanOrEqual(sets + 4 + DeskStretch.hourlyBudget(setAlerts: sets, notes: 4), DeskStretch.systemNotificationLimit)
+    func testRemindersShareTheSlotsWithSetAlerts() {
+        // A program day with a full queue: 60 set alerts every 15 minutes from 7 a.m. Wednesday.
+        let sets = (0..<60).map { CivilDateTime(date: CivilDate(year: 2026, month: 11, day: 25), minutes: 420 + $0 * 15) }
+        let reminders = [at(2026, 11, 25, 9, 30), at(2026, 11, 25, 10, 30), at(2026, 11, 26, 9), at(2026, 11, 26, 10)]
+        let shared = DeskStretch.sharedSlots(setAlerts: sets, reminders: reminders)
+        XCTAssertEqual(shared.sets + shared.reminders, DeskStretch.systemNotificationLimit - 4 - 1)
+        // Today's reminders are sooner than the last set alerts, so they go out; tomorrow's wait for a refill.
+        XCTAssertEqual(shared.reminders, 2)
+        XCTAssertEqual(shared.sets, 57)
+        // With no reminders, the set alerts keep their 60.
+        XCTAssertEqual(DeskStretch.sharedSlots(setAlerts: sets, reminders: []).sets, 60)
+        // A quiet day: every reminder fits, up to the limit.
+        let many = (9...17).map { at(2026, 11, 25, $0) } + (9...17).map { at(2026, 11, 26, $0) }
+        XCTAssertEqual(DeskStretch.sharedSlots(setAlerts: [], reminders: many).reminders, DeskStretch.hourlyLimit)
+        for count in stride(from: 0, through: 60, by: 5) {
+            let s = DeskStretch.sharedSlots(setAlerts: Array(sets.prefix(count)), reminders: many)
+            XCTAssertLessThanOrEqual(s.sets + s.reminders + 4 + 1, DeskStretch.systemNotificationLimit)
         }
         let limited = DeskStretch.hourlySlots(after: at(2026, 11, 25, 8), start: 9, end: 17, setAlerts: [], lastDone: nil, limit: 4)
         XCTAssertEqual(limited.count, 4)
@@ -181,9 +192,4 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertNil(DeskStretch.stretch(id: "rice-grab"))
     }
 
-    func testHourLabels() {
-        XCTAssertEqual(Copy.hourLabel(9), "9 a.m.")
-        XCTAssertEqual(Copy.hourLabel(12), "12 p.m.")
-        XCTAssertEqual(Copy.hourLabel(17), "5 p.m.")
-    }
 }

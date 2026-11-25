@@ -246,7 +246,11 @@ struct SettingsView: View {
                 set: { on in
                     DeskStretchStore.enabled = on
                     deskStretchOn = on
-                    Task { await controller.refreshAlerts() }
+                    Task {
+                        // Someone with no program may never have allowed notifications; reminders need them.
+                        if on { _ = await Notifier.requestAuthorization() }
+                        await controller.refreshAlerts()
+                    }
                 }
             ))
             .tint(Chalk.volt)
@@ -257,19 +261,20 @@ struct SettingsView: View {
                 .foregroundStyle(Chalk.inkMuted)
                 .fixedSize(horizontal: false, vertical: true)
             if deskStretchOn {
-                hourPicker(Copy.deskStretchFrom, hours: Array(DeskStretch.windowHours), selection: Binding(
-                    get: { deskStart },
-                    set: { hour in
+                TimeChoiceRow(label: Copy.deskStretchFrom, choices: DeskStretch.windowHours.map { ClockTime(hour: $0) }, selection: Binding(
+                    get: { ClockTime(hour: deskStart) },
+                    set: { time in
+                        let hour = time.hour
                         let window = DeskStretch.window(start: hour, end: max(deskEnd, hour))
                         deskStart = window.start
                         deskEnd = window.end
                         saveDeskWindow()
                     }
                 ))
-                hourPicker(Copy.deskStretchUntil, hours: Array(deskStart...DeskStretch.windowHours.upperBound), selection: Binding(
-                    get: { deskEnd },
-                    set: { hour in
-                        deskEnd = DeskStretch.window(start: deskStart, end: hour).end
+                TimeChoiceRow(label: Copy.deskStretchUntil, choices: (deskStart...DeskStretch.windowHours.upperBound).map { ClockTime(hour: $0) }, selection: Binding(
+                    get: { ClockTime(hour: deskEnd) },
+                    set: { time in
+                        deskEnd = DeskStretch.window(start: deskStart, end: time.hour).end
                         saveDeskWindow()
                     }
                 ))
@@ -429,16 +434,6 @@ extension ClockTime {
 
 // Item 20: the hourly desk stretch window.
 extension SettingsView {
-    func hourPicker(_ label: String, hours: [Int], selection: Binding<Int>) -> some View {
-        Picker(label, selection: selection) {
-            ForEach(hours, id: \.self) { Text(Copy.hourLabel($0)).tag($0) }
-        }
-        .pickerStyle(.menu)
-        .tint(Chalk.volt)
-        .foregroundStyle(Chalk.inkMuted)
-        .frame(minHeight: ChalkTokens.minimumTarget)
-    }
-
     func saveDeskWindow() {
         DeskStretchStore.startHour = deskStart
         DeskStretchStore.endHour = deskEnd

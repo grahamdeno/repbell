@@ -717,6 +717,8 @@ final class ProgramController {
         if parts.count >= 2, parts[0] == "desk" || parts[0] == "stretch",
            action == UNNotificationDefaultActionIdentifier, let stretch = DeskStretch.stretch(id: String(parts[1])) {
             DeskStretchStore.opened(stretch, now: CivilDateTime.local(Date()))
+            // One stretch at a time: the reminder replaces one waiting on Today.
+            deskStretch = nil
             notifiedStretch = stretch
             Task { await refreshAlerts() }
             return

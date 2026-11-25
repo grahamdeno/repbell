@@ -27,6 +27,33 @@ enum DeskStretchStore {
     /// The stretch shown last, so the next reminder is a different one.
     static var lastIndex: Int? { UserDefaults.standard.object(forKey: indexKey) as? Int }
 
+    private static let assignedKey = "deskStretch.assigned"
+
+    /// Remembers what this refill scheduled (and the last few before it), so the next refill doesn't repeat it.
+    static func remember(_ slots: [CivilDateTime], _ indices: [Int], now: CivilDateTime) {
+        var map = UserDefaults.standard.dictionary(forKey: assignedKey) as? [String: Int] ?? [:]
+        let dayAgo = now.absoluteMinutes - 3 * 1440
+        map = map.filter { (Int($0.key) ?? 0) >= dayAgo }
+        for (slot, index) in zip(slots, indices) { map[String(slot.absoluteMinutes)] = index }
+        UserDefaults.standard.set(map, forKey: assignedKey)
+    }
+
+    /// What a refill needs, read on the main actor.
+    struct Plan: Sendable {
+        var enabled: Bool
+        var start: Int
+        var end: Int
+        var lastDone: CivilDateTime?
+        var lastIndex: Int?
+        var assigned: [Int: Int]
+    }
+
+    static func plan() -> Plan {
+        let map = UserDefaults.standard.dictionary(forKey: assignedKey) as? [String: Int] ?? [:]
+        return Plan(enabled: enabled, start: startHour, end: endHour, lastDone: lastShown, lastIndex: lastIndex,
+                    assigned: Dictionary(uniqueKeysWithValues: map.compactMap { k, v in Int(k).map { ($0, v) } }))
+    }
+
     /// A reminder was opened: it counts as shown now, so the next hour's reminder is dropped on the next refill.
     static func opened(_ stretch: DeskStretch.Stretch, now: CivilDateTime) {
         lastShown = now

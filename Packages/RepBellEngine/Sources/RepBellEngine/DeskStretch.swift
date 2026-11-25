@@ -101,10 +101,31 @@ public enum DeskStretch {
         return (2...6).contains(weekday)
     }
 
-    /// How many hourly reminders fit beside the set alerts and notes already scheduled, with one slot kept spare
-    /// for the stretch after a set or a test alert.
-    public static func hourlyBudget(setAlerts: Int, notes: Int) -> Int {
-        max(0, min(hourlyLimit, systemNotificationLimit - setAlerts - notes - 1))
+    /// Set alerts and hourly reminders share what the four note slots leave, less one kept spare for the stretch
+    /// after a set or a test alert: 59 in all. The soonest win, whichever kind they are, so a reminder this
+    /// afternoon goes ahead of a set alert tomorrow and neither crowds out the other for long. With no reminders
+    /// wanted, set alerts keep all 60 of theirs. Both lists must be soonest first.
+    public static func sharedSlots(setAlerts: [CivilDateTime], reminders: [CivilDateTime],
+                                   setCapacity: Int = AlertQueue.capacity) -> (sets: Int, reminders: Int) {
+        guard !reminders.isEmpty else { return (min(setAlerts.count, setCapacity), 0) }
+        let total = systemNotificationLimit - 4 - 1
+        var sets = 0
+        var kept = 0
+        while sets + kept < total {
+            let nextSet = sets < min(setAlerts.count, setCapacity) ? setAlerts[sets] : nil
+            let nextReminder = kept < min(reminders.count, hourlyLimit) ? reminders[kept] : nil
+            switch (nextSet, nextReminder) {
+            case let (s?, r?):
+                if s <= r { sets += 1 } else { kept += 1 }
+            case (_?, nil):
+                sets += 1
+            case (nil, _?):
+                kept += 1
+            case (nil, nil):
+                return (sets, kept)
+            }
+        }
+        return (sets, kept)
     }
 
     /// The hours to remind at, soonest first: weekdays only, on the hour inside the window, after `now`,
@@ -137,7 +158,8 @@ public enum DeskStretch {
     }
 
     /// The stretches for a run of reminders. Where a skipped hour would bring the same stretch twice in a row,
-    /// or repeat the one shown last, the next one is used instead, so a stretch never comes back to back.
+    /// or repeat the one before (the last reminder already delivered, or the last stretch shown), the next one is
+    /// used instead, so a stretch never comes back to back.
     public static func stretchIndices(for slots: [CivilDateTime], previous: Int?) -> [Int] {
         var last = previous
         return slots.map { slot in
