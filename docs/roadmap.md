@@ -52,7 +52,9 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 - **Guard:** `scripts/privacy_guard.py` enforces the on-device promise in CI, with a self-test.
 - **Device checks:** alerts and Time Sensitive delivery, the test alarm through Silent and Focus, Watch actions and
   Double Tap, the widget, haptics, VoiceOver, Reduce Motion, Larger Text, Health permission.
-- **Websites:** none yet for Rep Bell. tangomike.app (grahamdeno/tangomike) lists Graham's apps.
+- **Websites:** repbell.tangomike.app (landing, /privacy, /support) from `site/`, published by `.github/workflows/site.yml`
+  to the Cloudflare Pages project `tangomike-repbell`. The site describes items 19 and 20; if either leaves 1.0, its
+  lines come off the site before the next publish. tangomike.app (grahamdeno/tangomike) lists Graham's apps.
 - **Compiled-in dates or values:** the program table (percent and interval per day) in the schedule engine.
 
 ## Steps that can't be undone (this product)

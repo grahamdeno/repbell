@@ -1,5 +1,5 @@
 # Publishes repbell.tangomike.app (the Cloudflare Pages project tangomike-repbell) from site/ on main.
-# It runs when site/ or this file changes on main, or by hand. Every deploy is the whole site.
+# It runs when site/ or this file changes on main, or by hand from main (a hand run from any other branch is skipped). Every deploy is the whole site.
 # If a page or the Cloudflare secrets are missing, it stops before uploading, so a partial site never replaces the live one.
 # Listed in CLAUDE.md under uploads and deploys: a change to site/ that reaches main changes the live site.
 name: Website
@@ -15,16 +15,19 @@ permissions:
   contents: read
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Check the site is whole
         id: build
         run: |
           missing=""
-          for f in site/index.html site/support.html site/privacy.html site/404.html site/site.css site/_headers site/img/icon.png; do
+          for f in $(grep -ohE '((src|href)="|url\(")/[^"?#]+' site/*.html site/site.css 2>/dev/null | sed -E 's/^((src|href)="|url\(")//' | grep -v '/$' | grep -vE '^/(privacy|support)$' | sed 's|^|site|' | sort -u) site/index.html site/support.html site/privacy.html site/404.html site/site.css site/_headers site/img/icon.png; do
             [ -f "$f" ] || missing="$missing $f"
           done
           if [ -n "$missing" ]; then echo "::error::Not publishing: missing$missing"; exit 1; fi
@@ -41,3 +44,4 @@ jobs:
         if: steps.build.outputs.ok == 'true' && env.HAS_TOKEN != 'true'
         run: |
           echo "::warning::Not publishing: add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to the repo's secrets."
+          echo "## Not published: Cloudflare secrets are missing" >> "$GITHUB_STEP_SUMMARY"

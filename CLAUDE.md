@@ -37,7 +37,8 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 - **Graham presses Submit for Review and Release.** Agents stop right before them. Never automate either.
 - **Three go-aheads, never mixed:** "merge" allows merging named PRs that trigger nothing above; "test build" allows
   one TestFlight upload for testing; "ship [version] at [commit]" comes after the go-live verdict. None implies
-  another. If unsure which applies, ask.
+  another. If unsure which applies, ask. A merge that changes `site/**` or the site workflow also changes the live
+  site, so it needs Graham's go for that site change by name; a merge go alone never covers it.
 - **Never delete, force-push, rename, archive or transfer** anything without Graham's go.
 - **Purchases and prices:** Graham approves each at Stage 3. Product IDs are permanent. The unlock product
   `com.grahamdeno.repbell.unlock` exists for a later version: never delete or change it, its price, or anything else

@@ -1,7 +1,7 @@
 @font-face { font-family:"Barlow Condensed"; src:url("/fonts/barlow-condensed-800.woff") format("woff"); font-weight:800; font-display:swap; }
 @font-face { font-family:"Barlow Condensed"; src:url("/fonts/barlow-condensed-900.woff") format("woff"); font-weight:900; font-display:swap; }
 /* The app's look: near-black ground, a violet glow behind the top, a volt glow from the bottom right. Volt means now, violet means earned. */
-:root { --ground:#0D0D0D; --surface:#1A1A1A; --line:#2A2A2A; --ink:#F2F2F2; --muted:#A0A0A0; --volt:#C8FF00; --on-volt:#0D0D0D; --violet:#A066FF; --flood:#202B06; }
+:root { --ground:#0D0D0D; --surface:#1A1A1A; --line:#2A2A2A; --ink:#F2F2F2; --muted:#A0A0A0; --volt:#C8FF00; --on-volt:#0D0D0D; --violet:#A066FF; --violet-text:#C4A6FF; --flood:#202B06; }
 * { box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; background:var(--ground); }
 body { margin:0; min-height:100vh; color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; background:transparent; isolation:isolate; }
@@ -35,7 +35,7 @@ nav a.link:hover, nav a.link[aria-current] { color:var(--ink); }
 .duo .low { margin-top:72px; }
 /* sections */
 section.s { padding:88px 0; border-top:1px solid var(--line); }
-.kicker { font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--violet); margin:0 0 14px; font-weight:600; }
+.kicker { font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--violet-text); margin:0 0 14px; font-weight:600; }
 h2 { margin:0; font-family:"Barlow Condensed",system-ui,sans-serif; font-weight:900; text-transform:uppercase; font-size:clamp(40px, 5.4vw, 68px); line-height:.95; }
 section p { color:var(--muted); font-size:18px; line-height:1.6; max-width:36em; }
 section p strong { color:var(--ink); font-weight:600; }
@@ -47,10 +47,11 @@ section p strong { color:var(--ink); font-weight:600; }
 .split { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
 .split img { width:100%; max-width:300px; height:auto; display:block; margin:0 auto; filter:drop-shadow(0 24px 36px rgba(0,0,0,.5)); }
 .split.flip .txt { order:2; }
+.solo { max-width:760px; }
 .voices { display:grid; gap:14px; margin-top:28px; max-width:36em; }
 .voice { border:1px solid var(--line); background:rgba(26,26,26,.6); border-radius:16px; padding:18px 20px; }
 .voice b { display:block; font-size:13px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
-.voice.coaching b { color:var(--violet); }
+.voice.coaching b { color:var(--violet-text); }
 .voice.push b { color:var(--volt); }
 .voice q { color:var(--ink); font-size:18px; line-height:1.5; quotes:none; }
 .ticks { list-style:none; padding:0; margin:24px 0 0; display:grid; gap:12px; max-width:36em; }
