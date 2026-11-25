@@ -54,8 +54,13 @@ struct AboutView: View {
     }
 }
 
+/// What the unlock adds, the store's price, Buy, Restore purchase and a way out (roadmap item 18).
+/// Shown as a sheet from Workouts and Coach voice; the program never shows it.
 struct PaywallView: View {
     @Environment(ProgramController.self) private var controller
+    @Environment(\.dismiss) private var dismiss
+    @State private var price: String?
+    @State private var working = false
 
     var body: some View {
         ScreenChrome(top: 28) {
@@ -63,20 +68,54 @@ struct PaywallView: View {
                 Text(Copy.unlockTitle)
                     .font(Chalk.display(48))
                     .textCase(.uppercase)
+                    .accessibilityAddTraits(.isHeader)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(Copy.unlockWorkouts)
+                    Text(Copy.unlockCoach)
+                }
+                .font(.body)
+                .foregroundStyle(Chalk.ink)
+                .fixedSize(horizontal: false, vertical: true)
                 Text(Copy.unlockBody)
                     .font(.body)
                     .foregroundStyle(Chalk.inkMuted)
-                    .lineSpacing(4)
+                    .fixedSize(horizontal: false, vertical: true)
                 if let message = controller.unlockMessage {
                     Text(message)
                         .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.updatesFrequently)
                 }
-                Spacer()
-                PrimaryButton(title: Copy.unlockButton) {
-                    Task { await controller.purchaseUnlock() }
+                Spacer(minLength: 8)
+                PrimaryButton(title: price.map(Copy.unlockButton(price:)) ?? Copy.unlockButton) {
+                    guard !working else { return }
+                    working = true
+                    Task {
+                        if await controller.purchaseUnlock() { dismiss() }
+                        working = false
+                    }
                 }
+                .disabled(working)
+                SecondaryButton(title: Copy.restorePurchase, size: .compact) {
+                    guard !working else { return }
+                    working = true
+                    Task {
+                        await controller.restorePurchases()
+                        if controller.library.unlocked { dismiss() }
+                        working = false
+                    }
+                }
+                .disabled(working)
+                Button(Copy.notNow) { dismiss() }
+                    .font(.body)
+                    .foregroundStyle(Chalk.inkMuted)
+                    .frame(maxWidth: .infinity, minHeight: 44)
             }
+        }
+        .task {
+            controller.unlockMessage = nil
+            price = await Unlocker.price()
         }
     }
 }

@@ -232,17 +232,37 @@ enum Unlocker {
         return false
     }
 
-    static func purchase() async -> Bool {
-        guard let product = try? await Product.products(for: [LibraryFile.unlockProductID]).first else {
-            return false
+    enum Outcome { case bought, cancelled, pending, failed, unavailable }
+
+    static func product() async -> Product? {
+        try? await Product.products(for: [LibraryFile.unlockProductID]).first
+    }
+
+    /// The store's own price for this person's storefront, never a price written in the app.
+    static func price() async -> String? {
+        await product()?.displayPrice
+    }
+
+    static func purchase() async -> Outcome {
+        guard let product = await product() else { return .unavailable }
+        let result: Product.PurchaseResult
+        do {
+            result = try await product.purchase()
+        } catch {
+            return .failed
         }
-        guard let result = try? await product.purchase() else { return false }
         switch result {
         case .success(.verified(let transaction)):
             await transaction.finish()
-            return true
-        default:
-            return false
+            return .bought
+        case .success(.unverified):
+            return .failed
+        case .pending:
+            return .pending
+        case .userCancelled:
+            return .cancelled
+        @unknown default:
+            return .failed
         }
     }
 

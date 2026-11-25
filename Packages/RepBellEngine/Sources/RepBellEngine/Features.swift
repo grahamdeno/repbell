@@ -6,9 +6,9 @@ public enum Features {
     /// Workouts is part of 1.0 (decision of 20 Nov 2026).
     public static let workouts = true
 
-    /// 1.0 has no payment and nothing is locked (decision of 20 Nov 2026).
-    /// The unlock product and the purchase code stay for the version that adds payment.
-    public static let payment = false
+    /// Workouts and Coach voice need the one-time unlock; the 14-day program never does
+    /// (decision of 24 Nov 2026, roadmap item 18).
+    public static let payment = true
 
     /// Coach clips are in TestFlight builds for testing while requirement R-1 is open (decision of 23 Nov 2026).
     /// Before any ship go, R-1 is met or this goes back to false and the clips leave the build.

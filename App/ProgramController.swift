@@ -373,7 +373,7 @@ final class ProgramController {
         let found = await Unlocker.restore()
         if found {
             library.unlocked = true
-            unlockMessage = nil
+            unlockMessage = Copy.unlockDone
             persist()
             Haptics.play(.dayComplete)
         } else {
@@ -654,18 +654,26 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
-    func purchaseUnlock() async {
-        let bought = await Unlocker.purchase()
-        if bought {
+    /// Buys the unlock and sets the message for what happened. Returns true when Workouts and Coach voice are open.
+    @discardableResult
+    func purchaseUnlock() async -> Bool {
+        switch await Unlocker.purchase() {
+        case .bought:
             library.unlocked = true
-            unlockMessage = nil
+            unlockMessage = Copy.unlockDone
             persist()
-            screen = library.current == nil ? .promise : .today
             Haptics.play(.result)
-            await refreshAlerts()
-        } else if unlockMessage == nil {
+            return true
+        case .cancelled:
+            unlockMessage = nil
+        case .pending:
+            unlockMessage = Copy.unlockPending
+        case .failed:
+            unlockMessage = Copy.unlockFailed
+        case .unavailable:
             unlockMessage = Copy.unlockMissing
         }
+        return false
     }
 
     func refreshEntitlements() async {

@@ -52,28 +52,17 @@ public struct LibraryFile: Equatable, Codable, Sendable {
 
     public var isFirstRun: Bool { runsStarted <= 1 }
 
-    /// Whether a program day can be used. With payment off (1.0) every day of every run is open.
-    public func allows(day: Int) -> Bool {
-        guard Features.payment else { return true }
-        if unlocked { return true }
-        if isFirstRun && (1...3).contains(day) { return true }
-        return false
-    }
+    /// The 14-day program is never locked: every day of every run is open (roadmap item 18).
+    public func allows(day: Int) -> Bool { true }
 
-    /// Whether the app must ask for the unlock before showing the current run at this moment.
-    /// Always false while payment is off.
-    public func needsUnlock(at now: CivilDateTime) -> Bool {
-        guard Features.payment, let current, !current.ended else { return false }
-        if !unlocked && !isFirstRun { return true }
-        let moment = current.pausedAt ?? now
-        if current.pausedAt == nil, let number = current.input.dayNumber(on: moment.date), !allows(day: number) {
-            return true
-        }
-        return false
-    }
+    /// The program never asks for the unlock. Kept so stored runs and callers stay unchanged.
+    public func needsUnlock(at now: CivilDateTime) -> Bool { false }
 
-    /// Whether starting another run needs the unlock. Always false while payment is off.
-    public var rerunNeedsUnlock: Bool { Features.payment && !unlocked }
+    /// Starting another run never needs the unlock.
+    public var rerunNeedsUnlock: Bool { false }
+
+    /// Whether Workouts and Coach voice are open: the unlock was bought or restored, or payment is switched off.
+    public var paidFeaturesOpen: Bool { !Features.payment || unlocked }
 
     public func resolved(at now: CivilDateTime) -> ResolvedRun? {
         guard let current else { return nil }

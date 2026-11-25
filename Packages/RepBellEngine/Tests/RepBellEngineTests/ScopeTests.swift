@@ -26,30 +26,24 @@ final class ScopeTests: XCTestCase {
         XCTAssertFalse(Copy.coachCredit.contains("!"))
     }
 
-    // Item 4: payment is off in 1.0.
-    func testItem4_paymentIsOff() {
-        XCTAssertFalse(Features.payment)
+    // Item 18: payment is on; Workouts and Coach voice need the unlock.
+    func testItem18_paymentIsOn() {
+        XCTAssertTrue(Features.payment)
     }
 
-    // Item 4: every day of the first run opens without a purchase.
-    func testItem4_everyDayOfFirstRunIsOpen() {
-        let library = LibraryFile(runsStarted: 1, unlocked: false, current: run())
-        for day in 1...15 {
-            XCTAssertTrue(library.allows(day: day), "Day \(day) should be open")
+    // Item 18: every day of every run opens without a purchase.
+    func testItem18_programIsNeverLocked() {
+        for runsStarted in [0, 1, 2, 5] {
+            let library = LibraryFile(runsStarted: runsStarted, unlocked: false, current: run())
+            for day in 1...15 {
+                XCTAssertTrue(library.allows(day: day), "runs \(runsStarted), day \(day)")
+            }
+            XCTAssertFalse(library.rerunNeedsUnlock)
         }
     }
 
-    // Item 4: a rerun opens without a purchase, and starting one never asks for the unlock.
-    func testItem4_rerunsAreOpen() {
-        let library = LibraryFile(runsStarted: 4, unlocked: false, current: run())
-        for day in 1...15 {
-            XCTAssertTrue(library.allows(day: day), "Rerun day \(day) should be open")
-        }
-        XCTAssertFalse(library.rerunNeedsUnlock)
-    }
-
-    // Item 4: no route leads to the paywall, on any day, first run or rerun, running or paused.
-    func testItem4_paywallNeverRequired() {
+    // Item 18: no route through the program leads to the paywall, running or paused.
+    func testItem18_programNeverNeedsUnlock() {
         for runsStarted in [0, 1, 2, 5] {
             for offset in 0...16 {
                 let now = CivilDateTime(date: start.addingDays(offset), hour: 12, minute: 0)
@@ -61,16 +55,26 @@ final class ScopeTests: XCTestCase {
         }
     }
 
-    // Item 4: no copy mentions free days or a price.
-    func testItem4_noPriceOrFreeDayCopy() {
-        let lines = [Copy.unlockTitle, Copy.unlockBody, Copy.unlockButton, Copy.unlockMissing, Copy.promiseBody]
+    // Item 18: Workouts and Coach voice open only with the unlock.
+    func testItem18_paidFeaturesNeedTheUnlock() {
+        XCTAssertFalse(LibraryFile(runsStarted: 1, unlocked: false).paidFeaturesOpen)
+        XCTAssertTrue(LibraryFile(runsStarted: 1, unlocked: true).paidFeaturesOpen)
+    }
+
+    // Item 18: the price comes from the store, never from copy; no free-day wording; no exclamation marks.
+    func testItem18_unlockCopyHasNoPriceOrFreeDays() {
+        let lines = [Copy.unlockTitle, Copy.unlockBody, Copy.unlockButton, Copy.unlockMissing, Copy.unlockWorkouts,
+                     Copy.unlockCoach, Copy.unlockPending, Copy.unlockFailed, Copy.unlockDone, Copy.notNow,
+                     Copy.promiseBody]
         for line in lines {
             let lower = line.lowercased()
             XCTAssertFalse(lower.contains("$"), line)
             XCTAssertFalse(lower.contains("4.99"), line)
             XCTAssertFalse(lower.contains("free"), line)
             XCTAssertFalse(lower.contains("three days"), line)
+            XCTAssertFalse(line.contains("!"), line)
         }
+        XCTAssertEqual(Copy.unlockButton(price: "$4.99"), "Unlock for $4.99")
     }
 
     // Data safety: a library saved by the first build (with `unlocked` and `runsStarted`) still decodes.
