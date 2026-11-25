@@ -208,6 +208,14 @@ Every line the app says. Short, plain, numbers first, never shaming. Brackets ar
 | F1 something hurts | Something hurts? Sharp or joint pain is a reason to stop. Your progress is kept either way. |
 | F1 options | Pause the program: No alerts until you resume. / End it here: Your days so far are saved. |
 | Day 8 not logged by noon | No re-test today, so week 2 uses your Day 1 max. Sets start now. |
+| Paywall, title | Workouts and Coach voice |
+| Paywall, what it adds | Workouts: guided sessions built around your time and your gear, with the coach showing each move. / Coach voice: a line after each set that reads your own numbers, as Coaching or Push. |
+| Paywall, body | One purchase, once. The 14-day program stays yours either way. |
+| Paywall, actions | Unlock for [price from the store] / Restore purchase / Not now |
+| Paywall, pending | Waiting for approval. Rep Bell unlocks as soon as it's approved. |
+| Paywall, failed | The purchase didn't finish. Try again. |
+| Paywall, store unreachable | The App Store isn't reachable right now. Try again in a moment. |
+| Paywall, done | Unlocked. Workouts and Coach voice are open. |
 
 ## Approved defaults
 
@@ -219,7 +227,7 @@ Every line the app says. Short, plain, numbers first, never shaming. Brackets ar
 | Week 2 re-test | On by default |
 | Day 9 and Day 10 load | As written, with a night-before note; no automatic cap |
 | Health note | One plain line at setup |
-| Pricing | Free for the first run's Days 1 to 3; one-time unlock $4.99 for the full program and every rerun. No subscription, no ads |
+| Pricing | The 14-day program is free. A one-time $4.99 unlock opens Workouts and Coach voice (decision of 24 Nov 2026, roadmap item 18). No subscription, no ads |
 | Credit | Credit The Modern Rogue and the program's tradition in About, no claim of endorsement |
 | iPhone without Apple Watch | Fully supported |
 

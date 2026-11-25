@@ -1,7 +1,8 @@
 import XCTest
 @testable import RepBellEngine
 
-/// Roadmap items 1 and 4: what 1.0 is. Workouts in, coach clips in for testing, payment off, nothing locked.
+/// Roadmap items 1 and 18: what 1.0 is. The program is free; Workouts and Coach voice need the unlock;
+/// coach clips are in for testing.
 final class ScopeTests: XCTestCase {
     private let start = CivilDate(year: 2026, month: 11, day: 16)
 

@@ -59,6 +59,7 @@ struct AboutView: View {
 struct PaywallView: View {
     @Environment(ProgramController.self) private var controller
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.isPresented) private var isPresented
     @State private var price: String?
     @State private var working = false
 
@@ -85,14 +86,13 @@ struct PaywallView: View {
                         .font(.subheadline)
                         .foregroundStyle(Chalk.inkMuted)
                         .fixedSize(horizontal: false, vertical: true)
-                        .accessibilityAddTraits(.updatesFrequently)
                 }
                 Spacer(minLength: 8)
                 PrimaryButton(title: price.map(Copy.unlockButton(price:)) ?? Copy.unlockButton) {
                     guard !working else { return }
                     working = true
                     Task {
-                        if await controller.purchaseUnlock() { dismiss() }
+                        if await controller.purchaseUnlock() { close() }
                         working = false
                     }
                 }
@@ -102,20 +102,30 @@ struct PaywallView: View {
                     working = true
                     Task {
                         await controller.restorePurchases()
-                        if controller.library.unlocked { dismiss() }
+                        if controller.library.unlocked { close() }
                         working = false
                     }
                 }
                 .disabled(working)
-                Button(Copy.notNow) { dismiss() }
-                    .font(.body)
-                    .foregroundStyle(Chalk.inkMuted)
-                    .frame(maxWidth: .infinity, minHeight: 44)
+                TextLink(title: Copy.notNow) { close() }
+                    .frame(maxWidth: .infinity)
             }
         }
         .task {
             controller.unlockMessage = nil
             price = await Unlocker.price()
+        }
+        .onChange(of: controller.unlockMessage) { _, message in
+            if let message { AccessibilityNotification.Announcement(message).post() }
+        }
+    }
+
+    /// As a sheet, closes the sheet. As a flow screen (screenshot mode only), goes back to Today or setup.
+    private func close() {
+        if isPresented {
+            dismiss()
+        } else {
+            controller.screen = controller.library.current == nil ? .promise : .today
         }
     }
 }

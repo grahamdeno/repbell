@@ -35,7 +35,7 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphone16promax_ax5_onboarding-ready.png` | iPhone 16 Pro Max | AX5 (largest) | Onboarding | Ready (step 5) | No run stored; opened on the step |
 | `iphone16promax_ax5_onboarding-start.png` | iPhone 16 Pro Max | AX5 (largest) | Onboarding | Start day (step 4) | No run stored; opened on the step |
 | `iphone16promax_ax5_onboarding-wake.png` | iPhone 16 Pro Max | AX5 (largest) | Onboarding | Wake time (step 2) | No run stored; opened on the step |
-| `iphone16promax_ax5_paywall.png` | iPhone 16 Pro Max | AX5 (largest) | Paywall | Not reachable in 1.0 (nothing is locked); shown for the record | Opened directly |
+| `iphone16promax_ax5_paywall.png` | iPhone 16 Pro Max | AX5 (largest) | Paywall | Shown as a sheet from Workouts and Settings (item 18) | Opened directly |
 | `iphone16promax_ax5_player.png` | iPhone 16 Pro Max | AX5 (largest) | Workouts player | Core, first step | Opened on the player |
 | `iphone16promax_ax5_progress.png` | iPhone 16 Pro Max | AX5 (largest) | Progress | Partway through a run | Day 9, real-looking logs |
 | `iphone16promax_ax5_rerun.png` | iPhone 16 Pro Max | AX5 (largest) | Run it again | Review screen | From the Day 15 result |
@@ -75,7 +75,7 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphone16promax_default_onboarding-ready.png` | iPhone 16 Pro Max | Large (default) | Onboarding | Ready (step 5) | No run stored; opened on the step |
 | `iphone16promax_default_onboarding-start.png` | iPhone 16 Pro Max | Large (default) | Onboarding | Start day (step 4) | No run stored; opened on the step |
 | `iphone16promax_default_onboarding-wake.png` | iPhone 16 Pro Max | Large (default) | Onboarding | Wake time (step 2) | No run stored; opened on the step |
-| `iphone16promax_default_paywall.png` | iPhone 16 Pro Max | Large (default) | Paywall | Not reachable in 1.0 (nothing is locked); shown for the record | Opened directly |
+| `iphone16promax_default_paywall.png` | iPhone 16 Pro Max | Large (default) | Paywall | Shown as a sheet from Workouts and Settings (item 18) | Opened directly |
 | `iphone16promax_default_player.png` | iPhone 16 Pro Max | Large (default) | Workouts player | Core, first step | Opened on the player |
 | `iphone16promax_default_progress.png` | iPhone 16 Pro Max | Large (default) | Progress | Partway through a run | Day 9, real-looking logs |
 | `iphone16promax_default_rerun.png` | iPhone 16 Pro Max | Large (default) | Run it again | Review screen | From the Day 15 result |
@@ -115,7 +115,7 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphonese3_ax3_onboarding-ready.png` | iPhone SE (3rd gen) | AX3 | Onboarding | Ready (step 5) | No run stored; opened on the step |
 | `iphonese3_ax3_onboarding-start.png` | iPhone SE (3rd gen) | AX3 | Onboarding | Start day (step 4) | No run stored; opened on the step |
 | `iphonese3_ax3_onboarding-wake.png` | iPhone SE (3rd gen) | AX3 | Onboarding | Wake time (step 2) | No run stored; opened on the step |
-| `iphonese3_ax3_paywall.png` | iPhone SE (3rd gen) | AX3 | Paywall | Not reachable in 1.0 (nothing is locked); shown for the record | Opened directly |
+| `iphonese3_ax3_paywall.png` | iPhone SE (3rd gen) | AX3 | Paywall | Shown as a sheet from Workouts and Settings (item 18) | Opened directly |
 | `iphonese3_ax3_player.png` | iPhone SE (3rd gen) | AX3 | Workouts player | Core, first step | Opened on the player |
 | `iphonese3_ax3_progress.png` | iPhone SE (3rd gen) | AX3 | Progress | Partway through a run | Day 9, real-looking logs |
 | `iphonese3_ax3_rerun.png` | iPhone SE (3rd gen) | AX3 | Run it again | Review screen | From the Day 15 result |
@@ -155,7 +155,7 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphonese3_ax5_onboarding-ready.png` | iPhone SE (3rd gen) | AX5 (largest) | Onboarding | Ready (step 5) | No run stored; opened on the step |
 | `iphonese3_ax5_onboarding-start.png` | iPhone SE (3rd gen) | AX5 (largest) | Onboarding | Start day (step 4) | No run stored; opened on the step |
 | `iphonese3_ax5_onboarding-wake.png` | iPhone SE (3rd gen) | AX5 (largest) | Onboarding | Wake time (step 2) | No run stored; opened on the step |
-| `iphonese3_ax5_paywall.png` | iPhone SE (3rd gen) | AX5 (largest) | Paywall | Not reachable in 1.0 (nothing is locked); shown for the record | Opened directly |
+| `iphonese3_ax5_paywall.png` | iPhone SE (3rd gen) | AX5 (largest) | Paywall | Shown as a sheet from Workouts and Settings (item 18) | Opened directly |
 | `iphonese3_ax5_player.png` | iPhone SE (3rd gen) | AX5 (largest) | Workouts player | Core, first step | Opened on the player |
 | `iphonese3_ax5_progress.png` | iPhone SE (3rd gen) | AX5 (largest) | Progress | Partway through a run | Day 9, real-looking logs |
 | `iphonese3_ax5_rerun.png` | iPhone SE (3rd gen) | AX5 (largest) | Run it again | Review screen | From the Day 15 result |
@@ -195,7 +195,7 @@ watch45mm uses Apple Watch Series 9 (45mm)
 | `iphonese3_default_onboarding-ready.png` | iPhone SE (3rd gen) | Large (default) | Onboarding | Ready (step 5) | No run stored; opened on the step |
 | `iphonese3_default_onboarding-start.png` | iPhone SE (3rd gen) | Large (default) | Onboarding | Start day (step 4) | No run stored; opened on the step |
 | `iphonese3_default_onboarding-wake.png` | iPhone SE (3rd gen) | Large (default) | Onboarding | Wake time (step 2) | No run stored; opened on the step |
-| `iphonese3_default_paywall.png` | iPhone SE (3rd gen) | Large (default) | Paywall | Not reachable in 1.0 (nothing is locked); shown for the record | Opened directly |
+| `iphonese3_default_paywall.png` | iPhone SE (3rd gen) | Large (default) | Paywall | Shown as a sheet from Workouts and Settings (item 18) | Opened directly |
 | `iphonese3_default_player.png` | iPhone SE (3rd gen) | Large (default) | Workouts player | Core, first step | Opened on the player |
 | `iphonese3_default_progress.png` | iPhone SE (3rd gen) | Large (default) | Progress | Partway through a run | Day 9, real-looking logs |
 | `iphonese3_default_rerun.png` | iPhone SE (3rd gen) | Large (default) | Run it again | Review screen | From the Day 15 result |
@@ -241,8 +241,8 @@ watch45mm uses Apple Watch Series 9 (45mm)
   produce them reliably. Capture them on a phone.
 - Widgets (every family and state): the Simulator can't place a widget on the Home or Lock Screen from a script.
 - Light mode: the app is dark only and doesn't respond to light mode, so there's no light set.
-- Busy sheet, Coach settings, and the paywall as the Day 4 screen or from Workouts: these no longer exist in 1.0
-  (Busy is one tap; coach media is out; nothing is locked). The paywall screen itself is shown for the record.
+- Busy sheet and the paywall as the Day 4 screen: these no longer exist in 1.0 (Busy is one tap; the program is
+  never locked). The paywall now opens as a sheet from Workouts and Settings (item 18).
 - Settings below the first screen, and the End confirmation under Something hurts: both need taps or scrolling,
   which the script doesn't do.
 

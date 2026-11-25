@@ -225,7 +225,8 @@ struct AlertReport: Codable {
 enum Unlocker {
     static func hasUnlock() async -> Bool {
         for await result in Transaction.currentEntitlements {
-            if case .verified(let transaction) = result, transaction.productID == LibraryFile.unlockProductID {
+            if case .verified(let transaction) = result, transaction.productID == LibraryFile.unlockProductID,
+               transaction.revocationDate == nil {
                 return true
             }
         }
@@ -271,10 +272,9 @@ enum Unlocker {
             for await update in Transaction.updates {
                 if case .verified(let transaction) = update, transaction.productID == LibraryFile.unlockProductID {
                     await transaction.finish()
-                    await MainActor.run {
-                        ProgramController.shared.library.unlocked = true
-                        LibraryDisk.save(ProgramController.shared.library)
-                    }
+                    // A refund arrives as an update too; re-read the entitlement so it can lock again.
+                    let open = await hasUnlock()
+                    await MainActor.run { ProgramController.shared.setUnlocked(open) }
                 }
             }
         }

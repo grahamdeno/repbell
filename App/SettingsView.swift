@@ -16,6 +16,7 @@ struct SettingsView: View {
     @State private var pushUpsToHealth = PushUpHealthStore.enabled
     @State private var deskStretchOn = DeskStretchStore.enabled
     @State private var showPaywall = false
+    @State private var restoring = false
 
     var body: some View {
         ScreenChrome(top: 8, scrolls: false) {
@@ -42,6 +43,7 @@ struct SettingsView: View {
             }
         }
         .onAppear(perform: loadTimes)
+        .onDisappear { controller.unlockMessage = nil }
         .sheet(isPresented: $showPaywall) {
             PaywallView()
                 .environment(controller)
@@ -145,8 +147,14 @@ struct SettingsView: View {
                     PrimaryButton(title: Copy.unlockButton) { showPaywall = true }
                 }
                 SecondaryButton(title: Copy.restorePurchase, size: .compact) {
-                    Task { await controller.restorePurchases() }
+                    guard !restoring else { return }
+                    restoring = true
+                    Task {
+                        await controller.restorePurchases()
+                        restoring = false
+                    }
                 }
+                .disabled(restoring)
                 if let message = controller.unlockMessage, !showPaywall {
                     Text(message)
                         .font(.subheadline)
