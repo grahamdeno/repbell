@@ -4,9 +4,19 @@ import SwiftUI
 struct WatchRoot: View {
     @Environment(WatchModel.self) private var model
 
+    /// The alert time of a set that is due now, if any.
+    private var dueAlert: CivilDateTime? {
+        guard let resolved = model.resolvedNow(), let run = model.library.current else { return nil }
+        let now = run.pausedAt ?? CivilDateTime.local(Date())
+        guard let number = run.input.dayNumber(on: now.date),
+              let set = resolved.day(number)?.sets.first(where: { $0.status == .upcoming }),
+              let alert = set.alert, alert <= now else { return nil }
+        return alert
+    }
+
     var body: some View {
         Group {
-            if let line = model.coachLine {
+            if let line = model.visibleCoachLine(dueAlert: dueAlert) {
                 WatchCoachLine(line: line)
             } else if let resolved = model.resolvedNow(), let run = model.library.current {
                 let now = run.pausedAt ?? CivilDateTime.local(Date())
@@ -52,6 +62,8 @@ private struct WatchCoachLine: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .contentShape(Rectangle())
                     .onTapGesture { model.clearCoachLine() }
+                    // VoiceOver reads the line and uses the button below to clear it.
+                    .accessibilityRespondsToUserInteraction(false)
                 Button(Copy.tapToContinue) { model.clearCoachLine() }
                     .font(.footnote.weight(.semibold))
                     .frame(maxWidth: .infinity)

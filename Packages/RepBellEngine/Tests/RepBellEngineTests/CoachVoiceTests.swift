@@ -178,22 +178,56 @@ final class CoachVoiceTests: XCTestCase {
     }
 
     // Item 19: the Watch sends numbers only and accepts the iPhone's line only inside the window.
-    func testWatchRequestCarriesTheFactsAndNothingElse() {
+    func testWatchRequestCarriesTheFactsAndVoiceOnly() {
         let sent = facts(.dayDone, day: 9, done: 46, total: 46, missed: 0, snoozes: 2, best: 400, full: 3)
-        let message = CoachVoice.watchRequest(sent)
-        XCTAssertEqual(Set(message.keys), ["kind", "facts"])
-        XCTAssertEqual(CoachVoice.facts(fromWatch: message), sent)
+        let message = CoachVoice.watchRequest(sent, mode: .push)
+        XCTAssertEqual(Set(message.keys), ["kind", "facts", "mode"])
+        let parsed = CoachVoice.parseWatchRequest(message)
+        XCTAssertEqual(parsed?.facts, sent)
+        XCTAssertEqual(parsed?.mode, .push)
     }
 
     func testWatchRequestRejectsOtherMessages() {
-        XCTAssertNil(CoachVoice.facts(fromWatch: [:]))
-        XCTAssertNil(CoachVoice.facts(fromWatch: ["kind": "done", "facts": Data()]))
-        XCTAssertNil(CoachVoice.facts(fromWatch: ["kind": "coach", "facts": Data("not json".utf8)]))
-        XCTAssertNil(CoachVoice.facts(fromWatch: ["kind": "coach", "facts": "text"]))
+        let good = CoachVoice.watchRequest(facts(), mode: .coaching)
+        XCTAssertNil(CoachVoice.parseWatchRequest([:]))
+        XCTAssertNil(CoachVoice.parseWatchRequest(["kind": "done", "facts": good["facts"]!, "mode": "coaching"]))
+        XCTAssertNil(CoachVoice.parseWatchRequest(["kind": "coach", "facts": Data("not json".utf8), "mode": "coaching"]))
+        XCTAssertNil(CoachVoice.parseWatchRequest(["kind": "coach", "facts": good["facts"]!, "mode": "loud"]))
+        XCTAssertNil(CoachVoice.parseWatchRequest(["kind": "coach", "facts": good["facts"]!]))
     }
 
-    func testWatchWindowIsShort() {
-        XCTAssertGreaterThan(CoachVoice.watchReplyWindow, 1.2)
-        XCTAssertLessThanOrEqual(CoachVoice.watchReplyWindow, 3)
+    func testIPhoneAnswersOnlyInTheWatchesVoice() {
+        XCTAssertEqual(CoachVoice.watchAnswer(phoneMode: .push, watchMode: .push), .write)
+        XCTAssertEqual(CoachVoice.watchAnswer(phoneMode: .coaching, watchMode: .push), .keep)
+        XCTAssertEqual(CoachVoice.watchAnswer(phoneMode: .off, watchMode: .push), .clear)
+    }
+
+    func testVoiceFollowsTheUnlock() {
+        // What the iPhone sends the Watch: the chosen voice while the unlock is open, off otherwise.
+        XCTAssertEqual(CoachMode.effective(stored: .push, paidFeaturesOpen: false), .off)
+        XCTAssertEqual(CoachMode.effective(stored: .push, paidFeaturesOpen: true), .push)
+    }
+
+    func testLateRepliesAreDropped() {
+        XCTAssertTrue(CoachVoice.watchReplyInTime(elapsed: 0.8))
+        XCTAssertTrue(CoachVoice.watchReplyInTime(elapsed: CoachVoice.watchReplyWindow))
+        XCTAssertFalse(CoachVoice.watchReplyInTime(elapsed: CoachVoice.watchReplyWindow + 0.1))
+        XCTAssertFalse(CoachVoice.watchReplyInTime(elapsed: -1))
+    }
+
+    func testOnlyASetStillToDoGetsALine() {
+        XCTAssertTrue(CoachVoice.watchGetsLine(mode: .coaching, statusBefore: .upcoming))
+        XCTAssertFalse(CoachVoice.watchGetsLine(mode: .coaching, statusBefore: .done))
+        XCTAssertFalse(CoachVoice.watchGetsLine(mode: .coaching, statusBefore: nil))
+        XCTAssertFalse(CoachVoice.watchGetsLine(mode: .off, statusBefore: .upcoming))
+    }
+
+    func testANewerDueSetTakesTheScreenBack() {
+        let shown = CivilDateTime(date: CivilDate(year: 2026, month: 11, day: 25), minutes: 600)
+        let earlier = CivilDateTime(date: shown.date, minutes: 590)
+        let later = CivilDateTime(date: shown.date, minutes: 625)
+        XCTAssertTrue(CoachVoice.watchShowsLine(shownAt: shown, dueAlert: nil))
+        XCTAssertTrue(CoachVoice.watchShowsLine(shownAt: shown, dueAlert: earlier))
+        XCTAssertFalse(CoachVoice.watchShowsLine(shownAt: shown, dueAlert: later))
     }
 }

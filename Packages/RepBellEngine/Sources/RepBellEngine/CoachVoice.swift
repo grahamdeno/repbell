@@ -83,16 +83,51 @@ public enum CoachVoice {
     /// dropped, so the text never changes while the person is reading. The iPhone itself gives the model 1.2 s.
     public static let watchReplyWindow: Double = 2.5
 
-    /// The Watch's request to the iPhone: the facts as JSON (numbers only).
-    public static func watchRequest(_ facts: CoachFacts) -> [String: Any] {
+    /// The Watch's request to the iPhone: the facts as JSON (numbers only) and the voice the Watch wrote its line in.
+    public static func watchRequest(_ facts: CoachFacts, mode: CoachMode) -> [String: Any] {
         guard let data = try? JSONEncoder().encode(facts) else { return [:] }
-        return ["kind": "coach", "facts": data]
+        return ["kind": "coach", "facts": data, "mode": mode.rawValue]
     }
 
-    /// The facts in a Watch request, or nil if the message isn't one.
-    public static func facts(fromWatch message: [String: Any]) -> CoachFacts? {
-        guard message["kind"] as? String == "coach", let data = message["facts"] as? Data else { return nil }
-        return try? JSONDecoder().decode(CoachFacts.self, from: data)
+    /// The facts and voice in a Watch request, or nil if the message isn't one.
+    public static func parseWatchRequest(_ message: [String: Any]) -> (facts: CoachFacts, mode: CoachMode)? {
+        guard message["kind"] as? String == "coach", let data = message["facts"] as? Data,
+              let mode = CoachMode(rawValue: message["mode"] as? String ?? ""),
+              let facts = try? JSONDecoder().decode(CoachFacts.self, from: data) else { return nil }
+        return (facts, mode)
+    }
+
+    /// What the iPhone does with a Watch request.
+    public enum WatchAnswer: Equatable, Sendable {
+        /// Write a model line: the iPhone's voice matches the Watch's.
+        case write
+        /// The voice is off on the iPhone (turned off, or the unlock refunded): the Watch takes its line down.
+        case clear
+        /// The voices differ: the Watch keeps its written line, so the text never changes voice.
+        case keep
+    }
+
+    public static func watchAnswer(phoneMode: CoachMode, watchMode: CoachMode) -> WatchAnswer {
+        if phoneMode == .off { return .clear }
+        return phoneMode == watchMode ? .write : .keep
+    }
+
+    /// A model line counts only if it arrives inside the window.
+    public static func watchReplyInTime(elapsed: Double) -> Bool {
+        elapsed >= 0 && elapsed <= watchReplyWindow
+    }
+
+    /// Item 19: a set that becomes due after the line went up takes the screen back, so a line never hides a set.
+    public static func watchShowsLine(shownAt: CivilDateTime, dueAlert: CivilDateTime?) -> Bool {
+        guard let dueAlert else { return true }
+        return dueAlert <= shownAt
+    }
+
+    /// Whether logging this set on the Watch brings a line: only a set that was still to do, like the iPhone.
+    /// The Watch decides from its own copy of the day; if the iPhone logged the set and that copy is behind, the
+    /// Watch can show one line the iPhone wouldn't, which is harmless.
+    public static func watchGetsLine(mode: CoachMode, statusBefore: SetStatus?) -> Bool {
+        mode != .off && statusBefore == .upcoming
     }
 
     // MARK: Rules every line must pass, written or generated

@@ -12,6 +12,8 @@ final class WatchModel: NSObject, WCSessionDelegate {
     var coachMode: CoachMode = .off
     /// The coach line on screen after a set logged here; it stays until tapped away.
     var coachLine: String?
+    /// When the line went up; a set due after this takes the screen back.
+    var coachShownAt = CivilDateTime.local(Date())
     private var coachToken = 0
 
     func start() {
@@ -32,13 +34,18 @@ final class WatchModel: NSObject, WCSessionDelegate {
     }
 
     func done(day: Int, index: Int) {
-        let wasUpcoming = library.current.map { run in
-            ScheduleEngine.resolve(run.input, now: CivilDateTime.local(Date())).day(day)?.sets.first { $0.index == index }?.status == .upcoming
-        } ?? false
+        let before = library.current.flatMap { run in
+            ScheduleEngine.resolve(run.input, now: CivilDateTime.local(Date())).day(day)?.sets.first { $0.index == index }?.status
+        }
         WKInterfaceDevice.current().play(.success)
         apply(kind: "done", day: day, index: index)
-        // Only a set that was really still to do gets a line, like the iPhone.
-        if wasUpcoming { showCoachLine(day: day, index: index) }
+        if CoachVoice.watchGetsLine(mode: coachMode, statusBefore: before) { showCoachLine(day: day, index: index) }
+    }
+
+    /// The line to show now, or nil once a newer set is due.
+    func visibleCoachLine(dueAlert: CivilDateTime?) -> String? {
+        guard let coachLine, CoachVoice.watchShowsLine(shownAt: coachShownAt, dueAlert: dueAlert) else { return nil }
+        return coachLine
     }
 
     func clearCoachLine() {
@@ -60,14 +67,23 @@ final class WatchModel: NSObject, WCSessionDelegate {
         coachToken += 1
         let token = coachToken
         coachLine = written
+        coachShownAt = CivilDateTime.local(Date())
         guard !WKAccessibilityIsVoiceOverRunning(), WCSession.isSupported(),
               WCSession.default.activationState == .activated, WCSession.default.isReachable else { return }
         let sent = Date()
-        WCSession.default.sendMessage(CoachVoice.watchRequest(facts), replyHandler: { reply in
-            guard let line = reply["line"] as? String else { return }
+        let mode = coachMode
+        // No error handler: if the iPhone can't answer, the written line simply stays.
+        WCSession.default.sendMessage(CoachVoice.watchRequest(facts, mode: mode), replyHandler: { reply in
+            let line = reply["line"] as? String
+            let clear = reply["clear"] as? Bool ?? false
             Task { @MainActor in
-                guard self.coachToken == token, Date().timeIntervalSince(sent) <= CoachVoice.watchReplyWindow else { return }
-                self.coachLine = line
+                guard self.coachToken == token else { return }
+                if clear {
+                    self.coachMode = .off
+                    self.clearCoachLine()
+                } else if let line, CoachVoice.watchReplyInTime(elapsed: Date().timeIntervalSince(sent)) {
+                    self.coachLine = line
+                }
             }
         }, errorHandler: nil)
     }
