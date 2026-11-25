@@ -246,7 +246,7 @@ private struct StudioSessionContent: View {
                     .sheet(isPresented: $showPaywall) {
                         PaywallView()
                             .environment(controller)
-                            .presentationBackground(Chalk.ground)
+                            .presentationBackground { GlowBackground() }
                     }
                     .confirmationDialog(StudioCopy.holdTitle, isPresented: $askHold, titleVisibility: .visible) {
                         Button(StudioCopy.holdYes) {
@@ -553,7 +553,7 @@ struct StudioDoneView: View {
 
     var body: some View {
         ZStack {
-            Chalk.ground.ignoresSafeArea()
+            GlowBackground()
             VStack(spacing: 20) {
                 Spacer()
                 ZStack {

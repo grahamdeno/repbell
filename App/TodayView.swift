@@ -118,7 +118,7 @@ struct TodayView: View {
                     .padding(.horizontal, ChalkTokens.Space.s6)
                     .padding(.top, ChalkTokens.Space.s3)
                     .padding(.bottom, ChalkTokens.Space.s2)
-                    .background(Chalk.ground)
+                    .background(.ultraThinMaterial)
             }
         }
     }

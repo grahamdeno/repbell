@@ -50,7 +50,7 @@ struct SettingsView: View {
         .sheet(isPresented: $showPaywall) {
             PaywallView()
                 .environment(controller)
-                .presentationBackground(Chalk.ground)
+                .presentationBackground { GlowBackground() }
         }
         .task { await checkAlerts() }
         .onChange(of: scenePhase) { _, phase in

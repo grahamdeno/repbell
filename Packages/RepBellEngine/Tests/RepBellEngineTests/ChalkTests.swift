@@ -31,6 +31,7 @@ final class ChalkTests: XCTestCase {
             "ink-muted": ChalkTokens.inkMuted, "ink-faint": ChalkTokens.inkFaint,
             "volt": ChalkTokens.volt, "on-volt": ChalkTokens.onVolt, "flood": ChalkTokens.flood, "flood-soft": ChalkTokens.floodSoft,
             "ultraviolet": ChalkTokens.ultraviolet, "alert": ChalkTokens.alert,
+            "glow-violet": ChalkTokens.glowViolet, "glow-volt": ChalkTokens.glowVolt,
         ]
         XCTAssertEqual(tokens.count, code.count, "tokens.json and code list the same tokens")
         for (name, rgb) in code {
@@ -80,6 +81,27 @@ final class ChalkTests: XCTestCase {
     }
 
     // UX-17: VoiceOver hears the tally, not just "Today's sets".
+    // The background glow keeps every text colour at 4.5:1 or better everywhere on the screen, on a small and a
+    // large phone, and the violet day bars at 3:1 or better where they sit at the top.
+    func testGlowKeepsContrast() {
+        for (w, h) in [(375.0, 667.0), (440.0, 956.0)] {
+            var worst = ChalkTokens.ground
+            var worstTop = ChalkTokens.ground
+            for xi in 0...40 {
+                for yi in 0...80 {
+                    let x = w * Double(xi) / 40, y = h * Double(yi) / 80
+                    let c = ChalkTokens.Glow.color(x: x, y: y, width: w, height: h)
+                    if c.luminance > worst.luminance { worst = c }
+                    if y < 200, c.luminance > worstTop.luminance { worstTop = c }
+                }
+            }
+            for text in [ChalkTokens.ink, ChalkTokens.inkMuted, ChalkTokens.volt] {
+                XCTAssertGreaterThanOrEqual(text.contrast(with: worst), 4.5, "\(text) on \(worst)")
+            }
+            XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: worstTop), 3.0)
+        }
+    }
+
     func testUX17_spokenTally() {
         let marks: [Copy.SpokenMark] = [.done, .done, .done, .done, .missed, .current, .upcoming]
         XCTAssertEqual(Copy.tallySpoken(marks: marks), "4 done, 1 missed, set 6 next")
