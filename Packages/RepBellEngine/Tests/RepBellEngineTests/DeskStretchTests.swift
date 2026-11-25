@@ -10,7 +10,7 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertFalse(DeskStretch.isDue(enabled: false, lastShown: nil, now: at(9, 0)))
     }
 
-    func testAtMostOnceAnHour() {
+    func testAfterASetAtMostEveryFortyMinutes() {
         XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: nil, now: at(9, 0)))
         XCTAssertFalse(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 39)))
         // Sets 45 minutes apart still bring a stretch about every hour.
@@ -216,4 +216,23 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertNil(DeskStretch.stretch(id: "rice-grab"))
     }
 
+
+    func testARefillJustAfterABellKeepsThatSetsReminder() {
+        // Day 3 of a run started Monday 23 Nov 2026, wake 7:00, max 50.
+        let start = CivilDate(year: 2026, month: 11, day: 23)
+        let input = RunInput(dayOneMax: 50, wake: ClockTime(hour: 7), bed: ClockTime(hour: 23), start: start, retestEnabled: true,
+                             events: [.test(day: 1, reps: 50, at: CivilDateTime(date: start, hour: 7, minute: 5))])
+        let probe = ScheduleEngine.resolve(input, now: CivilDateTime(date: start.addingDays(2), hour: 6, minute: 0))
+        guard let set = probe.day(3)?.sets.first(where: { ($0.alert?.minutes ?? 0) >= 600 }), let bell = set.alert else {
+            return XCTFail("no set after 10 a.m. on day 3")
+        }
+        let justAfter = CivilDateTime(date: bell.date, minutes: bell.minutes + 1)
+        let unlogged = ScheduleEngine.resolve(input, now: justAfter)
+        XCTAssertTrue(DeskStretch.bells(unlogged, now: justAfter).contains(bell))
+        var logged = input
+        logged.events.append(.done(day: 3, index: set.index, at: justAfter))
+        XCTAssertFalse(DeskStretch.bells(ScheduleEngine.resolve(logged, now: justAfter), now: justAfter).contains(bell))
+        let later = CivilDateTime(date: bell.date, minutes: bell.minutes + DeskStretch.setClearanceMinutes + 1)
+        XCTAssertFalse(DeskStretch.bells(ScheduleEngine.resolve(input, now: later), now: later).contains(bell))
+    }
 }

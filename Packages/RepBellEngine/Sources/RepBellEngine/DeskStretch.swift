@@ -1,5 +1,6 @@
-/// Desk stretch (1.0, added 20 Nov 2026): after a push-up set, one short stretch that counters sitting all day.
-/// Off by default. Shown at most once an hour. Skipping is never recorded.
+/// Desk stretch (1.0, added 20 Nov 2026): after a push-up set, one short stretch that counters sitting all day,
+/// at most every 40 minutes, plus quiet reminders about every hour on weekdays (item 20). Off by default.
+/// Skipping is never recorded.
 public enum DeskStretch {
     public struct Stretch: Equatable, Sendable {
         public let id: String
@@ -134,6 +135,17 @@ public enum DeskStretch {
             }
         }
         return (sets, kept)
+    }
+
+    /// The bells a reminder can follow: sets still to do whose bell is ahead, or rang within the last 30 minutes and
+    /// hasn't been logged, so a refill just after a bell keeps that set's reminder.
+    public static func bells(_ run: ResolvedRun, now: CivilDateTime) -> [CivilDateTime] {
+        let since = CivilDateTime(date: now.date, minutes: now.minutes - setClearanceMinutes)
+        return run.days.flatMap(\.sets)
+            .filter { $0.status == .upcoming }
+            .compactMap(\.alert)
+            .filter { $0 >= since }
+            .sorted()
     }
 
     /// The times to remind at, soonest first, on weekdays inside the window. Each hour mark gets one: on the hour

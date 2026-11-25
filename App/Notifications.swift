@@ -78,8 +78,7 @@ enum Notifier {
         // not scheduled yet, so each hour's reminder can follow its nearest set.
         var bells: [CivilDateTime] = []
         if let run = library.current, run.pausedAt == nil, !run.ended {
-            bells = ScheduleEngine.resolve(run.input, now: now).alertQueue(at: now, capacity: Int.max).pending
-                .filter { library.allows(day: $0.day) }.map(\.at)
+            bells = DeskStretch.bells(ScheduleEngine.resolve(run.input, now: now), now: now)
         }
         var slots: [CivilDateTime] = []
         if desk.enabled {
