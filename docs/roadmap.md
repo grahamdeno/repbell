@@ -352,10 +352,10 @@ going.
 - Apple's on-device model writes the line; nothing leaves the phone. Where the model is unavailable, refuses, or
   returns a line that breaks the rules, a written line for that mode and moment is shown.
 - The line has no exclamation marks, grows with text size and is read by VoiceOver.
-- The Watch shows the line the iPhone wrote, or the written line.
+- The Watch coach line moved to the next version (Graham's decision, 24 Nov 2026); the Watch has no celebration screen in 1.0.
 - Needs the unlock (item 18). Without it, the Settings choice shows the unlock.
 
-**Out of scope:** a named or real person's voice, spoken audio, lines about anything but the person's numbers.
+**Out of scope:** a named or real person's voice, spoken audio, lines about anything but the person's numbers, the Watch coach line (next version).
 
 **Steps:** 1. Shape lines and screens (Opus). 2. Build (Opus under the 1.0 exception). 3. Review by a separate
 agent.

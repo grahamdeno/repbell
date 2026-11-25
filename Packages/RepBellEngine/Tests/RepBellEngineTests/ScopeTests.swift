@@ -62,6 +62,14 @@ final class ScopeTests: XCTestCase {
         XCTAssertTrue(LibraryFile(runsStarted: 1, unlocked: true).paidFeaturesOpen)
     }
 
+    // Item 18: Coach voice is Off without the unlock, whatever was chosen.
+    func testItem18_coachVoiceNeedsTheUnlock() {
+        for mode in CoachMode.allCases {
+            XCTAssertEqual(CoachMode.effective(stored: mode, paidFeaturesOpen: false), .off)
+            XCTAssertEqual(CoachMode.effective(stored: mode, paidFeaturesOpen: true), mode)
+        }
+    }
+
     // Item 18: the price comes from the store, never from copy; no free-day wording; no exclamation marks.
     func testItem18_unlockCopyHasNoPriceOrFreeDays() {
         let lines = [Copy.unlockTitle, Copy.unlockBody, Copy.unlockButton, Copy.unlockMissing, Copy.unlockWorkouts,
