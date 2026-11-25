@@ -71,6 +71,9 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-24 | **Coach voice in 1.0:** a Settings choice of Off, Coaching or Push. Coaching reads the person's stats, recognizes past wins and looks ahead, with no guilt. Push says the same stats bluntly and may name a missed set, snooze or skipped day as a broken commitment, within limits (item 17) | Graham's decision |
+| 2026-11-24 | **Design rule amended:** no guilt copy, except in Push coaching, which the person turns on | Graham's decision. **Amends** the no-guilt design rule |
+| 2026-11-24 | **1.0 is paid:** the program, bells, logging, Progress, Watch and Desk stretch stay free; Workouts and Coach voice need the one-time unlock `com.grahamdeno.repbell.unlock` at $4.99 (item 18) | Graham's decision. **Replaces** the 20 Nov decision that 1.0 is free with no paywall (item 4) |
 | 2026-11-23 | **Coach clips return for TestFlight testing.** Both coaches' clips (68 movements, 16 of the 19 desk stretches) and the Coach picker are back in the build, switched by `Features.coachMedia`. A move with no clip yet shows its line figure. The About screen credits "Coach animations created with Grok." R-1 stays open: written permission was asked of xAI on 23 Nov 2026. Before any ship go, R-1 is met or `coachMedia` goes back to false and the clips leave the build | Graham's decision. **Replaces** the 20 Nov rule that coach media stays out of every build |
 | 2026-11-22 | Animated figures: every Workouts movement and desk stretch shows an animated line figure (side, front or hand close-up view, turn arrows for rotations, several key positions for flows), drawn by the app from numbers in figures.json. No art files, no outside media, no network | Approved by Graham after the thread-the-needle and rice-bucket-twist samples |
 | 2026-11-22 | D7 amended: lime `volt` stays. The bell-ring flood becomes a dark olive tint (`flood` #202B06) with the number and bell in volt and soft text in `flood-soft` #A8C25A, instead of a full lime screen. The taller day bars with outlined upcoming days (from #39) stay | Graham, after trying amber: keep the lime, tone the flood down to a dark screen |
@@ -189,7 +192,7 @@ As someone about to be unavailable, I want one tap to quiet the next hour, so I'
 
 **Steps:** 1. Shape, Build D (Opus). 2. Build (Sonnet).
 
-### 4. Requirement: 1.0 is free and nothing is locked (approved 2026-11-20; built in group 1)
+### 4. Requirement: 1.0 is free and nothing is locked (approved 2026-11-20; built in group 1; replaced 2026-11-24 by item 18)
 In 1.0 no paywall can be reached on any day or rerun, and no copy mentions free days or a price.
 - Enforced by tests: Day 4 and later, and a rerun, open without a purchase; no route leads to the paywall.
 - Enforced by a copy test: no price or free-day wording in the `Copy` enum.
@@ -212,7 +215,7 @@ want to keep going.
 
 **Steps:** 1. Shape with mockups (Opus). 2. Graham picks. 3. Build (Sonnet).
 
-### 6. Story: people who installed 1.0 stay free (approved 2026-11-20, for the version that adds payment)
+### 6. Story: people who installed 1.0 stay free (approved 2026-11-20; no longer needed from 2026-11-24, since 1.0 itself is paid)
 As someone who installed Rep Bell while it was free, I want to keep everything when payment arrives, so that the
 app keeps its word.
 - Open: how an early install is recognised. To check in shaping: the store's own record of the first installed
@@ -221,7 +224,7 @@ app keeps its word.
 **Steps:** 1. Confirm the mechanism before 1.0 ships, in case 1.0 must record anything (Opus). 2. Shape with the
 payment version (Opus, with a Fable strategy review of the boundary and price).
 
-### 7. Epic: payment (later; not yet shaped)
+### 7. Epic: payment (folded into item 18 on 2026-11-24)
 The free and paid boundary and the price; a paywall with a way out and Restore (UX-1); correct purchase messages
 (UX-13); a locked day that starts while the app is open (UX-37); item 6.
 Also: Settings lost its Purchase section (unlock status and Restore purchase) in the 1.0 Settings rebuild. It must
@@ -331,6 +334,48 @@ As someone doing a move I don't know, I want to see it move, not only read the s
   desk stretch has one. No art files, outside media or network, so R-1 does not apply.
 
 **Out of scope:** realistic people, hand grip detail beyond the close-ups, choosing a camera angle.
+
+### 17. Epic: Coach voice (approved 2026-11-24; in 1.0; paid)
+**Goal:** after each set and at the end of the day, one short line that reacts to the person's own numbers, in the
+voice they choose.
+
+**Story:** As someone on the program, I want a coach line that knows my numbers, in the tone I pick, so that I keep
+going.
+- Given Settings, when the person opens Coach voice, then the choices are Off, Coaching and Push; Off is the default.
+- Given Coaching, the line uses the person's own numbers, recognizes a past win or looks ahead, and carries no guilt.
+- Given Push, the line uses the same numbers, is blunt, and may name a missed set, a snooze or a skipped day as a
+  broken commitment.
+- Push never uses profanity, never mentions the person's body, weight or worth, never urges past injury or pain
+  beyond normal effort, and always ends pointed at the next rep.
+- Inputs are numbers only: reps this set and today against the plan, best day, starting max and test results, sets
+  done and missed, snoozes, days completed. Nothing a person types reaches the model.
+- Apple's on-device model writes the line; nothing leaves the phone. Where the model is unavailable, refuses, or
+  returns a line that breaks the rules, a written line for that mode and moment is shown.
+- The line has no exclamation marks, grows with text size and is read by VoiceOver.
+- The Watch shows the line the iPhone wrote, or the written line.
+- Needs the unlock (item 18). Without it, the Settings choice shows the unlock.
+
+**Out of scope:** a named or real person's voice, spoken audio, lines about anything but the person's numbers.
+
+**Steps:** 1. Shape lines and screens (Opus). 2. Build (Opus under the 1.0 exception). 3. Review by a separate
+agent.
+
+### 18. Epic: Workouts and Coach voice are paid (approved 2026-11-24; in 1.0)
+**Requirement:** the 14-day program, bells, logging, Progress, the Watch app and Desk stretch never need a purchase.
+Workouts and Coach voice need the one-time unlock `com.grahamdeno.repbell.unlock`, $4.99, no subscription.
+- Given no unlock, when the person opens Workouts or picks a Coach voice other than Off, then a paywall shows what the
+  unlock adds, its price from the store, Buy, Restore purchase and a way out.
+- Given the unlock bought or restored, Workouts and Coach voice open at once and stay open across launches.
+- Settings shows the unlock status and Restore purchase.
+- Purchase and restore messages are correct for success, cancel, pending and failure (UX-13).
+- Switched by `Features.payment`. Never gated on receipt type.
+- Enforced by tests: the free list opens without a purchase; Workouts and Coach voice do not.
+
+**Steps that can't be undone:** the product's price ($4.99), display name and description in App Store Connect are
+set by Grok on Graham's go. The App Privacy answers ("Purchases") are approved by Graham.
+
+**Steps:** 1. Build (Opus under the 1.0 exception). 2. Review by a separate agent. 3. Grok confirms the product in
+App Store Connect after Graham's go.
 
 ## Small follow-ups
 

@@ -69,7 +69,8 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 ## Product design rules
 
 - The number leads. One decision or one tap per flow screen.
-- No exclamation marks, no guilt copy. A missed set is a fact, not a failure.
+- No exclamation marks, no guilt copy. A missed set is a fact, not a failure. The one exception is Push coaching,
+  which the person turns on (decision of 24 Nov 2026, roadmap item 17).
 - No streak language, except the factual counts on Progress (decision of 20 Nov 2026, see docs/roadmap.md).
 - Dark only (Chalk). Text must grow with the person's text size.
 - Copy lives in the central `Copy` enum; the copy deck is in docs/plan.md.
