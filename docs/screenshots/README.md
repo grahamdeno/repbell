@@ -8,7 +8,7 @@ time zone is set so local time is mid-afternoon. The status bar is overridden to
 
 Names: `<device>_<textsize>_<screen-state>.png`. 220 files.
 
-Time zone for the app: Etc/GMT+9
+Time zone for the app: Etc/GMT+11
 watch41mm uses Apple Watch Series 9 (41mm)
 watch45mm uses Apple Watch Series 9 (45mm)
 
@@ -241,8 +241,8 @@ watch45mm uses Apple Watch Series 9 (45mm)
   produce them reliably. Capture them on a phone.
 - Widgets (every family and state): the Simulator can't place a widget on the Home or Lock Screen from a script.
 - Light mode: the app is dark only and doesn't respond to light mode, so there's no light set.
-- Busy sheet and the paywall as the Day 4 screen: these no longer exist in 1.0 (Busy is one tap; the program is
-  never locked). The paywall now opens as a sheet from Workouts and Settings (item 18).
+- Busy sheet, Coach settings, and the paywall as the Day 4 screen or from Workouts: these no longer exist in 1.0
+  (Busy is one tap; coach media is out; nothing is locked). The paywall screen itself is shown for the record.
 - Settings below the first screen, and the End confirmation under Something hurts: both need taps or scrolling,
   which the script doesn't do.
 
