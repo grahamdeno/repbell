@@ -127,13 +127,22 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertTrue(slots.allSatisfy { DeskStretch.isWeekday($0.date) })
     }
 
-    func testSkipsAnHourWhenABellIsClose() {
+    func testAnHourWithASetNearItLeavesTheStretchToThatSet() {
         let now = at(2026, 11, 25, 8, 30)
-        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 16)]
-        let hours = DeskStretch.hourlySlots(after: now, start: 9, end: 14, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
+        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 30), at(2026, 11, 25, 15, 31)]
+        let hours = DeskStretch.hourlySlots(after: now, start: 9, end: 16, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
             .map { $0.minutes / 60 }
-        // 10:00 (bell 10:15) and 12:00 (bell 11:50) are skipped; 13:00 stays (bell 16 minutes later).
-        XCTAssertEqual(hours, [9, 11, 13, 14])
+        // 10:00, 12:00, 13:00 and 14:00 each have a bell within 30 minutes; 16:00 is 29 minutes from 15:31.
+        // 9, 11 and 15 have none (15:00 is 31 minutes before 15:31), so they keep their reminder on the hour.
+        XCTAssertEqual(hours, [9, 11, 15])
+    }
+
+    func testAProgramWithSetsAllDayLeavesEveryStretchToTheSets() {
+        // Sets every 45 minutes from 7 a.m.: every hour mark has a bell within 30 minutes.
+        let bells = (0..<20).map { CivilDateTime(date: CivilDate(year: 2026, month: 11, day: 25), minutes: 420 + $0 * 45) }
+        let slots = DeskStretch.hourlySlots(after: at(2026, 11, 25, 6), start: 9, end: 17, setAlerts: bells, lastDone: nil,
+                                            limit: 20, daysAhead: 0)
+        XCTAssertEqual(slots, [])
     }
 
     func testSkipsTheHourAfterAStretch() {

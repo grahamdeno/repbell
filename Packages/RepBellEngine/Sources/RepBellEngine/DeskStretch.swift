@@ -80,8 +80,10 @@ public enum DeskStretch {
     public static let defaultEndHour = 17
     /// The hours the window can start and end on.
     public static let windowHours = 6...21
-    /// An hour is skipped when a program set's bell is this close.
-    public static let setClearanceMinutes = 15
+    /// With a program running, an hour that has a set's bell this close gets no reminder: the stretch comes
+    /// right after that set is logged instead (decision of 25 Nov 2026). An hour with no set near it keeps its
+    /// reminder on the hour, as it does with no program.
+    public static let setClearanceMinutes = 30
     /// At most this many hourly reminders are scheduled at once (about a working day); more are added on refill.
     public static let hourlyLimit = 10
     /// iOS keeps at most 64 pending notifications per app.
@@ -129,7 +131,8 @@ public enum DeskStretch {
     }
 
     /// The hours to remind at, soonest first: weekdays only, on the hour inside the window, after `now`,
-    /// skipping an hour when a set's bell is within 15 minutes or a stretch was done in the hour before it.
+    /// skipping an hour when a set's bell is within 30 minutes (that set brings the stretch) or a stretch was done in
+    /// the hour before it.
     public static func hourlySlots(after now: CivilDateTime, start: Int, end: Int, setAlerts: [CivilDateTime],
                                    lastDone: CivilDateTime?, limit: Int, daysAhead: Int = 3) -> [CivilDateTime] {
         guard limit > 0 else { return [] }
