@@ -61,7 +61,7 @@ final class CoachVoiceTests: XCTestCase {
 
     // Push may name a missed set as a broken commitment.
     func testPushNamesMissedSets() {
-        let f = facts(missed: 2)
+        let f = facts(done: 3, missed: 2)
         XCTAssertTrue(CoachVoice.writtenOptions(mode: .push, facts: f).allSatisfy { $0.contains("2") })
         XCTAssertTrue(CoachVoice.accepts("You missed 2. Don't miss the next one.", mode: .push, facts: f))
     }
@@ -138,20 +138,32 @@ final class CoachVoiceTests: XCTestCase {
                        CelebrationTiming.perSet)
     }
 
-    // A day of 35 sets never shows the same Push line twice, and the general lines lean on attitude, not counts.
+    // On the long days (Day 9 about 46 sets, Day 10 about 61) no Push line repeats within 36 sets in a row,
+    // a line shows at most twice in a day, and the general lines lean on attitude, not counts.
     func testPushVariesAcrossALongDay() {
-        XCTAssertGreaterThanOrEqual(CoachVoice.pushGrit.count, 35)
+        XCTAssertGreaterThanOrEqual(CoachVoice.pushGrit.count, 36)
         XCTAssertEqual(Set(CoachVoice.pushGrit).count, CoachVoice.pushGrit.count)
-        for day in [1, 6, 13] {
+        for (day, total) in [(9, 46), (10, 61)] {
             var seen: [String] = []
-            for done in 1...34 {
-                let f = facts(day: day, done: done, total: 35)
-                seen.append(CoachVoice.writtenLine(mode: .push, facts: f) ?? "")
+            for done in 1..<total {
+                seen.append(CoachVoice.writtenLine(mode: .push, facts: facts(day: day, done: done, total: total)) ?? "")
             }
-            XCTAssertEqual(Set(seen).count, seen.count, "day \(day) repeats a line")
+            for start in 0..<max(seen.count - 35, 1) {
+                let window = seen[start..<min(start + 36, seen.count)]
+                XCTAssertEqual(Set(window).count, window.count, "day \(day) repeats within 36 sets")
+            }
+            let counts = Dictionary(seen.map { ($0, 1) }, uniquingKeysWith: +)
+            XCTAssertLessThanOrEqual(counts.values.max() ?? 0, 2)
         }
-        let withNumbers = CoachVoice.pushGrit.filter { $0.contains(where: \.isNumber) }
-        XCTAssertTrue(withNumbers.isEmpty)
+        XCTAssertTrue(CoachVoice.pushGrit.allSatisfy { !$0.contains(where: \.isNumber) })
+    }
+
+    // A snooze or a miss is called out every third set, not on every set for the rest of the day.
+    func testCallOutsDontTakeOverTheDay() {
+        let lines = (1...12).map { done in
+            CoachVoice.writtenLine(mode: .push, facts: facts(day: 9, done: done, total: 46, snoozes: 1)) ?? ""
+        }
+        XCTAssertEqual(lines.filter { $0.contains("pushed the bell back") }.count, 4)
     }
 
     // Push never praises a day with misses.
@@ -162,6 +174,6 @@ final class CoachVoiceTests: XCTestCase {
                 XCTAssertFalse(lower.contains(praise), line)
             }
         }
-        XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("Do not praise"))
+        XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("Never praise"))
     }
 }

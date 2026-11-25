@@ -165,21 +165,23 @@ public enum CoachVoice {
             }
             return lines
         case (.push, .afterSet):
-            if f.setsMissed > 0 {
+            // Missed and snooze lines come every third set, so they don't take over the rest of a long day.
+            let callOut = f.setsDone % 3 == 0
+            if f.setsMissed > 0 && (callOut || f.setsLeft == 0) {
                 let times = f.setsMissed == 1 ? "once" : "\(f.setsMissed) times"
-                return ["\(count(f.setsMissed, "set", "sets")) missed today. You made a promise and broke it \(times). The only fix is the next one, on time, no story.",
+                return ["\(count(f.setsMissed, "set", "sets")) missed today. You made a promise and broke it \(times) today. The only fix is the next one, on time, no story.",
                         "You let \(f.setsMissed) slip today. Nobody else saw it. You did. Fix it with the next one."]
             }
-            if f.snoozesToday > 0 {
-                return ["You pushed the bell back \(count(f.snoozesToday, "time", "times")) today. Every snooze is a small vote for quitting. Stop voting that way."]
+            if f.snoozesToday > 0 && f.setsMissed == 0 && callOut {
+                return ["You pushed the bell back \(count(f.snoozesToday, "time", "times")) today. Each one makes the next easier. Next time, let the bell win."]
             }
-            if f.setsLeft == 0 {
+            if f.setsLeft == 0 && f.setsMissed == 0 {
                 return ["\(f.setsDone) of \(f.setsTotal). You kept your word today. Don't celebrate it. That's the price of being who you said you are."]
             }
             return [pushGrit[(f.setsDone + f.day * 5) % pushGrit.count]]
         case (.push, .dayDone):
             if f.setsMissed > 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). You left \(f.setsMissed) on the floor today and you know exactly why. Next time there's no why. Every set."]
+                return ["\(f.setsDone) of \(f.setsTotal). You let \(f.setsMissed) go today and you know exactly why. Next time there's no why. Every set."]
             }
             if f.testTomorrow {
                 return ["Every set done. Tomorrow is \(test). Nobody cares how today felt. Walk in and find out what you built."]
@@ -187,29 +189,28 @@ public enum CoachVoice {
             return [
                 "\(f.setsTotal) of \(f.setsTotal). Good. That's the minimum, not the finish. Wake up and do it again.",
                 "Every set, on time. Nobody hands out medals for that. It's the job, and the job starts again next time.",
-                "Day \(f.day) done. Most people would have quit by now. You didn't. Don't start.",
-            ]
+            ] + (f.day >= 4 ? ["Day \(f.day) done. Most people would have quit by now. You didn't. Don't start."] : [])
         }
     }
 
     /// Push after a set (item 17): blunt, varied, mostly without numbers, so a day of 35 sets doesn't read the
     /// same line twice in a row. Chosen by set, so consecutive sets get consecutive lines.
     static let pushGrit = [
-        "That set is already history. Nobody's coming to do the next one for you, so stop looking around and be ready.",
-        "Your mind will tell you that's enough. It says that every time. It's lying, and you know it.",
-        "Comfortable people don't finish programs like this. Get uncomfortable and stay there until today is done.",
+        "That set is already history. The next one is yours to do and nobody else's. Be ready.",
+        "The voice saying you've done enough shows up every day. It hasn't been right yet.",
+        "Comfortable people don't finish programs like this. Today isn't supposed to feel easy, and it won't.",
         "You didn't come this far to coast. The next set is where you find out who's actually doing this.",
-        "Motivation left a while ago. Good. Discipline is what's left, and discipline doesn't need a reason.",
+        "You stopped feeling like it sets ago. That's fine. Feelings were never part of the deal.",
         "Every set you do when you don't feel like it is the one that changes you. Go collect another one.",
         "The person you want to be does the next set without negotiating. Be that person.",
-        "Tired is information, not an instruction. Note it and get on the floor when the bell rings.",
+        "Tired is a report, not a decision. Note it and be on the floor when the bell rings.",
         "Nobody's impressed by the sets you've done. Only by the ones you finish when it gets hard.",
         "You're not done. You're not close to done. Stop counting and start owning the rest of the day.",
         "Easy days don't build anything. This one isn't easy, which means it's working.",
         "The bell doesn't care how you feel. Neither does the program. Show up anyway.",
         "Most people quit right about here. That's exactly why most people stay where they are.",
         "Your excuses are ready. So is the next set. Only one of those makes you better.",
-        "Talk is cheap and so are good intentions. The floor only counts reps.",
+        "Talk is cheap and so are good intentions. Only the reps get written down.",
         "You want the result without the grind. There's no such deal. Get back to work.",
         "That set is a receipt, not a trophy. Earn the next one.",
         "Some part of you is hoping the bell forgets. It won't. Be ready when it rings.",
@@ -217,18 +218,18 @@ public enum CoachVoice {
         "You signed up for every set, not the ones that fit your mood. Keep your word.",
         "The hard sets are the only ones that change anything. You just did one. Do it again.",
         "Don't wait to feel ready. Ready shows up after you start.",
-        "Every time you show up when you'd rather not, you get harder to stop. Get harder to stop.",
+        "Every time you show up when you'd rather not, quitting gets a little quieter. Keep it quiet.",
         "Average is easy and crowded. Do the next set and leave the crowd where it is.",
         "Stop waiting for this to feel good. It won't. Doing it anyway is the whole point.",
         "This is where you separate from who you were last week. Next set.",
         "Weak excuses sound reasonable at this point in the day. Ignore every one of them.",
         "You owe yourself every set you promised this morning. Pay it.",
-        "Pressure is something most people never sign up for. You did. Act like it.",
+        "Most people never sign up for something this relentless. You did. Act like it.",
         "When it rings again, don't think. Thinking is where quitting starts. Just go.",
         "You can rest when today is done. Not before.",
         "Repetition is where this stops being a mood and becomes who you are. Next set.",
         "Nobody's grading effort. The floor counts reps, and the day isn't finished.",
-        "You can do more than your head is offering. Prove it wrong on the next set.",
+        "Your head keeps offering a way out. Turn it down on the next set.",
         "The version of you that skips this set is already making plans. Don't let it win.",
         "Discomfort is the price of the result. You already paid for this one. Pay for the next.",
     ]
