@@ -6,9 +6,12 @@ public enum CelebrationTiming {
     public static let dayComplete: Double = 4.0
 
     /// Seconds before it dismisses itself, or nil to wait for a tap. With VoiceOver on it waits, so it can be read.
-    public static func autoDismiss(dayComplete: Bool, voiceOverRunning: Bool) -> Double? {
+    /// With a coach line showing, the moment stays long enough to read it.
+    public static let coachExtra: Double = 2.5
+
+    public static func autoDismiss(dayComplete: Bool, voiceOverRunning: Bool, coachLine: Bool = false) -> Double? {
         if voiceOverRunning { return nil }
-        return dayComplete ? Self.dayComplete : perSet
+        return (dayComplete ? Self.dayComplete : perSet) + (coachLine ? coachExtra : 0)
     }
 }
 

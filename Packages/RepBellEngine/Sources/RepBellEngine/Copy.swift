@@ -107,6 +107,15 @@ public enum Copy {
         dayStart(day: day, sets: sets).replacingOccurrences(of: "\n", with: " ")
     }
 
+    public static let coachVoiceSetting = "Coach voice"
+    public static let coachVoiceNote = "A line after each set that reads your numbers. Coaching encourages. Push holds you to your word."
+    public static func coachModeName(_ mode: CoachMode) -> String {
+        switch mode {
+        case .off: return "Off"
+        case .coaching: return "Coaching"
+        case .push: return "Push"
+        }
+    }
     public static let deskStretchTitle = "Desk stretch"
     public static let deskStretchSkip = "Skip"
     public static let deskStretchSetting = "Desk stretch"

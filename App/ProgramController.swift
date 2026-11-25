@@ -305,9 +305,29 @@ final class ProgramController {
             if celebrate {
                 let reps = resolved.sets.first { $0.index == index }?.reps ?? resolved.reps
                 celebration = Celebration(day: day, reps: reps, done: resolved.doneCount, total: resolved.sets.count, repsToday: resolved.loggedReps, dayComplete: finished)
+                addCoachLine(run: run, day: day, reps: reps, finished: finished, now: now)
             }
         }
         Task { await refreshAlerts() }
+    }
+
+    /// The Coach voice in use: the person's choice, while the unlock is open.
+    var activeCoachMode: CoachMode {
+        library.paidFeaturesOpen ? CoachVoiceStore.mode : .off
+    }
+
+    private func addCoachLine(run: PersistedRun, day: Int, reps: Int, finished: Bool, now: CivilDateTime) {
+        let mode = activeCoachMode
+        guard mode != .off,
+              let facts = CoachFacts.make(run: ScheduleEngine.resolve(run.input, now: now), day: day, repsThisSet: reps,
+                                          dayOneMax: run.input.dayOneMax, moment: finished ? .dayDone : .afterSet)
+        else { return }
+        celebration?.coachLine = CoachVoice.writtenLine(mode: mode, facts: facts)
+        let id = celebration?.id
+        Task { @MainActor in
+            guard let line = await CoachWriter.generated(mode: mode, facts: facts), celebration?.id == id else { return }
+            celebration?.coachLine = line
+        }
     }
 
     /// The set that is due right now, if any.
@@ -965,6 +985,8 @@ struct Celebration: Equatable, Identifiable {
     var finalTest = false
     var startMax = 0
     var percent = 0
+    /// Coach voice line (item 17): the written line first, replaced by the on-device model's if it comes in time.
+    var coachLine: String?
 }
 
 struct ProfileRow: Identifiable, Equatable {

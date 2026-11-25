@@ -65,7 +65,9 @@ struct CelebrationView: View {
             if ProgramController.screenshotState != nil { return }
             #endif
             // With VoiceOver on it waits for a tap, so it can be read in full.
-            guard let seconds = CelebrationTiming.autoDismiss(dayComplete: celebration.dayComplete, voiceOverRunning: UIAccessibility.isVoiceOverRunning) else { return }
+            guard let seconds = CelebrationTiming.autoDismiss(dayComplete: celebration.dayComplete,
+                                                              voiceOverRunning: UIAccessibility.isVoiceOverRunning,
+                                                              coachLine: celebration.coachLine != nil) else { return }
             try? await Task.sleep(for: .seconds(seconds))
             dismiss()
         }
@@ -113,6 +115,18 @@ struct CelebrationView: View {
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .opacity(shown ? 1 : 0)
+                if let coach = celebration.coachLine, !flood {
+                    // Coach voice (item 17): the person's own numbers, in the voice they chose.
+                    Text(coach)
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(ink)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .contentTransition(.opacity)
+                        .animation(.easeOut(duration: 0.3), value: coach)
+                        .opacity(shown ? 1 : 0)
+                        .padding(.top, 4)
+                }
                 Spacer()
                 Text(Copy.tapToContinue)
                     .font(.subheadline)

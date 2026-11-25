@@ -216,6 +216,10 @@ Every line the app says. Short, plain, numbers first, never shaming. Brackets ar
 | Paywall, failed | The purchase didn't finish. Try again. |
 | Paywall, store unreachable | The App Store isn't reachable right now. Try again in a moment. |
 | Paywall, done | Unlocked. Workouts and Coach voice are open. |
+| Settings, Coach voice | Coach voice: Off / Coaching / Push. A line after each set that reads your numbers. Coaching encourages. Push holds you to your word. |
+| Coach line, Coaching (written examples) | [96] so far today. [12] sets left, and each one moves you toward Day 15. / [420] is your best day yet, up from [380]. |
+| Coach line, Push (written examples) | [2] missed today. That set is gone. Don't let the next one go with it. / [16] of [16]. You did what you said you'd do. Do it again tomorrow. |
+| Coach line rules | Written by Apple's on-device model from numbers only, or a written line when it is unavailable, slow or breaks a rule. No exclamation marks, no profanity, nothing about the body or worth, nothing urging past pain or injury, no number that isn't the person's own. Coaching never carries guilt; Push may name a missed or snoozed set. |
 
 ## Approved defaults
 

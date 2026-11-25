@@ -17,6 +17,8 @@ struct SettingsView: View {
     @State private var deskStretchOn = DeskStretchStore.enabled
     @State private var showPaywall = false
     @State private var restoring = false
+    @State private var coachMode = CoachVoiceStore.mode
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         ScreenChrome(top: 8, scrolls: false) {
@@ -130,6 +132,50 @@ struct SettingsView: View {
         alertsOK = !rows.contains(where: AlertsCheckView.needsAttention)
     }
 
+    // MARK: Coach voice
+
+    /// Off, Coaching or Push (roadmap item 17). Coaching and Push need the unlock.
+    private var coachVoice: some View {
+        let selection = Binding<CoachMode>(
+            get: { controller.library.paidFeaturesOpen ? coachMode : .off },
+            set: { choice in
+                if choice != .off && !controller.library.paidFeaturesOpen {
+                    showPaywall = true
+                } else {
+                    CoachVoiceStore.mode = choice
+                    coachMode = choice
+                    Haptics.play(.tap)
+                }
+            }
+        )
+        return VStack(alignment: .leading, spacing: 8) {
+            Text(Copy.coachVoiceSetting)
+                .font(.body)
+                .foregroundStyle(Chalk.ink)
+            Group {
+                if typeSize.isAccessibilitySize {
+                    Picker(Copy.coachVoiceSetting, selection: selection) {
+                        ForEach(CoachMode.allCases, id: \.self) { Text(Copy.coachModeName($0)).tag($0) }
+                    }
+                    .pickerStyle(.menu)
+                    .tint(Chalk.volt)
+                } else {
+                    Picker(Copy.coachVoiceSetting, selection: selection) {
+                        ForEach(CoachMode.allCases, id: \.self) { Text(Copy.coachModeName($0)).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+            Text(Copy.coachVoiceNote)
+                .font(.subheadline)
+                .foregroundStyle(Chalk.inkMuted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .onChange(of: controller.library.unlocked) { _, open in
+            if open { coachMode = CoachVoiceStore.mode }
+        }
+    }
+
     // MARK: Purchase
 
     /// Unlock status and Restore purchase (roadmap item 18). The program itself never needs the unlock.
@@ -183,6 +229,7 @@ struct SettingsView: View {
                     }
                 }
             }
+            coachVoice
             Toggle(Copy.deskStretchSetting, isOn: Binding(
                 get: { deskStretchOn },
                 set: { on in
