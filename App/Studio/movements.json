@@ -2046,9 +2046,9 @@
     },
     {
       "id": "gi-row",
-      "name": "Gi bag row",
+      "name": "Sandbag row",
       "cues": [
-        "Grip the gi sleeves or lapels tied to the bag. Hinge forward with a flat back.",
+        "Grip the bag by its handles or ends. Hinge forward with a flat back.",
         "Row the bag to your belly and squeeze your shoulder blades. Let your grip do the work, not your wrists."
       ],
       "sides": "none",
@@ -2067,10 +2067,10 @@
     },
     {
       "id": "gi-drag",
-      "name": "Gi bag drag",
+      "name": "Sandbag drag",
       "cues": [
-        "Grip the gi with both hands, sit low, arms long.",
-        "Walk backward in short steps, dragging the bag. Stay low, like breaking a posture on the mat."
+        "Grip the bag with both hands, sit low, arms long.",
+        "Walk backward in short steps, dragging the bag. Stay low and keep your back flat."
       ],
       "sides": "none",
       "gear": [
@@ -2088,10 +2088,10 @@
     },
     {
       "id": "gi-hold",
-      "name": "Gi grip hold",
+      "name": "Sandbag grip hold",
       "cues": [
-        "Lift the bag off the floor by the gi and stand tall.",
-        "Hold as long as the timer runs. Switch grips (sleeve, lapel, pistol) between rounds."
+        "Lift the bag off the floor by its handles or ends and stand tall.",
+        "Hold as long as the timer runs. Change your grip between rounds."
       ],
       "sides": "none",
       "gear": [
@@ -2117,74 +2117,11 @@
       "gear": [],
       "standIn": null,
       "easier": null,
-      "harder": "rice-grab",
-      "view": "front",
-      "keyframes": [
-        "open",
-        "fist"
-      ],
-      "modify": {}
-    },
-    {
-      "id": "rice-grab",
-      "name": "Rice bucket grab",
-      "cues": [
-        "Push one hand deep into the rice.",
-        "Clench a fist as hard as you can, then open it fully. Fast and hard."
-      ],
-      "sides": "each",
-      "gear": [
-        "rice-bucket"
-      ],
-      "standIn": "grip-squeeze",
-      "easier": "grip-squeeze",
       "harder": null,
       "view": "front",
       "keyframes": [
         "open",
         "fist"
-      ],
-      "modify": {}
-    },
-    {
-      "id": "rice-twist",
-      "name": "Rice bucket twist",
-      "cues": [
-        "Hand deep in the rice, fist closed.",
-        "Turn your wrist side to side as far as it goes, against the rice."
-      ],
-      "sides": "each",
-      "gear": [
-        "rice-bucket"
-      ],
-      "standIn": "grip-squeeze",
-      "easier": null,
-      "harder": null,
-      "view": "front",
-      "keyframes": [
-        "turned in",
-        "turned out"
-      ],
-      "modify": {}
-    },
-    {
-      "id": "rice-spread",
-      "name": "Rice bucket spread",
-      "cues": [
-        "Hand deep in the rice, fingers together.",
-        "Spread your fingers as wide as you can against the rice, then bring them back."
-      ],
-      "sides": "each",
-      "gear": [
-        "rice-bucket"
-      ],
-      "standIn": "grip-squeeze",
-      "easier": null,
-      "harder": null,
-      "view": "front",
-      "keyframes": [
-        "closed",
-        "spread"
       ],
       "modify": {}
     },

@@ -157,7 +157,7 @@ enum FigureDrawing {
     static func hand(_ gc: GraphicsContext, size: CGSize, clip: FigureClip, u: Double, tint: Color) {
         let (s, dx, dy) = fit(size)
         func p(_ x: Double, _ y: Double) -> CGPoint { CGPoint(x: dx + x * s, y: dy + y * s) }
-        let bucket = clip.bucket ?? true
+        let bucket = clip.bucket ?? false
         if bucket {
             var rice = Path()
             rice.move(to: p(88, 86)); rice.addLine(to: p(216, 86)); rice.addLine(to: p(204, 192)); rice.addLine(to: p(100, 192)); rice.closeSubpath()

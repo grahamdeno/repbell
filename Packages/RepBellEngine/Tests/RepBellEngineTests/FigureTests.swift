@@ -25,7 +25,7 @@ final class FigureTests: XCTestCase {
     func testEveryMovementHasAClip() throws {
         let lib = try library()
         let ids = try movementIDs()
-        XCTAssertEqual(ids.count, 149)
+        XCTAssertEqual(ids.count, 146)
         for id in ids { XCTAssertNotNil(lib.clips[id], id) }
     }
 
@@ -58,12 +58,11 @@ final class FigureTests: XCTestCase {
         }
     }
 
-    // The four grip moves are hand close-ups, since a line figure can't show fingers.
+    // The grip move is a hand close-up, since a line figure can't show fingers. The rice bucket moves are gone
+    // (decision of 25 Nov 2026).
     func testGripMovesAreHandCloseUps() throws {
         let lib = try library()
-        XCTAssertEqual(lib.clips["rice-twist"]?.hand, "twist")
-        XCTAssertEqual(lib.clips["rice-grab"]?.hand, "grab")
-        XCTAssertEqual(lib.clips["rice-spread"]?.hand, "spread")
+        XCTAssertNil(lib.clips["rice-grab"])
         XCTAssertEqual(lib.clips["grip-squeeze"]?.hand, "squeeze")
         XCTAssertEqual(lib.clips["grip-squeeze"]?.bucket, false)
     }

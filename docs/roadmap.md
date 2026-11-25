@@ -73,6 +73,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-25 | **Gear trimmed:** the rice bucket and its three moves are gone (Grip and pull uses the fist squeeze instead); the gi bag is now just "Sandbag", with its moves and cues reworded without the gi | Graham's decision |
 | 2026-11-25 | **Product's 1.0 calls reviewed:** Graham agreed the Desk stretch flow, Fit my time details, Desk stretch joining 1.0, the Health read permission text, the Health permission text with "Data Not Collected", and this week's calls (glow at 30% and 22%, Fit my time needs the unlock, no free sample sessions) | Graham's review |
 | 2026-11-25 | **Watch coach line joins 1.0** (item 19), moved back from the next version; **light mode is dropped** | Graham's decisions |
 | 2026-11-25 | **Hourly desk stretch on weekdays joins 1.0** (item 20) | Graham's decision |
