@@ -20,12 +20,13 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
   Prepare for Submission. Internal TestFlight only.
 - **1.0 scope:** open (decision of 20 Nov 2026); items join as Graham approves them. Built under the 1.0 exception.
 - **Test builds:** 15 rejected at upload (missing NSHealthShareUsageDescription, fixed in #30); 16 and 17 uploaded;
-  18 started 22 Nov 2026 from `648b21c` (Volt palette, bell-ring flood, Day 15 flood, Today and large-text fixes,
-  19-stretch Desk stretch mix).
-- **Screenshots:** `docs/screenshots/` holds run 3 of the current build (Debug seeding, manual workflow).
+  18 and 19 failed at signing (certificate limit); 20, 22, 23, 24, 26 and 27 uploaded; 25 cancelled before it
+  started; 28 failed at signing (certificate limit); 29 uploaded 25 Nov 2026 from `2040cee` (coach clips, volt icon,
+  paid unlock, Coach voice, harder Push, tap to clear).
+- **Screenshots:** `docs/screenshots/` holds run 3; run 4 (24 Nov, with the paywall) is on `screenshots/run-4`, and its paywall shot is the purchase's review screenshot.
 - **Not built:** the Watch face complication (needs a new bundle ID, which needs Graham's approval); the new app
   icon (art pending Graham's approval); "Start set now" (early sets, not yet shaped).
-- **Next:** Graham lives on build 18; fix rounds as he finds things; the Stage 5 UX walk; the Fable go-live
+- **Next:** Graham lives on the newest test build; fix rounds as he finds things; the Stage 5 UX walk; the Fable go-live
   assessment. Graham reviews every "decided by Product under the 1.0 exception" line in the Decision log before any
   ship go.
 
@@ -71,6 +72,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-25 | **Test builds reuse one saved signing certificate.** "Apple Development: Graham DeNoyer" (expires 25 Nov 2027) is loaded from build secrets into a temporary keychain each run, so runs stop creating development certificates while it is valid. The archive step checks the app was signed with it. Renew it before 25 Nov 2027 | Graham's go 25 Nov 2026 (Product's recommendation). Builds 18, 19 and 28 had failed on the Apple Development certificate limit |
 | 2026-11-24 | **Coach voice in 1.0:** a Settings choice of Off, Coaching or Push. Coaching reads the person's stats, recognizes past wins and looks ahead, with no guilt. Push says the same stats bluntly and may name a missed set, snooze or skipped day as a broken commitment, within limits (item 17) | Graham's decision |
 | 2026-11-24 | **Design rule amended:** no guilt copy, except in Push coaching, which the person turns on | Graham's decision. **Amends** the no-guilt design rule |
 | 2026-11-24 | **1.0 is paid:** the program, bells, logging, Progress, Watch and Desk stretch stay free; Workouts and Coach voice need the one-time unlock `com.grahamdeno.repbell.unlock` at $4.99 (item 18) | Graham's decision. **Replaces** the 20 Nov decision that 1.0 is free with no paywall (item 4) |
