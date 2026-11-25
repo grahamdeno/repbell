@@ -138,6 +138,22 @@ final class CoachVoiceTests: XCTestCase {
                        CelebrationTiming.perSet)
     }
 
+    // A day of 35 sets never shows the same Push line twice, and the general lines lean on attitude, not counts.
+    func testPushVariesAcrossALongDay() {
+        XCTAssertGreaterThanOrEqual(CoachVoice.pushGrit.count, 35)
+        XCTAssertEqual(Set(CoachVoice.pushGrit).count, CoachVoice.pushGrit.count)
+        for day in [1, 6, 13] {
+            var seen: [String] = []
+            for done in 1...34 {
+                let f = facts(day: day, done: done, total: 35)
+                seen.append(CoachVoice.writtenLine(mode: .push, facts: f) ?? "")
+            }
+            XCTAssertEqual(Set(seen).count, seen.count, "day \(day) repeats a line")
+        }
+        let withNumbers = CoachVoice.pushGrit.filter { $0.contains(where: \.isNumber) }
+        XCTAssertTrue(withNumbers.isEmpty)
+    }
+
     // Push never praises a day with misses.
     func testPushDoesNotPraiseMisses() {
         for line in CoachVoice.writtenOptions(mode: .push, facts: facts(.dayDone, done: 14, missed: 2)) {

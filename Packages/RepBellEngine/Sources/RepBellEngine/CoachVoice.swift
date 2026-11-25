@@ -103,7 +103,7 @@ public enum CoachVoice {
     /// Whether a line may be shown for this mode and these facts.
     public static func accepts(_ line: String, mode: CoachMode, facts: CoachFacts) -> Bool {
         let text = line.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !text.isEmpty, text.count <= 140, !text.contains("!"), !text.contains("\n") else { return false }
+        guard !text.isEmpty, text.count <= 200, !text.contains("!"), !text.contains("\n") else { return false }
         let lower = text.lowercased()
         let words = lower.split { !$0.isLetter }.map(String.init)
         func starts(_ stems: [String]) -> Bool {
@@ -166,41 +166,79 @@ public enum CoachVoice {
             return lines
         case (.push, .afterSet):
             if f.setsMissed > 0 {
-                let them = f.setsMissed == 1 ? "it" : "them"
-                return ["\(count(f.setsMissed, "set", "sets")) missed today. You said every set. Right now that isn't true.",
-                        "That's \(f.setsMissed) you let go. You don't get \(them) back. The next one isn't optional."]
+                let times = f.setsMissed == 1 ? "once" : "\(f.setsMissed) times"
+                return ["\(count(f.setsMissed, "set", "sets")) missed today. You made a promise and broke it \(times). The only fix is the next one, on time, no story.",
+                        "You let \(f.setsMissed) slip today. Nobody else saw it. You did. Fix it with the next one."]
             }
             if f.snoozesToday > 0 {
-                return ["You pushed the bell back \(count(f.snoozesToday, "time", "times")) today. Waiting is how days slip. When it rings, you start."]
+                return ["You pushed the bell back \(count(f.snoozesToday, "time", "times")) today. Every snooze is a small vote for quitting. Stop voting that way."]
             }
             if f.setsLeft == 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). You kept your word today. Tomorrow it starts over."]
+                return ["\(f.setsDone) of \(f.setsTotal). You kept your word today. Don't celebrate it. That's the price of being who you said you are."]
             }
-            return [
-                "\(f.setsDone) of \(f.setsTotal). The ones you've done are done. Get the next one.",
-                "\(setsLeft) left. That's the job. Don't negotiate with it.",
-                "\(f.repsToday) of \(f.repsPlannedToday). Not done is not done. Finish it.",
-            ]
+            return [pushGrit[(f.setsDone + f.day * 5) % pushGrit.count]]
         case (.push, .dayDone):
             if f.setsMissed > 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). \(count(f.setsMissed, "time", "times")) today you chose something else. Next time, choose the set."]
+                return ["\(f.setsDone) of \(f.setsTotal). You left \(f.setsMissed) on the floor today and you know exactly why. Next time there's no why. Every set."]
             }
             if f.testTomorrow {
-                return ["Every set done. Tomorrow is \(test). No excuses walk in with you."]
+                return ["Every set done. Tomorrow is \(test). Nobody cares how today felt. Walk in and find out what you built."]
             }
             return [
-                "\(f.setsTotal) of \(f.setsTotal). Good. That was the deal. Same deal next time.",
-                "Every set, on time. That's not special. That's the standard.",
+                "\(f.setsTotal) of \(f.setsTotal). Good. That's the minimum, not the finish. Wake up and do it again.",
+                "Every set, on time. Nobody hands out medals for that. It's the job, and the job starts again next time.",
+                "Day \(f.day) done. Most people would have quit by now. You didn't. Don't start.",
             ]
         }
     }
+
+    /// Push after a set (item 17): blunt, varied, mostly without numbers, so a day of 35 sets doesn't read the
+    /// same line twice in a row. Chosen by set, so consecutive sets get consecutive lines.
+    static let pushGrit = [
+        "That set is already history. Nobody's coming to do the next one for you, so stop looking around and be ready.",
+        "Your mind will tell you that's enough. It says that every time. It's lying, and you know it.",
+        "Comfortable people don't finish programs like this. Get uncomfortable and stay there until today is done.",
+        "You didn't come this far to coast. The next set is where you find out who's actually doing this.",
+        "Motivation left a while ago. Good. Discipline is what's left, and discipline doesn't need a reason.",
+        "Every set you do when you don't feel like it is the one that changes you. Go collect another one.",
+        "The person you want to be does the next set without negotiating. Be that person.",
+        "Tired is information, not an instruction. Note it and get on the floor when the bell rings.",
+        "Nobody's impressed by the sets you've done. Only by the ones you finish when it gets hard.",
+        "You're not done. You're not close to done. Stop counting and start owning the rest of the day.",
+        "Easy days don't build anything. This one isn't easy, which means it's working.",
+        "The bell doesn't care how you feel. Neither does the program. Show up anyway.",
+        "Most people quit right about here. That's exactly why most people stay where they are.",
+        "Your excuses are ready. So is the next set. Only one of those makes you better.",
+        "Talk is cheap and so are good intentions. The floor only counts reps.",
+        "You want the result without the grind. There's no such deal. Get back to work.",
+        "That set is a receipt, not a trophy. Earn the next one.",
+        "Some part of you is hoping the bell forgets. It won't. Be ready when it rings.",
+        "Doubt is loud right now. Answer it the only way that works: the next set, done clean.",
+        "You signed up for every set, not the ones that fit your mood. Keep your word.",
+        "The hard sets are the only ones that change anything. You just did one. Do it again.",
+        "Don't wait to feel ready. Ready shows up after you start.",
+        "Every time you show up when you'd rather not, you get harder to stop. Get harder to stop.",
+        "Average is easy and crowded. Do the next set and leave the crowd where it is.",
+        "Stop waiting for this to feel good. It won't. Doing it anyway is the whole point.",
+        "This is where you separate from who you were last week. Next set.",
+        "Weak excuses sound reasonable at this point in the day. Ignore every one of them.",
+        "You owe yourself every set you promised this morning. Pay it.",
+        "Pressure is something most people never sign up for. You did. Act like it.",
+        "When it rings again, don't think. Thinking is where quitting starts. Just go.",
+        "You can rest when today is done. Not before.",
+        "Repetition is where this stops being a mood and becomes who you are. Next set.",
+        "Nobody's grading effort. The floor counts reps, and the day isn't finished.",
+        "You can do more than your head is offering. Prove it wrong on the next set.",
+        "The version of you that skips this set is already making plans. Don't let it win.",
+        "Discomfort is the price of the result. You already paid for this one. Pay for the next.",
+    ]
 
     // MARK: Prompt for the on-device model
 
     public static func instructions(mode: CoachMode) -> String {
         let common = """
         You write one line for a push-up app, shown right after the person logs a set or finishes a day. \
-        Use only the numbers given and never invent a number. One or two short sentences, under 20 words. \
+        Use only the numbers given and never invent a number. Short sentences, under 35 words. \
         No exclamation marks. No profanity. Never mention the person's body, weight, looks or worth. \
         Never tell them to push through pain or injury. Plain words, no military words. \
         Write every number as digits. End pointed at the next set or the next day. Reply with the line only.
@@ -211,7 +249,7 @@ public enum CoachVoice {
         case .coaching:
             return common + " Tone: calm and encouraging. Recognize a real win from the numbers, or look ahead to what is left. No guilt and no blame; never mention missed or snoozed sets."
         case .push:
-            return common + " Tone: hard. A coach who expects more and says so, not a cheerleader. Do not praise unless every set is done, and even then keep it to a few words. Call out excuses, snoozes and missed sets directly as broken commitments. Short, hard sentences. Challenge them; never insult them or mention their body."
+            return common + " Tone: hard and relentless, a coach who expects more and says so, never a cheerleader. Two or three short, hard sentences, up to 35 words. Talk about discipline, discomfort, excuses, keeping your word, and the mind quitting before you do. Use at most one number, and don't just recite the counts. Never praise unless every set is done, and then only in a few words. Call out excuses, snoozes and missed sets as broken commitments. Challenge them; never insult them or mention their body."
         }
     }
 
