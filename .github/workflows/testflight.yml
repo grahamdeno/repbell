@@ -7,6 +7,10 @@ on:
 # Archives the iPhone app (Watch app and widget embedded), signs with the App
 # Store Connect API key, and uploads to TestFlight for Apple ID 6834201034.
 # Does not submit for review.
+#
+# Signing reuses one saved Apple Development certificate ("Apple Development: Graham DeNoyer",
+# expires 2027-11-25), loaded from the BUILD_CERT_P12 secret into a temporary keychain, so a run
+# never creates a new certificate. The keychain is deleted at the end of every run.
 jobs:
   upload:
     name: Archive and upload to TestFlight
@@ -23,6 +27,33 @@ jobs:
           mkdir -p "$RUNNER_TEMP/private_keys"
           printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/private_keys/AuthKey_${ASC_KEY_ID}.p8"
           chmod 600 "$RUNNER_TEMP/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+
+      - name: Load the saved signing certificate
+        env:
+          BUILD_CERT_P12: ${{ secrets.BUILD_CERT_P12 }}
+          BUILD_CERT_PASSWORD: ${{ secrets.BUILD_CERT_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$BUILD_CERT_P12" ] || [ -z "$BUILD_CERT_PASSWORD" ] || [ -z "$KEYCHAIN_PASSWORD" ]; then
+            echo "The saved signing certificate secrets are missing. Stopping so no new certificate is created."
+            exit 1
+          fi
+          KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+          CERT="$RUNNER_TEMP/signing.p12"
+          printf '%s' "$BUILD_CERT_P12" | base64 --decode > "$CERT"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security import "$CERT" -P "$BUILD_CERT_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" > /dev/null
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+          rm -f "$CERT"
+          if ! security find-identity -v -p codesigning "$KEYCHAIN" | grep -q "Apple Development: Graham DeNoyer"; then
+            echo "The saved certificate did not load. Stopping so no new certificate is created."
+            exit 1
+          fi
+          echo "Saved signing certificate loaded."
 
       - name: Archive
         env:
@@ -81,3 +112,9 @@ jobs:
             -authenticationKeyPath "$RUNNER_TEMP/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      - name: Remove the temporary keychain
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2>/dev/null || true
+          rm -f "$RUNNER_TEMP/signing.p12"
