@@ -25,7 +25,7 @@ final class FigureTests: XCTestCase {
     func testEveryMovementHasAClip() throws {
         let lib = try library()
         let ids = try movementIDs()
-        XCTAssertEqual(ids.count, 149)
+        XCTAssertEqual(ids.count, 146)
         for id in ids { XCTAssertNotNil(lib.clips[id], id) }
     }
 

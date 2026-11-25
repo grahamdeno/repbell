@@ -428,7 +428,7 @@ C["russian-twist"] = clip("front", [F(hip=(0, -6), lean=-8, arm=(-34, -44), ep="
                                     F(hip=(0, -6), lean=8, arm=(30, -40), arm2=(34, -44), ep="o", leg=(-16, -2), kp="o")], 0.6, 0.2, arrows=[arc("nk", 26, 200, 340, 0, 20)])
 C["bicycle"] = clip("side", [S(hip=(0, -6), t=66, arm=(36, -70), ep="u", leg=(20, -40), kp="u", leg2=A(-104)), S(hip=(0, -6), t=66, arm=(36, -70), ep="u", leg=A(-104), leg2=(20, -40), kp2="u")], 0.6, 0.2)
 
-# ---- Kettlebell, gi bag and carries
+# ---- Kettlebell, sandbag and carries
 C["kettlebell-swing"] = clip("side", [S(hip=(-14, -66), t=72, arm=(-4, -34), ep="f", leg=(6, 0)), S(arm=A(90))], 0.6, 0.15, props=[bell("ha")])
 C["kb-deadlift"] = clip("side", [S(hip=(-16, -54), t=68, arm=(12, -14), leg=(6, 0)), S(arm=A(2))], 0.9, 0.3, props=[bell("ha")])
 C["goblet-squat"] = clip("side", [S(arm=(18, -108), ep="d"), S(hip=(-22, -38), t=30, arm=(8, -76), ep="d", leg=(6, 0))], 0.9, 0.3, props=[bell("ha")])

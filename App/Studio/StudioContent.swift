@@ -163,7 +163,8 @@ final class StudioSettings {
 
     private init() {
         mascot = defaults.string(forKey: "studio.mascot") ?? "him"
-        gear = Set(defaults.stringArray(forKey: "studio.gear") ?? ["chair", "table"])
+        // Gear that no longer exists (the rice bucket) drops out, so the count matches the toggles.
+        gear = Set(defaults.stringArray(forKey: "studio.gear") ?? ["chair", "table"]).intersection(Self.allGear)
         easyOn = Set(defaults.stringArray(forKey: "studio.easyOn") ?? [])
         health = defaults.bool(forKey: "studio.health")
         if let data = defaults.data(forKey: "studio.log"), let entries = try? JSONDecoder().decode([StudioLogEntry].self, from: data) {
