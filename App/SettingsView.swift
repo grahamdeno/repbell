@@ -15,6 +15,8 @@ struct SettingsView: View {
     @State private var confirmStartOver = false
     @State private var pushUpsToHealth = PushUpHealthStore.enabled
     @State private var deskStretchOn = DeskStretchStore.enabled
+    @State private var deskStart = DeskStretchStore.startHour
+    @State private var deskEnd = DeskStretchStore.endHour
     @State private var showPaywall = false
     @State private var restoring = false
     @State private var coachMode = CoachVoiceStore.mode
@@ -244,6 +246,7 @@ struct SettingsView: View {
                 set: { on in
                     DeskStretchStore.enabled = on
                     deskStretchOn = on
+                    Task { await controller.refreshAlerts() }
                 }
             ))
             .tint(Chalk.volt)
@@ -253,6 +256,24 @@ struct SettingsView: View {
                 .font(.footnote)
                 .foregroundStyle(Chalk.inkMuted)
                 .fixedSize(horizontal: false, vertical: true)
+            if deskStretchOn {
+                hourPicker(Copy.deskStretchFrom, hours: Array(DeskStretch.windowHours), selection: Binding(
+                    get: { deskStart },
+                    set: { hour in
+                        let window = DeskStretch.window(start: hour, end: max(deskEnd, hour))
+                        deskStart = window.start
+                        deskEnd = window.end
+                        saveDeskWindow()
+                    }
+                ))
+                hourPicker(Copy.deskStretchUntil, hours: Array(deskStart...DeskStretch.windowHours.upperBound), selection: Binding(
+                    get: { deskEnd },
+                    set: { hour in
+                        deskEnd = DeskStretch.window(start: deskStart, end: hour).end
+                        saveDeskWindow()
+                    }
+                ))
+            }
             if StudioHealth.available {
                 Toggle(Copy.pushUpsToHealth, isOn: Binding(
                     get: { pushUpsToHealth },
@@ -403,5 +424,25 @@ extension ClockTime {
 
     func dateToday() -> Date {
         Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: Date()) ?? Date()
+    }
+}
+
+// Item 20: the hourly desk stretch window.
+extension SettingsView {
+    func hourPicker(_ label: String, hours: [Int], selection: Binding<Int>) -> some View {
+        Picker(label, selection: selection) {
+            ForEach(hours, id: \.self) { Text(Copy.hourLabel($0)).tag($0) }
+        }
+        .pickerStyle(.menu)
+        .tint(Chalk.volt)
+        .foregroundStyle(Chalk.inkMuted)
+        .frame(minHeight: ChalkTokens.minimumTarget)
+    }
+
+    func saveDeskWindow() {
+        DeskStretchStore.startHour = deskStart
+        DeskStretchStore.endHour = deskEnd
+        Haptics.play(.tap)
+        Task { await controller.refreshAlerts() }
     }
 }

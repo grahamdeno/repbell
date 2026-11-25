@@ -40,7 +40,9 @@ enum Notifier {
         let desired = desiredRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet)
         let wanted = Set(desired.map(\.identifier))
         let pending = await center.pendingNotificationRequests()
-        let stale = pending.map(\.identifier).filter { ($0.hasPrefix("set.") || $0.hasPrefix("note.")) && !wanted.contains($0) }
+        let stale = pending.map(\.identifier).filter {
+            ($0.hasPrefix("set.") || $0.hasPrefix("note.") || $0.hasPrefix("desk.")) && !wanted.contains($0)
+        }
         if !stale.isEmpty {
             center.removePendingNotificationRequests(withIdentifiers: stale)
         }
@@ -60,8 +62,40 @@ enum Notifier {
     }
 
     private static func desiredRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool) -> [UNNotificationRequest] {
-        guard let run = library.current, run.pausedAt == nil, !run.ended else { return [] }
         let now = CivilDateTime.local(Date())
+        var requests = programRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet, now: now)
+        // Item 20: the hourly desk stretch runs with or without a program, in the slots the set alerts leave.
+        var bells: [CivilDateTime] = []
+        if let run = library.current, run.pausedAt == nil, !run.ended {
+            bells = ScheduleEngine.resolve(run.input, now: now).alertQueue(at: now, capacity: Int.max).pending
+                .filter { library.allows(day: $0.day) }.map(\.at)
+        }
+        let setCount = requests.filter { $0.identifier.hasPrefix("set.") }.count
+        requests += deskStretchRequests(now: now, bells: bells, budget: DeskStretch.hourlyBudget(setAlerts: setCount, notes: 4))
+        return requests
+    }
+
+    private static func deskStretchRequests(now: CivilDateTime, bells: [CivilDateTime], budget: Int) -> [UNNotificationRequest] {
+        guard DeskStretchStore.enabled, budget > 0 else { return [] }
+        let slots = DeskStretch.hourlySlots(after: now, start: DeskStretchStore.startHour, end: DeskStretchStore.endHour,
+                                            setAlerts: bells, lastDone: DeskStretchStore.lastShown, limit: budget)
+        let indices = DeskStretch.stretchIndices(for: slots, previous: DeskStretchStore.lastIndex)
+        return zip(slots, indices).compactMap { slot, index in
+            guard let date = slot.foundationDate(), date > Date() else { return nil }
+            let stretch = DeskStretch.all[index]
+            let content = UNMutableNotificationContent()
+            content.title = Copy.deskStretchTitle
+            content.body = Copy.deskStretchNotice(name: stretch.name, cue: stretch.cues.first ?? "", seconds: DeskStretch.seconds)
+            content.sound = nil
+            content.threadIdentifier = "desk-stretch"
+            let id = "desk.\(stretch.id).\(slot.date.dayNumber).\(slot.minutes / 60)"
+            return UNNotificationRequest(identifier: id, content: content, trigger: trigger(for: date))
+        }
+    }
+
+    private static func programRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool,
+                                        now: CivilDateTime) -> [UNNotificationRequest] {
+        guard let run = library.current, run.pausedAt == nil, !run.ended else { return [] }
         let resolved = ScheduleEngine.resolve(run.input, now: now)
         var requests: [UNNotificationRequest] = []
         for alert in resolved.alertQueue(at: now).pending where library.allows(day: alert.day) {

@@ -10,6 +10,30 @@ enum DeskStretchStore {
     private static let lastShownKey = "deskStretch.lastShown"
     private static let indexKey = "deskStretch.index"
     private static let bagKey = "deskStretch.bag"
+    private static let startKey = "deskStretch.start"
+    private static let endKey = "deskStretch.end"
+
+    /// The hourly window (item 20). 9 a.m. to the 5 p.m. reminder unless the person changes it.
+    static var startHour: Int {
+        get { UserDefaults.standard.object(forKey: startKey) as? Int ?? DeskStretch.defaultStartHour }
+        set { UserDefaults.standard.set(newValue, forKey: startKey) }
+    }
+
+    static var endHour: Int {
+        get { UserDefaults.standard.object(forKey: endKey) as? Int ?? DeskStretch.defaultEndHour }
+        set { UserDefaults.standard.set(newValue, forKey: endKey) }
+    }
+
+    /// The stretch shown last, so the next reminder is a different one.
+    static var lastIndex: Int? { UserDefaults.standard.object(forKey: indexKey) as? Int }
+
+    /// A reminder was opened: it counts as shown now, so the next hour's reminder is dropped on the next refill.
+    static func opened(_ stretch: DeskStretch.Stretch, now: CivilDateTime) {
+        lastShown = now
+        if let index = DeskStretch.all.firstIndex(of: stretch) {
+            UserDefaults.standard.set(index, forKey: indexKey)
+        }
+    }
 
     static var enabled: Bool {
         get { UserDefaults.standard.bool(forKey: enabledKey) }

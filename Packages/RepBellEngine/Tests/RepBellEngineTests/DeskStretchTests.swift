@@ -99,4 +99,91 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertEqual(DeskStretch.phases(doorway).map(\.kind), [.getInPosition, .hold(side: nil)])
         XCTAssertEqual(DeskStretch.phases(doorway).last?.seconds, 30)
     }
+
+    // MARK: Item 20, hourly on weekdays
+
+    private func at(_ y: Int, _ m: Int, _ d: Int, _ h: Int, _ min: Int = 0) -> CivilDateTime {
+        CivilDateTime(date: CivilDate(year: y, month: m, day: d), hour: h, minute: min)
+    }
+
+    func testWeekdaysAreMondayToFriday() {
+        // 23 Nov 2026 is a Monday.
+        let days = (0..<7).map { DeskStretch.isWeekday(CivilDate(year: 2026, month: 11, day: 23).addingDays($0)) }
+        XCTAssertEqual(days, [true, true, true, true, true, false, false])
+    }
+
+    func testDefaultWindowIsNineToFiveOnTheHour() {
+        // Wednesday 25 Nov 2026, 8:30 a.m.
+        let slots = DeskStretch.hourlySlots(after: at(2026, 11, 25, 8, 30), start: DeskStretch.defaultStartHour,
+                                            end: DeskStretch.defaultEndHour, setAlerts: [], lastDone: nil, limit: 20, daysAhead: 0)
+        XCTAssertEqual(slots.map { $0.minutes / 60 }, Array(9...17))
+        XCTAssertTrue(slots.allSatisfy { $0.minutes % 60 == 0 })
+    }
+
+    func testNoRemindersAtTheWeekend() {
+        // Friday 27 Nov, 6 p.m.: the next ones are Monday.
+        let slots = DeskStretch.hourlySlots(after: at(2026, 11, 27, 18), start: 9, end: 17, setAlerts: [], lastDone: nil, limit: 3)
+        XCTAssertEqual(slots.first, at(2026, 11, 30, 9))
+        XCTAssertTrue(slots.allSatisfy { DeskStretch.isWeekday($0.date) })
+    }
+
+    func testSkipsAnHourWhenABellIsClose() {
+        let now = at(2026, 11, 25, 8, 30)
+        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 16)]
+        let hours = DeskStretch.hourlySlots(after: now, start: 9, end: 14, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
+            .map { $0.minutes / 60 }
+        // 10:00 (bell 10:15) and 12:00 (bell 11:50) are skipped; 13:00 stays (bell 16 minutes later).
+        XCTAssertEqual(hours, [9, 11, 13, 14])
+    }
+
+    func testSkipsTheHourAfterAStretch() {
+        let hours = DeskStretch.hourlySlots(after: at(2026, 11, 25, 9, 40), start: 9, end: 12, setAlerts: [],
+                                            lastDone: at(2026, 11, 25, 9, 40), limit: 20, daysAhead: 0).map { $0.minutes / 60 }
+        XCTAssertEqual(hours, [11, 12])
+    }
+
+    func testTheWindowCanMove() {
+        let hours = DeskStretch.hourlySlots(after: at(2026, 11, 25, 6), start: 7, end: 10, setAlerts: [], lastDone: nil,
+                                            limit: 20, daysAhead: 0).map { $0.minutes / 60 }
+        XCTAssertEqual(hours, [7, 8, 9, 10])
+        XCTAssertEqual(DeskStretch.window(start: 15, end: 9).end, 15)
+        XCTAssertEqual(DeskStretch.window(start: 2, end: 30).start, DeskStretch.windowHours.lowerBound)
+        XCTAssertEqual(DeskStretch.window(start: 2, end: 30).end, DeskStretch.windowHours.upperBound)
+    }
+
+    func testRemindersFitBesideTheSetAlerts() {
+        XCTAssertEqual(DeskStretch.hourlyBudget(setAlerts: 0, notes: 4), DeskStretch.hourlyLimit)
+        XCTAssertEqual(DeskStretch.hourlyBudget(setAlerts: 55, notes: 4), 4)
+        XCTAssertEqual(DeskStretch.hourlyBudget(setAlerts: 60, notes: 4), 0)
+        for sets in 0...60 {
+            XCTAssertLessThanOrEqual(sets + 4 + DeskStretch.hourlyBudget(setAlerts: sets, notes: 4), DeskStretch.systemNotificationLimit)
+        }
+        let limited = DeskStretch.hourlySlots(after: at(2026, 11, 25, 8), start: 9, end: 17, setAlerts: [], lastDone: nil, limit: 4)
+        XCTAssertEqual(limited.count, 4)
+    }
+
+    func testRemindersNeverRepeatBackToBackAndCoverEveryStretch() {
+        let now = at(2026, 11, 23, 8)
+        // Bells every so often make gaps of different sizes.
+        let bells = (0..<40).map { at(2026, 11, 23, 9).date.addingDays($0 / 8) }.enumerated().map { offset, date in
+            CivilDateTime(date: date, hour: 9 + (offset * 3) % 9, minute: 5)
+        }
+        let slots = DeskStretch.hourlySlots(after: now, start: 9, end: 17, setAlerts: bells, lastDone: nil, limit: 200, daysAhead: 13)
+        let indices = DeskStretch.stretchIndices(for: slots, previous: DeskStretch.stretchIndex(for: slots[0]))
+        XCTAssertNotEqual(indices.first, DeskStretch.stretchIndex(for: slots[0]))
+        XCTAssertTrue(zip(indices, indices.dropFirst()).allSatisfy { $0 != $1 })
+        XCTAssertEqual(Set(indices).count, DeskStretch.all.count)
+        XCTAssertEqual(DeskStretch.all.count, 19)
+    }
+
+    func testAReminderFindsItsStretch() {
+        XCTAssertEqual(DeskStretch.stretch(id: "neck-stretch")?.name, "Neck side stretch")
+        XCTAssertNil(DeskStretch.stretch(id: "rice-grab"))
+    }
+
+    func testHourLabels() {
+        XCTAssertEqual(Copy.hourLabel(9), "9 a.m.")
+        XCTAssertEqual(Copy.hourLabel(12), "12 p.m.")
+        XCTAssertEqual(Copy.hourLabel(17), "5 p.m.")
+    }
 }

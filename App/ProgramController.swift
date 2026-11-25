@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import RepBellEngine
 import UIKit
+import UserNotifications
 
 enum Screen: Equatable {
     case promise
@@ -94,6 +95,8 @@ final class ProgramController {
     var celebration: Celebration?
     /// A desk stretch to show once the celebration is gone.
     var deskStretch: DeskStretch.Stretch?
+    /// A stretch opened from its notification (item 20). It shows over any screen, program or not.
+    var notifiedStretch: DeskStretch.Stretch?
 
     private init() {
         let loaded = LibraryDisk.load()
@@ -710,6 +713,14 @@ final class ProgramController {
 
     func handleNotification(action: String, identifier: String) {
         let parts = identifier.split(separator: ".")
+        // A desk stretch reminder (item 20) or the stretch after a set: tapping it opens that stretch.
+        if parts.count >= 2, parts[0] == "desk" || parts[0] == "stretch",
+           action == UNNotificationDefaultActionIdentifier, let stretch = DeskStretch.stretch(id: String(parts[1])) {
+            DeskStretchStore.opened(stretch, now: CivilDateTime.local(Date()))
+            notifiedStretch = stretch
+            Task { await refreshAlerts() }
+            return
+        }
         guard parts.count == 3, parts[0] == "set", let day = Int(parts[1]), let index = Int(parts[2]) else { return }
         if action == Notifier.doneAction {
             logDone(day: day, index: index)

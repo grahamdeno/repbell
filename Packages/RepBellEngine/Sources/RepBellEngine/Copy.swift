@@ -119,7 +119,14 @@ public enum Copy {
     public static let deskStretchTitle = "Desk stretch"
     public static let deskStretchSkip = "Skip"
     public static let deskStretchSetting = "Desk stretch"
-    public static let deskStretchDetail = "After a set, one 30-second stretch for sitting all day. At most once an hour."
+    public static let deskStretchDetail = "On weekdays, a quiet reminder on the hour for one 30-second stretch, skipped when a set is close. After a set, one more, at most once an hour."
+    public static let deskStretchFrom = "First reminder"
+    public static let deskStretchUntil = "Last reminder"
+
+    /// "9 a.m.", "5 p.m.": the hourly window's ends.
+    public static func hourLabel(_ hour24: Int) -> String {
+        "\(displayHour(hour24)) \(hour24 < 12 ? "a.m." : "p.m.")"
+    }
 
     public static func deskStretchNotice(name: String, cue: String, seconds: Int) -> String {
         "\(name), \(seconds) seconds. \(cue)"

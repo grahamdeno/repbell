@@ -73,6 +73,81 @@ public enum DeskStretch {
                 eachSide: false),
     ]
 
+    // MARK: Hourly on weekdays (item 20)
+
+    /// The default window: on the hour from 9 a.m. to the 5 p.m. stretch.
+    public static let defaultStartHour = 9
+    public static let defaultEndHour = 17
+    /// The hours the window can start and end on.
+    public static let windowHours = 6...21
+    /// An hour is skipped when a program set's bell is this close.
+    public static let setClearanceMinutes = 15
+    /// At most this many hourly reminders are scheduled at once (about a working day); more are added on refill.
+    public static let hourlyLimit = 10
+    /// iOS keeps at most 64 pending notifications per app.
+    public static let systemNotificationLimit = 64
+
+    /// A start and end the app can use: both inside `windowHours`, and the end not before the start.
+    public static func window(start: Int, end: Int) -> (start: Int, end: Int) {
+        let s = min(max(start, windowHours.lowerBound), windowHours.upperBound)
+        let e = min(max(end, s), windowHours.upperBound)
+        return (s, e)
+    }
+
+    /// Monday to Friday.
+    public static func isWeekday(_ date: CivilDate) -> Bool {
+        // 1 Jan 2000, day number 0, was a Saturday.
+        let weekday = ((date.dayNumber % 7) + 7) % 7
+        return (2...6).contains(weekday)
+    }
+
+    /// How many hourly reminders fit beside the set alerts and notes already scheduled, with one slot kept spare
+    /// for the stretch after a set or a test alert.
+    public static func hourlyBudget(setAlerts: Int, notes: Int) -> Int {
+        max(0, min(hourlyLimit, systemNotificationLimit - setAlerts - notes - 1))
+    }
+
+    /// The hours to remind at, soonest first: weekdays only, on the hour inside the window, after `now`,
+    /// skipping an hour when a set's bell is within 15 minutes or a stretch was done in the hour before it.
+    public static func hourlySlots(after now: CivilDateTime, start: Int, end: Int, setAlerts: [CivilDateTime],
+                                   lastDone: CivilDateTime?, limit: Int, daysAhead: Int = 3) -> [CivilDateTime] {
+        guard limit > 0 else { return [] }
+        let window = window(start: start, end: end)
+        var slots: [CivilDateTime] = []
+        for offset in 0...daysAhead {
+            let date = now.date.addingDays(offset)
+            guard isWeekday(date) else { continue }
+            for hour in window.start...window.end {
+                let slot = CivilDateTime(date: date, hour: hour, minute: 0)
+                guard slot > now else { continue }
+                if let lastDone, lastDone <= slot, lastDone.minutes(until: slot) < minimumGapMinutes { continue }
+                if setAlerts.contains(where: { abs(slot.minutes(until: $0)) <= setClearanceMinutes }) { continue }
+                slots.append(slot)
+                if slots.count == limit { return slots }
+            }
+        }
+        return slots
+    }
+
+    /// The stretch for an hour: it steps through all of them hour by hour, so every stretch comes up within a
+    /// couple of working days, and a refill mostly keeps the reminders already scheduled.
+    public static func stretchIndex(for slot: CivilDateTime) -> Int {
+        let hourNumber = slot.date.dayNumber * 24 + slot.minutes / 60
+        return ((hourNumber % all.count) + all.count) % all.count
+    }
+
+    /// The stretches for a run of reminders. Where a skipped hour would bring the same stretch twice in a row,
+    /// or repeat the one shown last, the next one is used instead, so a stretch never comes back to back.
+    public static func stretchIndices(for slots: [CivilDateTime], previous: Int?) -> [Int] {
+        var last = previous
+        return slots.map { slot in
+            var index = stretchIndex(for: slot)
+            if index == last { index = (index + 1) % all.count }
+            last = index
+            return index
+        }
+    }
+
     /// Whether a stretch is due after a set logged now.
     public static func isDue(enabled: Bool, lastShown: CivilDateTime?, now: CivilDateTime) -> Bool {
         guard enabled else { return false }
@@ -91,6 +166,11 @@ public enum DeskStretch {
         }
         let index = bag.removeFirst()
         return (index, bag)
+    }
+
+    /// The stretch a reminder was for, from its id.
+    public static func stretch(id: String) -> Stretch? {
+        all.first { $0.id == id }
     }
 
     /// The steps of one stretch, after the person taps Start.
@@ -130,3 +210,5 @@ public enum DeskStretch {
         stretch.eachSide ? Copy.eachSideNote(seconds: perSideSeconds) : nil
     }
 }
+
+extension DeskStretch.Stretch: Identifiable {}
