@@ -27,8 +27,7 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 - **Not built:** the Watch face complication (needs a new bundle ID, which needs Graham's approval); the new app
   icon (art pending Graham's approval); "Start set now" (early sets, not yet shaped).
 - **Next:** Graham lives on the newest test build; fix rounds as he finds things; the Stage 5 UX walk; the Fable go-live
-  assessment. Graham reviews every "decided by Product under the 1.0 exception" line in the Decision log before any
-  ship go.
+  assessment. Graham reviewed and agreed every "decided by Product under the 1.0 exception" line on 25 Nov 2026.
 
 ## Product specifics
 
@@ -53,7 +52,9 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 - **Guard:** `scripts/privacy_guard.py` enforces the on-device promise in CI, with a self-test.
 - **Device checks:** alerts and Time Sensitive delivery, the test alarm through Silent and Focus, Watch actions and
   Double Tap, the widget, haptics, VoiceOver, Reduce Motion, Larger Text, Health permission.
-- **Websites:** none yet for Rep Bell. tangomike.app (grahamdeno/tangomike) lists Graham's apps.
+- **Websites:** repbell.tangomike.app (landing, /privacy, /support) from `site/`, published by `.github/workflows/site.yml`
+  to the Cloudflare Pages project `tangomike-repbell`. The site describes items 19 and 20; if either leaves 1.0, its
+  lines come off the site before the next publish. tangomike.app (grahamdeno/tangomike) lists Graham's apps.
 - **Compiled-in dates or values:** the program table (percent and interval per day) in the schedule engine.
 
 ## Steps that can't be undone (this product)
@@ -73,6 +74,10 @@ Newest first. Refined decisions only.
 | Date | Decision | Why |
 |---|---|---|
 | 2026-11-25 | **Gear trimmed:** the rice bucket and its three moves are gone (Grip and pull uses the fist squeeze instead); the gi bag is now just "Sandbag", with its moves and cues reworded without the gi | Graham's decision |
+| 2026-11-25 | **Product's 1.0 calls reviewed:** Graham agreed the Desk stretch flow, Fit my time details, Desk stretch joining 1.0, the Health read permission text, the Health permission text with "Data Not Collected", and this week's calls (glow at 30% and 22%, Fit my time needs the unlock, no free sample sessions) | Graham's review |
+| 2026-11-25 | **Watch coach line joins 1.0** (item 19), moved back from the next version; **light mode is dropped** | Graham's decisions |
+| 2026-11-25 | **Hourly desk stretch on weekdays joins 1.0** (item 20) | Graham's decision |
+| 2026-11-25 | **Rep Bell website:** repbell.tangomike.app with /privacy and /support, matching the other apps; built in `site/` and published to Cloudflare Pages by `.github/workflows/site.yml`; support@tangomike.app with "Rep Bell" in the subject; not a trader in the EU | Graham's decisions and publish go |
 | 2026-11-25 | **Background glow:** every iPhone screen has a violet glow behind the top and a volt glow from the bottom right over `ground`; flood screens keep their colour and the Watch stays black. Set to 30% and 22% so muted text stays at 4.5:1 everywhere and faint outlines at 3:1 | Graham's decision ("build the glow", from the violet and volt mockups) |
 | 2026-11-25 | **Test builds reuse one saved signing certificate.** "Apple Development: Graham DeNoyer" (expires 25 Nov 2027) is loaded from build secrets into a temporary keychain each run, so runs stop creating development certificates while it is valid. The archive step checks the app was signed with it. Renew it before 25 Nov 2027 | Graham's go 25 Nov 2026 (Product's recommendation). Builds 18, 19 and 28 had failed on the Apple Development certificate limit |
 | 2026-11-24 | **Coach voice in 1.0:** a Settings choice of Off, Coaching or Push. Coaching reads the person's stats, recognizes past wins and looks ahead, with no guilt. Push says the same stats bluntly and may name a missed set, snooze or skipped day as a broken commitment, within limits (item 17) | Graham's decision |
@@ -148,7 +153,7 @@ Newest first. Refined decisions only.
 ## Dated checks
 
 - **At launch (before the 1.0 ship go):** revisit repo visibility (Graham).
-- **Before the 1.0 ship go:** Graham reviews every choice logged as "decided by Product under the 1.0 exception".
+- **Before the 1.0 ship go:** Graham reviews every choice logged as "decided by Product under the 1.0 exception". Done 25 Nov 2026: all agreed.
 - **Before any ship go:** R-1 is met for every coach clip in the build, or the clips leave the build (Opus checks, Graham approves).
 
 ## Backlog
@@ -359,10 +364,10 @@ going.
 - With a coach line showing, the celebration stays until the person taps to clear it; a desk stretch comes up only after that.
 - Push is hard: no praise unless every set is done, and then only briefly; excuses, snoozes and missed sets are called out as broken commitments.
 - Push varies: no line repeats within 36 sets (on Day 10, a line shows at most twice), missed and snooze call-outs come every third set, and most lines speak to discipline and keeping your word rather than reciting counts. Lines may run to two or three sentences.
-- The Watch coach line moved to the next version (Graham's decision, 24 Nov 2026); the Watch has no celebration screen in 1.0.
+- The Watch coach line is item 19 (back in 1.0 on 25 Nov 2026).
 - Needs the unlock (item 18). Without it, the Settings choice shows the unlock.
 
-**Out of scope:** a named or real person's voice, spoken audio, lines about anything but the person's numbers, the Watch coach line (next version).
+**Out of scope:** a named or real person's voice, spoken audio, lines about anything but the person's numbers.
 
 **Steps:** 1. Shape lines and screens (Opus). 2. Build (Opus under the 1.0 exception). 3. Review by a separate
 agent.
@@ -383,6 +388,24 @@ set by Grok on Graham's go. The App Privacy answers ("Purchases") are approved b
 
 **Steps:** 1. Build (Opus under the 1.0 exception). 2. Review by a separate agent. 3. Grok confirms the product in
 App Store Connect after Graham's go.
+
+### 19. Story: Watch coach line (approved 2026-11-25; in 1.0; paid)
+As someone logging sets on the Watch, I want the coach line there too, so that the voice I chose reaches me wherever
+I log.
+- Given Coach voice on and the unlock, when a set is logged on the Watch, then the Watch shows the coach line in the
+  chosen voice: the iPhone's model line when the iPhone is reachable, a written line otherwise.
+- It waits for a tap to clear, like the iPhone.
+- Same rules as item 17; numbers only.
+
+### 20. Story: hourly desk stretch on weekdays (approved 2026-11-25; in 1.0; free)
+As someone who sits all day, I want a desk stretch every hour on weekdays, whether or not a program is running, so
+that I move regularly.
+- Given Desk stretch on, then Monday to Friday, on the hour, from 9 a.m. to 5 p.m. by default (start and end
+  adjustable in Settings), a quiet notification names the stretch; tapping it opens the stretch.
+- It skips an hour when a program set's bell is within 15 minutes, or when a stretch was done in the last hour.
+- Stretches rotate through all 19 with no back-to-back repeats.
+- Notifications are scheduled a day or two ahead within iOS's limit of 64, and topped up when the app opens or a set
+  is logged.
 
 ## Small follow-ups
 

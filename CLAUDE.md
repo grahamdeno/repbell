@@ -18,6 +18,7 @@ Anything below uploads a build or changes something live. Check this list before
 | Trigger | What it does | Go-ahead needed |
 |---|---|---|
 | Running `.github/workflows/testflight.yml` (manual run only, `workflow_dispatch`) | Archives the iPhone app with the Watch app and widget, signs it with the one saved Apple Development certificate (secret `BUILD_CERT_P12`, expires 25 Nov 2027; it does not create a development certificate while that one is valid, and fails if the app was signed with any other), and uploads it to TestFlight for Apple ID 6834201034. Does not submit for review | Test build only |
+| A merge to `main` that changes `site/**` or `.github/workflows/site.yml`, or running `.github/workflows/site.yml` by hand | Publishes repbell.tangomike.app (Cloudflare Pages project `tangomike-repbell`): the landing, privacy and support pages | Graham's go for that site change (first publish approved 25 Nov 2026) |
 
 Everything not listed here uploads and deploys nothing. If you find a trigger that isn't listed, stop and add it.
 
@@ -27,8 +28,8 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
   and pushes them to a new `screenshots/run-<n>` branch. It uploads nothing to Apple and never touches `main`; the
   screenshots reach `main` only through a PR on a merge go. The Debug-only `-RBScreenshot` launch argument it uses
   (`App/ScreenshotMode.swift`, `ScreenshotSeeds` in the engine) is not compiled into Release builds.
-- There is no `testflight` branch trigger, no `release` branch, no site and no listing workflow in this repo.
-- A merge to `main` uploads nothing.
+- There is no `testflight` branch trigger, no `release` branch and no listing workflow in this repo. The site is `site/` (see the table).
+- A merge to `main` uploads nothing, and deploys only when it changes `site/**` or the site workflow.
 - Any change to a workflow, branch or path trigger updates this list in the same PR.
 
 ## Rules that must never be missed
@@ -36,7 +37,8 @@ Everything not listed here uploads and deploys nothing. If you find a trigger th
 - **Graham presses Submit for Review and Release.** Agents stop right before them. Never automate either.
 - **Three go-aheads, never mixed:** "merge" allows merging named PRs that trigger nothing above; "test build" allows
   one TestFlight upload for testing; "ship [version] at [commit]" comes after the go-live verdict. None implies
-  another. If unsure which applies, ask.
+  another. If unsure which applies, ask. A merge that changes `site/**` or the site workflow also changes the live
+  site, so it needs Graham's go for that site change by name; a merge go alone never covers it.
 - **Never delete, force-push, rename, archive or transfer** anything without Graham's go.
 - **Purchases and prices:** Graham approves each at Stage 3. Product IDs are permanent. The unlock product
   `com.grahamdeno.repbell.unlock` exists for a later version: never delete or change it, its price, or anything else
