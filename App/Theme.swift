@@ -47,22 +47,49 @@ struct Wordmark: View {
 struct GlowBackground: View {
     var body: some View {
         GeometryReader { geo in
-            ZStack {
-                Chalk.ground
-                ForEach(Array(ChalkTokens.Glow.spots.enumerated()), id: \.offset) { _, spot in
-                    RadialGradient(
-                        stops: stride(from: 0.0, through: 1.0, by: 0.125).map { t in
-                            .init(color: Chalk.color(spot.color).opacity(ChalkTokens.Glow.opacity(spot, at: t)), location: t)
-                        },
-                        center: UnitPoint(x: spot.x, y: spot.y),
-                        startRadius: 0,
-                        endRadius: spot.radius * geo.size.width
-                    )
-                }
-            }
+            GlowLayer(size: geo.size)
         }
         .ignoresSafeArea()
+        .allowsHitTesting(false)
         .accessibilityHidden(true)
+    }
+
+    /// The part of the screen's glow that falls inside a strip, so a pinned bar shows the same glow as the screen
+    /// behind it, with no band. Put it in the strip's background; it reads the strip's place on screen.
+    static var slice: some View {
+        GeometryReader { geo in
+            let frame = geo.frame(in: .global)
+            let screen = CGSize(width: frame.width, height: frame.maxY)
+            GlowLayer(size: screen)
+                .frame(width: screen.width, height: screen.height)
+                .offset(y: -frame.minY)
+                .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
+                .clipped()
+        }
+        .ignoresSafeArea(edges: .bottom)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// The glow drawn for a screen of a given size.
+private struct GlowLayer: View {
+    var size: CGSize
+
+    var body: some View {
+        ZStack {
+            Chalk.ground
+            ForEach(Array(ChalkTokens.Glow.spots.enumerated()), id: \.offset) { _, spot in
+                RadialGradient(
+                    stops: stride(from: 0.0, through: 1.0, by: 0.125).map { t in
+                        .init(color: Chalk.color(spot.color).opacity(ChalkTokens.Glow.opacity(spot, at: t)), location: t)
+                    },
+                    center: UnitPoint(x: spot.x, y: spot.y),
+                    startRadius: 0,
+                    endRadius: spot.radius * size.width
+                )
+            }
+        }
     }
 }
 
