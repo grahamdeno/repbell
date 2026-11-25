@@ -6,7 +6,9 @@ struct WatchRoot: View {
 
     var body: some View {
         Group {
-            if let resolved = model.resolvedNow(), let run = model.library.current {
+            if let line = model.coachLine {
+                WatchCoachLine(line: line)
+            } else if let resolved = model.resolvedNow(), let run = model.library.current {
                 let now = run.pausedAt ?? CivilDateTime.local(Date())
                 if let number = run.input.dayNumber(on: now.date), let day = resolved.day(number),
                    let current = day.sets.first(where: { $0.status == .upcoming }),
@@ -30,6 +32,38 @@ struct WatchRoot: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Chalk.groundWatch)
+    }
+}
+
+/// Item 19: the coach line after a set logged on the Watch. It waits for a tap, like the iPhone.
+private struct WatchCoachLine: View {
+    @Environment(WatchModel.self) private var model
+    var line: String
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(line)
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Chalk.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .contentTransition(.opacity)
+                    .animation(.easeOut(duration: 0.3), value: line)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture { model.clearCoachLine() }
+                Button(Copy.tapToContinue) { model.clearCoachLine() }
+                    .font(.footnote.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 44)
+                    .background(Chalk.watchSecondary)
+                    .foregroundStyle(Chalk.ink)
+                    .clipShape(Capsule())
+                    .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 4)
+            .padding(.top, 6)
+        }
     }
 }
 

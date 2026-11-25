@@ -8,6 +8,11 @@ import WatchKit
 final class WatchModel: NSObject, WCSessionDelegate {
     var library = LibraryFile()
     var hasPhone = false
+    /// The Coach voice the iPhone has in use (item 19); off until the iPhone says otherwise.
+    var coachMode: CoachMode = .off
+    /// The coach line on screen after a set logged here; it stays until tapped away.
+    var coachLine: String?
+    private var coachToken = 0
 
     func start() {
         #if DEBUG
@@ -27,8 +32,44 @@ final class WatchModel: NSObject, WCSessionDelegate {
     }
 
     func done(day: Int, index: Int) {
+        let wasUpcoming = library.current.map { run in
+            ScheduleEngine.resolve(run.input, now: CivilDateTime.local(Date())).day(day)?.sets.first { $0.index == index }?.status == .upcoming
+        } ?? false
         WKInterfaceDevice.current().play(.success)
         apply(kind: "done", day: day, index: index)
+        // Only a set that was really still to do gets a line, like the iPhone.
+        if wasUpcoming { showCoachLine(day: day, index: index) }
+    }
+
+    func clearCoachLine() {
+        coachLine = nil
+        coachToken += 1
+    }
+
+    /// Item 19: the written line at once, then the iPhone's model line if it answers within the window.
+    /// With VoiceOver on, the written line stays, so what was read is what stays on screen.
+    private func showCoachLine(day: Int, index: Int) {
+        guard coachMode != .off, let run = library.current else { return }
+        let resolved = ScheduleEngine.resolve(run.input, now: CivilDateTime.local(Date()))
+        guard let today = resolved.day(day) else { return }
+        let finished = !today.sets.isEmpty && !today.sets.contains { $0.status == .upcoming }
+        let reps = today.sets.first { $0.index == index }?.reps ?? today.reps
+        guard let facts = CoachFacts.make(run: resolved, day: day, repsThisSet: reps, dayOneMax: run.input.dayOneMax,
+                                          moment: finished ? .dayDone : .afterSet),
+              let written = CoachVoice.writtenLine(mode: coachMode, facts: facts) else { return }
+        coachToken += 1
+        let token = coachToken
+        coachLine = written
+        guard !WKAccessibilityIsVoiceOverRunning(), WCSession.isSupported(),
+              WCSession.default.activationState == .activated, WCSession.default.isReachable else { return }
+        let sent = Date()
+        WCSession.default.sendMessage(CoachVoice.watchRequest(facts), replyHandler: { reply in
+            guard let line = reply["line"] as? String else { return }
+            Task { @MainActor in
+                guard self.coachToken == token, Date().timeIntervalSince(sent) <= CoachVoice.watchReplyWindow else { return }
+                self.coachLine = line
+            }
+        }, errorHandler: nil)
     }
 
     func snooze(day: Int, index: Int) {
@@ -85,6 +126,9 @@ final class WatchModel: NSObject, WCSessionDelegate {
     }
 
     private func consume(_ context: [String: Any]) {
+        if let raw = context["coach"] as? String {
+            coachMode = CoachMode(rawValue: raw) ?? .off
+        }
         guard let data = context["library"] as? Data, let file = try? JSONDecoder().decode(LibraryFile.self, from: data) else { return }
         let incoming = file.current?.input.events.count ?? 0
         let local = library.current?.input.events.count ?? 0

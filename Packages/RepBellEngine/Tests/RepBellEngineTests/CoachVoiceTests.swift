@@ -176,4 +176,24 @@ final class CoachVoiceTests: XCTestCase {
         }
         XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("Never praise"))
     }
+
+    // Item 19: the Watch sends numbers only and accepts the iPhone's line only inside the window.
+    func testWatchRequestCarriesTheFactsAndNothingElse() {
+        let sent = facts(.dayDone, day: 9, done: 46, total: 46, missed: 0, snoozes: 2, best: 400, full: 3)
+        let message = CoachVoice.watchRequest(sent)
+        XCTAssertEqual(Set(message.keys), ["kind", "facts"])
+        XCTAssertEqual(CoachVoice.facts(fromWatch: message), sent)
+    }
+
+    func testWatchRequestRejectsOtherMessages() {
+        XCTAssertNil(CoachVoice.facts(fromWatch: [:]))
+        XCTAssertNil(CoachVoice.facts(fromWatch: ["kind": "done", "facts": Data()]))
+        XCTAssertNil(CoachVoice.facts(fromWatch: ["kind": "coach", "facts": Data("not json".utf8)]))
+        XCTAssertNil(CoachVoice.facts(fromWatch: ["kind": "coach", "facts": "text"]))
+    }
+
+    func testWatchWindowIsShort() {
+        XCTAssertGreaterThan(CoachVoice.watchReplyWindow, 1.2)
+        XCTAssertLessThanOrEqual(CoachVoice.watchReplyWindow, 3)
+    }
 }

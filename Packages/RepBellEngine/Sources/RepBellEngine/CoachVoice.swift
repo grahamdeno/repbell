@@ -11,8 +11,8 @@ public enum CoachMode: String, CaseIterable, Codable, Sendable {
 }
 
 /// The numbers a coach line may use. Numbers only: nothing a person typed ever reaches the model.
-public struct CoachFacts: Equatable, Sendable {
-    public enum Moment: String, Sendable { case afterSet, dayDone }
+public struct CoachFacts: Equatable, Sendable, Codable {
+    public enum Moment: String, Sendable, Codable { case afterSet, dayDone }
 
     public var moment: Moment
     public var day: Int
@@ -79,6 +79,22 @@ public struct CoachFacts: Equatable, Sendable {
 }
 
 public enum CoachVoice {
+    /// Item 19: how long the Watch waits for the iPhone's model line after a set. A reply that comes later is
+    /// dropped, so the text never changes while the person is reading. The iPhone itself gives the model 1.2 s.
+    public static let watchReplyWindow: Double = 2.5
+
+    /// The Watch's request to the iPhone: the facts as JSON (numbers only).
+    public static func watchRequest(_ facts: CoachFacts) -> [String: Any] {
+        guard let data = try? JSONEncoder().encode(facts) else { return [:] }
+        return ["kind": "coach", "facts": data]
+    }
+
+    /// The facts in a Watch request, or nil if the message isn't one.
+    public static func facts(fromWatch message: [String: Any]) -> CoachFacts? {
+        guard message["kind"] as? String == "coach", let data = message["facts"] as? Data else { return nil }
+        return try? JSONDecoder().decode(CoachFacts.self, from: data)
+    }
+
     // MARK: Rules every line must pass, written or generated
 
     /// Matched as the start of a word ("dammit", "shitty"); "ass" and "hell" only as whole words.

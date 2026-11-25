@@ -19,7 +19,6 @@ extension Copy {
     static let undo = "Undo"
     static let didIt = "Done"
     static let dayDone = "Day done"
-    static let tapToContinue = "Tap to continue"
     static func celebrationLine(done: Int, total: Int, repsToday: Int) -> String {
         "Set \(done) of \(total) · \(grouped(repsToday)) push-ups today"
     }

@@ -332,6 +332,8 @@ public enum Copy {
         "Max \(max)"
     }
 
+    public static let tapToContinue = "Tap to continue"
+
     public static func watchTally(done: Int, total: Int, reps: Int) -> String {
         "\(done) of \(total) · \(grouped(reps)) today"
     }
