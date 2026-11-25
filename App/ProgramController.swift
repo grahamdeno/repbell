@@ -370,15 +370,26 @@ final class ProgramController {
     }
 
     func restorePurchases() async {
-        let found = await Unlocker.restore()
-        if found {
-            library.unlocked = true
-            unlockMessage = nil
-            persist()
+        switch await Unlocker.restore() {
+        case .found:
+            setUnlocked(true)
             Haptics.play(.dayComplete)
-        } else {
+        case .none:
             unlockMessage = Copy.restoreNone
+        case .unreachable:
+            unlockMessage = Copy.unlockMissing
         }
+    }
+
+    /// The one place the unlock changes: purchase, restore, Ask to Buy approval, refund, launch refresh.
+    func setUnlocked(_ open: Bool) {
+        guard library.unlocked != open else {
+            if open { unlockMessage = Copy.unlockDone }
+            return
+        }
+        library.unlocked = open
+        unlockMessage = open ? Copy.unlockDone : nil
+        persist()
     }
 
     // MARK: Studio alert hold
@@ -609,10 +620,6 @@ final class ProgramController {
 
     /// "Run it again" on the result: a review screen with the times and Tomorrow or Today.
     func reviewRerun() {
-        if library.rerunNeedsUnlock {
-            screen = .paywall
-            return
-        }
         if let window = currentWindow() {
             draftWake = window.wake
             draftBed = window.bed
@@ -628,10 +635,6 @@ final class ProgramController {
     func runAgain(startToday: Bool = false) {
         correctingDay = nil
         endedOnDay = nil
-        if library.rerunNeedsUnlock {
-            screen = .paywall
-            return
-        }
         let maxReps = rerunMax()
         let wake = draftWake
         let bed = draftBed
@@ -654,24 +657,31 @@ final class ProgramController {
         Task { await refreshAlerts() }
     }
 
-    func purchaseUnlock() async {
-        let bought = await Unlocker.purchase()
-        if bought {
-            library.unlocked = true
-            unlockMessage = nil
-            persist()
-            screen = library.current == nil ? .promise : .today
+    /// Buys the unlock and sets the message for what happened. Returns true when Workouts and Coach voice are open.
+    @discardableResult
+    func purchaseUnlock() async -> Bool {
+        switch await Unlocker.purchase() {
+        case .bought:
+            setUnlocked(true)
             Haptics.play(.result)
-            await refreshAlerts()
-        } else if unlockMessage == nil {
+            return true
+        case .cancelled:
+            unlockMessage = nil
+        case .pending:
+            unlockMessage = Copy.unlockPending
+        case .failed:
+            unlockMessage = Copy.unlockFailed
+        case .unavailable:
             unlockMessage = Copy.unlockMissing
         }
+        return false
     }
 
     func refreshEntitlements() async {
         guard Features.payment else { return }
-        if await Unlocker.hasUnlock() {
-            library.unlocked = true
+        let open = await Unlocker.hasUnlock()
+        if open != library.unlocked {
+            library.unlocked = open
             persist()
         }
     }
@@ -930,7 +940,6 @@ final class ProgramController {
 
     private static func openingScreen(for library: LibraryFile) -> Screen {
         guard let run = library.current else { return .promise }
-        if library.needsUnlock(at: CivilDateTime.local(Date())) { return .paywall }
         if run.ended { return .result }
         return .today
     }

@@ -136,11 +136,6 @@ private struct StudioRow: View {
                     Text(session.name)
                         .font(.headline)
                         .foregroundStyle(missing.isEmpty && !held ? Chalk.ink : Chalk.inkMuted)
-                    if Features.payment && session.free {
-                        Text(StudioCopy.free)
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(Chalk.volt)
-                    }
                 }
                 Text(held ? StudioCopy.heldShort : (missing.isEmpty ? StudioCopy.meta(session) : StudioCopy.standIns(session)))
                     .font(.subheadline)
@@ -174,6 +169,7 @@ private struct StudioSessionContent: View {
     @Environment(ProgramController.self) private var controller
     var sessionID: String
     @State private var askHold = false
+    @State private var showPaywall = false
     private var settings: StudioSettings { StudioSettings.shared }
 
     var body: some View {
@@ -234,7 +230,7 @@ private struct StudioSessionContent: View {
                             .padding(.top, 12)
                     }
                     PrimaryButton(title: StudioCopy.start) {
-                        if !Features.payment || session.free || controller.library.unlocked {
+                        if controller.library.paidFeaturesOpen {
                             Haptics.play(.tap)
                             if controller.setsDuring(minutes: session.minutes) > 0 {
                                 askHold = true
@@ -242,11 +238,16 @@ private struct StudioSessionContent: View {
                                 controller.screen = .studioPlayer(session.id)
                             }
                         } else {
-                            controller.screen = .paywall
+                            showPaywall = true
                         }
                     }
                     .padding(.top, 12)
                     .disabled(controller.workoutHeld(session.id))
+                    .sheet(isPresented: $showPaywall) {
+                        PaywallView()
+                            .environment(controller)
+                            .presentationBackground(Chalk.ground)
+                    }
                     .confirmationDialog(StudioCopy.holdTitle, isPresented: $askHold, titleVisibility: .visible) {
                         Button(StudioCopy.holdYes) {
                             controller.holdAlerts(minutes: session.minutes)
@@ -719,7 +720,6 @@ enum StudioCopy {
         ("Core", ["core", "ab-finisher"]),
         ("Mobility", ["flow-45", "flow-90", "stretch", "balance"]),
     ]
-    static let free = "Free"
     static let start = "Start"
     static let mascot = "Coach"
     static let him = "Him"

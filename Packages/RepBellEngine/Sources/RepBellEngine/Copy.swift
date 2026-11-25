@@ -70,10 +70,17 @@ public enum Copy {
     /// Attribution xAI asks for on Grok output. Shown only while coach clips are in the build.
     public static let coachCredit = "Coach animations created with Grok."
 
-    public static let unlockTitle = "Unlock the full program"
-    public static let unlockBody = "One purchase opens the full program and every rerun."
+    public static let unlockTitle = "Workouts and Coach voice"
+    public static let unlockBody = "One purchase, once. The 14-day program stays yours either way."
     public static let unlockButton = "Unlock"
-    public static let unlockMissing = "The unlock is not available yet."
+    public static let unlockMissing = "The App Store isn't reachable right now. Try again in a moment."
+    public static let unlockWorkouts = "Workouts: guided sessions built around your time and your gear, with the coach showing each move."
+    public static let unlockCoach = "Coach voice: a line after each set that reads your own numbers, as Coaching or Push."
+    public static func unlockButton(price: String) -> String { "Unlock for \(price)" }
+    public static let unlockPending = "Waiting for approval. Rep Bell unlocks as soon as it's approved."
+    public static let unlockFailed = "The purchase didn't finish. Try again."
+    public static let unlockDone = "Unlocked. Workouts and Coach voice are open."
+    public static let notNow = "Not now"
 
     public static let paused = "Paused"
     public static let resume = "Resume"

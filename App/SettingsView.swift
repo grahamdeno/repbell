@@ -15,6 +15,8 @@ struct SettingsView: View {
     @State private var confirmStartOver = false
     @State private var pushUpsToHealth = PushUpHealthStore.enabled
     @State private var deskStretchOn = DeskStretchStore.enabled
+    @State private var showPaywall = false
+    @State private var restoring = false
 
     var body: some View {
         ScreenChrome(top: 8, scrolls: false) {
@@ -30,6 +32,7 @@ struct SettingsView: View {
                         }
                         alerts
                         program
+                        purchase
                         ProfileSection(Copy.aboutTitle) {
                             SettingsRow(title: Copy.aboutTitle) { controller.open(.about) }
                         }
@@ -40,6 +43,12 @@ struct SettingsView: View {
             }
         }
         .onAppear(perform: loadTimes)
+        .onDisappear { controller.unlockMessage = nil }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+                .environment(controller)
+                .presentationBackground(Chalk.ground)
+        }
         .task { await checkAlerts() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await checkAlerts() } }
@@ -119,6 +128,41 @@ struct SettingsView: View {
         await controller.refreshAlerts()
         let rows = await Notifier.diagnostics()
         alertsOK = !rows.contains(where: AlertsCheckView.needsAttention)
+    }
+
+    // MARK: Purchase
+
+    /// Unlock status and Restore purchase (roadmap item 18). The program itself never needs the unlock.
+    @ViewBuilder
+    private var purchase: some View {
+        if Features.payment {
+            ProfileSection(Copy.unlockSection) {
+                Text(controller.library.unlocked ? Copy.unlocked : Copy.notUnlocked)
+                    .font(.body)
+                    .foregroundStyle(Chalk.ink)
+                if !controller.library.unlocked {
+                    Text(Copy.unlockTitle)
+                        .font(.subheadline)
+                        .foregroundStyle(Chalk.inkMuted)
+                    PrimaryButton(title: Copy.unlockButton) { showPaywall = true }
+                }
+                SecondaryButton(title: Copy.restorePurchase, size: .compact) {
+                    guard !restoring else { return }
+                    restoring = true
+                    Task {
+                        await controller.restorePurchases()
+                        restoring = false
+                    }
+                }
+                .disabled(restoring)
+                if let message = controller.unlockMessage, !showPaywall {
+                    Text(message)
+                        .font(.subheadline)
+                        .foregroundStyle(Chalk.inkMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
     }
 
     // MARK: Program

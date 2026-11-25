@@ -27,7 +27,7 @@ result-final	Result	End of a run	Day 15 final test logged, 40 to 58
 result-ended	Result	Ended early (Something hurts)	Run ended on Day 6
 rerun	Run it again	Review screen	From the Day 15 result
 hurts	Something hurts?	Pause and End options	Day 9 run
-paywall	Paywall	Not reachable in 1.0 (nothing is locked); shown for the record	Opened directly
+paywall	Paywall	Shown as a sheet from Workouts and Settings (item 18)	Opened directly
 progress	Progress	Partway through a run	Day 9, real-looking logs
 settings	Settings	Top	Day 9 run
 alerts-check	Alerts check	Diagnostics	From Settings
