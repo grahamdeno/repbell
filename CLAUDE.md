@@ -17,7 +17,7 @@ Anything below uploads a build or changes something live. Check this list before
 
 | Trigger | What it does | Go-ahead needed |
 |---|---|---|
-| Running `.github/workflows/testflight.yml` (manual run only, `workflow_dispatch`) | Archives the iPhone app with the Watch app and widget, signs it with the one saved Apple Development certificate (secret `BUILD_CERT_P12`, expires 25 Nov 2027; it never creates a new one), and uploads it to TestFlight for Apple ID 6834201034. Does not submit for review | Test build only |
+| Running `.github/workflows/testflight.yml` (manual run only, `workflow_dispatch`) | Archives the iPhone app with the Watch app and widget, signs it with the one saved Apple Development certificate (secret `BUILD_CERT_P12`, expires 25 Nov 2027; it does not create a development certificate while that one is valid, and fails if the app was signed with any other), and uploads it to TestFlight for Apple ID 6834201034. Does not submit for review | Test build only |
 
 Everything not listed here uploads and deploys nothing. If you find a trigger that isn't listed, stop and add it.
 
