@@ -356,6 +356,7 @@ going.
 - The line has no exclamation marks, grows with text size and is read by VoiceOver.
 - With a coach line showing, the celebration stays until the person taps to clear it; a desk stretch comes up only after that.
 - Push is hard: no praise unless every set is done, and then only briefly; excuses, snoozes and missed sets are called out as broken commitments.
+- Push varies: no line repeats within 36 sets (on Day 10, a line shows at most twice), missed and snooze call-outs come every third set, and most lines speak to discipline and keeping your word rather than reciting counts. Lines may run to two or three sentences.
 - The Watch coach line moved to the next version (Graham's decision, 24 Nov 2026); the Watch has no celebration screen in 1.0.
 - Needs the unlock (item 18). Without it, the Settings choice shows the unlock.
 
