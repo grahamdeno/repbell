@@ -121,6 +121,9 @@ final class CoachVoiceTests: XCTestCase {
             XCTAssertFalse(line.contains("1 sets"), line)
             XCTAssertFalse(line.contains("Those sets"), line)
         }
+        for line in CoachVoice.writtenOptions(mode: .push, facts: facts(.dayDone, done: 15, missed: 1)) {
+            XCTAssertFalse(line.contains("1 times"), line)
+        }
         let dayBeforeRetest = facts(.dayDone, day: 7, done: 16)
         XCTAssertTrue(CoachVoice.writtenOptions(mode: .push, facts: dayBeforeRetest).allSatisfy { $0.contains("re-test") })
         XCTAssertTrue(CoachVoice.writtenOptions(mode: .coaching, facts: facts(.dayDone, day: 14, done: 16))
@@ -138,7 +141,10 @@ final class CoachVoiceTests: XCTestCase {
     // Push never praises a day with misses.
     func testPushDoesNotPraiseMisses() {
         for line in CoachVoice.writtenOptions(mode: .push, facts: facts(.dayDone, done: 14, missed: 2)) {
-            XCTAssertFalse(line.lowercased().contains("good"), line)
+            let lower = line.lowercased()
+            for praise in ["good", "great", "nice", "well done", "proud"] {
+                XCTAssertFalse(lower.contains(praise), line)
+            }
         }
         XCTAssertTrue(CoachVoice.instructions(mode: .push).contains("Do not praise"))
     }

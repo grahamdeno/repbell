@@ -41,6 +41,11 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task { await controller.onActive() }
+            } else if phase == .background {
+                // A celebration waiting for a tap never outlives the visit: it would hide the next bell,
+                // and its desk stretch belongs to that moment, not hours later.
+                controller.celebration = nil
+                controller.deskStretch = nil
             }
         }
         .onOpenURL { url in

@@ -171,7 +171,7 @@ public enum CoachVoice {
                         "That's \(f.setsMissed) you let go. You don't get \(them) back. The next one isn't optional."]
             }
             if f.snoozesToday > 0 {
-                return ["You put off \(count(f.snoozesToday, "set", "sets")) today. Waiting is how days slip. When it rings, you drop."]
+                return ["You pushed the bell back \(count(f.snoozesToday, "time", "times")) today. Waiting is how days slip. When it rings, you start."]
             }
             if f.setsLeft == 0 {
                 return ["\(f.setsDone) of \(f.setsTotal). You kept your word today. Tomorrow it starts over."]
@@ -183,7 +183,7 @@ public enum CoachVoice {
             ]
         case (.push, .dayDone):
             if f.setsMissed > 0 {
-                return ["\(f.setsDone) of \(f.setsTotal). \(f.setsMissed) times today you chose something else. Next time, choose the set."]
+                return ["\(f.setsDone) of \(f.setsTotal). \(count(f.setsMissed, "time", "times")) today you chose something else. Next time, choose the set."]
             }
             if f.testTomorrow {
                 return ["Every set done. Tomorrow is \(test). No excuses walk in with you."]
