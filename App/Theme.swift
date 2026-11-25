@@ -50,6 +50,7 @@ struct GlowBackground: View {
             GlowLayer(size: geo.size)
         }
         .ignoresSafeArea()
+        .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
 
@@ -66,6 +67,7 @@ struct GlowBackground: View {
                 .clipped()
         }
         .ignoresSafeArea(edges: .bottom)
+        .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
 }
