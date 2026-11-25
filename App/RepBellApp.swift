@@ -45,7 +45,11 @@ struct RootView: View {
                 // and its desk stretch belongs to that moment, not hours later.
                 controller.celebration = nil
                 controller.deskStretch = nil
+                controller.notifiedStretch = nil
             }
+        }
+        .fullScreenCover(item: Bindable(controller).notifiedStretch) { stretch in
+            DeskStretchView(stretch: stretch) { controller.notifiedStretch = nil }
         }
         .onOpenURL { url in
             // repbell://studio/<session-id> opens that Studio session (used by Padwork).

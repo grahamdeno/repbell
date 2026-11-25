@@ -37,10 +37,16 @@ enum Notifier {
     @discardableResult
     static func refill(library: LibraryFile, holdUntil: Date? = nil, ringing: Set<String> = [], quiet: Bool = false) async -> AlertReport {
         let center = UNUserNotificationCenter.current()
-        let desired = desiredRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet)
+        let plan = await MainActor.run { DeskStretchStore.plan() }
+        let now = CivilDateTime.local(Date())
+        let built = desiredRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet, desk: plan, now: now)
+        let desired = built.requests
+        await MainActor.run { DeskStretchStore.remember(built.deskSlots, built.deskIndices, now: now) }
         let wanted = Set(desired.map(\.identifier))
         let pending = await center.pendingNotificationRequests()
-        let stale = pending.map(\.identifier).filter { ($0.hasPrefix("set.") || $0.hasPrefix("note.")) && !wanted.contains($0) }
+        let stale = pending.map(\.identifier).filter {
+            ($0.hasPrefix("set.") || $0.hasPrefix("note.") || $0.hasPrefix("desk.")) && !wanted.contains($0)
+        }
         if !stale.isEmpty {
             center.removePendingNotificationRequests(withIdentifiers: stale)
         }
@@ -59,11 +65,55 @@ enum Notifier {
         return report
     }
 
-    private static func desiredRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool) -> [UNNotificationRequest] {
-        guard let run = library.current, run.pausedAt == nil, !run.ended else { return [] }
-        let now = CivilDateTime.local(Date())
+    private struct Built {
+        var requests: [UNNotificationRequest]
+        var deskSlots: [CivilDateTime]
+        var deskIndices: [Int]
+    }
+
+    private static func desiredRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool,
+                                        desk: DeskStretchStore.Plan, now: CivilDateTime) -> Built {
+        let program = programRequests(library: library, holdUntil: holdUntil, ringing: ringing, quiet: quiet, now: now)
+        // Item 20: the hourly desk stretch runs with or without a program. Every upcoming bell counts for the
+        // 15-minute rule, even ones not scheduled yet.
+        var bells: [CivilDateTime] = []
+        if let run = library.current, run.pausedAt == nil, !run.ended {
+            bells = ScheduleEngine.resolve(run.input, now: now).alertQueue(at: now, capacity: Int.max).pending
+                .filter { library.allows(day: $0.day) }.map(\.at)
+        }
+        var slots: [CivilDateTime] = []
+        if desk.enabled {
+            slots = DeskStretch.hourlySlots(after: now, start: desk.start, end: desk.end, setAlerts: bells,
+                                            lastDone: desk.lastDone, limit: DeskStretch.hourlyLimit)
+            // Reminders wait during a Studio session too.
+            if let holdUntil { slots = slots.filter { ($0.foundationDate() ?? .distantPast) >= holdUntil } }
+        }
+        // Set alerts and reminders share the slots; the soonest go out.
+        let shared = DeskStretch.sharedSlots(setAlerts: program.sets.map { $0.at }, reminders: slots)
+        slots = Array(slots.prefix(shared.reminders))
+        let previous = desk.assigned.filter { $0.key < (slots.first?.absoluteMinutes ?? Int.max) }
+            .max { $0.key < $1.key }?.value ?? desk.lastIndex
+        let indices = DeskStretch.stretchIndices(for: slots, previous: previous)
+        let reminders: [UNNotificationRequest] = zip(slots, indices).compactMap { slot, index in
+            guard let date = slot.foundationDate(), date > Date() else { return nil }
+            let stretch = DeskStretch.all[index]
+            let content = UNMutableNotificationContent()
+            content.title = Copy.deskStretchTitle
+            content.body = Copy.deskStretchNotice(name: stretch.name, cue: stretch.cues.first ?? "", seconds: DeskStretch.seconds)
+            content.sound = nil
+            content.threadIdentifier = "desk-stretch"
+            let id = "desk.\(stretch.id).\(slot.date.dayNumber).\(slot.minutes / 60)"
+            return UNNotificationRequest(identifier: id, content: content, trigger: trigger(for: date))
+        }
+        let sets = program.sets.prefix(shared.sets).map { $0.request }
+        return Built(requests: Array(sets) + program.notes + reminders, deskSlots: slots, deskIndices: indices)
+    }
+
+    private static func programRequests(library: LibraryFile, holdUntil: Date?, ringing: Set<String>, quiet: Bool,
+                                        now: CivilDateTime) -> (sets: [(at: CivilDateTime, request: UNNotificationRequest)], notes: [UNNotificationRequest]) {
+        guard let run = library.current, run.pausedAt == nil, !run.ended else { return ([], []) }
         let resolved = ScheduleEngine.resolve(run.input, now: now)
-        var requests: [UNNotificationRequest] = []
+        var sets: [(at: CivilDateTime, request: UNNotificationRequest)] = []
         for alert in resolved.alertQueue(at: now).pending where library.allows(day: alert.day) {
             guard let date = alert.at.foundationDate(), date > Date() else { continue }
             // During a Studio session, set alerts wait. The set stays due until the next one, so nothing is lost.
@@ -76,20 +126,19 @@ enum Notifier {
             content.categoryIdentifier = categoryID
             content.interruptionLevel = .timeSensitive
             content.threadIdentifier = "day-\(alert.day)"
-            requests.append(UNNotificationRequest(identifier: "set.\(alert.day).\(alert.index)", content: content, trigger: trigger(for: date)))
+            sets.append((alert.at, UNNotificationRequest(identifier: "set.\(alert.day).\(alert.index)", content: content, trigger: trigger(for: date))))
         }
-        var notes = 0
-        for note in resolved.notes() where notes < 4 && note.at > now {
+        var notes: [UNNotificationRequest] = []
+        for note in resolved.notes() where notes.count < 4 && note.at > now {
             guard shouldSchedule(note, library: library, resolved: resolved) else { continue }
             guard let date = note.at.foundationDate(), date > Date() else { continue }
             let content = UNMutableNotificationContent()
             content.title = Copy.wordmark
             content.body = note.body
             content.sound = .default
-            requests.append(UNNotificationRequest(identifier: "note.\(note.id)", content: content, trigger: trigger(for: date)))
-            notes += 1
+            notes.append(UNNotificationRequest(identifier: "note.\(note.id)", content: content, trigger: trigger(for: date)))
         }
-        return requests
+        return (sets, notes)
     }
 
     private static func trigger(for date: Date) -> UNNotificationTrigger {
