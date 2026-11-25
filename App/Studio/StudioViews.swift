@@ -246,7 +246,7 @@ private struct StudioSessionContent: View {
                     .sheet(isPresented: $showPaywall) {
                         PaywallView()
                             .environment(controller)
-                            .presentationBackground { GlowBackground() }
+                            .presentationBackground(.clear)
                     }
                     .confirmationDialog(StudioCopy.holdTitle, isPresented: $askHold, titleVisibility: .visible) {
                         Button(StudioCopy.holdYes) {

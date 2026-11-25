@@ -77,7 +77,6 @@ struct DeskStretchView: View {
 
     var body: some View {
         ZStack {
-            GlowBackground()
             ScreenChrome(top: 24) {
                 VStack(alignment: .leading, spacing: 18) {
                     Text(Copy.deskStretchTitle)

@@ -80,28 +80,30 @@ final class ChalkTests: XCTestCase {
         XCTAssertGreaterThan(ChalkTokens.markOutlineHigh.contrast(with: ground), ChalkTokens.markOutline.contrast(with: ground))
     }
 
-    // UX-17: VoiceOver hears the tally, not just "Today's sets".
-    // The background glow keeps every text colour at 4.5:1 or better everywhere on the screen, on a small and a
-    // large phone, and the violet day bars at 3:1 or better where they sit at the top.
+    // The background glow keeps every text colour at 4.5:1 or better everywhere on the screen, the violet day bars
+    // at 3:1 where they sit at the top, and the faint outlines (upcoming and missed marks) at 3:1 across the content
+    // area above the footer, on a small, a mid and a large phone.
     func testGlowKeepsContrast() {
-        for (w, h) in [(375.0, 667.0), (440.0, 956.0)] {
-            var worst = ChalkTokens.ground
-            var worstTop = ChalkTokens.ground
+        for (w, h) in [(375.0, 667.0), (393.0, 852.0), (440.0, 956.0)] {
+            var worst = ChalkTokens.ground, worstTop = ChalkTokens.ground, worstContent = ChalkTokens.ground
             for xi in 0...40 {
                 for yi in 0...80 {
                     let x = w * Double(xi) / 40, y = h * Double(yi) / 80
                     let c = ChalkTokens.Glow.color(x: x, y: y, width: w, height: h)
                     if c.luminance > worst.luminance { worst = c }
                     if y < 200, c.luminance > worstTop.luminance { worstTop = c }
+                    if y >= 60, y <= h - 150, c.luminance > worstContent.luminance { worstContent = c }
                 }
             }
             for text in [ChalkTokens.ink, ChalkTokens.inkMuted, ChalkTokens.volt] {
                 XCTAssertGreaterThanOrEqual(text.contrast(with: worst), 4.5, "\(text) on \(worst)")
             }
             XCTAssertGreaterThanOrEqual(ChalkTokens.ultraviolet.contrast(with: worstTop), 3.0)
+            XCTAssertGreaterThanOrEqual(ChalkTokens.markOutline.contrast(with: worstContent), 3.0, "\(w)x\(h)")
         }
     }
 
+    // UX-17: VoiceOver hears the tally, not just "Today's sets".
     func testUX17_spokenTally() {
         let marks: [Copy.SpokenMark] = [.done, .done, .done, .done, .missed, .current, .upcoming]
         XCTAssertEqual(Copy.tallySpoken(marks: marks), "4 done, 1 missed, set 6 next")

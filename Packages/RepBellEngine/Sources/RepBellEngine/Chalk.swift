@@ -59,9 +59,9 @@ public enum ChalkTokens {
             public let x: Double, y: Double, radius: Double, strength: Double
             public let color: RGB
         }
-        public static let violet = Spot(x: -0.05, y: -0.02, radius: 1.15, strength: 0.30, color: glowViolet)
-        public static let volt = Spot(x: 1.05, y: 1.02, radius: 1.25, strength: 0.25, color: glowVolt)
-        public static let spots = [violet, volt]
+        public static let violetSpot = Spot(x: -0.05, y: -0.02, radius: 1.15, strength: 0.30, color: glowViolet)
+        public static let voltSpot = Spot(x: 1.05, y: 1.02, radius: 1.25, strength: 0.22, color: glowVolt)
+        public static let spots = [violetSpot, voltSpot]
 
         /// How strongly a spot shows at distance `t` (0 at its centre, 1 at its radius): strength × (1 − t)².
         public static func opacity(_ spot: Spot, at t: Double) -> Double {
