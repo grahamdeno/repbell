@@ -4,9 +4,21 @@ import SwiftUI
 struct WatchRoot: View {
     @Environment(WatchModel.self) private var model
 
+    /// The alert time of a set that is due now, if any.
+    private var dueAlert: CivilDateTime? {
+        guard let resolved = model.resolvedNow(), let run = model.library.current else { return nil }
+        let now = run.pausedAt ?? CivilDateTime.local(Date())
+        guard let number = run.input.dayNumber(on: now.date),
+              let set = resolved.day(number)?.sets.first(where: { $0.status == .upcoming }),
+              let alert = set.alert, alert <= now else { return nil }
+        return alert
+    }
+
     var body: some View {
         Group {
-            if let resolved = model.resolvedNow(), let run = model.library.current {
+            if let line = model.visibleCoachLine(dueAlert: dueAlert) {
+                WatchCoachLine(line: line)
+            } else if let resolved = model.resolvedNow(), let run = model.library.current {
                 let now = run.pausedAt ?? CivilDateTime.local(Date())
                 if let number = run.input.dayNumber(on: now.date), let day = resolved.day(number),
                    let current = day.sets.first(where: { $0.status == .upcoming }),
@@ -30,6 +42,40 @@ struct WatchRoot: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Chalk.groundWatch)
+    }
+}
+
+/// Item 19: the coach line after a set logged on the Watch. It waits for a tap, like the iPhone.
+private struct WatchCoachLine: View {
+    @Environment(WatchModel.self) private var model
+    var line: String
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(line)
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Chalk.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .contentTransition(.opacity)
+                    .animation(.easeOut(duration: 0.3), value: line)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture { model.clearCoachLine() }
+                    // VoiceOver reads the line and uses the button below to clear it.
+                    .accessibilityRespondsToUserInteraction(false)
+                Button(Copy.tapToContinue) { model.clearCoachLine() }
+                    .font(.footnote.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 44)
+                    .background(Chalk.watchSecondary)
+                    .foregroundStyle(Chalk.ink)
+                    .clipShape(Capsule())
+                    .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 4)
+            .padding(.top, 6)
+        }
     }
 }
 

@@ -146,6 +146,7 @@ struct SettingsView: View {
                 } else {
                     CoachVoiceStore.mode = choice
                     coachMode = choice
+                    controller.syncWatch()
                     CoachWriter.prewarm(mode: choice)
                     Haptics.play(.tap)
                 }
@@ -179,6 +180,7 @@ struct SettingsView: View {
             if open, let wanted = coachWanted {
                 CoachVoiceStore.mode = wanted
                 CoachWriter.prewarm(mode: wanted)
+                controller.syncWatch()
             }
             coachWanted = nil
             coachMode = CoachVoiceStore.mode

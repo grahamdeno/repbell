@@ -403,6 +403,11 @@ final class ProgramController {
         }
     }
 
+    /// Sends the library and Coach voice to the Watch, for a change that doesn't go through persist().
+    func syncWatch() {
+        PhoneSessionBridge.shared.push(library)
+    }
+
     /// The one place the unlock changes: purchase, restore, Ask to Buy approval, refund, launch refresh.
     func setUnlocked(_ open: Bool) {
         guard library.unlocked != open else {
