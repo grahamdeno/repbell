@@ -72,6 +72,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-25 | **Background glow:** every iPhone screen has a violet glow behind the top and a volt glow from the bottom right over `ground`; flood screens keep their colour and the Watch stays black. Set to 30% and 22% so muted text stays at 4.5:1 everywhere and faint outlines at 3:1 | Graham's decision ("build the glow", from the violet and volt mockups) |
 | 2026-11-25 | **Test builds reuse one saved signing certificate.** "Apple Development: Graham DeNoyer" (expires 25 Nov 2027) is loaded from build secrets into a temporary keychain each run, so runs stop creating development certificates while it is valid. The archive step checks the app was signed with it. Renew it before 25 Nov 2027 | Graham's go 25 Nov 2026 (Product's recommendation). Builds 18, 19 and 28 had failed on the Apple Development certificate limit |
 | 2026-11-24 | **Coach voice in 1.0:** a Settings choice of Off, Coaching or Push. Coaching reads the person's stats, recognizes past wins and looks ahead, with no guilt. Push says the same stats bluntly and may name a missed set, snooze or skipped day as a broken commitment, within limits (item 17) | Graham's decision |
 | 2026-11-24 | **Design rule amended:** no guilt copy, except in Push coaching, which the person turns on | Graham's decision. **Amends** the no-guilt design rule |

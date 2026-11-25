@@ -38,7 +38,11 @@ struct CelebrationView: View {
 
     var body: some View {
         ZStack {
-            ground.ignoresSafeArea()
+            if flood {
+                ground.ignoresSafeArea()
+            } else {
+                GlowBackground()
+            }
             // At large text sizes the moment scrolls instead of cutting its line short.
             ViewThatFits(in: .vertical) {
                 moment

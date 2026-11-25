@@ -42,10 +42,35 @@ struct Wordmark: View {
 /// Screens that already scroll, or that use a vertical drag, pass `scrolls: false`.
 /// The content is built for both the fitting and the scrolling layout, so a child's `@State` resets if the
 /// screen switches between them (for example when text size changes). Keep screen state in the controller.
+/// The iPhone background (decision of 25 Nov 2026): `ground` with a violet glow behind the top and a volt glow from
+/// the bottom right. The numbers live in `ChalkTokens.Glow`, which the contrast tests check. The Watch stays black.
+struct GlowBackground: View {
+    var body: some View {
+        GeometryReader { geo in
+            ZStack {
+                Chalk.ground
+                ForEach(Array(ChalkTokens.Glow.spots.enumerated()), id: \.offset) { _, spot in
+                    RadialGradient(
+                        stops: stride(from: 0.0, through: 1.0, by: 0.125).map { t in
+                            .init(color: Chalk.color(spot.color).opacity(ChalkTokens.Glow.opacity(spot, at: t)), location: t)
+                        },
+                        center: UnitPoint(x: spot.x, y: spot.y),
+                        startRadius: 0,
+                        endRadius: spot.radius * geo.size.width
+                    )
+                }
+            }
+        }
+        .ignoresSafeArea()
+        .accessibilityHidden(true)
+    }
+}
+
 struct ScreenChrome<Content: View>: View {
     var top: CGFloat = 8
     var scrolls: Bool = true
-    var background: Color = Chalk.ground
+    /// nil draws the glow; a flood screen passes its own colour.
+    var background: Color? = nil
     @ViewBuilder var content: () -> Content
 
     var body: some View {
@@ -63,7 +88,13 @@ struct ScreenChrome<Content: View>: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(background.ignoresSafeArea())
+        .background {
+            if let background {
+                background.ignoresSafeArea()
+            } else {
+                GlowBackground()
+            }
+        }
     }
 
     private var framed: some View {

@@ -28,8 +28,7 @@ struct RootView: View {
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: Browse.self) { destination in
                     browse(destination)
-                        .toolbarBackground(Chalk.ground, for: .navigationBar)
-                        .toolbarBackground(.visible, for: .navigationBar)
+                        .toolbarBackground(.hidden, for: .navigationBar)
                         .toolbarColorScheme(.dark, for: .navigationBar)
                         .navigationBarTitleDisplayMode(.inline)
                 }

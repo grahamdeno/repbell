@@ -77,7 +77,6 @@ struct DeskStretchView: View {
 
     var body: some View {
         ZStack {
-            Chalk.ground.ignoresSafeArea()
             ScreenChrome(top: 24) {
                 VStack(alignment: .leading, spacing: 18) {
                     Text(Copy.deskStretchTitle)

@@ -48,6 +48,41 @@ public enum ChalkTokens {
     public static let inkMuted = RGB(0xA0A0A0)
     public static let inkFaint = RGB(0x6E6B66)
     public static let alert = RGB(0xFF3B30)
+    /// The background glow (decision of 25 Nov 2026): violet behind the top, volt from the bottom right,
+    /// both laid over `ground` on every iPhone screen. The Watch stays black.
+    public static let glowViolet = RGB(0x7846C8)
+    public static let glowVolt = RGB(0x96CD00)
+
+    public enum Glow {
+        public struct Spot: Sendable {
+            /// Centre as a fraction of the screen's width and height; radius as a fraction of its width.
+            public let x: Double, y: Double, radius: Double, strength: Double
+            public let color: RGB
+        }
+        public static let violetSpot = Spot(x: -0.05, y: -0.02, radius: 1.15, strength: 0.30, color: glowViolet)
+        public static let voltSpot = Spot(x: 1.05, y: 1.02, radius: 1.25, strength: 0.22, color: glowVolt)
+        public static let spots = [violetSpot, voltSpot]
+
+        /// How strongly a spot shows at distance `t` (0 at its centre, 1 at its radius): strength × (1 − t)².
+        public static func opacity(_ spot: Spot, at t: Double) -> Double {
+            let k = max(0, 1 - t)
+            return spot.strength * k * k
+        }
+
+        /// The background colour at a point, for contrast checks. Mirrors what the app draws.
+        public static func color(x: Double, y: Double, width: Double, height: Double) -> RGB {
+            var r = Double(ground.red), g = Double(ground.green), b = Double(ground.blue)
+            for spot in spots {
+                let dx = (x - spot.x * width) / (spot.radius * width)
+                let dy = (y - spot.y * height) / (spot.radius * width)
+                let a = opacity(spot, at: (dx * dx + dy * dy).squareRoot())
+                r = r * (1 - a) + Double(spot.color.red) * a
+                g = g * (1 - a) + Double(spot.color.green) * a
+                b = b * (1 - a) + Double(spot.color.blue) * a
+            }
+            return RGB(Int(r.rounded()) << 16 | Int(g.rounded()) << 8 | Int(b.rounded()))
+        }
+    }
     /// Watch-only fill for secondary buttons. Not a design-system token.
     public static let watchSecondary = RGB(0x262626)
 
@@ -115,6 +150,8 @@ public enum Chalk {
     public static var inkFaint: Color { color(ChalkTokens.inkFaint) }
     public static var alert: Color { color(ChalkTokens.alert) }
     public static var watchSecondary: Color { color(ChalkTokens.watchSecondary) }
+    public static var glowViolet: Color { color(ChalkTokens.glowViolet) }
+    public static var glowVolt: Color { color(ChalkTokens.glowVolt) }
 
     /// Outline for marks that carry meaning, stronger when Increase Contrast is on.
     public static func markOutline(_ contrast: ColorSchemeContrast) -> Color {
