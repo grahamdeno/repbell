@@ -21,7 +21,7 @@ journey, the platform check, the schedule engine spec and the copy deck. Where t
 - **1.0 scope:** open (decision of 20 Nov 2026); items join as Graham approves them. Built under the 1.0 exception.
 - **Test builds:** 15 rejected at upload (missing NSHealthShareUsageDescription, fixed in #30); 16 and 17 uploaded;
   18 and 19 failed at signing (certificate limit); 20, 22, 23, 24, 26 and 27 uploaded; 25 cancelled before it
-  started; 28 failed at signing (certificate limit); 29 started 25 Nov 2026 from `2040cee` (coach clips, volt icon,
+  started; 28 failed at signing (certificate limit); 29 uploaded 25 Nov 2026 from `2040cee` (coach clips, volt icon,
   paid unlock, Coach voice, harder Push, tap to clear).
 - **Screenshots:** `docs/screenshots/` holds run 3; run 4 (24 Nov, with the paywall) is on `screenshots/run-4`, and its paywall shot is the purchase's review screenshot.
 - **Not built:** the Watch face complication (needs a new bundle ID, which needs Graham's approval); the new app
