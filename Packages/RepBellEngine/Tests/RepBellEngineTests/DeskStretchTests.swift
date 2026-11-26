@@ -10,10 +10,11 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertFalse(DeskStretch.isDue(enabled: false, lastShown: nil, now: at(9, 0)))
     }
 
-    func testAtMostOnceAnHour() {
+    func testAfterASetAtMostEveryFortyMinutes() {
         XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: nil, now: at(9, 0)))
-        XCTAssertFalse(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 45)))
-        XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(10, 0)))
+        XCTAssertFalse(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 39)))
+        // Sets 45 minutes apart still bring a stretch about every hour.
+        XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: at(9, 0), now: at(9, 45)))
         XCTAssertTrue(DeskStretch.isDue(enabled: true, lastShown: CivilDateTime(date: day.addingDays(-1), hour: 22, minute: 0), now: at(7, 0)))
     }
 
@@ -127,13 +128,36 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertTrue(slots.allSatisfy { DeskStretch.isWeekday($0.date) })
     }
 
-    func testSkipsAnHourWhenABellIsClose() {
+    private func clock(_ slots: [CivilDateTime]) -> [String] {
+        slots.map { String(format: "%d:%02d", $0.minutes / 60, $0.minutes % 60) }
+    }
+
+    func testAnHourWithASetNearItFollowsThatSet() {
         let now = at(2026, 11, 25, 8, 30)
-        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 16)]
-        let hours = DeskStretch.hourlySlots(after: now, start: 9, end: 14, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
-            .map { $0.minutes / 60 }
-        // 10:00 (bell 10:15) and 12:00 (bell 11:50) are skipped; 13:00 stays (bell 16 minutes later).
-        XCTAssertEqual(hours, [9, 11, 13, 14])
+        let bells = [at(2026, 11, 25, 10, 15), at(2026, 11, 25, 11, 50), at(2026, 11, 25, 13, 30), at(2026, 11, 25, 15, 31)]
+        let slots = DeskStretch.hourlySlots(after: now, start: 9, end: 16, setAlerts: bells, lastDone: nil, limit: 20, daysAhead: 0)
+        // 9 and 15 have no bell within 30 minutes: on the hour. 10, 12, 13 and 16 follow their nearest set by
+        // 10 minutes (12:00 is 10 minutes after 11:50). 11:00 is too close to 10:25; 14:00's nearest set is 13:30's.
+        XCTAssertEqual(clock(slots), ["9:00", "10:25", "12:00", "13:40", "15:00", "15:41"])
+    }
+
+    func testLoggingTheSetDropsItsReminder() {
+        // The 10:15 set was logged at 10:17 and brought its stretch; its 10:25 reminder goes.
+        let bells = [at(2026, 11, 25, 10, 15)]
+        let slots = DeskStretch.hourlySlots(after: at(2026, 11, 25, 10, 17), start: 9, end: 12, setAlerts: bells,
+                                            lastDone: at(2026, 11, 25, 10, 17), limit: 20, daysAhead: 0)
+        // 11:00 is within the hour after the stretch, so the next reminder is 12:00.
+        XCTAssertEqual(clock(slots), ["12:00"])
+    }
+
+    func testRemindersAreNeverCloserThanFortyMinutes() {
+        // Sets every 45 minutes from 7 a.m.: each hour's reminder follows a set, and none come closer than 40 minutes.
+        let bells = (0..<20).map { CivilDateTime(date: CivilDate(year: 2026, month: 11, day: 25), minutes: 420 + $0 * 45) }
+        let slots = DeskStretch.hourlySlots(after: at(2026, 11, 25, 6), start: 9, end: 17, setAlerts: bells, lastDone: nil,
+                                            limit: 20, daysAhead: 0)
+        XCTAssertEqual(clock(slots), ["9:25", "10:10", "10:55", "12:25", "13:10", "13:55", "15:25", "16:10", "16:55"])
+        XCTAssertTrue(zip(slots, slots.dropFirst()).allSatisfy { $0.minutes(until: $1) >= DeskStretch.afterSetGapMinutes })
+        XCTAssertTrue(slots.allSatisfy { slot in bells.contains { $0.minutes(until: slot) == DeskStretch.unloggedSetDelayMinutes } })
     }
 
     func testSkipsTheHourAfterAStretch() {
@@ -192,4 +216,23 @@ final class DeskStretchTests: XCTestCase {
         XCTAssertNil(DeskStretch.stretch(id: "rice-grab"))
     }
 
+
+    func testARefillJustAfterABellKeepsThatSetsReminder() {
+        // Day 3 of a run started Monday 23 Nov 2026, wake 7:00, max 50.
+        let start = CivilDate(year: 2026, month: 11, day: 23)
+        let input = RunInput(dayOneMax: 50, wake: ClockTime(hour: 7), bed: ClockTime(hour: 23), start: start, retestEnabled: true,
+                             events: [.test(day: 1, reps: 50, at: CivilDateTime(date: start, hour: 7, minute: 5))])
+        let probe = ScheduleEngine.resolve(input, now: CivilDateTime(date: start.addingDays(2), hour: 6, minute: 0))
+        guard let set = probe.day(3)?.sets.first(where: { ($0.alert?.minutes ?? 0) >= 600 }), let bell = set.alert else {
+            return XCTFail("no set after 10 a.m. on day 3")
+        }
+        let justAfter = CivilDateTime(date: bell.date, minutes: bell.minutes + 1)
+        let unlogged = ScheduleEngine.resolve(input, now: justAfter)
+        XCTAssertTrue(DeskStretch.bells(unlogged, now: justAfter).contains(bell))
+        var logged = input
+        logged.events.append(.done(day: 3, index: set.index, at: justAfter))
+        XCTAssertFalse(DeskStretch.bells(ScheduleEngine.resolve(logged, now: justAfter), now: justAfter).contains(bell))
+        let later = CivilDateTime(date: bell.date, minutes: bell.minutes + DeskStretch.setClearanceMinutes + 1)
+        XCTAssertFalse(DeskStretch.bells(ScheduleEngine.resolve(input, now: later), now: later).contains(bell))
+    }
 }

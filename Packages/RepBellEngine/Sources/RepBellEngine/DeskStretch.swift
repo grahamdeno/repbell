@@ -1,5 +1,6 @@
-/// Desk stretch (1.0, added 20 Nov 2026): after a push-up set, one short stretch that counters sitting all day.
-/// Off by default. Shown at most once an hour. Skipping is never recorded.
+/// Desk stretch (1.0, added 20 Nov 2026): after a push-up set, one short stretch that counters sitting all day,
+/// at most every 40 minutes, plus quiet reminders about every hour on weekdays (item 20). Off by default.
+/// Skipping is never recorded.
 public enum DeskStretch {
     public struct Stretch: Equatable, Sendable {
         public let id: String
@@ -80,8 +81,16 @@ public enum DeskStretch {
     public static let defaultEndHour = 17
     /// The hours the window can start and end on.
     public static let windowHours = 6...21
-    /// An hour is skipped when a program set's bell is this close.
-    public static let setClearanceMinutes = 15
+    /// With a program running, an hour mark with a set's bell this close leaves the stretch to that set: it comes
+    /// right after the set is logged (decision of 25 Nov 2026). An hour with no set near it keeps its reminder on
+    /// the hour, as it does with no program.
+    public static let setClearanceMinutes = 30
+    /// If that set isn't logged, a quiet reminder still comes this long after its bell. Logging the set first
+    /// drops it on the next refill.
+    public static let unloggedSetDelayMinutes = 10
+    /// After a logged set, the stretch comes at most this often, so sets 45 minutes apart still bring one about
+    /// every hour. Reminders are never closer together than this either.
+    public static let afterSetGapMinutes = 40
     /// At most this many hourly reminders are scheduled at once (about a working day); more are added on refill.
     public static let hourlyLimit = 10
     /// iOS keeps at most 64 pending notifications per app.
@@ -128,8 +137,21 @@ public enum DeskStretch {
         return (sets, kept)
     }
 
-    /// The hours to remind at, soonest first: weekdays only, on the hour inside the window, after `now`,
-    /// skipping an hour when a set's bell is within 15 minutes or a stretch was done in the hour before it.
+    /// The bells a reminder can follow: sets still to do whose bell is ahead, or rang within the last 30 minutes and
+    /// hasn't been logged, so a refill just after a bell keeps that set's reminder.
+    public static func bells(_ run: ResolvedRun, now: CivilDateTime) -> [CivilDateTime] {
+        let since = CivilDateTime(date: now.date, minutes: now.minutes - setClearanceMinutes)
+        return run.days.flatMap(\.sets)
+            .filter { $0.status == .upcoming }
+            .compactMap(\.alert)
+            .filter { $0 >= since }
+            .sorted()
+    }
+
+    /// The times to remind at, soonest first, on weekdays inside the window. Each hour mark gets one: on the hour
+    /// when no set's bell is within 30 minutes of it; otherwise 10 minutes after the nearest bell, in case that set
+    /// isn't logged (logging it brings the stretch at once and drops this reminder). A reminder is skipped when a
+    /// stretch was done in the hour before it, and two are never closer than 40 minutes.
     public static func hourlySlots(after now: CivilDateTime, start: Int, end: Int, setAlerts: [CivilDateTime],
                                    lastDone: CivilDateTime?, limit: Int, daysAhead: Int = 3) -> [CivilDateTime] {
         guard limit > 0 else { return [] }
@@ -139,10 +161,13 @@ public enum DeskStretch {
             let date = now.date.addingDays(offset)
             guard isWeekday(date) else { continue }
             for hour in window.start...window.end {
-                let slot = CivilDateTime(date: date, hour: hour, minute: 0)
+                let mark = CivilDateTime(date: date, hour: hour, minute: 0)
+                let nearest = setAlerts.filter { abs(mark.minutes(until: $0)) <= setClearanceMinutes }
+                    .min { abs(mark.minutes(until: $0)) < abs(mark.minutes(until: $1)) }
+                let slot = nearest.map { CivilDateTime(date: $0.date, minutes: $0.minutes + unloggedSetDelayMinutes) } ?? mark
                 guard slot > now else { continue }
                 if let lastDone, lastDone <= slot, lastDone.minutes(until: slot) < minimumGapMinutes { continue }
-                if setAlerts.contains(where: { abs(slot.minutes(until: $0)) <= setClearanceMinutes }) { continue }
+                if let previous = slots.last, previous.minutes(until: slot) < afterSetGapMinutes { continue }
                 slots.append(slot)
                 if slots.count == limit { return slots }
             }
@@ -174,7 +199,7 @@ public enum DeskStretch {
     public static func isDue(enabled: Bool, lastShown: CivilDateTime?, now: CivilDateTime) -> Bool {
         guard enabled else { return false }
         guard let lastShown else { return true }
-        return lastShown.minutes(until: now) >= minimumGapMinutes
+        return lastShown.minutes(until: now) >= afterSetGapMinutes
     }
 
     /// The next stretch: a shuffled bag of every stretch, so all of them come up before any repeats,
