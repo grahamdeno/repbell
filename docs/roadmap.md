@@ -402,7 +402,14 @@ As someone who sits all day, I want a desk stretch every hour on weekdays, wheth
 that I move regularly.
 - Given Desk stretch on, then Monday to Friday, on the hour, from 9 a.m. to 5 p.m. by default (start and end
   adjustable in Settings), a quiet notification names the stretch; tapping it opens the stretch.
-- It skips an hour when a program set's bell is within 15 minutes, or when a stretch was done in the last hour.
+- With a program running, the stretch comes right after a logged set, at most every 40 minutes. In the app it opens
+  as soon as the set screen clears; from an alert or the Watch, a quiet notification comes at once (updated
+  2026-11-25).
+- On weekdays inside the window, each hour gets a quiet reminder. If a set's bell falls within 30 minutes of the
+  hour, the reminder comes 10 minutes after that bell, in case the set isn't logged; logging the set cancels it.
+  Otherwise the reminder comes on the hour.
+- Reminders are never closer than 40 minutes, and are skipped for an hour after a stretch. With no program,
+  reminders come on the hour.
 - Stretches rotate through all 19 with no back-to-back repeats.
 - Notifications are scheduled a day or two ahead within iOS's limit of 64, and topped up when the app opens or a set
   is logged.
